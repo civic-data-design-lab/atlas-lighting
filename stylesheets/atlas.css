@@ -1,0 +1,156 @@
+
+body{
+    color:#aaa;
+    background-color:#000;
+    font-family: 'Ropa Sans', sans-serif;
+    font-weight: 400;
+    fill:rgba(255,255,255,.3);
+}
+
+.largeContent{
+    font-size:36px;
+}
+#map{
+    position:absolute; 
+    width: 1800px;
+    height: 1200px;
+    overflow:hidden;
+}
+#info{
+    position:relative;
+    float:right;
+}
+.zipcodemap{
+    position:absolute;
+    width: 1800px;
+    height: 1200px;
+}
+.datalayer{
+    overflow:hidden;
+}
+canvas {
+     position: absolute;
+     width: 1800px;
+     height:1200px;
+     overflow:hidden;
+   }
+#key{
+    border:1px solid #fff;
+    width:200px;
+    height:180px;
+    position:fixed;
+    bottom:20px;
+    left:20px;
+    background-color:rgba(0,0,0,.8);
+    font-family: 'Ropa Sans', sans-serif;
+    font-weight: 200;
+    
+}
+.dc-data-count a{
+    color:#aaa;
+}
+.loader-text{
+    position:absolute;left:0px;
+    font-size:16px;
+    top:60%;
+   width:800px;
+   z-index:999;
+   text-align:left;
+   left:50px;
+   letter-spacing:2px;
+   font-family: 'Dosis', sans-serif;
+   
+}
+.d3-tip{ 
+    background-color:rgba(0,0,0,0.7);
+    border:1px solid #fff;
+    padding:5px;
+    border-radius:5px;
+}
+    
+#title{
+    text-align:center;
+    font-family: 'Dosis', sans-serif;
+    font-size:14px;
+    font-weight: 500;
+    letter-spacing:4px;
+    padding:10px;
+}
+.subtitle{
+    border-bottom:1px solid white;
+    font-size:10px;
+}
+#info{
+    border-radius:10px;
+    margin-top:10px;
+    padding-bottom:30px;
+    background-color:rgba(0,0,0,.7);
+    overflow:auto;
+    
+}
+#header{
+    border-bottom:1px solid white;
+    background-color:rgba(0,0,0,.7);
+    
+}
+.loader{position:absolute; top:0px; left:0px;overflow:hidden;}
+#moreinfo {padding:10px;}
+#philips{padding:10px;}
+#civic{padding:10px;}
+.x.axis line {
+  stroke: #fff;
+}
+.x.axis path {
+    stroke: #fff;
+}
+#info div{
+    margin-top:10px;
+}
+.y.axis line,
+.y.axis path {
+  fill: none;
+  stroke: #fff;
+}
+/* Dropdown Button */
+.dropbtn {
+    background-color: #000;
+    color: white;
+    padding: 5px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    width:200px;
+    text-align:left;
+}
+
+/* Dropdown button on hover & focus */
+.dropbtn:hover, .dropbtn:focus {
+    background-color: #111;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #000;
+    min-width: 160px;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #222}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {display:block;}

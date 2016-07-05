@@ -1,0 +1,25 @@
+{
+  "name": "atlas_of_lighting",
+  "description": "atlas-front-libs",
+  "main": "",
+  "authors": [
+    "Armin Akhavan armin.akhavan@gmail.com"
+  ],
+  "license": "Apache Version 2.0",
+  "homepage": "https://github.com/arminakvn/atlas_test1",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.0.0",
+    "d3": "^3.5.17",
+    "mapbox.js": "^2.4.0",
+    "d3-tip": "^0.6.7",
+    "crossfilter": "^1.3.12",
+    "d3-queue": "^3.0.1"
+  }
+}

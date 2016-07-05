@@ -1,0 +1,33 @@
+{
+  "name": "atlas_lighting",
+  "version": "1.0.1",
+  "description": "atlas-of-lighting-web-application",
+  "repository": "https://github.com/civic-data-design-lab/atlas_lighting",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "monitor": "nodemon server.js",
+    "deploy": "gcloud preview app deploy app.yaml"
+  },
+  "author": "Armin Akhavan armin.akhavan@gmail.com",
+  "license": "Apache Version 2.0",
+  "dependencies": {
+    "async": "latest",
+    "body-parser": "^1.14.2",
+    "bootstrap": "^3.3.6",
+    "crossfilter": "^1.3.12",
+    "daemon": "latest",
+    "dc": "^2.0.0-beta.30",
+    "express": "latest",
+    "gcloud": "git://github.com/GoogleCloudPlatform/gcloud-node",
+    "googleapis": "latest",
+    "optimist": "latest",
+    "redis": "^2.6.2",
+    "request": "latest",
+    "serve-static": "latest",
+    "topojson": "^1.6.26"
+  },
+  "engines": {
+    "node": "latest"
+  }
+}
