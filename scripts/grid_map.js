@@ -18,6 +18,7 @@ var groupToWords = {
 "8":"High Income, Medium Intensity",
 "9":"High Income, High Intensity"
 }
+
 var colors = {
 "1":"#fff7bc",
 "2":"#fee391",
@@ -29,7 +30,6 @@ var colors = {
 "8":"#9ecae1",
 "9":"#3182bd",
 }
-
 var center = cityCentroids["Chicago"]
 var projection = d3.geo.mercator().scale(20000).center([center.lng,center.lat])
 var densityScale = d3.scale.linear().domain([3000,31684]).range([5,50])
@@ -89,17 +89,7 @@ function initCanvas(data){
             var x = project(d).x
             var y = project(d).y
             var fillColor = null
-            var colors = {
-            "1":"#fff7bc",
-            "2":"#fee391",
-            "3":"#fec44f",
-            "4":"#fee0d2",
-            "5":"#fc9272",
-            "6":"#de2d26",
-            "7":"#deebf7",
-            "8":"#9ecae1",
-            "9":"#3182bd",
-            }
+            
             if(colorByLight==true){
                 var light = d.averlight
                 var lightScale = d3.scale.linear().domain([0,200,400]).range(["#3182bd","#fee391","#fc9272"])
@@ -220,26 +210,31 @@ function charts(data){
         
         .x(d3.scale.linear().domain([0, 20]))
          placesChart.yAxis().ticks(2)
-    
+
+var chartColors = {"1":"#fff7bc","2":"#fee391","3":"#fec44f","4":"#fee0d2","5":"#fc9272","6":"#de2d26","7":"#deebf7","8":"#9ecae1","9":"#3182bd"}
     devIntChart.width(chartWidth).height(chartHeight)
         .group(devIntGroup).dimension(devIntDimension)
-        .ordinalColors(["#ffffff"])      
+        .ordinalColors(["#fff"])      
         .margins({top: 0, left: 50, right: 10, bottom: 20})
         
        // .x(d3.scale.linear().domain([0, 4]))
         .xAxis().ticks(4)
-    
+
     ligAveChart.width(chartWidth).height(chartHeight)
         .group(laGroup).dimension(ligAveDimension).centerBar(true)
         //.round(dc.round.floor)
         //.alwaysUseRounding(true)
         .elasticY(true)
-        .ordinalColors(["#ffffff"])
+        //.ordinalColors(["#ffffff"])
+        .colors(d3.scale.linear().domain([0,200,400]).range(["#3182bd","#fee391","#fc9272"]))
+        .colorAccessor(function(d){
+            return d.key
+        })
         .margins({top: 0, left: 50, right: 10, bottom: 20})
         
         .x(d3.scale.linear().domain([0, 500]))
         .yAxis().ticks(3)
-    
+
     populationChart.width(chartWidth).height(chartHeight).group(pGroup).dimension(populationDimension)
         .round(dc.round.floor)
         .alwaysUseRounding(true)
@@ -254,7 +249,8 @@ function charts(data){
     
     incomeChart.width(chartWidth).height(chartHeight).group(iGroup).dimension(incomeDimension)
         .round(dc.round.floor)    
-        .ordinalColors(["#ffffff"])        
+        .ordinalColors(["#ffffff"])
+        
         .alwaysUseRounding(true)
         .elasticY(true)
         .elasticX(true)
@@ -328,7 +324,7 @@ function drawMap(data){
             
         })
     .attr("opacity",.5)
-        .on("mouseover",function(d){console.log(d)})
+     //   .on("mouseover",function(d){console.log(d)})
 }
 function drawPolygons(geoData){
     

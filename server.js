@@ -27,7 +27,7 @@
   app.set('trust proxy', true);
 
   app.use(serveStatic('./', {
-    'index': ['grid.html', 'grid.htm']
+    'index': ['index.html', 'index.htm']
   }));
 
   app.use(serveStatic('./node_modules/bootstrap/dist/js'));

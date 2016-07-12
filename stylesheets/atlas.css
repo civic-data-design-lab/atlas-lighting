@@ -49,6 +49,9 @@ canvas {
 .dc-data-count a{
     color:#aaa;
 }
+.dc-chart rect.bar:hover {
+    fill-opacity: .5;
+}
 .loader-text{
     position:absolute;left:0px;
     font-size:16px;

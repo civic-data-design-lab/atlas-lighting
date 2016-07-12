@@ -1,5 +1,5 @@
 $(function() {
-	queue()
+	d3.queue()
 		.defer(d3.json, "us.json")
         .defer(d3.csv, "city_comparisons_all.csv")
     .await(dataDidLoad);

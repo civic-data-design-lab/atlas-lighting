@@ -10,8 +10,7 @@
   <script src='mapbox-gl.js'></script> -->
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.20.0/mapbox-gl.css' rel='stylesheet' />
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.20.0/mapbox-gl.js'></script>
-  <link rel="stylesheet" href="leaflet.css" />
-  <script src="leaflet.js"></script>  
+
   <script src="d3.min.js"></script>
   <script src="d3-queue.js"></script>
   <script src="topojson.min.js"></script>
@@ -62,22 +61,23 @@
             <span class="filter-count"></span> selected out of <span class="total-count">
             </span> records | <a href="javascript:dc.filterAll(); dc.redrawAll();;">Reset All</a>
         </div>
-        <div id ="population">Population
-          <a class="reset" href="javascript:populationChart.filterAll();dc.redrawAll();" 			style="display: none;">reset</a></br>
-        </div>
+       
         <div id ="income">Median Household Income
         <a class="reset" href="javascript:incomeChart.filterAll();dc.redrawAll();" 			style="display: none;">reset</a></br>
-        </div>
-        <div id ="business_diversity">Business Diversity
-        <a class="reset" href="javascript:busDivChart.filterAll();dc.redrawAll();" 			style="display: none;">reset</a></br>
         </div>
         <div id ="development_intensity">Development Intensity
         <a class="reset" href="javascript:devIntChart.filterAll();dc.redrawAll();" 			style="display: none;">reset</a></br>
         </div>
+        <div id ="population">Population
+          <a class="reset" href="javascript:populationChart.filterAll();dc.redrawAll();" 			style="display: none;">reset</a></br>
+        </div>
+        <div id ="business_diversity">Business Diversity
+        <a class="reset" href="javascript:busDivChart.filterAll();dc.redrawAll();" 			style="display: none;">reset</a></br>
+        </div>
         <div id ="light_average">Light Average</br>
         <a class="reset" href="javascript:ligAveChart.filterAll();dc.redrawAll();" 			style="display: none;">reset</a></br>
         </div>
-        <div id ="places">Number of Places
+        <div id ="places">Place Density
         <a class="reset" href="javascript:placesChart.filterAll();dc.redrawAll();" 			style="display: none;">reset</a></br>
         </div>
       </div>
