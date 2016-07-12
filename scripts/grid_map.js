@@ -196,7 +196,7 @@ function charts(data){
         .group(busDivGroup).dimension(busDivDimension)        
         .ordinalColors(["#aaaaaa"])
         .margins({top: 0, left: 50, right: 10, bottom: 20})
-        .x(d3.scale.linear().domain([0, 3]))
+        .x(d3.scale.linear().domain([0, 5]))
     
         busDivChart.yAxis().ticks(2)
         busDivChart.xAxis().ticks(4)
@@ -214,8 +214,9 @@ function charts(data){
 var chartColors = {"1":"#fff7bc","2":"#fee391","3":"#fec44f","4":"#fee0d2","5":"#fc9272","6":"#de2d26","7":"#deebf7","8":"#9ecae1","9":"#3182bd"}
     devIntChart.width(chartWidth).height(chartHeight)
         .group(devIntGroup).dimension(devIntDimension)
-        .ordinalColors(["#fff"])      
+        .ordinalColors(["#888","#888","#888"])      
         .margins({top: 0, left: 50, right: 10, bottom: 20})
+		.labelOffsetX(-35)
         
        // .x(d3.scale.linear().domain([0, 4]))
         .xAxis().ticks(4)
@@ -250,7 +251,6 @@ var chartColors = {"1":"#fff7bc","2":"#fee391","3":"#fec44f","4":"#fee0d2","5":"
     incomeChart.width(chartWidth).height(chartHeight).group(iGroup).dimension(incomeDimension)
         .round(dc.round.floor)    
         .ordinalColors(["#ffffff"])
-        
         .alwaysUseRounding(true)
         .elasticY(true)
         .elasticX(true)

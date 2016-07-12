@@ -1,6 +1,6 @@
 
 body{
-    color:#aaa;
+    color:#fff;
     background-color:#000;
     font-family: 'Ropa Sans', sans-serif;
     font-weight: 400;
@@ -47,10 +47,23 @@ canvas {
     
 }
 .dc-data-count a{
-    color:#aaa;
+    color:#fff;
 }
-.dc-chart rect.bar:hover {
+.dc-chart{
     fill-opacity: .5;
+    cursor:pointer;
+    font-size:12px;
+    letter-spacing:2px;
+}
+.dc-chart:hover {
+    fill-opacity: 1;
+    cursor:pointer;
+}
+.dc-chart .selected{
+    fill:#fff;
+}
+.dc-chart .deselected{
+    fill:#888;
 }
 .loader-text{
     position:absolute;left:0px;

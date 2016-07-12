@@ -17,6 +17,7 @@
   <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
   <script src="crossfilter.min.js"></script>
   <script src="dc.js"></script>
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
   
   <script src='mapbox.js'></script>
   <link href='mapbox.css' rel='stylesheet' />
@@ -62,23 +63,23 @@
             </span> records | <a href="javascript:dc.filterAll(); dc.redrawAll();;">Reset All</a>
         </div>
        
-        <div id ="income">Median Household Income
+        <div id ="income">MEDIAN HOUSEHOLD INCOME <i class="fa fa-info-circle incomeDataSource" aria-hidden="true"></i>
         <a class="reset" href="javascript:incomeChart.filterAll();dc.redrawAll();" 			style="display: none;">reset</a></br>
         </div>
-        <div id ="development_intensity">Development Intensity
+        <div id ="development_intensity">DEVELOPMENT INTENSITY <i class="devIntSource" aria-hidden="true"></i>
         <a class="reset" href="javascript:devIntChart.filterAll();dc.redrawAll();" 			style="display: none;">reset</a></br>
         </div>
-        <div id ="population">Population
+        <div id ="population">POPULATION
           <a class="reset" href="javascript:populationChart.filterAll();dc.redrawAll();" 			style="display: none;">reset</a></br>
         </div>
-        <div id ="business_diversity">Business Diversity
+        <div id ="business_diversity">BUSINESS DIVERSITY
         <a class="reset" href="javascript:busDivChart.filterAll();dc.redrawAll();" 			style="display: none;">reset</a></br>
         </div>
-        <div id ="light_average">Light Average</br>
-        <a class="reset" href="javascript:ligAveChart.filterAll();dc.redrawAll();" 			style="display: none;">reset</a></br>
-        </div>
-        <div id ="places">Place Density
+        <div id ="places">PLACE DENSITY
         <a class="reset" href="javascript:placesChart.filterAll();dc.redrawAll();" 			style="display: none;">reset</a></br>
+        </div>
+        <div id ="light_average">LIGHTING AVERAGE</br>
+        <a class="reset" href="javascript:ligAveChart.filterAll();dc.redrawAll();" 			style="display: none;">reset</a></br>
         </div>
       </div>
     </div>
@@ -88,6 +89,7 @@
 <script src="city_dropdown.js"></script>
 
 <script src="grid_map.js"></script>
+<script src="filter_rollovers.js"></script>
 
 
 <script type="text/javascript" charset="utf-8">
