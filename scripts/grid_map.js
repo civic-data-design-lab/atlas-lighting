@@ -42,8 +42,13 @@ var ligAveChart = dc.barChart("#light_average")
 var placesChart = dc.barChart("#places")
 
 var __map = null
+var originalZoom = 8
+var currentZoom = 8
+var currentCenter = [-86.4,41.6]
 var colorByLight = true
+var radius = 1
 function dataDidLoad(error,grid,zipcodes) {
+    
     charts(grid)
    // drawPolygons(zipcodes)
 }
@@ -56,13 +61,18 @@ function initCanvas(data){
         __map = new mapboxgl.Map({
             container: "map", // container id
             style: 'mapbox://styles/arminavn/cimgzcley000nb9nluxbgd3q5', //stylesheet location
-            center: [-86.4,41.6], // starting position
-            zoom: 8 // starting zoom
+            center: currentCenter, // starting position
+            zoom: currentZoom // starting zoom
         });
         
     }
+   
     var map = __map
  //   var svg = d3.select(map.getPanes().overlayPane).append("svg")
+    map.on('mousemove', function (e) {
+       console.log(JSON.stringify(e.lngLat) )
+        
+    }); 
     
     function project(d) {
         return map.project(getLL(d));
@@ -74,15 +84,42 @@ function initCanvas(data){
    
 //svg.append("circle").attr("cx",200).attr("cy",200).attr("r",20)
 
-    
-    var chart = d3.select("#map").append("canvas").attr("class","datalayer").node()
+    var container = map.getCanvasContainer()
+    console.log(container)
+    var chart = d3.select(container).append("canvas").attr("class","datalayer").node()
      chart.width = 1800
      chart.height = 1200
      // .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom()))
       //.node().getContext("2d");
-
+          map.zoom = map.getZoom()
+          map.center = map.getCenter()
+          currentCenter = map.center
+          currentZoom = map.zoom
+          radius = parseFloat(currentZoom)/parseFloat(originalZoom)*2
+    //  map.on("viewreset", function() {
+    //      context.clearRect(0, 0, chart.width, chart.height);
+    //      
+    //      map.zoom = map.getZoom()
+    //      map.center = map.getCenter()
+    //      currentCenter = map.center
+    //      currentZoom = map.zoom
+    //      radius = parseFloat(currentZoom)/parseFloat(originalZoom)
+    //      console.log(radius)
+    //      initCanvas(data)
+    //    })
+    //    map.on("move", function() {
+    //        context.clearRect(0, 0, chart.width, chart.height);
+    //        
+    //        map.zoom = map.getZoom()
+    //        map.center = map.getCenter()
+    //        currentCenter = map.center
+    //        currentZoom = map.zoom
+    //        radius = parseFloat(currentZoom)/parseFloat(originalZoom)
+    //        console.log(radius)
+    //        initCanvas(data)
+    //      })
+    //
         var context = chart.getContext("2d");
-
 
         context.clearRect(0, 0, chart.width, chart.height);
         data.forEach(function(d, i) {
@@ -112,9 +149,9 @@ function initCanvas(data){
                 }
             }
             
-            
+        
           context.beginPath();
-          context.rect(x,y, 1, 1);
+          context.rect(x,y, radius, radius);
           context.fillStyle=fillColor;
     //      context.fillStyle = "rgba(0,0,0,.3)"
           context.fill();
@@ -282,6 +319,8 @@ var chartColors = {"1":"#fff7bc","2":"#fee391","3":"#fec44f","4":"#fee0d2","5":"
         })
         initCanvas(data)
         dc.renderAll();
+        console.log("take away loader now")
+    	d3.select("#loader").transition().duration(600).style("opacity",0).remove();
 }
 function reDrawMap(data){
 

@@ -37,7 +37,12 @@
     <div id = "civic" class="col-md-1"><img src="logos/cddl_white.png" style="width:80px "></div>
   </div>
 
-
+<div id = "loader">
+  <div id = "loader-text">
+    Loading data for Chicago and its surrounding MSA ...
+    <br/><br/>
+  </div>
+</div>
   
     <div id = "map"></div>
     <div id = "info" class="col-md-4">
@@ -62,8 +67,8 @@
             <span class="filter-count"></span> selected out of <span class="total-count">
             </span> records | <a href="javascript:dc.filterAll(); dc.redrawAll();;">Reset All</a>
         </div>
-       
-        <div id ="income">MEDIAN HOUSEHOLD INCOME <i class="fa fa-info-circle incomeDataSource" aria-hidden="true"></i>
+       <span class="filterTitle">MEDIAN HOUSEHOLD INCOME <i class="fa fa-info-circle incomeDataSource" aria-hidden="true"></i></span>
+        <div id ="income">
         <a class="reset" href="javascript:incomeChart.filterAll();dc.redrawAll();" 			style="display: none;">reset</a></br>
         </div>
         <div id ="development_intensity">DEVELOPMENT INTENSITY <i class="devIntSource" aria-hidden="true"></i>
@@ -84,6 +89,7 @@
       </div>
     </div>
 </div>
+<script src="grid_loader.js"></script>
 
 <script src="city_comparisons_data.js"></script>
 <script src="city_dropdown.js"></script>

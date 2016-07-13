@@ -12,7 +12,7 @@ var dataSources = {
     "developmentIntensity":"link to datasource"
 }
 
-d3.select(".incomeDataSource")
+d3.select(".filterTitle")
     .on("mouseover",function(d){
         console.log("show")
         tip.html("show")
