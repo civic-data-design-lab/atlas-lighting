@@ -42,21 +42,57 @@ var ligAveChart = dc.barChart("#light_average")
 var placesChart = dc.barChart("#places")
 
 var __map = null
+var  __canvas = null
 var originalZoom = 8
 var currentZoom = 8
 var currentCenter = [-86.4,41.6]
 var colorByLight = true
 var radius = 1
+  
 function dataDidLoad(error,grid,zipcodes) {
     
     charts(grid)
-   // drawPolygons(zipcodes)
+    d3.select("#loader").remove()
+
+   
+}
+
+function draw() {
+  
+    var randomX = d3.random.normal(1000/ 2, 80),
+        randomY = d3.random.normal(1000 / 2, 80);
+
+    var data = d3.range(90000).map(function() {
+      return [
+        randomX(),
+        randomY()
+      ];
+    });
+      var i = -1, n = data.length, d;
+      __canvas.beginPath();
+      while (++i < n) {
+        d = data[i];
+        __canvas.moveTo(d[0], d[1]);
+        __canvas.rect(i/300*2,i%300*2,1,1)
+        __canvas.fillStyle = "#aaaaaa"
+      }
+      __canvas.fill();
+}
+
+function zoom() {    
+    console.log("zoom")
+    var canvas = __canvas
+    canvas.save();
+    canvas.clearRect(0, 0,1000,1000);
+    canvas.translate(d3.event.translate[0], d3.event.translate[1]);
+    canvas.scale(d3.event.scale, d3.event.scale);
+    draw();
+    canvas.restore();
 }
 
 function initCanvas(data){
-
+//draws map tile if map is null
     if(__map == null){
-    
         mapboxgl.accessToken = 'pk.eyJ1IjoiYXJtaW5hdm4iLCJhIjoiSTFteE9EOCJ9.iDzgmNaITa0-q-H_jw1lJw';
         __map = new mapboxgl.Map({
             container: "map", // container id
@@ -64,15 +100,10 @@ function initCanvas(data){
             center: currentCenter, // starting position
             zoom: currentZoom // starting zoom
         });
-        
     }
    
     var map = __map
- //   var svg = d3.select(map.getPanes().overlayPane).append("svg")
-    map.on('mousemove', function (e) {
-       console.log(JSON.stringify(e.lngLat) )
-        
-    }); 
+    map.on('mousemove', function (e) {console.log(JSON.stringify(e.lngLat) )}); 
     
     function project(d) {
         return map.project(getLL(d));
@@ -81,84 +112,38 @@ function initCanvas(data){
           return new mapboxgl.LngLat(+d.lng, +d.lat)
     }
     var bbox = document.body.getBoundingClientRect();
-   
-//svg.append("circle").attr("cx",200).attr("cy",200).attr("r",20)
 
     var container = map.getCanvasContainer()
-    console.log(container)
-    var chart = d3.select(container).append("canvas").attr("class","datalayer").node()
-     chart.width = 1800
-     chart.height = 1200
-     // .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom()))
-      //.node().getContext("2d");
-          map.zoom = map.getZoom()
-          map.center = map.getCenter()
-          currentCenter = map.center
-          currentZoom = map.zoom
-          radius = parseFloat(currentZoom)/parseFloat(originalZoom)*2
-    //  map.on("viewreset", function() {
-    //      context.clearRect(0, 0, chart.width, chart.height);
-    //      
-    //      map.zoom = map.getZoom()
-    //      map.center = map.getCenter()
-    //      currentCenter = map.center
-    //      currentZoom = map.zoom
-    //      radius = parseFloat(currentZoom)/parseFloat(originalZoom)
-    //      console.log(radius)
-    //      initCanvas(data)
-    //    })
-    //    map.on("move", function() {
-    //        context.clearRect(0, 0, chart.width, chart.height);
-    //        
-    //        map.zoom = map.getZoom()
-    //        map.center = map.getCenter()
-    //        currentCenter = map.center
-    //        currentZoom = map.zoom
-    //        radius = parseFloat(currentZoom)/parseFloat(originalZoom)
-    //        console.log(radius)
-    //        initCanvas(data)
-    //      })
-    //
-        var context = chart.getContext("2d");
-
-        context.clearRect(0, 0, chart.width, chart.height);
-        data.forEach(function(d, i) {
-            var x = project(d).x
-            var y = project(d).y
-            var fillColor = null
-            
-            if(colorByLight==true){
-                var light = d.averlight
-                var lightScale = d3.scale.linear().domain([0,200,400]).range(["#3182bd","#fee391","#fc9272"])
-                fillColor = lightScale(light)   
-            }else{
-                var IC = d.inc_cat
-                var DI = d.dev_intensity
-                if(IC == 1){
-                    if(DI == 1){fillColor = colors[1]}
-                    else if(DI == 2){fillColor = colors[2]}
-                    else{fillColor = colors[3]}
-                }else if (IC ==2){
-                    if(DI == 1){fillColor =  colors[4]}
-                    else if(DI == 2){fillColor =  colors[5]}
-                    else{fillColor = colors[6]}
-                }else if (IC ==3){
-                    if(DI == 1){fillColor =  colors[7]}
-                    else if(DI == 2){fillColor = colors[8]}
-                    else{fillColor = colors[9]}
-                }
-            }
-            
-        
-          context.beginPath();
-          context.rect(x,y, radius, radius);
-          context.fillStyle=fillColor;
-    //      context.fillStyle = "rgba(0,0,0,.3)"
-          context.fill();
-          context.closePath();
-        });
+    
+    var canvas = d3.select(container).append("canvas").attr("class","datalayer")
+        .attr("width", 1800)
+        .attr("height", 1200)
+        .call(d3.behavior.zoom().scaleExtent([1, 40]).on("zoom", zoom))
+        .node().getContext("2d");
+     __canvas = canvas
+        draw()
+    
+    
+ //       context.clearRect(0, 0, chart.width, chart.height);
+ //       data.forEach(function(d, i) {
+ //           var x = project(d).x
+ //           var y = project(d).y
+ //           var fillColor = null
+ //           
+ //           var light = d.averlight
+ //           var lightScale = d3.scale.linear().domain([0,200,400]).range(["#3182bd","#fee391","#fc9272"])
+ //           fillColor = lightScale(light)
+ //
+ //         context.beginPath();
+ //         context.rect(x,y, radius, radius);
+ //         context.fillStyle=fillColor;
+ //   //      context.fillStyle = "rgba(0,0,0,.3)"
+ //         context.fill();
+ //         context.closePath();
+ //       });
  //   context.clearRect(0, 0, chart.width, chart.height);   
 }
+
 function charts(data){
     data.forEach(function(d){
         d.lng = +d.lng
@@ -175,10 +160,7 @@ function charts(data){
     
     var ndx = crossfilter(data)
     var all = ndx.groupAll()
-    
-
-
-              
+               
     var busDivDimension = ndx.dimension(function(d){
        // console.log(parseFloat(parseInt(d.b_diversity*100))/100)
         return parseFloat(parseInt(d.b_diversity*100))/100})
@@ -248,28 +230,20 @@ function charts(data){
         .x(d3.scale.linear().domain([0, 20]))
          placesChart.yAxis().ticks(2)
 
-var chartColors = {"1":"#fff7bc","2":"#fee391","3":"#fec44f","4":"#fee0d2","5":"#fc9272","6":"#de2d26","7":"#deebf7","8":"#9ecae1","9":"#3182bd"}
+        var chartColors = {"1":"#fff7bc","2":"#fee391","3":"#fec44f","4":"#fee0d2","5":"#fc9272","6":"#de2d26","7":"#deebf7","8":"#9ecae1","9":"#3182bd"}
     devIntChart.width(chartWidth).height(chartHeight)
         .group(devIntGroup).dimension(devIntDimension)
         .ordinalColors(["#888","#888","#888"])      
         .margins({top: 0, left: 50, right: 10, bottom: 20})
 		.labelOffsetX(-35)
-        
-       // .x(d3.scale.linear().domain([0, 4]))
         .xAxis().ticks(4)
 
     ligAveChart.width(chartWidth).height(chartHeight)
         .group(laGroup).dimension(ligAveDimension).centerBar(true)
-        //.round(dc.round.floor)
-        //.alwaysUseRounding(true)
         .elasticY(true)
-        //.ordinalColors(["#ffffff"])
         .colors(d3.scale.linear().domain([0,200,400]).range(["#3182bd","#fee391","#fc9272"]))
-        .colorAccessor(function(d){
-            return d.key
-        })
+        .colorAccessor(function(d){return d.key })
         .margins({top: 0, left: 50, right: 10, bottom: 20})
-        
         .x(d3.scale.linear().domain([0, 500]))
         .yAxis().ticks(3)
 
@@ -281,9 +255,8 @@ var chartColors = {"1":"#fff7bc","2":"#fee391","3":"#fec44f","4":"#fee0d2","5":"
         .ordinalColors(["#ffffff"])
         .x(d3.scale.linear().domain([0, 30]))
         .margins({top: 0, left: 50, right: 10, bottom: 20})
-        
         .yAxis().ticks(2)
-        populationChart.xAxis().ticks(4)
+    populationChart.xAxis().ticks(4)
     
     incomeChart.width(chartWidth).height(chartHeight).group(iGroup).dimension(incomeDimension)
         .round(dc.round.floor)    
@@ -292,7 +265,6 @@ var chartColors = {"1":"#fff7bc","2":"#fee391","3":"#fec44f","4":"#fee0d2","5":"
         .elasticY(true)
         .elasticX(true)
         .margins({top: 0, left: 50, right: 10, bottom: 20})
-        
         .on('renderlet', function(d) {
                 var newData = incomeDimension.top(Infinity)
                 //reDrawMap(newData)
@@ -317,17 +289,12 @@ var chartColors = {"1":"#fff7bc","2":"#fee391","3":"#fec44f","4":"#fee0d2","5":"
             some:"%filter-count areas out of %total-count fit the selection criteria | <a href='javascript:dc.filterAll(); dc.renderAll();''>Reset All</a>",
             all:"Total %total-count areas."
         })
-        initCanvas(data)
+       // initCanvas(data)
         dc.renderAll();
         console.log("take away loader now")
     	d3.select("#loader").transition().duration(600).style("opacity",0).remove();
 }
-function reDrawMap(data){
 
-    d3.selectAll("#map circle").transition().duration(1000).attr("opacity",0)
-    d3.selectAll("#map circle").data(data).transition().duration(1000).attr("opacity",1)
-
-}
 function drawMap(data){
    
     var mapSvg = d3.select("#map").append("svg").attr("width",1000).attr("height",1000)
