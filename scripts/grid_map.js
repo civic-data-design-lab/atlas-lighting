@@ -3,7 +3,7 @@
 $(function() {
 	d3.queue()
 		.defer(d3.csv, "grids_values_export_no0.csv")
-        .defer(d3.json,"zipcode_business.geojson")
+      //  .defer(d3.json,"zipcode_business.geojson")
 	//	.defer(d3.json, "grids.geojson")
     .await(dataDidLoad);
 })
@@ -31,9 +31,6 @@ var colors = {
 "9":"#3182bd",
 }
 var center = cityCentroids["Chicago"]
-var projection = d3.geo.mercator().scale(20000).center([center.lng,center.lat])
-var densityScale = d3.scale.linear().domain([3000,31684]).range([5,50])
-var projection = d3.geo.mercator().scale(30000).center([-87.7,42.3])
 var populationChart = dc.barChart("#population")
 var incomeChart = dc.barChart("#income")
 var busDivChart = dc.barChart("#business_diversity")
@@ -43,105 +40,136 @@ var placesChart = dc.barChart("#places")
 
 var __map = null
 var  __canvas = null
-var originalZoom = 8
-var currentZoom = 8
-var currentCenter = [-86.4,41.6]
+var __gridData = null
+
+var originalZoom = 9
+var currentZoom = 9
+var currentCenter = center
 var colorByLight = true
 var radius = 1
   
-function dataDidLoad(error,grid,zipcodes) {
-    
+function dataDidLoad(error,grid) {
     charts(grid)
     d3.select("#loader").remove()
-
+//initCanvas(grid)
    
 }
-
-function draw() {
-  
-    var randomX = d3.random.normal(1000/ 2, 80),
-        randomY = d3.random.normal(1000 / 2, 80);
-
-    var data = d3.range(90000).map(function() {
-      return [
-        randomX(),
-        randomY()
-      ];
-    });
-      var i = -1, n = data.length, d;
-      __canvas.beginPath();
-      while (++i < n) {
-        d = data[i];
-        __canvas.moveTo(d[0], d[1]);
-        __canvas.rect(i/300*2,i%300*2,1,1)
-        __canvas.fillStyle = "#aaaaaa"
-      }
-      __canvas.fill();
+function project(d) {
+    return __map.project(getLL(d));
 }
-
+function getLL(d) {
+      return new mapboxgl.LngLat(+d.lng, +d.lat)
+}
 function zoom() {    
-    console.log("zoom")
+    var zoom_map = __map.getZoom();
+    var center_map = __map.getCenter();
+    
+    console.log(project)
+    console.log(__gridData)
+    console.log(["zoom",d3.event.scale,__map.getZoom()])
+    console.log(d3.event.translate)
     var canvas = __canvas
     canvas.save();
-    canvas.clearRect(0, 0,1000,1000);
+    canvas.clearRect(0, 0,1200,1200);
+    
+    
+    
     canvas.translate(d3.event.translate[0], d3.event.translate[1]);
     canvas.scale(d3.event.scale, d3.event.scale);
-    draw();
+    currentZoom = originalZoom*d3.event.scale
+ //   draw();
+    
+
+    var fillColor = "#000"
+    var lightScale = d3.scale.linear().domain([0,200,400]).range(["#3182bd","#fee391","#fc9272"])
+    var i = -1, n = __gridData.length, d;
+    
+    while (++i < n) {
+        __canvas.beginPath();
+      d = __gridData[i];
+      
+      var light = d.averlight
+      radius = d3.event.scale
+       fillColor = lightScale(light)
+      __canvas.moveTo(project(d).x,project(d).y);
+      __canvas.rect(project(d).x,project(d).y,radius,radius)
+      __canvas.fillStyle = fillColor
+         __canvas.globalAlpha=1.0/d3.event.scale
+
+      __canvas.fill();
+    }
+    
+    
     canvas.restore();
 }
 
 function initCanvas(data){
+    __gridData = data
 //draws map tile if map is null
     if(__map == null){
-        mapboxgl.accessToken = 'pk.eyJ1IjoiYXJtaW5hdm4iLCJhIjoiSTFteE9EOCJ9.iDzgmNaITa0-q-H_jw1lJw';
+        mapboxgl.accessToken = 'pk.eyJ1IjoiampqaWlhMTIzIiwiYSI6ImNpbDQ0Z2s1OTN1N3R1eWtzNTVrd29lMDIifQ.gSWjNbBSpIFzDXU2X5YCiQ';
         __map = new mapboxgl.Map({
             container: "map", // container id
-            style: 'mapbox://styles/arminavn/cimgzcley000nb9nluxbgd3q5', //stylesheet location
+            style: 'mapbox://styles/jjjiia123/cipn0g53q0004bmnd1rzl152g', //stylesheet location
             center: currentCenter, // starting position
             zoom: currentZoom // starting zoom
         });
     }
    
     var map = __map
-    map.on('mousemove', function (e) {console.log(JSON.stringify(e.lngLat) )}); 
+ //   map.on('mousemove', function (e) {console.log(JSON.stringify(e.lngLat) )}); 
     
-    function project(d) {
-        return map.project(getLL(d));
-    }
-    function getLL(d) {
-          return new mapboxgl.LngLat(+d.lng, +d.lat)
-    }
     var bbox = document.body.getBoundingClientRect();
 
     var container = map.getCanvasContainer()
-    
+    console.log(container)
     var canvas = d3.select(container).append("canvas").attr("class","datalayer")
-        .attr("width", 1800)
-        .attr("height", 1200)
-        .call(d3.behavior.zoom().scaleExtent([1, 40]).on("zoom", zoom))
+        .attr("width", 1200)
+        .attr("height",  1200)
+        .call(d3.behavior.zoom().scaleExtent([-10, 10]).on("zoom", zoom))
         .node().getContext("2d");
      __canvas = canvas
-        draw()
+  //      draw(data)
     
+        var fillColor = "#000"
+        var lightScale = d3.scale.linear().domain([0,200,400]).range(["#3182bd","#fee391","#fc9272"])
+        var i = -1, n = data.length, d;
+        console.log(data[3])
+        console.log(project(data[3]))
+        
+        var testCoords = {lat:42.10975616,lng:-87.75686081}
+        console.log(project(testCoords))
+        
+       while (++i < n) {
+           canvas.beginPath();
+         d = data[i];
+         var coordinates = {lat:d.lat,lng:d.lng}
+         var light = d.averlight
+          fillColor = lightScale(light)
+         //__canvas.moveTo(project(d).x,project(d).y);
+         canvas.rect(project(coordinates).x,project(coordinates).y,radius,radius)
+         canvas.fillStyle = fillColor
+         canvas.globalAlpha=0.8
+         canvas.fill();
+       }
+   
     
- //       context.clearRect(0, 0, chart.width, chart.height);
- //       data.forEach(function(d, i) {
- //           var x = project(d).x
- //           var y = project(d).y
- //           var fillColor = null
- //           
- //           var light = d.averlight
- //           var lightScale = d3.scale.linear().domain([0,200,400]).range(["#3182bd","#fee391","#fc9272"])
- //           fillColor = lightScale(light)
- //
- //         context.beginPath();
- //         context.rect(x,y, radius, radius);
- //         context.fillStyle=fillColor;
- //   //      context.fillStyle = "rgba(0,0,0,.3)"
- //         context.fill();
- //         context.closePath();
- //       });
- //   context.clearRect(0, 0, chart.width, chart.height);   
+   //     canvas.clearRect(0, 0, 1200,1200);
+   //     data.forEach(function(d, i) {
+   //         var x = project(d).x
+   //         var y = project(d).y
+   //         var fillColor = "#aaa"
+   //         
+   //        fillColor = lightScale(d.averlight)
+   //
+   //       canvas.beginPath();
+   //       canvas.rect(x,y, radius, radius);
+   //       canvas.fillStyle=fillColor;
+   // //      context.fillStyle = "rgba(0,0,0,.3)"
+   //       canvas.fill();
+   //       canvas.closePath();
+   //     });
+ //   canvas.clearRect(0, 0,1200,1200);   
 }
 
 function charts(data){
@@ -182,34 +210,7 @@ function charts(data){
     
     var placesDimension = ndx.dimension(function(d){return d.places})
     var placesGroup = placesDimension.group()
-    
-    
-    var lngDimension = ndx.dimension(function(d){
-        var projectedLat = projection([d.lng,d.lat])[1]
-        var projectedLng = projection([d.lng,d.lat])[0]
-        
-        return [projectedLat,projectedLng,d.dev_intensity]
-    })
 
-      var colors = ["red","blue","orange","red"]
-    var lngGroup = lngDimension.group().reduce(
-        function(p,v){
-            ++p.count
-            p.id = v.id;
-            p.lat = v.lat;
-            p.lng = v.lng;
-            return p;
-        },
-        function(p,v){
-            --p.count
-            p.id = "";
-            p.lat = 0;
-            p.lng = 0;
-            return p;
-        },function(){
-            return{count:0,x:0,y:0,label:""};
-        })
-        
         var chartHeight = 80
     busDivChart.width(chartWidth).height(chartHeight)
         .group(busDivGroup).dimension(busDivDimension)        

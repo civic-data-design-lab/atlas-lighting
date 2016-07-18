@@ -1,6 +1,6 @@
 
 body{
-    color:#fff;
+    color:#ddd;
     background-color:#000;
     font-family: 'Ropa Sans', sans-serif;
     font-weight: 400;
@@ -10,7 +10,44 @@ body{
 .largeContent{
     font-size:36px;
 }
-
+.section-title{
+    font-size:20px;
+    letter-spacing:2px;
+    color:#fff;
+    margin-left:-20px;
+    
+}
+.subsection-title{
+    font-size:14px;
+    letter-spacing:2px;
+    color:#fff; 
+    margin-left:-10px;
+    
+}
+#about-1{
+    letter-spacing:1px;
+    font-size:12px;
+    position:absolute;
+    width:30%;
+    left:5%;
+    padding:20px;
+}
+#about-2{
+    letter-spacing:1px;
+    font-size:12px;
+    position:absolute;
+    width:30%;
+    left:35%;
+    padding:20px;
+}
+#about-3{
+    letter-spacing:1px;
+    font-size:12px;
+    position:absolute;
+    width:30%;
+    left:70%;
+    padding:20px;
+}
 #loader{
 	width:100%;
     background: #000000; /* For browsers that do not support gradients */
@@ -38,7 +75,7 @@ body{
 }
 #map{
     position:absolute; 
-    width: 1800px;
+    width: 1200px;
     height: 1200px;
     overflow:hidden;
 }
@@ -56,8 +93,6 @@ body{
 }
 canvas {
      position: absolute;
-     width: 1800px;
-     height:1200px;
      overflow:hidden;
    }
 #key{

@@ -4,7 +4,7 @@ var cityCentroids = {
     "Milwaukee":{lat:43.038903,lng:-87.906474},
     "Washington":{lat:39,lng:-77},
     "Denver":{lat:39,lng:-104},
-    "Chicago":{lat:41.878114,lng:-87.629798},
+    "Chicago":{lat:41.7,lng:-87.18},
     "Pittsburg":{lat:40,lng:-79},
     "Portland":{lat:45.523062,lng:-122.676482},
     "Las Vegas":{lat:36.084,lng:-115.153739},
