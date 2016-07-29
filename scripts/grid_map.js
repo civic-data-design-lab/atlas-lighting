@@ -43,11 +43,15 @@ var  __canvas = null
 var __gridData = null
 
 var originalZoom = 9
-var currentZoom = 9
+var maxZoom = 12
+var minZoom  = 8
+
 var currentCenter = center
 var colorByLight = true
 var radius = 1
-  
+
+var alpha = 0.6
+var alphaScale = d3.scale.linear().domain([minZoom,maxZoom]).range([0.6,.03])
 function dataDidLoad(error,grid) {
     charts(grid)
     d3.select("#loader").remove()
@@ -60,47 +64,52 @@ function project(d) {
 function getLL(d) {
       return new mapboxgl.LngLat(+d.lng, +d.lat)
 }
+function getD3() {
+      var bbox = document.body.getBoundingClientRect();
+      var center = map.getCenter();
+      var zoom = map.getZoom();
+      // 512 is hardcoded tile size, might need to be 256 or changed to suit your map config
+      var scale = (512) * 0.5 / Math.PI * Math.pow(2, zoom);
+
+      var d3projection = d3.geo.mercator()
+        .center([center.lng, center.lat])
+        .translate([bbox.width/2, bbox.height/2])
+        .scale(scale);
+
+      return d3projection;
+}
 function zoom() {    
-    var zoom_map = __map.getZoom();
-    var center_map = __map.getCenter();
-    
-    console.log(project)
-    console.log(__gridData)
-    console.log(["zoom",d3.event.scale,__map.getZoom()])
-    console.log(d3.event.translate)
     var canvas = __canvas
+    
     canvas.save();
     canvas.clearRect(0, 0,1200,1200);
-    
-    
-    
-    canvas.translate(d3.event.translate[0], d3.event.translate[1]);
-    canvas.scale(d3.event.scale, d3.event.scale);
-    currentZoom = originalZoom*d3.event.scale
- //   draw();
-    
-
-    var fillColor = "#000"
-    var lightScale = d3.scale.linear().domain([0,200,400]).range(["#3182bd","#fee391","#fc9272"])
-    var i = -1, n = __gridData.length, d;
-    
-    while (++i < n) {
-        __canvas.beginPath();
-      d = __gridData[i];
-      
-      var light = d.averlight
-      radius = d3.event.scale
-       fillColor = lightScale(light)
-      __canvas.moveTo(project(d).x,project(d).y);
-      __canvas.rect(project(d).x,project(d).y,radius,radius)
-      __canvas.fillStyle = fillColor
-         __canvas.globalAlpha=1.0/d3.event.scale
-
-      __canvas.fill();
-    }
-    
-    
-    canvas.restore();
+        
+    //    canvas.translate(d3.event.translate[0], d3.event.translate[1]);
+    //    canvas.scale(d3.event.scale, d3.event.scale);
+    //    currentZoom = originalZoom*d3.event.scale
+    // //   draw();
+    //    
+    //
+    //    var fillColor = "#000"
+    //    var lightScale = d3.scale.linear().domain([0,200,400]).range(["#3182bd","#fee391","#fc9272"])
+    //    var i = -1, n = __gridData.length, d;
+    //    
+    //    while (++i < n) {
+    //        __canvas.beginPath();
+    //      d = __gridData[i];
+    //      
+    //      var light = d.averlight
+          radius = radius*d3.event.scale
+    //       fillColor = lightScale(light)
+    //      __canvas.moveTo(project(d).x,project(d).y);
+    //      __canvas.rect(project(d).x,project(d).y,radius,radius)
+    //      __canvas.fillStyle = fillColor
+    //         __canvas.globalAlpha=1.0/d3.event.scale
+    //
+    //      __canvas.fill();
+    //    }
+    //    
+  initCanvas(__gridData)  
 }
 
 function initCanvas(data){
@@ -112,64 +121,62 @@ function initCanvas(data){
             container: "map", // container id
             style: 'mapbox://styles/jjjiia123/cipn0g53q0004bmnd1rzl152g', //stylesheet location
             center: currentCenter, // starting position
-            zoom: currentZoom // starting zoom
+            zoom: originalZoom,// starting zoom
+            maxZoom:maxZoom,
+            minZoom:minZoom
         });
+        __map.scrollZoom.disable()
+        __map.addControl(new mapboxgl.Navigation());
+       // __map.addControl(new mapboxgl.Geocoder());
+        
     }
-   
+
     var map = __map
  //   map.on('mousemove', function (e) {console.log(JSON.stringify(e.lngLat) )}); 
-    
+//     map.on("viewreset", function() {
+//            initCanvas(__gridData)
+//          })
+//          map.on("move", function() {
+//            initCanvas(__gridData)
+//          })
     var bbox = document.body.getBoundingClientRect();
 
     var container = map.getCanvasContainer()
-    console.log(container)
     var canvas = d3.select(container).append("canvas").attr("class","datalayer")
         .attr("width", 1200)
         .attr("height",  1200)
-        .call(d3.behavior.zoom().scaleExtent([-10, 10]).on("zoom", zoom))
+        .call(d3.behavior.zoom().on("zoom", 
+                function(){
+                    var canvas = __canvas
+                    canvas.clearRect(0, 0,1200,1200);
+                    alpha = alphaScale(__map.getZoom())
+                    console.log(alpha)
+                    if(__map.getZoom() < maxZoom && __map.getZoom() > minZoom){
+                          radius = radius*__map.getZoom()/8
+                    }
+                    initCanvas(__gridData)
+        
+                }
+        ))
         .node().getContext("2d");
-     __canvas = canvas
+         __canvas = canvas
   //      draw(data)
-    
+        console.log("clear")
         var fillColor = "#000"
         var lightScale = d3.scale.linear().domain([0,200,400]).range(["#3182bd","#fee391","#fc9272"])
-        var i = -1, n = data.length, d;
-        console.log(data[3])
-        console.log(project(data[3]))
-        
-        var testCoords = {lat:42.10975616,lng:-87.75686081}
-        console.log(project(testCoords))
-        
-       while (++i < n) {
+        var i = -1, n = data.length, d;        
+        while (++i < n) {
            canvas.beginPath();
-         d = data[i];
-         var coordinates = {lat:d.lat,lng:d.lng}
-         var light = d.averlight
-          fillColor = lightScale(light)
-         //__canvas.moveTo(project(d).x,project(d).y);
-         canvas.rect(project(coordinates).x,project(coordinates).y,radius,radius)
-         canvas.fillStyle = fillColor
-         canvas.globalAlpha=0.8
-         canvas.fill();
-       }
-   
-    
-   //     canvas.clearRect(0, 0, 1200,1200);
-   //     data.forEach(function(d, i) {
-   //         var x = project(d).x
-   //         var y = project(d).y
-   //         var fillColor = "#aaa"
-   //         
-   //        fillColor = lightScale(d.averlight)
-   //
-   //       canvas.beginPath();
-   //       canvas.rect(x,y, radius, radius);
-   //       canvas.fillStyle=fillColor;
-   // //      context.fillStyle = "rgba(0,0,0,.3)"
-   //       canvas.fill();
-   //       canvas.closePath();
-   //     });
- //   canvas.clearRect(0, 0,1200,1200);   
+             d = data[i];
+             var coordinates = {lat:d.lat,lng:d.lng}
+             var light = d.averlight
+              fillColor = lightScale(light)
+             canvas.moveTo(project(d).x,project(d).y);
+             canvas.rect(project(coordinates).x,project(coordinates).y,radius,radius)
+             canvas.fillStyle = fillColor
+             canvas.globalAlpha=alpha
+             canvas.fill();
+       } 
 }
 
 function charts(data){
@@ -269,8 +276,10 @@ function charts(data){
         .on('renderlet', function(d) {
                 var newData = incomeDimension.top(Infinity)
                 //reDrawMap(newData)
-            d3.select("#map .datalayer").remove()
-            
+           // d3.select("#map .datalayer").remove()
+            console.log("render canvas")
+            var canvas = __canvas
+           
             initCanvas(newData)
         })
         .x(d3.scale.linear().domain([1,250000]))
@@ -292,7 +301,6 @@ function charts(data){
         })
        // initCanvas(data)
         dc.renderAll();
-        console.log("take away loader now")
     	d3.select("#loader").transition().duration(600).style("opacity",0).remove();
 }
 
