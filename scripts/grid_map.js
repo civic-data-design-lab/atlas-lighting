@@ -3,7 +3,7 @@
 $(function() {
 	d3.queue()
 		.defer(d3.csv, "grids_values_export_no0.csv")
-      //  .defer(d3.json,"zipcode_business.geojson")
+        .defer(d3.json,"zipcode_business.geojson")
 	//	.defer(d3.json, "grids.geojson")
     .await(dataDidLoad);
 })
@@ -54,10 +54,10 @@ var radius = 1
 
 var alpha = 1
 var alphaScale = d3.scale.linear().domain([minZoom,maxZoom]).range([0.6,.03])
-function dataDidLoad(error,grid) {
-    charts(grid)
+function dataDidLoad(error,grid,zipcodes) {
+//    charts(grid)
     d3.select("#loader").remove()
-//initCanvas(grid)
+initCanvas(grid,zipcodes)
    
 }
 function project(d) {
@@ -101,7 +101,7 @@ function zoom() {
   initCanvas(__gridData)  
 }
 
-function initCanvas(data){
+function initCanvas(data,zipcodes){
     __gridData = data
     //draws map tile if map is null
     if(__map == null){
@@ -116,11 +116,60 @@ function initCanvas(data){
         });
         __map.scrollZoom.disable()
         __map.addControl(new mapboxgl.Navigation({position:"top-left"}));
-       // __map.addControl(new mapboxgl.Geocoder());
-        
+   //     __map.addControl(new mapboxgl.Geocoder());        
     }
     
     var map = __map
+    
+    map.style.on("load",function(){
+        map.addSource("zipcodes",{
+            "type":"geojson",
+            "data":zipcodes
+        })
+        map.addLayer({
+                "id": "state-fills",
+                "type": "fill",
+                "source": "zipcodes",
+                "layout": {},
+                "paint": {
+                    "fill-color": "#627BC1",
+                    "fill-opacity": 0
+                }
+            });
+            map.addLayer({
+                   "id": "route-hover",
+                   "type": "line",
+                   "source": "zipcodes",
+                   "layout": {},
+                   "paint": {
+                       "line-color": "#fff",
+                       "line-width": 2
+                   },
+                   "filter": ["==", "name", ""]
+               });
+        
+       var popup = new mapboxgl.Popup({
+           closeButton: false,
+           closeOnClick: false
+       });
+    
+        map.on("mousemove", function(e) {
+                var features = map.queryRenderedFeatures(e.point, { layers: ["state-fills"] });
+                if (features.length) {
+                    map.setFilter("route-hover", ["==", "name", features[0].properties.name]);
+                
+                console.log(features[0].properties)
+                    popup.setLngLat([JSON.stringify(e.lngLat["lng"]),JSON.stringify(e.lngLat["lat"])])
+                            .setHTML("<span style=\"color:#aaa; background:rgba(255,255,255,.4)\">zipcode: "+features[0].properties.name+"</br> other data: ....<h1></span>")
+                            .addTo(map)
+                } else {
+                    map.setFilter("route-hover", ["==", "name", ""]);
+                }
+
+            });
+        
+    })
+
     
     var container = map.getCanvasContainer()
     var canvas = d3.select(container).append("canvas").attr("class","datalayer")

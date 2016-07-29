@@ -79,6 +79,9 @@ body{
     height: 1200px;
     overflow:hidden;
 }
+.popup{
+    color:#000;
+}
 #info{
     position:relative;
     float:right;

@@ -28,47 +28,47 @@
 <script>
 //zoomtest
 
-var width = 1200,
-    height = 1200;
+var width = 1300,
+    height = 1300;
 
-var randomX = d3.random.normal(width / 2, 80),
-    randomY = d3.random.normal(height / 2, 80);
+    var randomX = d3.random.normal(0,8);
 
-var data = d3.range(250000).map(function() {
+var data = d3.range(90000).map(function() {
   return [
-    randomX(),
-    randomY()
+    randomX()
   ];
 });
 
-
+var globalAlpha = 1
 var canvas = d3.select("body").append("canvas")
     .attr("width", width)
     .attr("height", height)
-    .call(d3.behavior.zoom().scaleExtent([1, 40]).on("zoom", zoom))
+    .call(d3.behavior.zoom().scaleExtent([1, 50]).on("zoom", zoom))
   .node().getContext("2d");
 
 draw();
-
+var alphaScale = d3.scale.linear().domain([1,50]).range([1,.2])
 function zoom() {
   canvas.save();
   canvas.clearRect(0, 0, width, height);
   canvas.translate(d3.event.translate[0], d3.event.translate[1]);
   canvas.scale(d3.event.scale, d3.event.scale);
+  globalAlpha = alphaScale(d3.event.scale)
   draw();
   canvas.restore();
 }
 
 function draw() {
   var i = -1, n = data.length, d;
-  canvas.beginPath();
   while (++i < n) {
-    d = data[i];
-    canvas.moveTo(d[0], d[1]);
-    canvas.rect(i/500*2,i%500*2,1.5,1.5)
-    canvas.fillStyle="#888"
+    canvas.beginPath();
+    d = "#"+String(Math.abs((data[i][0])*10000000)).slice(0,6)
+    canvas.rect(i/300*2,i%300*2,2,2)
+    canvas.fillStyle=d
+    canvas.globalAlpha=globalAlpha
+    canvas.fill();
+    
   }
-  canvas.fill();
 }
 
 </script>
