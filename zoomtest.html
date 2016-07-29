@@ -11,6 +11,20 @@
 </style>
 <body>
 <script src="//d3js.org/d3.v3.min.js"></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.20.0/mapbox-gl.css' rel='stylesheet' />
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.20.0/mapbox-gl.js'></script>
+  <script src="d3.min.js"></script>
+  <script src="d3-queue.js"></script>
+  <script src="topojson.min.js"></script>
+  <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+  <script src="crossfilter.min.js"></script>
+  <script src="dc.js"></script>
+  <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v1.3.0/mapbox-gl-geocoder.js'></script>
+  <script src='mapbox.js'></script>
+  <link href='mapbox.css' rel='stylesheet' />
+<link href='https://fonts.googleapis.com/css?family=Dosis:500,300|Ropa+Sans' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">  
+	<link rel="stylesheet" type="text/css" href="atlas.css"> </style>     
 <script>
 //zoomtest
 
@@ -26,6 +40,7 @@ var data = d3.range(250000).map(function() {
     randomY()
   ];
 });
+
 
 var canvas = d3.select("body").append("canvas")
     .attr("width", width)

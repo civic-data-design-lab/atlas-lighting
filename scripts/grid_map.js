@@ -30,7 +30,8 @@ var colors = {
 "8":"#9ecae1",
 "9":"#3182bd",
 }
-var center = cityCentroids["Chicago"]
+//var center = cityCentroids["Chicago"]
+var center = {lat:41.857673, lng:-87.688886}
 var populationChart = dc.barChart("#population")
 var incomeChart = dc.barChart("#income")
 var busDivChart = dc.barChart("#business_diversity")
@@ -42,15 +43,16 @@ var __map = null
 var  __canvas = null
 var __gridData = null
 
-var originalZoom = 9
-var maxZoom = 12
+var originalZoom = 8
+var maxZoom = 16
 var minZoom  = 8
+var currentZoom = null
 
 var currentCenter = center
 var colorByLight = true
 var radius = 1
 
-var alpha = 0.6
+var alpha = 1
 var alphaScale = d3.scale.linear().domain([minZoom,maxZoom]).range([0.6,.03])
 function dataDidLoad(error,grid) {
     charts(grid)
@@ -64,20 +66,7 @@ function project(d) {
 function getLL(d) {
       return new mapboxgl.LngLat(+d.lng, +d.lat)
 }
-function getD3() {
-      var bbox = document.body.getBoundingClientRect();
-      var center = map.getCenter();
-      var zoom = map.getZoom();
-      // 512 is hardcoded tile size, might need to be 256 or changed to suit your map config
-      var scale = (512) * 0.5 / Math.PI * Math.pow(2, zoom);
 
-      var d3projection = d3.geo.mercator()
-        .center([center.lng, center.lat])
-        .translate([bbox.width/2, bbox.height/2])
-        .scale(scale);
-
-      return d3projection;
-}
 function zoom() {    
     var canvas = __canvas
     
@@ -114,7 +103,7 @@ function zoom() {
 
 function initCanvas(data){
     __gridData = data
-//draws map tile if map is null
+    //draws map tile if map is null
     if(__map == null){
         mapboxgl.accessToken = 'pk.eyJ1IjoiampqaWlhMTIzIiwiYSI6ImNpbDQ0Z2s1OTN1N3R1eWtzNTVrd29lMDIifQ.gSWjNbBSpIFzDXU2X5YCiQ';
         __map = new mapboxgl.Map({
@@ -126,57 +115,57 @@ function initCanvas(data){
             minZoom:minZoom
         });
         __map.scrollZoom.disable()
-        __map.addControl(new mapboxgl.Navigation());
+        __map.addControl(new mapboxgl.Navigation({position:"top-left"}));
        // __map.addControl(new mapboxgl.Geocoder());
         
     }
-
+    
     var map = __map
- //   map.on('mousemove', function (e) {console.log(JSON.stringify(e.lngLat) )}); 
-//     map.on("viewreset", function() {
-//            initCanvas(__gridData)
-//          })
-//          map.on("move", function() {
-//            initCanvas(__gridData)
-//          })
-    var bbox = document.body.getBoundingClientRect();
-
+    
     var container = map.getCanvasContainer()
     var canvas = d3.select(container).append("canvas").attr("class","datalayer")
-        .attr("width", 1200)
-        .attr("height",  1200)
-        .call(d3.behavior.zoom().on("zoom", 
-                function(){
-                    var canvas = __canvas
-                    canvas.clearRect(0, 0,1200,1200);
-                    alpha = alphaScale(__map.getZoom())
-                    console.log(alpha)
-                    if(__map.getZoom() < maxZoom && __map.getZoom() > minZoom){
-                          radius = radius*__map.getZoom()/8
-                    }
-                    initCanvas(__gridData)
-        
-                }
-        ))
+        .attr("width",2000)
+        .attr("height",  2000)
         .node().getContext("2d");
-         __canvas = canvas
-  //      draw(data)
-        console.log("clear")
-        var fillColor = "#000"
+     __canvas = canvas
+    
+    function render(){
+        console.log(["render",data.length])
         var lightScale = d3.scale.linear().domain([0,200,400]).range(["#3182bd","#fee391","#fc9272"])
-        var i = -1, n = data.length, d;        
+        var i = -1, n = data.length, d;    
+        canvas.clearRect(0,0,2000,2000)
+
+        var radius = 6/1400*Math.pow(2,map.getZoom())
+    
+        var zoomAlphaScale = d3.scale.linear().domain([8,16]).range([.8,.2])
+        alpha = zoomAlphaScale(map.getZoom())
         while (++i < n) {
            canvas.beginPath();
              d = data[i];
              var coordinates = {lat:d.lat,lng:d.lng}
              var light = d.averlight
-              fillColor = lightScale(light)
+             var fillColor = lightScale(light)
              canvas.moveTo(project(d).x,project(d).y);
-             canvas.rect(project(coordinates).x,project(coordinates).y,radius,radius)
+             canvas.rect(project(d).x,project(d).y,radius,radius)
+         //    canvas.rect(d3Projection([coordinates.lng,coordinates.lat])[0],d3Projection([coordinates.lng,coordinates.lat])[1],radius,radius)
+             //console.log(coordinates)
+             //console.log(d3Projection([coordinates.lng,coordinates.lat]))
              canvas.fillStyle = fillColor
              canvas.globalAlpha=alpha
              canvas.fill();
-       } 
+       }         
+    }
+    render()
+    
+    map.on("viewreset",function(){
+        console.log("viewreset")
+        render()
+    })
+    map.on("move", function() {
+           render()
+        console.log("move")
+        
+         })
 }
 
 function charts(data){
@@ -276,8 +265,8 @@ function charts(data){
         .on('renderlet', function(d) {
                 var newData = incomeDimension.top(Infinity)
                 //reDrawMap(newData)
-           // d3.select("#map .datalayer").remove()
-            console.log("render canvas")
+            d3.select("#map .datalayer").remove()
+           // console.log("render canvas")
             var canvas = __canvas
            
             initCanvas(newData)
@@ -304,93 +293,3 @@ function charts(data){
     	d3.select("#loader").transition().duration(600).style("opacity",0).remove();
 }
 
-function drawMap(data){
-   
-    var mapSvg = d3.select("#map").append("svg").attr("width",1000).attr("height",1000)
-    mapSvg.selectAll("circle")
-        .data(data)
-        .enter()
-        .append("circle")
-        .attr("class",function(d){return "_"+d.id})
-        .attr("r",1)
-        .attr("cx",function(d){
-            return parseInt(projection([d.lng,d.lat])[0])
-        })
-        .attr("cy",function(d){
-           return parseInt(projection([d.lng,d.lat])[1])
-        })
-        .attr("fill",function(d){
-            var IC = d.inc_cat
-            var DI = d.dev_intensity
-            
-            if(IC == 1){
-                if(DI == 1){return colors[1]}
-                else if(DI == 2){return colors[2]}
-                else{return colors[3]}
-            }else if (IC ==2){
-                if(DI == 1){return colors[4]}
-                else if(DI == 2){return colors[5]}
-                else{return colors[6]}
-            }else if (IC ==3){
-                if(DI == 1){return colors[7]}
-                else if(DI == 2){return colors[8]}
-                else{return colors[9]}
-            }
-            
-        })
-    .attr("opacity",.5)
-     //   .on("mouseover",function(d){console.log(d)})
-}
-function drawPolygons(geoData){
-    
-    var container = __map.getCanvasContainer()
-    var svg = d3.select(container).append("svg")
-   // var svg = d3.select("#map svg")
-	var path = d3.geo.path().projection(projection);
-
-    svg.selectAll("path") 
-        .data(geoData.features)
-        .enter()
-        .append("path")
-        .attr("class", "country")
-        .attr("d", path)
-        .style("fill","#000")
-        .style("stroke","#ffffff")
-        .style("stroke-width",1)
-        .style("opacity",1)
-}
-//population,income,averlight,places,b_diversity,dev_intensity,id,lng,lat
-function drawKey(){
-    var keyArray = []
-    for(var i =1; i<=9; i++){
-        var color = colors[i]
-        var group = groupToWords[i]
-        keyArray.push([color,group])
-    }
-    
-    var keySvg = d3.select("#key").append("svg").attr("width",180).attr("height",180)
-    keySvg.selectAll(".key")
-    .data(keyArray)
-    .enter()
-    .append("rect")
-    .attr("x",0)
-    .attr("y",function(d,i){return i*14+10})
-    .attr("width",10)
-    .attr("height",10)
-    .attr("fill",function(d){return d[0]})
-    
-    keySvg.selectAll(".keyText")
-    .data(keyArray)
-    .enter()
-    .append("text")
-    .attr("x",15)
-    .attr("y",function(d,i){return i*14+20})
-    .attr("width",10)
-    .attr("height",10)
-    .text(function(d){return d[1]})
-    .style("fill","#fff").attr("font-size","11px")
-    
-     keySvg.append("text").text("Grid Size is 250m x 250m").attr("x",0).attr("y",160)    
-    .style("fill","#fff").attr("font-size","11px")
-
-}
