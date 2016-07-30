@@ -55,7 +55,7 @@ var radius = 1
 var alpha = 1
 var alphaScale = d3.scale.linear().domain([minZoom,maxZoom]).range([0.6,.03])
 function dataDidLoad(error,grid,zipcodes) {
-//    charts(grid)
+    charts(grid)
     d3.select("#loader").remove()
 initCanvas(grid,zipcodes)
    
@@ -115,8 +115,8 @@ function initCanvas(data,zipcodes){
             minZoom:minZoom
         });
         __map.scrollZoom.disable()
+        __map.addControl(new mapboxgl.Geocoder({position:"top-left"}));       
         __map.addControl(new mapboxgl.Navigation({position:"top-left"}));
-   //     __map.addControl(new mapboxgl.Geocoder());        
     }
     
     var map = __map
@@ -158,7 +158,7 @@ function initCanvas(data,zipcodes){
                 if (features.length) {
                     map.setFilter("route-hover", ["==", "name", features[0].properties.name]);
                 
-                console.log(features[0].properties)
+             //   console.log(features[0].properties)
                     popup.setLngLat([JSON.stringify(e.lngLat["lng"]),JSON.stringify(e.lngLat["lat"])])
                             .setHTML("<span style=\"color:#aaa; background:rgba(255,255,255,.4)\">zipcode: "+features[0].properties.name+"</br> other data: ....<h1></span>")
                             .addTo(map)
@@ -179,7 +179,7 @@ function initCanvas(data,zipcodes){
      __canvas = canvas
     
     function render(){
-        console.log(["render",data.length])
+      //  console.log(["render",data.length])
         var lightScale = d3.scale.linear().domain([0,200,400]).range(["#3182bd","#fee391","#fc9272"])
         var i = -1, n = data.length, d;    
         canvas.clearRect(0,0,2000,2000)

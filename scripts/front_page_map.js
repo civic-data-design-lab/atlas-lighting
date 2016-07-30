@@ -149,15 +149,20 @@ function drawControls(data){
     svg.append("text").text("MAP").attr("x",355).attr("y",565).style("fill","#fff").attr("cursor","pointer")
     .on("click",function(){
         d3.select(".toggle").transition().attr("cx",340)
+        if(map != true){
         map = true
         transformMap(data)
+        }
+      
     })
     svg.append("text").text("DATA").attr("x",265).attr("y",565).style("fill","#fff").attr("cursor","pointer")
     .on("click",function(){
         d3.select(".toggle").transition().attr("cx",310)
+        if(map != false){
         map = false
         d3.selectAll(".otherCities").transition().style("opacity",.2)
         drawChart(data)
+        }
     })
 
     svg.append("circle")
@@ -166,14 +171,22 @@ function drawControls(data){
     .attr("r",5)
     .attr("fill","#fff")
     .attr("class","toggle")
+    .on("click",function(){ toggle(data)})
+    .attr("cursor","pointer")
 }
 function toggle(data){
     if(map == true){
-        d3.select(".toggle").transition().attr("cx",340)
-        map = false
-    }else{
+        console.log("map true, changing")
         d3.select(".toggle").transition().attr("cx",310)
+        map = false
+        d3.selectAll(".otherCities").transition().style("opacity",.2)
+        drawChart(data)
+    }else{
+        console.log("map false, changing")
+        d3.select(".toggle").transition().attr("cx",340)
         map = true
+        transformMap(data)
+        
     }
 }
 
