@@ -34,13 +34,6 @@ var cityTypeColors = {
 "Las Vegas":"#e9c057",
 "Los Angeles":"#20c0e2"
 }
-var typeColors={
-"Large-Slow Growth":"#20c0e2",
-"Rust Belt-Declining":"#62d999",
-"Growth Magnets":"#e9c057",
-"Large-Faster Growth":"#e4587b",
-"New Economy-Quality of Life Hubs":"#f28954"
-}
 
 var groupToWords = {
 "1":"Low Income, Low Intensity",
@@ -66,7 +59,7 @@ var cityCentroids = {
     "Los Angeles":{lat:34,lng:-118}
 }
 function drawKey(keyData){
-    console.log("key")
+  //  console.log("key")
     d3.selectAll("#bubble-key svg").remove()
     var size = 10
     var keyArray = []
@@ -101,7 +94,7 @@ function drawKey(keyData){
 }    
 
 var __nodes = null
-var padding = 2;
+var padding = 1;
 
  //drawKey(typeColors)
 $(function() {
@@ -127,8 +120,6 @@ function dataDidLoad(error,data,comparison,us) {
       data[j].y = Math.random() * height;
     }    
     
-
-
     var groupCenters = getCenters("group",[800,600],data)
 
     var tip = d3.tip()
@@ -144,36 +135,37 @@ function dataDidLoad(error,data,comparison,us) {
 //    .append("feGaussianBlur")
 //      .attr("stdDeviation", 3);
       
-nodes.enter().append("circle")
-    .attr("class", function(d){return "node "+d.name.replace(" ","")})
-    .attr("cx", function (d) {return d.x; })
-    .attr("cy", function (d) { return d.y; })
-    .attr("r", function (d) { return d.radius; })
-    //  .attr("filter", "url(#blur)")
+    nodes.enter().append("circle")
+        .attr("class", function(d){return "node "+d.name.replace(" ","")})
+        .attr("cx", function (d) {return d.x; })
+        .attr("cy", function (d) { return d.y; })
+        .attr("r", function (d) { return d.radius; })
+        //  .attr("filter", "url(#blur)")
       
-    .style("fill", function (d) {
-    return nightlightColors[d.group]; })
-    .on("mouseover", function (d) { 
-        var selector = d3.select(this).attr("class").split(" ")[1]
-        d3.selectAll(".node").transition().duration(1000).attr("opacity",.1)          
-        d3.selectAll("."+selector).transition().duration(1000).attr("opacity",1)
-        console.log(d)
-        tip.html(d.name+" </br> GMP:"+d.gmp+"</br> Population Change:"+d.popChange+"</br> Denisty:"+d.density)
-        tip.show()
-        //    showPopover.call(this, d); 
-    })
-    .on("mouseout", function (d) { 
-        d3.selectAll(".node").transition().duration(1000).attr("opacity",1)
-        tip.hide()
-    //    removePopovers(); 
-    })
+        .style("fill", function (d) {
+        return nightlightColors[d.group]; })
+        .on("mouseover", function (d) { 
+            var selector = d3.select(this).attr("class").split(" ")[1]
+            d3.selectAll(".node").transition().duration(1000).attr("opacity",.1)          
+            d3.selectAll("."+selector).transition().duration(1000).attr("opacity",1)
+            tip.html(d.name+" </br> GMP: "+d.gmp+"</br> Population Change: "+d.popChange+"</br> Denisty: "+d.density
+                        +"</br> Value: "+d.value)
+            tip.show()
+        })
+        .on("mouseout", function (d) { 
+            d3.selectAll(".node").transition().duration(1000).attr("opacity",1)
+            tip.hide()
+        })
 
-__nodes = nodes
-draw('make',data);
+    __nodes = nodes
+    draw('make',data,us);
 
-$( ".btn" ).click(function() {
-  draw(this.id,data);
-});
+    $( ".btn" ).click(function() {
+        $(this).parent().find("label").removeClass("active")
+        $(this).addClass('active')
+      draw(this.id,data,us);
+    });
+
 }
 
 
@@ -189,24 +181,39 @@ var getCenters = function (vname, size,data) {
   map.nodes({children: centers});
   return centers;
 };
+function drawPolygons(geoData){
+    var svg = d3.select("#map svg")
+	var path = d3.geo.path().projection(projection);
+    svg.insert("path", ".graticule")
+      .datum(topojson.feature(geoData, geoData.objects.land))
+      .attr("class", "country")
+      .attr("d", path)
+		.style("fill","none")
+        .style("stroke","#ffffff")
+        .style("stroke-width",1)
+	    .style("opacity",1)
+}
 
-function draw (varname,data) {
+var projection = d3.geo.mercator().scale(660).center([-83,39])
+function draw (varname,data,map) {
     var force = d3.layout.force();
     
       var centers = getCenters(varname, [800, 600],data);
       force.on("tick", tick(centers, varname,data));
       labels(centers)
-      force.start();     
-    if(varname == "mapB"){
-        var projection = d3.geo.mercator().scale(660).center([-85,45])
+      force.start();
+        var densityScale = d3.scale.linear().domain([3000,31684]).range([5,50])
 
+    if(varname == "mapB"){
+        force.stop();
+        drawPolygons(map)
         d3.selectAll("circle")
-        .transition().duration(500)          
-        .style("fill",function(d){console.log(d);return nightlightColors[d.group]; })
+        .transition().delay(100).duration(800)          
+        .style("fill",function(d){return cityTypeColors[d.name]; })
         .attr("r",function(d){
-          return 30
-          return parseFloat(d.value)/3})
-        .attr("opacity",1)
+            return densityScale(d.density)
+        })
+        .attr("opacity",.3)
         .attr("cx",function(d){
             var lat = parseFloat(cityCentroids[d.name].lat)
             var lng = parseFloat(cityCentroids[d.name].lng)
@@ -219,10 +226,14 @@ function draw (varname,data) {
             var projectedLat = projection([lng,lat])[1]
             return projectedLat
         })
+        .attr("cursor","pointer")
         d3.selectAll(".axis").remove()
-        drawKey(nightlightColors)  
+        drawKey(typeColors)  
         force.stop();
+        
     }else if(varname =="group"){
+        d3.selectAll(".country").remove()
+         force.start();
         var rScale = d3.scale.linear().domain([10,100]).range([3,25])
         d3.selectAll("circle")
         .transition().duration(500)          
@@ -231,24 +242,54 @@ function draw (varname,data) {
         .attr("opacity",1)
         d3.selectAll(".axis").remove()
         drawKey(cityNameColors)
+        labels(centers)
+        .attr("cursor","pointer")
+        d3.selectAll("#groupF").style("fill","red")
+   //      force.stop();
         
     }else if(varname =="msaB"){
-        var GMPScale = d3.scale.linear().domain([0,1377989]).range([800,0])
-        var popChangeScale = d3.scale.linear().domain([-155946,1792786]).range([800,0])
+        force.stop();
+        d3.selectAll(".country").remove()
+        var gmpScale = d3.scale.linear().domain([0,1800000]).range([480,10])
+        var popChangeScale = d3.scale.linear().domain([-155946,1792786]).range([600,0])
+        
         var density2010Scale = d3.scale.linear().domain([0,31250]).range([0,100])
-        d3.select("#map svg").append("text").text("population change").attr("x",800).attr("y",900).attr("fill","#fff").attr("class","axis")
-        d3.select("#map svg").append("text").text("GMP").attr("x",30).attr("y",50).attr("fill","#fff").attr("class","axis")
         d3.selectAll("circle")
         .transition()
         .duration(500)
         .delay(function(d,i){return i*5})
         .style("fill",function(d){return cityTypeColors[d.name]})
-        .attr("cy",function(d,i){return GMPScale(d.gmp)})
-        .attr("cx",function(d,i){return popChangeScale(d.popChange)})
-        .attr("r",function(d,i){return density2010Scale(d.density)})
+        .attr("cy",function(d,i){return gmpScale(d.gmp)
+        })
+        .attr("cx",function(d,i){
+            console.log(d)
+            return popChangeScale(d.popChange)+160
+        })
+        .attr("r",function(d,i){
+            return densityScale(d.density)})
         .attr("opacity",.2)
-        force.stop();
+    
         drawKey(typeColors)
+            
+            var svg = d3.select("#map svg")
+    var xAxis = d3.svg.axis()
+        .scale(popChangeScale)
+        .orient("bottom")
+        
+    
+    var yAxis = d3.svg.axis()
+        .scale(gmpScale)
+        .orient("left")
+        .ticks(4) 
+      
+  
+   svg.append("g").attr("class","x axis").call(xAxis).attr("transform","translate(160,480)")
+   svg.append("g").attr("class","y axis").call(yAxis).attr("transform","translate(160,0)")
+   svg.append("text").attr("class","axis")
+            .text("Population Change (2000-2014)").attr("x",0).attr("y",0).attr("transform","translate(390,515)").attr("fill","#fff")
+   svg.append("text").attr("class","axis")
+            .text("Gross Metropolitan Product(millions of dollars,2013)").attr("x",0).attr("y",0).attr("transform","translate(170,30)").attr("fill","#fff")
+        
     }
 }
 
@@ -272,14 +313,14 @@ function tick(centers, varname,data) {
 }
 
 function labels (centers) {
-    
+var svg = d3.select("#map svg")
   svg.selectAll(".label").remove();
   svg.selectAll(".label")
   .data(centers).enter().append("text")
   .attr("class", "label")
   .text(function (d) {return groupToWords[d.name] })
   .attr("transform", function (d) {
-    return "translate(" + (d.x + (d.dx / 3)) + ", " + (d.y + 20) + ")";
+    return "translate(" + (d.x + (d.dx / 4)) + ", " + (d.y + 20) + ")";
   });
 }
 
@@ -297,7 +338,6 @@ function showPopover (d) {
     trigger: 'manual',
     html : true,
     content: function() { 
-        console.log(d)
       return "City: " + d.name + "<br/>Value: " + d.value + 
              "<br/>Group: " + d.group; 
     }

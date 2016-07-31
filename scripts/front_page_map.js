@@ -22,7 +22,7 @@ function dataDidLoad(error,states,cities,groups) {
 function drawPolygons(geoData,svg){
     var svg = d3.select("#map svg")
 	var path = d3.geo.path().projection(projection);
-svg.insert("path", ".graticule")
+    svg.insert("path", ".graticule")
       .datum(topojson.feature(geoData, geoData.objects.land))
       .attr("class", "country")
       .attr("d", path)
