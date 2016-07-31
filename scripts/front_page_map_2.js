@@ -66,6 +66,8 @@ var cityCentroids = {
     "Los Angeles":{lat:34,lng:-118}
 }
 function drawKey(keyData){
+    console.log("key")
+    d3.selectAll("#bubble-key svg").remove()
     var size = 10
     var keyArray = []
     for(var i in keyData){
@@ -97,14 +99,23 @@ function drawKey(keyData){
       return d.key})
     .attr("fill",function(d){return d.color})
 }    
-      
-  drawKey(nightlightColors)  
- //drawKey(cityNameColors)  
+
+var __nodes = null
+var padding = 2;
+
  //drawKey(typeColors)
-d3.csv('data/groupdata.csv', function (error, data) {
+$(function() {
+	d3.queue()
+		.defer(d3.csv, "data/groupdata.csv")
+        .defer(d3.csv,"data/city_comparisons_all.csv")
+        .defer(d3.json,"data/us.json")
+	//	.defer(d3.json, "grids.geojson")
+    .await(dataDidLoad);
+})
+function dataDidLoad(error,data,comparison,us) {
 
       
-    var width = 1000, height = 1000;
+    var width = 800, height = 600;
     var fill = d3.scale.ordinal().range(['#827d92','#827354','#523536','#72856a','#2a3285','#383435'])
     var svg = d3.select("#map").append("svg")
         .attr("width", width)
@@ -114,28 +125,12 @@ d3.csv('data/groupdata.csv', function (error, data) {
       data[j].radius = +data[j].value / 3;
       data[j].x = Math.random() * width;
       data[j].y = Math.random() * height;
-    }
-    var padding = 2;
-    var maxRadius = d3.max(_.pluck(data, 'radius'));
+    }    
     
-    
-    
-    var getCenters = function (vname, size) {
-      var centers, map;
-      
-      var sortedData = data.sort(function(a,b){return parseInt(b.gridorder)-parseInt(a.gridorder)})
-      centers = _.uniq(_.pluck(sortedData, vname)).map(function (d) {
-          return {name: d, value: 1};
-      });
-      map = d3.layout.treemap().size(size).ratio(1/1);
-      map.nodes({children: centers});
-      return centers;
-    };
 
-    var groupCenters = getCenters("group",[1000,1000])
-    for(var i in groupCenters){
-        console.log([groupCenters[i].name,groupCenters[i].x,groupCenters[i].y])
-    }
+
+    var groupCenters = getCenters("group",[800,600],data)
+
     var tip = d3.tip()
     .attr("class","d3-tip")
     .offset([20,10])
@@ -143,44 +138,66 @@ d3.csv('data/groupdata.csv', function (error, data) {
     svg.call(tip)    
     var nodes = svg.selectAll("circle")
       .data(data);
-
+//  var filter = svg.append("defs")
+//    .append("filter")
+//      .attr("id", "blur")
+//    .append("feGaussianBlur")
+//      .attr("stdDeviation", 3);
+      
 nodes.enter().append("circle")
     .attr("class", function(d){return "node "+d.name.replace(" ","")})
     .attr("cx", function (d) {return d.x; })
     .attr("cy", function (d) { return d.y; })
     .attr("r", function (d) { return d.radius; })
+    //  .attr("filter", "url(#blur)")
+      
     .style("fill", function (d) {
     return nightlightColors[d.group]; })
-.on("mouseover", function (d) { 
-    var selector = d3.select(this).attr("class").split(" ")[1]
-    d3.selectAll(".node").transition().duration(1000).attr("opacity",.1)          
-    d3.selectAll("."+selector).transition().duration(1000).attr("opacity",1)
-    console.log(d)
-    tip.html(d.name+" </br> GMP:"+d.gmp+"</br> Population Change:"+d.popChange+"</br> Denisty:"+d.density)
-    tip.show()
-    //    showPopover.call(this, d); 
-})
-.on("mouseout", function (d) { 
-    d3.selectAll(".node").transition().duration(1000).attr("opacity",1)
-    tip.hide()
-//    removePopovers(); 
-})
+    .on("mouseover", function (d) { 
+        var selector = d3.select(this).attr("class").split(" ")[1]
+        d3.selectAll(".node").transition().duration(1000).attr("opacity",.1)          
+        d3.selectAll("."+selector).transition().duration(1000).attr("opacity",1)
+        console.log(d)
+        tip.html(d.name+" </br> GMP:"+d.gmp+"</br> Population Change:"+d.popChange+"</br> Denisty:"+d.density)
+        tip.show()
+        //    showPopover.call(this, d); 
+    })
+    .on("mouseout", function (d) { 
+        d3.selectAll(".node").transition().duration(1000).attr("opacity",1)
+        tip.hide()
+    //    removePopovers(); 
+    })
 
-var force = d3.layout.force();
-
-draw('make');
+__nodes = nodes
+draw('make',data);
 
 $( ".btn" ).click(function() {
-  draw(this.id);
+  draw(this.id,data);
 });
+}
 
-function draw (varname) {
-      var centers = getCenters(varname, [1000, 1000]);
-      console.log(centers)
-      force.on("tick", tick(centers, varname));
+
+
+var getCenters = function (vname, size,data) {
+  var centers, map;
+  
+  var sortedData = data.sort(function(a,b){return parseInt(b.gridorder)-parseInt(a.gridorder)})
+  centers = _.uniq(_.pluck(sortedData, vname)).map(function (d) {
+      return {name: d, value: 1};
+  });
+  map = d3.layout.treemap().size(size).ratio(1/1);
+  map.nodes({children: centers});
+  return centers;
+};
+
+function draw (varname,data) {
+    var force = d3.layout.force();
+    
+      var centers = getCenters(varname, [800, 600],data);
+      force.on("tick", tick(centers, varname,data));
       labels(centers)
       force.start();     
-    if(varname == "name"){
+    if(varname == "mapB"){
         var projection = d3.geo.mercator().scale(660).center([-85,45])
 
         d3.selectAll("circle")
@@ -203,17 +220,19 @@ function draw (varname) {
             return projectedLat
         })
         d3.selectAll(".axis").remove()
-        console.log(cityCentroids)
+        drawKey(nightlightColors)  
         force.stop();
     }else if(varname =="group"){
+        var rScale = d3.scale.linear().domain([10,100]).range([3,25])
         d3.selectAll("circle")
         .transition().duration(500)          
         .style("fill",function(d){ return cityNameColors[d.name]})
-        .attr("r",function(d){return parseFloat(d.value)/3})
+        .attr("r",function(d){return rScale(parseFloat(d.value))})
         .attr("opacity",1)
-        d3.selectAll(".axis").remove()          
-
-    }else if(varname =="type"){
+        d3.selectAll(".axis").remove()
+        drawKey(cityNameColors)
+        
+    }else if(varname =="msaB"){
         var GMPScale = d3.scale.linear().domain([0,1377989]).range([800,0])
         var popChangeScale = d3.scale.linear().domain([-155946,1792786]).range([800,0])
         var density2010Scale = d3.scale.linear().domain([0,31250]).range([0,100])
@@ -229,15 +248,13 @@ function draw (varname) {
         .attr("r",function(d,i){return density2010Scale(d.density)})
         .attr("opacity",.2)
         force.stop();
+        drawKey(typeColors)
     }
 }
 
-function tick (centers, varname) {
-    
-     
+function tick(centers, varname,data) {
+    var nodes = __nodes
   var foci = {};
-
-  console.log(centers)
   for (var i = 0; i < centers.length; i++) {
     foci[centers[i].name] = centers[i];
   }
@@ -248,20 +265,21 @@ function tick (centers, varname) {
       o.y += ((f.y + (f.dy / 2)) - o.y) * e.alpha;
       o.x += ((f.x + (f.dx / 2)) - o.x) * e.alpha;
     }
-    nodes.each(collide(.11))
+    nodes.each(collide(.11,data))
       .attr("cx", function (d) { return d.x; })
       .attr("cy", function (d) { return d.y; });
   }
 }
 
 function labels (centers) {
+    
   svg.selectAll(".label").remove();
   svg.selectAll(".label")
   .data(centers).enter().append("text")
   .attr("class", "label")
-  .text(function (d) { return d.name })
+  .text(function (d) {return groupToWords[d.name] })
   .attr("transform", function (d) {
-    return "translate(" + (d.x + (d.dx / 2)) + ", " + (d.y + 20) + ")";
+    return "translate(" + (d.x + (d.dx / 3)) + ", " + (d.y + 20) + ")";
   });
 }
 
@@ -279,6 +297,7 @@ function showPopover (d) {
     trigger: 'manual',
     html : true,
     content: function() { 
+        console.log(d)
       return "City: " + d.name + "<br/>Value: " + d.value + 
              "<br/>Group: " + d.group; 
     }
@@ -286,7 +305,9 @@ function showPopover (d) {
     $(this).popover('show')
 }
 
-function collide(alpha) {
+function collide(alpha,data) {
+    var maxRadius = d3.max(_.pluck(data, 'radius'));
+    
   var quadtree = d3.geom.quadtree(data);
   return function (d) {
     var r = d.radius + maxRadius + padding,
@@ -312,5 +333,3 @@ function collide(alpha) {
     });
   };
 }
-
-});
