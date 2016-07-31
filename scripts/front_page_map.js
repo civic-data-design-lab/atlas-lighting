@@ -2,6 +2,7 @@ $(function() {
 	d3.queue()
 		.defer(d3.json, "us.json")
         .defer(d3.csv, "city_comparisons_all.csv")
+        .defer(d3.csv, "groupdata.csv")
     .await(dataDidLoad);
 })
 
@@ -9,25 +10,14 @@ var projection = d3.geo.mercator().scale(660).center([-83,39])
 var densityScale = d3.scale.linear().domain([3000,31684]).range([5,50])
 var map = true
 
-function dataDidLoad(error,states,cities) {
-    var mapSvg = d3.select("#map").append("svg").attr("width",1200).attr("height",800)
+function dataDidLoad(error,states,cities,groups) {
+    var mapSvg = d3.select("#map").append("svg").attr("width",800).attr("height",800)
     drawPolygons(states)
     var formatedData = formatCitiesData(cities)
     drawDotsMap(formatedData)
 //    drawChart(formatedData)
-    drawControls(formatedData)
+    drawControls(formatedData,groups)
     //drawChart(data)
-    d3.select("#view-selection").on("click",function(){
-       // console.log("group")
-        var force = d3.layout.force();
-        
-        force.start();
-        
-        d3.selectAll("circle")
-        .transition()
-        .attr("r")
-        
-    })
 }
 function drawPolygons(geoData,svg){
     var svg = d3.select("#map svg")
@@ -51,7 +41,7 @@ function jsonToArray(data){
 function drawChart(data){
     
     var arrayFormatData = jsonToArray(data)
-    var popScale = d3.scale.linear().domain([-15,90]).range([10,480])
+    var popScale = d3.scale.linear().domain([-15,90]).range([10,680])
     var gmpScale = d3.scale.linear().domain([0,1800000]).range([480,10])
 
     var xAxis = d3.svg.axis()
@@ -132,23 +122,23 @@ function tipTextFormat(data){
     return text
 }
 
-function drawControls(data){    
+function drawControls(data,groups){    
     var svg = d3.select("#map svg")
-    svg.append("rect")
-    .attr("x",300)
-    .attr("y",550)
-    .attr("width",50)
-    .attr("height",20)
-    .attr("rx",10)
-    .attr("ry",10)
-    .style("stroke","#fff")
-    .style("stroke-width",2)
-    .attr("cursor","pointer")
-    .on("click",function(){ toggle(data)})
+   // svg.append("rect")
+   // .attr("x",300)
+   // .attr("y",550)
+   // .attr("width",50)
+   // .attr("height",20)
+   // .attr("rx",10)
+   // .attr("ry",10)
+   // .style("stroke","#fff")
+   // .style("stroke-width",2)
+   // .attr("cursor","pointer")
+   // .on("click",function(){ toggle(data)})
 
-    svg.append("text").text("MAP").attr("x",355).attr("y",565).style("fill","#fff").attr("cursor","pointer")
+    svg.append("text").text("MAP").attr("x",165).attr("y",565).style("fill","#fff").attr("cursor","pointer")
     .on("click",function(){
-        d3.select(".toggle").transition().attr("cx",340)
+        d3.select(".toggle").transition().attr("cx",150)
         if(map != true){
         map = true
         transformMap(data)
@@ -157,7 +147,7 @@ function drawControls(data){
     })
     svg.append("text").text("DATA").attr("x",265).attr("y",565).style("fill","#fff").attr("cursor","pointer")
     .on("click",function(){
-        d3.select(".toggle").transition().attr("cx",310)
+        d3.select(".toggle").transition().attr("cx",250)
         if(map != false){
         map = false
         d3.selectAll(".otherCities").transition().style("opacity",.2)
@@ -165,14 +155,20 @@ function drawControls(data){
         }
     })
 
+    svg.append("text").text("GROUPS").attr("x",365).attr("y",565).style("fill","#fff").attr("cursor","pointer")
+    .on("click",function(){
+        d3.select(".toggle").transition().attr("cx",350)
+        drawGroups(groups)
+    })
+
     svg.append("circle")
-    .attr("cx",340)
+    .attr("cx",150)
     .attr("cy",560)
     .attr("r",5)
     .attr("fill","#fff")
     .attr("class","toggle")
-    .on("click",function(){ toggle(data)})
-    .attr("cursor","pointer")
+   // .on("click",function(){ toggle(data)})
+  //  .attr("cursor","pointer")
 }
 function toggle(data){
     if(map == true){
@@ -181,12 +177,13 @@ function toggle(data){
         map = false
         d3.selectAll(".otherCities").transition().style("opacity",.2)
         drawChart(data)
+
     }else{
         console.log("map false, changing")
         d3.select(".toggle").transition().attr("cx",340)
         map = true
         transformMap(data)
-        
+
     }
 }
 
@@ -288,7 +285,37 @@ function drawDotsMap(cities){
         })
         
 }
+function drawGroups(data){
+    console.log(data)
+    
+}
 
+function cluster(alpha) {
+    return function(d) {
+      var cluster = clusters[d.cluster]
+        if (cluster === d) return;
+      var x = d.x - cluster.x,
+        y = d.y - cluster.y,
+        l = Math.sqrt(x * x + y * y),
+        r = d.radius + cluster.radius;
+      if (l != r) {
+        l = (l - r) / l * alpha;
+        d.x -= x *= l;
+        d.y -= y *= l;
+        cluster.x += x;
+        cluster.y += y;
+      }
+    };
+}
+function tick(e) {
+    node.each(cluster(10 * e.alpha * e.alpha))
+      .each(collide(.5))
+      //.attr("transform", functon(d) {});
+      .attr("transform", function(d) {
+        var k = "translate(" + d.x + "," + d.y + ")";
+        return k;
+      })
+}
 function collide(alpha) {
   var quadtree = d3.geom.quadtree(data);
   return function (d) {
