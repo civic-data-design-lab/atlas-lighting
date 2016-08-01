@@ -1,6 +1,6 @@
 
 body{
-    color:#aaa;
+    color:#ddd;
     background-color:#000;
     font-family: 'Ropa Sans', sans-serif;
     font-weight: 400;
@@ -10,15 +10,82 @@ body{
 .largeContent{
     font-size:36px;
 }
+.section-title{
+    font-size:20px;
+    letter-spacing:2px;
+    color:#fff;
+    margin-left:-20px;
+    
+}
+.subsection-title{
+    font-size:14px;
+    letter-spacing:2px;
+    color:#fff; 
+    margin-left:-10px;
+    
+}
+#about-1{
+    letter-spacing:1px;
+    font-size:12px;
+    position:absolute;
+    width:30%;
+    left:5%;
+    padding:20px;
+}
+#about-2{
+    letter-spacing:1px;
+    font-size:12px;
+    position:absolute;
+    width:30%;
+    left:35%;
+    padding:20px;
+}
+#about-3{
+    letter-spacing:1px;
+    font-size:12px;
+    position:absolute;
+    width:30%;
+    left:70%;
+    padding:20px;
+}
+#loader{
+	width:100%;
+    background: #000000; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#000030, #555,#000020); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#000030, #555,#000020); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#000030, #555,#000020); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#000030, #555,#000020); /* Standard syntax (must be last) */
+    opacity:0.9;
+	z-index:99999;
+	position:absolute;
+	top:50px;
+    left:0px;
+	height:100%;
+	font-size:24px;
+	letter-spacing:3px;
+	color:#fff;
+	line-height:175%;
+    margin:0px;
+}
+#loader-text{
+    width:60%;
+    position: fixed;
+    top: 30%;
+    left: 20%;
+}
 #map{
     position:absolute; 
-    width: 1800px;
+    width: 1200px;
     height: 1200px;
     overflow:hidden;
+}
+.popup{
+    color:#000;
 }
 #info{
     position:relative;
     float:right;
+    height:800px;
 }
 .zipcodemap{
     position:absolute;
@@ -30,8 +97,6 @@ body{
 }
 canvas {
      position: absolute;
-     width: 1800px;
-     height:1200px;
      overflow:hidden;
    }
 #key{
@@ -47,7 +112,23 @@ canvas {
     
 }
 .dc-data-count a{
-    color:#aaa;
+    color:#fff;
+}
+.dc-chart{
+    fill-opacity: .5;
+    cursor:pointer;
+    font-size:12px;
+    letter-spacing:2px;
+}
+.dc-chart:hover {
+    fill-opacity: 1;
+    cursor:pointer;
+}
+.dc-chart .selected{
+    fill:#fff;
+}
+.dc-chart .deselected{
+    fill:#888;
 }
 .loader-text{
     position:absolute;left:0px;
@@ -67,7 +148,10 @@ canvas {
     padding:5px;
     border-radius:5px;
 }
+#row{
+    padding:5px;
     
+}
 #title{
     text-align:center;
     font-family: 'Dosis', sans-serif;
@@ -78,7 +162,8 @@ canvas {
 }
 .subtitle{
     border-bottom:1px solid white;
-    font-size:10px;
+    font-size:12px;
+    letter-spacing:2px;
 }
 #info{
     border-radius:10px;
@@ -103,6 +188,10 @@ canvas {
 .x.axis path {
     stroke: #fff;
 }
+#bubble-key{
+    padding:5px;
+    font-size:10px;
+}
 #info div{
     margin-top:10px;
 }
@@ -111,27 +200,55 @@ canvas {
   fill: none;
   stroke: #fff;
 }
+/* bubble control*/
+.btn-primary.active{
+    background-color:#444;
+}
+.btn-group{
+}
+.btn{
+    background-color:#000;
+    color:#fff;
+    font-size:18px;
+    border:none;
+    letter-spacing:2px;
+}
+.label{
+    color:#fff;
+    font-size:14px;
+}
+#bubble-key{
+    position:absolute;
+    top:80px;
+    left:0px;
+}
+.btn:hover, .btn:focus{
+    background-color: #333;
+}
 /* Dropdown Button */
 .dropbtn {
     background-color: #000;
     color: white;
-    padding: 5px;
+    padding: 10px;
     font-size: 16px;
     border: none;
     cursor: pointer;
-    width:200px;
+    width:100%;
     text-align:left;
+    letter-spacing:2px;
 }
 
 /* Dropdown button on hover & focus */
 .dropbtn:hover, .dropbtn:focus {
-    background-color: #111;
+    background-color: #333;
 }
 
 /* The container <div> - needed to position the dropdown content */
 .dropdown {
     position: relative;
     display: inline-block;
+    width:100%;
+    border:1px solid #fff;
 }
 
 /* Dropdown Content (Hidden by Default) */
