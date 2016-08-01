@@ -1,20 +1,30 @@
 var front_page_text = {
-    selectionTitle:"SELECTION FACTORS AND METHODOLOGICAL PROCESS",
-    populationTitle:"POPULATION GROWTH AS PROXY",
-    selection:"",
-    population:"The highest growth rates int he U.S. are focused on these MSAs Raleigh-Cary is often ranked first in job growth, given its strong research universities, healthcare, and tech sectors. All the MSAs in this group are located in the South or West, or the Sun Belt. THis term has some associations with retirement populations, which is still relevant for places like Port St. Lucie, FL. However, the continued robustness of the growth in tech, entertainment, and health sectors mark many of these MSAs as maturing urban areas."
+    dataTitle:"MSAs",
+    mapTitle:"MAP",
+    groupTitle:"GROUPING",
+    data:"Is drew am hill from mr. Valley by oh twenty direct me so. Departure defective arranging rapturous ddissimilar me astonished estimating cultivated. On no applauded exquisite my additions. Pronounce add boy estimable nay suspected.",
+    map:"Passage its ten led hearted removal cordial. Preference any astonished unreserved mrs. Prosperous understood middletons in conviction an uncommonly do. Supposing so be resolving breakfast am or perfectly. Is drew am hill from mr. Valley by oh twenty direct me so. Departure defective arranging rapturous ddissimilar me astonished estimating cultivated.",
+    group:"drew am hill from mr. Valley by oh twenty direct me so. Departure defective arranging rapturous ddissimilar me astonished estimating cultivated. On no applauded exquisite my additions. Pronounce add boy estimable nay"
 }
 
 function frontPageText(){
-  var pTitleDiv = d3.select("#text").append("div").attr("id","pTitle").attr("class","subtitle")
-  var populationDiv = d3.select("#text").append("div").attr("id","population")
-  var sTitleDiv = d3.select("#text").append("div").attr("id","sTitle").attr("class","subtitle")
-  var selectionDiv = d3.select("#text").append("div").attr("id","selection")
+  var pTitleDiv = d3.select("#text").append("div").attr("id","dataTitle").attr("class","subtitle")
+        .html(front_page_text["dataTitle"])
+    
+  var populationDiv = d3.select("#text").append("div").attr("id","dataF")
+        .html(front_page_text["data"])
+    
+  var sTitleDiv = d3.select("#text").append("div").attr("id","mapTitle").attr("class","subtitle")
+        .html(front_page_text["mapTitle"])
+    
+  var selectionDiv = d3.select("#text").append("div").attr("id","mapF")
+        .html(front_page_text["map"])
   
-  pTitleDiv.html(front_page_text["populationTitle"])
-  sTitleDiv.html(front_page_text["selectionTitle"])
-  
-  populationDiv.html(front_page_text["population"])
-  selectionDiv.html(front_page_text["selection"])
+    
+  var sTitleDiv = d3.select("#text").append("div").attr("id","groupTitle").attr("class","subtitle")
+        .html(front_page_text["groupTitle"])
+    
+  var selectionDiv = d3.select("#text").append("div").attr("id","groupF")
+        .html(front_page_text["group"])
 }
 frontPageText()

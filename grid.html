@@ -10,14 +10,15 @@
   <script src='mapbox-gl.js'></script> -->
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.20.0/mapbox-gl.css' rel='stylesheet' />
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.20.0/mapbox-gl.js'></script>
-  <link rel="stylesheet" href="leaflet.css" />
-  <script src="leaflet.js"></script>  
+<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v1.3.0/mapbox-gl-geocoder.js'></script>
+<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v1.3.0/mapbox-gl-geocoder.css' type='text/css' />
   <script src="d3.min.js"></script>
   <script src="d3-queue.js"></script>
   <script src="topojson.min.js"></script>
   <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
   <script src="crossfilter.min.js"></script>
   <script src="dc.js"></script>
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
   
   <script src='mapbox.js'></script>
   <link href='mapbox.css' rel='stylesheet' />
@@ -37,7 +38,12 @@
     <div id = "civic" class="col-md-1"><img src="logos/cddl_white.png" style="width:80px "></div>
   </div>
 
-
+<div id = "loader">
+  <div id = "loader-text">
+    Loading data for Chicago and its surrounding MSA ...
+    <br/><br/>
+  </div>
+</div>
   
     <div id = "map"></div>
     <div id = "info" class="col-md-4">
@@ -62,32 +68,35 @@
             <span class="filter-count"></span> selected out of <span class="total-count">
             </span> records | <a href="javascript:dc.filterAll(); dc.redrawAll();;">Reset All</a>
         </div>
-        <div id ="population">Population
-          <a class="reset" href="javascript:populationChart.filterAll();dc.redrawAll();" 			style="display: none;">reset</a></br>
-        </div>
-        <div id ="income">Median Household Income
+       <span class="filterTitle">MEDIAN HOUSEHOLD INCOME <i class="fa fa-info-circle incomeDataSource" aria-hidden="true"></i></span>
+        <div id ="income">
         <a class="reset" href="javascript:incomeChart.filterAll();dc.redrawAll();" 			style="display: none;">reset</a></br>
         </div>
-        <div id ="business_diversity">Business Diversity
-        <a class="reset" href="javascript:busDivChart.filterAll();dc.redrawAll();" 			style="display: none;">reset</a></br>
-        </div>
-        <div id ="development_intensity">Development Intensity
+        <div id ="development_intensity">DEVELOPMENT INTENSITY <i class="devIntSource" aria-hidden="true"></i>
         <a class="reset" href="javascript:devIntChart.filterAll();dc.redrawAll();" 			style="display: none;">reset</a></br>
         </div>
-        <div id ="light_average">Light Average</br>
-        <a class="reset" href="javascript:ligAveChart.filterAll();dc.redrawAll();" 			style="display: none;">reset</a></br>
+        <div id ="population">POPULATION
+          <a class="reset" href="javascript:populationChart.filterAll();dc.redrawAll();" 			style="display: none;">reset</a></br>
         </div>
-        <div id ="places">Number of Places
+        <div id ="business_diversity">BUSINESS DIVERSITY
+        <a class="reset" href="javascript:busDivChart.filterAll();dc.redrawAll();" 			style="display: none;">reset</a></br>
+        </div>
+        <div id ="places">PLACE DENSITY
         <a class="reset" href="javascript:placesChart.filterAll();dc.redrawAll();" 			style="display: none;">reset</a></br>
+        </div>
+        <div id ="light_average">LIGHTING AVERAGE</br>
+        <a class="reset" href="javascript:ligAveChart.filterAll();dc.redrawAll();" 			style="display: none;">reset</a></br>
         </div>
       </div>
     </div>
 </div>
+<script src="grid_loader.js"></script>
 
 <script src="city_comparisons_data.js"></script>
 <script src="city_dropdown.js"></script>
 
 <script src="grid_map.js"></script>
+<script src="filter_rollovers.js"></script>
 
 
 <script type="text/javascript" charset="utf-8">

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Zoom + Pan</title>
+<style>
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+</style>
+<body>
+<script src="//d3js.org/d3.v3.min.js"></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.20.0/mapbox-gl.css' rel='stylesheet' />
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.20.0/mapbox-gl.js'></script>
+  <script src="d3.min.js"></script>
+  <script src="d3-queue.js"></script>
+  <script src="topojson.min.js"></script>
+  <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+  <script src="crossfilter.min.js"></script>
+  <script src="dc.js"></script>
+  <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v1.3.0/mapbox-gl-geocoder.js'></script>
+  <script src='mapbox.js'></script>
+  <link href='mapbox.css' rel='stylesheet' />
+<link href='https://fonts.googleapis.com/css?family=Dosis:500,300|Ropa+Sans' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">  
+	<link rel="stylesheet" type="text/css" href="atlas.css"> </style>     
+<script>
+//zoomtest
+
+var width = 1300,
+    height = 1300;
+
+    var randomX = d3.random.normal(0,8);
+
+var data = d3.range(90000).map(function() {
+  return [
+    randomX()
+  ];
+});
+
+var globalAlpha = 1
+var canvas = d3.select("body").append("canvas")
+    .attr("width", width)
+    .attr("height", height)
+    .call(d3.behavior.zoom().scaleExtent([1, 50]).on("zoom", zoom))
+  .node().getContext("2d");
+
+draw();
+var alphaScale = d3.scale.linear().domain([1,50]).range([1,.2])
+function zoom() {
+  canvas.save();
+  canvas.clearRect(0, 0, width, height);
+  canvas.translate(d3.event.translate[0], d3.event.translate[1]);
+  canvas.scale(d3.event.scale, d3.event.scale);
+  globalAlpha = alphaScale(d3.event.scale)
+  draw();
+  canvas.restore();
+}
+
+function draw() {
+  var i = -1, n = data.length, d;
+  while (++i < n) {
+    canvas.beginPath();
+    d = "#"+String(Math.abs((data[i][0])*10000000)).slice(0,6)
+    canvas.rect(i/300*2,i%300*2,2,2)
+    canvas.fillStyle=d
+    canvas.globalAlpha=globalAlpha
+    canvas.fill();
+    
+  }
+}
+
+</script>
