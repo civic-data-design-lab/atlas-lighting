@@ -3,8 +3,8 @@
 
 $(function() {
 	queue()
-		.defer(d3.csv, "grids_values_export_no0.csv")
-        .defer(d3.json,"zipcode_business.geojson")
+		.defer(d3.json, "grids/chicago")
+        .defer(d3.json,"zipcode_business_geojson/chicago")
 	//	.defer(d3.json, "grids.geojson")
     .await(dataDidLoad);
 })
@@ -45,12 +45,14 @@ var placesChart = dc.barChart("#places")
 var __map = null
 var colorByLight = true
 function dataDidLoad(error,grid,zipcodes) {
+    console.log("grid", grid, "zip", zipcodes)
    // charts(grid)
-    baseMap(zipcodes)
+   // console.log("ew",zipcodes[0]["geojson"])
+    baseMap(zipcodes[0]["geojson"])
    // drawPolygons(zipcodes)
 }
 function baseMap(zipcodes){
-    
+    console.log(zipcodes[0]["geojson"])
     mapboxgl.accessToken = 'pk.eyJ1IjoiYXJtaW5hdm4iLCJhIjoiSTFteE9EOCJ9.iDzgmNaITa0-q-H_jw1lJw';
     var map = new mapboxgl.Map({
         container: "map", // container id

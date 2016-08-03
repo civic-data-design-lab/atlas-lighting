@@ -65,6 +65,8 @@
 
   app.use(serveStatic('./node_modules/crossfilter'));
 
+  app.use(serveStatic('./font-awesome'));
+
   app.use(serveStatic('./stylesheets'));
 
   app.use(serveStatic('./data'));
@@ -76,6 +78,12 @@
   app.use(serveStatic('./', {
     'index': ['grid.html', 'grid.htm']
   }));
+
+  app.get('/', function(req, res) {
+    res.render('index', function(err, html) {
+      res.send(html);
+    });
+  });
 
   app.get('/', function(req, res) {
     res.render('index', function(err, html) {
@@ -103,6 +111,14 @@
     });
   });
 
+  app.get('/groups_data', function(req, res) {
+    sequelize.query('SELECT * FROM group_data', {
+      type: sequelize.QueryTypes.SELECT
+    }).then(function(object) {
+      res.json(object);
+    });
+  });
+
   app.get('/city_comparisons_all', function(req, res) {
     sequelize.query('SELECT * FROM city_comparison', {
       type: sequelize.QueryTypes.SELECT
@@ -124,13 +140,17 @@
   });
 
   app.get('/us_json', function(req, res) {
-    client.hgetall("us_json", function(err, object) {
+    sequelize.query('SELECT * FROM us_json', {
+      type: sequelize.QueryTypes.SELECT
+    }).then(function(object) {
       res.json(object);
     });
   });
 
   app.get('/zipcode_business_geojson/:msa', function(req, res) {
-    client.hgetall("zipcode_business_geojson_" + req.params.msa, function(err, object) {
+    sequelize.query('SELECT * FROM zipcode_business', {
+      type: sequelize.QueryTypes.SELECT
+    }).then(function(object) {
       res.json(object);
     });
   });

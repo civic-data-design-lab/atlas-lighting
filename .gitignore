@@ -1,8 +1,6 @@
 node_modules/
-bower_components/
 migrate.js
 .DS_Store
 secret.json
 *.coffee
 app.yaml
-Dockerfile

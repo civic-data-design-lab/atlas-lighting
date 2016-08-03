@@ -3,7 +3,7 @@ services:
   dataservices:
     build: ./data_services/.
     volumes:
-      - ./data_services:/usr/src/app/data-services
+      - ./data_services:/usr/src/app/
     depends_on:
       - postgresql
     volumes_from:
@@ -14,7 +14,7 @@ services:
     ports:
       - "8000:8000"
     env_file: ./data_services/.env
-    # ommand: python manage.py db migrate
+    command: python main.py 
   postgresql:
     # image: postgres
     build: ./postgresql/.
@@ -48,7 +48,7 @@ services:
     volumes:
       - ./services:/usr/src/app/services
       - ./stylesheets:/usr/src/app/stylesheets
-      - ./server:/usr/src/server/
+      - ./server:/usr/src/app/server/
       - ./scripts:/usr/src/scripts
     links:
       - redis:redis
