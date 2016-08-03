@@ -4,3 +4,4 @@ migrate.js
 secret.json
 *.coffee
 app.yaml
+_docker-compose.yml

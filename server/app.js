@@ -2,13 +2,11 @@
 (function() {
   var path;
   'use strict';
-  var Sequelize, app, async, client, express, http, path, redis, redisHOST, request, sequelize, serveStatic, server;
+  var Sequelize, app, async, express, http, path, request, sequelize, serveStatic, server;
 
   express = require('express');
 
   request = require('request');
-
-  redis = require('redis');
 
   path = require('path');
 
@@ -18,17 +16,7 @@
 
   async = require('async');
 
-  redis = require('redis');
-
   serveStatic = require('serve-static');
-
-  redisHOST = 'redis';
-
-  client = redis.createClient('6379', redisHOST);
-
-  client.on('error', function(err) {
-    console.log('Error ' + err);
-  });
 
   Sequelize = require('sequelize');
 
@@ -123,18 +111,6 @@
     sequelize.query('SELECT * FROM city_comparison', {
       type: sequelize.QueryTypes.SELECT
     }).then(function(object) {
-      res.json(object);
-    });
-  });
-
-  app.get('/cityComparisonsData', function(req, res) {
-    client.hgetall("city_comparison_data", function(err, object) {
-      res.json(object);
-    });
-  });
-
-  app.get('/comparisonsData/:datacomponent', function(req, res) {
-    client.hgetall("" + req.params.datacomponent, function(err, object) {
       res.json(object);
     });
   });

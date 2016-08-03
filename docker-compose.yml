@@ -10,13 +10,11 @@ services:
       - postgresql
     links:
       - postgresql 
-      - redis
     ports:
       - "8000:8000"
     env_file: ./data_services/.env
     command: python main.py 
   postgresql:
-    # image: postgres
     build: ./postgresql/.
     volumes:
       - ./postgresql:/var/lib/postgresql
@@ -24,34 +22,17 @@ services:
       - "5432:5432"
     expose:
       - "5432"
-    # command: psql -U postgres -f /var/lib/postgresql/seed.sql 
-  redis:
-    image: redis
-    volumes:
-      - ./redis/data:/data
-    ports:
-      - "6379:6379"
-    command: redis-server --appendonly yes
-  # mongo:
-  #   restart: always
-  #   image: mongo
-  #   ports:
-  #     - "27017:27017"
-  #   volumes:
-  #     - ./mongo/data/db:/data/db
   web:
     restart: always
     build: .
     depends_on:
       - dataservices
-      - redis
     volumes:
       - ./services:/usr/src/app/services
       - ./stylesheets:/usr/src/app/stylesheets
       - ./server:/usr/src/app/server/
       - ./scripts:/usr/src/scripts
     links:
-      - redis:redis
       - postgresql:postgresql
     ports:
       - "8080:8080"

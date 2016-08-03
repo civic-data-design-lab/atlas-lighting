@@ -1,7 +1,7 @@
 $(function() {
 	d3.queue()
 		.defer(d3.json, "/us_json")
-        .defer(d3.json, "/city_comparison")
+        .defer(d3.json, "/city_comparisons_all")
         .defer(d3.json, "/groups_data")
     .await(dataDidLoad);
 })
