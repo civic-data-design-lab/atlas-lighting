@@ -1,8 +1,8 @@
 $(function() {
 	d3.queue()
-		.defer(d3.json, "us.json")
-        .defer(d3.csv, "city_comparisons_all.csv")
-        .defer(d3.csv, "groupdata.csv")
+		.defer(d3.json, "/us_json")
+        .defer(d3.json, "/city_comparisons_all")
+        .defer(d3.json, "/groups_data")
     .await(dataDidLoad);
 })
 

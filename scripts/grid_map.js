@@ -2,8 +2,8 @@
 
 $(function() {
 	d3.queue()
-		.defer(d3.csv, "grids_values_export_no0.csv")
-        .defer(d3.json,"zipcode_business.geojson")
+		.defer(d3.json, "grids/chicago")
+        .defer(d3.json,"zipcode_business_geojson/chicago")
 	//	.defer(d3.json, "grids.geojson")
     .await(dataDidLoad);
 })
@@ -55,9 +55,10 @@ var radius = 1
 var alpha = 1
 var alphaScale = d3.scale.linear().domain([minZoom,maxZoom]).range([0.6,.03])
 function dataDidLoad(error,grid,zipcodes) {
+    console.log("in grid ,map", zipcodes)
     charts(grid)
     d3.select("#loader").remove()
-initCanvas(grid,zipcodes)
+initCanvas(grid,zipcodes[0]["geojson"])
    
 }
 function project(d) {

@@ -5,7 +5,7 @@
   "repository": "https://github.com/civic-data-design-lab/atlas_lighting",
   "private": true,
   "scripts": {
-    "start": "node server.js",
+    "start": "node app.js",
     "monitor": "nodemon server.js",
     "deploy": "gcloud preview app deploy app.yaml"
   },
@@ -19,11 +19,11 @@
     "daemon": "latest",
     "dc": "^2.0.0-beta.30",
     "express": "latest",
-    "gcloud": "git://github.com/GoogleCloudPlatform/gcloud-node",
-    "googleapis": "latest",
     "optimist": "latest",
+    "pg": "^6.0.3",
     "redis": "^2.6.2",
     "request": "latest",
+    "sequelize": "^3.23.6",
     "serve-static": "latest",
     "topojson": "^1.6.26"
   },
