@@ -1,9 +1,14 @@
 'use strict';
 
+
 $(function() {
+
+
+var currentCity = document.URL.split("#")[1]
+console.log(currentCity)
 	d3.queue()
-		.defer(d3.csv, "grids_values_export_no0.csv")
-        .defer(d3.json,"zipcode_business.geojson")
+		.defer(d3.csv, "grid_values_"+currentCity+".csv")
+        .defer(d3.json,"zipcode_business_"+currentCity+".json")
 	//	.defer(d3.json, "grids.geojson")
     .await(dataDidLoad);
 })
@@ -158,9 +163,18 @@ function initCanvas(data,zipcodes){
                 if (features.length) {
                     map.setFilter("route-hover", ["==", "name", features[0].properties.name]);
                 
-             //   console.log(features[0].properties)
+                    var currentZipData = features[0].properties
+                    console.log(currentZipData)
                     popup.setLngLat([JSON.stringify(e.lngLat["lng"]),JSON.stringify(e.lngLat["lat"])])
-                            .setHTML("<span style=\"color:#aaa; background:rgba(255,255,255,.4)\">zipcode: "+features[0].properties.name+"</br> other data: ....<h1></span>")
+                            .setHTML("<span style=\"color:#aaa; background:rgba(255,255,255,.4)\">Zipcode: "
+                            +currentZipData.name+"</br>HMI: "+currentZipData.HMI
+                    +"</br>Total Population: "+currentZipData.TOT_POP
+                    +"</br>Diversity: "+currentZipData.diversity
+                    +"</br>Places: "+currentZipData.places_cou
+                    +"</br>Light Mean: "+currentZipData.light_mean
+                
+                
+                )
                             .addTo(map)
                 } else {
                     map.setFilter("route-hover", ["==", "name", ""]);
