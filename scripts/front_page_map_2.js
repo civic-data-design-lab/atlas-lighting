@@ -110,7 +110,7 @@ function dataDidLoad(error,data,comparison,us) {
       
     var width = 800, height = 600;
     var fill = d3.scale.ordinal().range(['#827d92','#827354','#523536','#72856a','#2a3285','#383435'])
-    var svg = d3.select("#map").append("svg")
+    var svg = d3.select("#frontpage-map").append("svg")
         .attr("width", width)
         .attr("height", height);
 
@@ -158,7 +158,8 @@ function dataDidLoad(error,data,comparison,us) {
         })
 
     __nodes = nodes
-    draw('make',data,us);
+
+    draw('mapB',data,us);
 
     $( ".btn" ).click(function() {
         $(this).parent().find("label").removeClass("active")
@@ -182,7 +183,7 @@ var getCenters = function (vname, size,data) {
   return centers;
 };
 function drawPolygons(geoData){
-    var svg = d3.select("#map svg")
+    var svg = d3.select("#frontpage-map svg")
 	var path = d3.geo.path().projection(projection);
     svg.insert("path", ".graticule")
       .datum(topojson.feature(geoData, geoData.objects.land))
@@ -271,7 +272,7 @@ function draw (varname,data,map) {
     
         drawKey(typeColors)
             
-            var svg = d3.select("#map svg")
+            var svg = d3.select("#frontpage-map svg")
     var xAxis = d3.svg.axis()
         .scale(popChangeScale)
         .orient("bottom")
@@ -313,7 +314,7 @@ function tick(centers, varname,data) {
 }
 
 function labels (centers) {
-var svg = d3.select("#map svg")
+var svg = d3.select("#frontpage-map svg")
   svg.selectAll(".label").remove();
   svg.selectAll(".label")
   .data(centers).enter().append("text")

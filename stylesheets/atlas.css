@@ -13,6 +13,14 @@ a:hover{
     text-decoration:none;
     
 }
+#logos{
+    position:absolute;
+    right:10px;
+    top:10px;
+}
+#logos img{
+    padding:5px;
+}
 .mapboxgl-popup {
         max-width: 400px;
         font-family: 'Ropa Sans', sans-serif;
@@ -26,7 +34,7 @@ a:hover{
 }
 .section-title{
     font-size:20px;
-    letter-spacing:2px;
+    letter-spacing:1px;
     color:#fff;
     margin-left:-20px;
     
@@ -63,7 +71,7 @@ a:hover{
     padding:20px;
 }
 #loader{
-	width:100%;
+	width:100hh;
     background: #000000; /* For browsers that do not support gradients */
     background: -webkit-linear-gradient(#000030, #555,#000020); /* For Safari 5.1 to 6.0 */
     background: -o-linear-gradient(#000030, #555,#000020); /* For Opera 11.1 to 12.0 */
@@ -74,7 +82,7 @@ a:hover{
 	position:absolute;
 	top:50px;
     left:0px;
-	height:100%;
+	height:100vh;
 	font-size:24px;
 	letter-spacing:3px;
 	color:#fff;
@@ -89,17 +97,15 @@ a:hover{
 }
 #map{
     position:absolute; 
-    width: 1200px;
-    height: 1200px;
+    top:0px;
+    left:0px;
+    width: 100%;
+    height: 100%;
     overflow:hidden;
+    z-index:-1;
 }
 .popup{
     color:#000;
-}
-#info{
-    position:relative;
-    float:right;
-    height:800px;
 }
 .zipcodemap{
     position:absolute;
@@ -108,6 +114,32 @@ a:hover{
 }
 .datalayer{
     overflow:hidden;
+}
+
+.source {
+    position: relative;
+    display: inline-block;
+}
+.source .sourcetext {
+    visibility: hidden;
+    width: 200px;
+    background-color: rgba(255,255,255,.9);
+    color: #000;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    font-size:9px;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+.source:hover .sourcetext {
+    visibility: visible;
+}
+
+.overviewMenu{
+    padding:10px;
+    font-size:14px;
 }
 canvas {
      position: absolute;
@@ -132,7 +164,7 @@ canvas {
     fill-opacity: .5;
     cursor:pointer;
     font-size:12px;
-    letter-spacing:2px;
+    letter-spacing:1px;
 }
 .dc-chart:hover {
     fill-opacity: 1;
@@ -181,19 +213,26 @@ canvas {
 }
 #info{
     border-radius:10px;
-    margin-top:10px;
-    padding-bottom:30px;
+    padding:10px;
     background-color:rgba(0,0,0,.7);
+    width:30%;
+    height:100%;
+    position:fixed;
+    top:42px;
+    right:20px;
     overflow:auto;
-    
+}
+#frontpage-map{
+    position:absolute;
+    top:100px;
+    left:100px;
 }
 #header{
     border-bottom:1px solid white;
     background-color:rgba(0,0,0,.7);
-    
 }
 .loader{position:absolute; top:0px; left:0px;overflow:hidden;}
-#moreinfo {padding:10px;}
+#moreinfo {position:absolute; top:10px; left:10px;}
 #philips{padding:10px;}
 #civic{padding:10px;}
 .x.axis line {
@@ -207,7 +246,7 @@ canvas {
     font-size:10px;
 }
 #info div{
-    margin-top:10px;
+    margin-top:5px;
 }
 .y.axis line,
 .y.axis path {
@@ -223,9 +262,10 @@ canvas {
 .btn{
     background-color:#000;
     color:#fff;
-    font-size:18px;
+    font-size:16px;
     border:none;
     letter-spacing:2px;
+    border-radius:0px;
 }
 .label{
     color:#fff;
@@ -237,7 +277,8 @@ canvas {
     left:0px;
 }
 .btn:hover, .btn:focus{
-    background-color: #333;
+    background-color: #000;
+    color:#aaa;
 }
 /* Dropdown Button */
 .dropbtn {
@@ -254,7 +295,8 @@ canvas {
 
 /* Dropdown button on hover & focus */
 .dropbtn:hover, .dropbtn:focus {
-    background-color: #333;
+    background-color: #000;
+    color:#aaa;
 }
 
 /* The container <div> - needed to position the dropdown content */

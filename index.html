@@ -28,18 +28,31 @@
 	</head>
 
 <body>
-<div class = "container-fluid">
-  <div id = "header" class="row">
-    <div id = "moreinfo" class="col-md-1">
-    <a href="about.html"><img src="icons/questionMark.png" style="width:25px "></a>
-    </div>
-<div id = "title" class="col-md-9"><a href="index.html"><span style="color:#fff">ATLAS of LIGHTING</span> </a><sup><small><i>beta</i></small></sup></div>
-    <div id = "philips" class="col-md-1"><a href="https://www.phillips.com/" target="_blank"><img src="logos/philips_white.png" style="width:80px "></a></div>
-    <div id = "civic" class="col-md-1"><a href="http://www.civicdatadesignlab.org/" target="_blank"><img src="logos/cddl_white.png" style="width:80px "></a></div>
+<div class = "container-">
+  <div id = "header">
+    <div id = "title"><a href="index.html"><span style="color:#fff">ATLAS of LIGHTING</span> </a><sup><small><i>beta</i></small></sup></div>
+    
+    <a href ="about.html"><div id = "moreinfo"><img src="icons/questionMark.png" style="width:25px "></div></a>
+    
+    <div id = "logos"><a href="https://www.phillips.com/" target="_blank"><img src="logos/philips_white.png" style="width:80px"></a> <a href="http://www.civicdatadesignlab.org/" target="_blank"><img src="logos/cddl_white.png" style="width:80px "></a></div>
   </div>
-  
-    <div id = "map" class="col-md-8"></div>
-    <div id = "info" class="col-md-4">
+  <div class="overviewMenu">
+         OVERVIEW BY: 
+       <div class="btn-group" data-toggle="buttons">
+         <label class="btn btn-primary" id="msaB">
+           <input type="radio" name="options">MSA
+         </label>
+         <label class="btn btn-primary" id="mapB">
+           <input type="radio" name="options">MAP
+         </label>
+         <label class="btn btn-primary" id="group">
+           <input type="radio" name="options">GROUP
+         </label>
+       </div>
+     </div>
+    <div id = "bubble-key"></div>
+    <div id = "frontpage-map"></div>
+    <div id = "info">
 
       <div id = "view-selection" class="icons">
       </div>
@@ -51,8 +64,8 @@
             </button>
 
             <div id="myDropdown" class="dropdown-content">
-              <a href="grid.html">CHICAGO-JOLIET-NAPERVILLE</a>
-              <a href="#">City 2 N/A</a>
+              <a href="grid.html#chicago">CHICAGO-JOLIET-NAPERVILLE</a>
+              <a href="grid.html#city2">City 2 N/A</a>
               <a href="#">City 3 N/A</a>
               <a href="#">City 4 N/A</a>
               <a href="#">City 5 N/A</a>
@@ -70,7 +83,7 @@
 <script src="front_page_text.js"></script>
 <script src="city_dropdown.js"></script>
 
-<script src="front_page_map.js"></script>
+<script src="front_page_map_2.js"></script>
 
 
 <script type="text/javascript" charset="utf-8">
