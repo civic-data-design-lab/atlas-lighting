@@ -35,8 +35,8 @@ var colors = {
 "8":"#9ecae1",
 "9":"#3182bd",
 }
-//var center = cityCentroids["Chicago"]
-var center = {lat:41.857673, lng:-87.688886}
+var center = cityCentroids["Chicago"]
+//var center = {lat:41.857673, lng:-87.688886}
 var populationChart = dc.barChart("#population")
 var incomeChart = dc.barChart("#income")
 var busDivChart = dc.barChart("#business_diversity")
@@ -172,16 +172,18 @@ function initCanvas(data,zipcodes){
                     +"</br>Diversity: "+currentZipData.diversity
                     +"</br>Places: "+currentZipData.places_cou
                     +"</br>Light Mean: "+currentZipData.light_mean
-                
-                
-                )
-                            .addTo(map)
+                    )   
+                    .addTo(map)
                 } else {
                     map.setFilter("route-hover", ["==", "name", ""]);
                 }
+                if (!features.length) {
+                       popup.remove();
+                       return;
+                   }
 
             });
-        
+   
     })
 
     

@@ -13,6 +13,14 @@ a:hover{
     text-decoration:none;
     
 }
+.mapboxgl-popup {
+        max-width: 400px;
+        font-family: 'Ropa Sans', sans-serif;
+        font-size:10;
+        background-color:rgba(0,0,0,.1);
+        color:red;
+    }
+
 .largeContent{
     font-size:36px;
 }
