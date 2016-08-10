@@ -21,14 +21,28 @@ a:hover{
 #logos img{
     padding:5px;
 }
+.chart-title{
+    border-bottom:1px solid #aaa;
+    font-size:10px;
+    margin:10px;
+}
+
 .mapboxgl-popup {
         max-width: 400px;
         font-family: 'Ropa Sans', sans-serif;
         font-size:10;
         background-color:rgba(0,0,0,.1);
-        color:red;
     }
-
+.mapboxgl-popup-content{
+    background:rgba(150,150,150,.5);
+}
+.mapboxgl-popup-tip{
+    border:none;
+    border-bottom-color:rgba(150,150,150,.5);
+} 
+.mapboxgl-popup-anchor-right {
+    margin-right: -100px;
+}
 .largeContent{
     font-size:36px;
 }
@@ -36,8 +50,7 @@ a:hover{
     font-size:20px;
     letter-spacing:1px;
     color:#fff;
-    margin-left:-20px;
-    
+    margin-left:-20px;    
 }
 .subsection-title{
     font-size:14px;
@@ -46,6 +59,7 @@ a:hover{
     margin-left:-10px;
     
 }
+
 #about-1{
     letter-spacing:1px;
     font-size:12px;
@@ -117,18 +131,18 @@ a:hover{
 }
 
 .source {
-    position: relative;
-    display: inline-block;
+    float: right;
 }
 .source .sourcetext {
     visibility: hidden;
     width: 200px;
-    background-color: rgba(255,255,255,.9);
-    color: #000;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
+    background-color: rgba(150,150,150,.7);
+    color: #fff;
+    text-align: left;
+    padding: 5px;
     font-size:9px;
+    margin-top:20px;
+    margin-left:-200px;
     /* Position the tooltip */
     position: absolute;
     z-index: 1;
@@ -159,6 +173,9 @@ canvas {
 }
 .dc-data-count a{
     color:#fff;
+}
+.dc-data-count{
+    color:#337ab7;
 }
 .dc-chart{
     fill-opacity: .5;
@@ -215,11 +232,11 @@ canvas {
     border-radius:10px;
     padding:10px;
     background-color:rgba(0,0,0,.7);
-    width:30%;
+    width:400px;
     height:100%;
     position:fixed;
     top:42px;
-    right:20px;
+    right:0px;
     overflow:auto;
 }
 #frontpage-map{

@@ -164,9 +164,9 @@ function initCanvas(data,zipcodes){
                     map.setFilter("route-hover", ["==", "name", features[0].properties.name]);
                 
                     var currentZipData = features[0].properties
-                    console.log(currentZipData)
-                    popup.setLngLat([JSON.stringify(e.lngLat["lng"]),JSON.stringify(e.lngLat["lat"])])
-                            .setHTML("<span style=\"color:#aaa; background:rgba(255,255,255,.4)\">Zipcode: "
+                    popup
+                            .setLngLat([JSON.stringify(e.lngLat["lng"]),JSON.stringify(e.lngLat["lat"])])
+                            .setHTML("Zipcode: "
                             +currentZipData.name+"</br>HMI: "+currentZipData.HMI
                     +"</br>Total Population: "+currentZipData.TOT_POP
                     +"</br>Diversity: "+(currentZipData.diversity).toFixed(2)
@@ -272,7 +272,7 @@ function charts(data){
     var placesDimension = ndx.dimension(function(d){return d.places})
     var placesGroup = placesDimension.group()
 
-        var chartHeight = 70
+        var chartHeight = 65
     busDivChart.width(chartWidth).height(chartHeight)
         .group(busDivGroup).dimension(busDivDimension)        
         .ordinalColors(["#aaaaaa"])
