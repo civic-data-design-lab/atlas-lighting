@@ -72,7 +72,7 @@ function drawKey(keyData){
     .data(keyArray)
     .enter()
     .append("rect")
-    .attr("x",10)
+    .attr("x",0)
     .attr("y",function(d,i){return i*size+10})
     .attr("width",size-2)
     .attr("height",size-2)
@@ -82,7 +82,7 @@ function drawKey(keyData){
     .data(keyArray)
     .enter()
     .append("text")
-    .attr("x",25)
+    .attr("x",15)
     .attr("y",function(d,i){return i*size+18})
     .text(function(d){
       var keys = Object.keys(groupToWords)
@@ -161,7 +161,7 @@ function dataDidLoad(error,data,comparison,us) {
 
     draw('mapB',data,us);
 
-    $( ".btn" ).click(function() {
+    $( ".radio" ).click(function() {
         $(this).parent().find("label").removeClass("active")
         $(this).addClass('active')
       draw(this.id,data,us);

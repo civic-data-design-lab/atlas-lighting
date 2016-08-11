@@ -23,7 +23,7 @@
   <script src='mapbox.js'></script>
   <link href='mapbox.css' rel='stylesheet' />
 <link href='https://fonts.googleapis.com/css?family=Dosis:500,300|Ropa+Sans' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" href="bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">  
+
 	<link rel="stylesheet" type="text/css" href="atlas.css"> </style>     
 	</head>
 
@@ -36,33 +36,18 @@
     
     <div id = "logos"><a href="https://www.phillips.com/" target="_blank"><img src="logos/philips_white.png" style="width:80px"></a> <a href="http://www.civicdatadesignlab.org/" target="_blank"><img src="logos/cddl_white.png" style="width:80px "></a></div>
   </div>
-  <div class="overviewMenu">
-         OVERVIEW BY: 
-       <div class="btn-group" data-toggle="buttons">
-         <label class="btn btn-primary" id="msaB">
-           <input type="radio" name="options">MSA
-         </label>
-         <label class="btn btn-primary" id="mapB">
-           <input type="radio" name="options">MAP
-         </label>
-         <label class="btn btn-primary" id="group">
-           <input type="radio" name="options">GROUP
-         </label>
-       </div>
-     </div>
-    <div id = "bubble-key"></div>
+
     <div id = "frontpage-map"></div>
     <div id = "info">
 
-      <div id = "view-selection" class="icons">
-      </div>
-      <div id = "text" class="content">
-      </div>
-      <div id = "city-title" class="title2">
-        <div class="dropdown">
-            <button onclick="myFunction()" class="dropbtn">Select a MSA for More
-            </button>
 
+
+      <div id = "text" class="content"> 
+
+      <div id = "city-title" class="title2">
+       
+        <div id = "dropdown" class="dropdown">
+            <button onclick="myFunction()" class="dropbtn">FLAG UNITED STATES OF AMERICA</button>
             <div id="myDropdown" class="dropdown-content">
               <a href="grid.html#chicago">CHICAGO-JOLIET-NAPERVILLE</a>
               <a href="grid.html#city2">City 2 N/A</a>
@@ -74,6 +59,21 @@
               <a href="#">City 8 N/A</a>
             </div>
           </div>
+               <div class="btn-group" data-toggle="buttons">
+                 <div class = "overviewby">CLASSIFY BY:</div>
+                <form>
+                 <label class="radio" id="mapB">
+                   <input type="radio" name="options" checked="checked"> MAP</label>
+                <label class="radio" id="msaB">
+                  <input type="radio" name="options" id="msaB">GROWTH</label>
+                 <label class="radio" id="group">
+                   <input type="radio" name="options">LIGHTING AND INCOME</label>
+                 </form>
+             </div>
+          
+      </div>
+          <div id = "bubble-key"></div>
+          
       </div>
     </div>
 </div>
