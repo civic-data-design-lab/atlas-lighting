@@ -5,17 +5,53 @@ body{
     font-family: 'Ropa Sans', sans-serif;
     font-weight: 400;
     fill:rgba(255,255,255,.3);
+    font-size:11px;
+}
+a {
+    text-decoration:none;
+}
+a:hover{
+    text-decoration:none;
+    
+}
+#logos{
+    position:absolute;
+    right:10px;
+    top:10px;
+}
+#logos img{
+    padding:5px;
+}
+.chart-title{
+    border-bottom:1px solid #aaa;
+    font-size:10px;
+    margin:10px;
 }
 
+.mapboxgl-popup {
+        max-width: 400px;
+        font-family: 'Ropa Sans', sans-serif;
+        font-size:10;
+        background-color:rgba(0,0,0,.1);
+    }
+.mapboxgl-popup-content{
+    background:rgba(150,150,150,.5);
+}
+.mapboxgl-popup-tip{
+    border:none;
+    border-bottom-color:rgba(150,150,150,.5);
+} 
+.mapboxgl-popup-anchor-right {
+    margin-right: -100px;
+}
 .largeContent{
     font-size:36px;
 }
 .section-title{
     font-size:20px;
-    letter-spacing:2px;
+    letter-spacing:1px;
     color:#fff;
     margin-left:-20px;
-    
 }
 .subsection-title{
     font-size:14px;
@@ -23,6 +59,11 @@ body{
     color:#fff; 
     margin-left:-10px;
      
+}
+.overviewby{
+    border-bottom:1px solid #aaa;
+    width:100%;
+    font-size:9;
 }
 #about-1{
     letter-spacing:1px;
@@ -49,7 +90,7 @@ body{
     padding:20px;
 }
 #loader{
-	width:100%;
+	width:100hh;
     background: #000000; /* For browsers that do not support gradients */
     background: -webkit-linear-gradient(#000030, #555,#000020); /* For Safari 5.1 to 6.0 */
     background: -o-linear-gradient(#000030, #555,#000020); /* For Opera 11.1 to 12.0 */
@@ -60,7 +101,7 @@ body{
 	position:absolute;
 	top:50px;
     left:0px;
-	height:100%;
+	height:100vh;
 	font-size:24px;
 	letter-spacing:3px;
 	color:#fff;
@@ -75,17 +116,15 @@ body{
 }
 #map{
     position:absolute; 
-    width: 1200px;
-    height: 1200px;
+    top:0px;
+    left:0px;
+    width: 100%;
+    height: 100%;
     overflow:hidden;
+    z-index:-1;
 }
 .popup{
     color:#000;
-}
-#info{
-    position:relative;
-    float:right;
-    height:800px;
 }
 .zipcodemap{
     position:absolute;
@@ -94,6 +133,32 @@ body{
 }
 .datalayer{
     overflow:hidden;
+}
+
+.source {
+    float: right;
+}
+.source .sourcetext {
+    visibility: hidden;
+    width: 200px;
+    background-color: rgba(150,150,150,.7);
+    color: #fff;
+    text-align: left;
+    padding: 5px;
+    font-size:9px;
+    margin-top:20px;
+    margin-left:-200px;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+.source:hover .sourcetext {
+    visibility: visible;
+}
+
+.overviewMenu{
+    padding:10px;
+    font-size:14px;
 }
 canvas {
      position: absolute;
@@ -114,11 +179,14 @@ canvas {
 .dc-data-count a{
     color:#fff;
 }
+.dc-data-count{
+    color:#337ab7;
+}
 .dc-chart{
     fill-opacity: .5;
     cursor:pointer;
     font-size:12px;
-    letter-spacing:2px;
+    letter-spacing:1px;
 }
 .dc-chart:hover {
     fill-opacity: 1;
@@ -167,19 +235,27 @@ canvas {
 }
 #info{
     border-radius:10px;
-    margin-top:10px;
-    padding-bottom:30px;
+    padding:10px;
     background-color:rgba(0,0,0,.7);
+    width:400px;
+    height:100%;
+    position:fixed;
+    top:50px;
+    right:0px;
     overflow:auto;
-    
+}
+#frontpage-map{
+    position:absolute;
+    top:100px;
+    left:40px;
 }
 #header{
     border-bottom:1px solid white;
     background-color:rgba(0,0,0,.7);
-    
+    z-index:20;
 }
 .loader{position:absolute; top:0px; left:0px;overflow:hidden;}
-#moreinfo {padding:10px;}
+#moreinfo {position:absolute; top:10px; left:10px;}
 #philips{padding:10px;}
 #civic{padding:10px;}
 .x.axis line {
@@ -193,7 +269,7 @@ canvas {
     font-size:10px;
 }
 #info div{
-    margin-top:10px;
+    margin-top:5px;
 }
 .y.axis line,
 .y.axis path {
@@ -201,30 +277,15 @@ canvas {
   stroke: #fff;
 }
 /* bubble control*/
-.btn-primary.active{
-    background-color:#444;
-}
-.btn-group{
-}
-.btn{
-    background-color:#000;
-    color:#fff;
-    font-size:18px;
-    border:none;
-    letter-spacing:2px;
-}
+
 .label{
     color:#fff;
     font-size:14px;
 }
-#bubble-key{
-    position:absolute;
-    top:80px;
-    left:0px;
+.radio{
+    float: left;
 }
-.btn:hover, .btn:focus{
-    background-color: #333;
-}
+
 /* Dropdown Button */
 .dropbtn {
     background-color: #000;
@@ -236,11 +297,14 @@ canvas {
     width:100%;
     text-align:left;
     letter-spacing:2px;
+    font-family: 'Ropa Sans', sans-serif;
+    
 }
 
 /* Dropdown button on hover & focus */
 .dropbtn:hover, .dropbtn:focus {
-    background-color: #333;
+    background-color: #000;
+    color:#aaa;
 }
 
 /* The container <div> - needed to position the dropdown content */
@@ -249,6 +313,7 @@ canvas {
     display: inline-block;
     width:100%;
     border:1px solid #fff;
+    z-index:9;
 }
 
 /* Dropdown Content (Hidden by Default) */
