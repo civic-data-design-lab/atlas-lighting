@@ -1,5 +1,4 @@
 FROM python:2.7
-RUN apt-get update
 ADD requirements.txt /usr/src/app/requirements.txt
 RUN pip install -r /usr/src/app/requirements.txt
 ENV APP_SETTINGS config.DevelopmentConfig
