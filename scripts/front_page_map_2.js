@@ -72,7 +72,7 @@ function drawKey(keyData){
     .data(keyArray)
     .enter()
     .append("rect")
-    .attr("x",10)
+    .attr("x",0)
     .attr("y",function(d,i){return i*size+10})
     .attr("width",size-2)
     .attr("height",size-2)
@@ -82,7 +82,7 @@ function drawKey(keyData){
     .data(keyArray)
     .enter()
     .append("text")
-    .attr("x",25)
+    .attr("x",15)
     .attr("y",function(d,i){return i*size+18})
     .text(function(d){
       var keys = Object.keys(groupToWords)
@@ -110,7 +110,7 @@ function dataDidLoad(error,data,comparison,us) {
       
     var width = 800, height = 600;
     var fill = d3.scale.ordinal().range(['#827d92','#827354','#523536','#72856a','#2a3285','#383435'])
-    var svg = d3.select("#map").append("svg")
+    var svg = d3.select("#frontpage-map").append("svg")
         .attr("width", width)
         .attr("height", height);
 
@@ -158,9 +158,10 @@ function dataDidLoad(error,data,comparison,us) {
         })
 
     __nodes = nodes
-    draw('make',data,us);
 
-    $( ".btn" ).click(function() {
+    draw('mapB',data,us);
+
+    $( ".radio" ).click(function() {
         $(this).parent().find("label").removeClass("active")
         $(this).addClass('active')
       draw(this.id,data,us);
@@ -182,7 +183,7 @@ var getCenters = function (vname, size,data) {
   return centers;
 };
 function drawPolygons(geoData){
-    var svg = d3.select("#map svg")
+    var svg = d3.select("#frontpage-map svg")
 	var path = d3.geo.path().projection(projection);
     svg.insert("path", ".graticule")
       .datum(topojson.feature(geoData, geoData.objects.land))
@@ -195,16 +196,22 @@ function drawPolygons(geoData){
 }
 
 var projection = d3.geo.mercator().scale(660).center([-83,39])
+    var force = d3.layout.force()
+    .friction(.9)
+    .gravity(0.1)
+    .charge(-30)
+    .start()
 function draw (varname,data,map) {
-    var force = d3.layout.force();
+
     
       var centers = getCenters(varname, [800, 600],data);
-      force.on("tick", tick(centers, varname,data));
       labels(centers)
-      force.start();
+   //   force.stop();
         var densityScale = d3.scale.linear().domain([3000,31684]).range([5,50])
 
     if(varname == "mapB"){
+        d3.selectAll(".country").remove()
+        
         force.stop();
         drawPolygons(map)
         d3.selectAll("circle")
@@ -213,7 +220,7 @@ function draw (varname,data,map) {
         .attr("r",function(d){
             return densityScale(d.density)
         })
-        .attr("opacity",.3)
+        .attr("opacity",.1)
         .attr("cx",function(d){
             var lat = parseFloat(cityCentroids[d.name].lat)
             var lng = parseFloat(cityCentroids[d.name].lng)
@@ -232,11 +239,13 @@ function draw (varname,data,map) {
         force.stop();
         
     }else if(varname =="group"){
+        force.on("tick", tick(centers, varname,data));
+        
         d3.selectAll(".country").remove()
-         force.start();
+         force.resume();
         var rScale = d3.scale.linear().domain([10,100]).range([3,25])
         d3.selectAll("circle")
-        .transition().duration(500)          
+       // .transition().duration(100)          
         .style("fill",function(d){ return cityNameColors[d.name]})
         .attr("r",function(d){return rScale(parseFloat(d.value))})
         .attr("opacity",1)
@@ -245,11 +254,11 @@ function draw (varname,data,map) {
         labels(centers)
         .attr("cursor","pointer")
         d3.selectAll("#groupF").style("fill","red")
-   //      force.stop();
         
     }else if(varname =="msaB"){
         force.stop();
         d3.selectAll(".country").remove()
+        d3.selectAll(".axis").remove()
         var gmpScale = d3.scale.linear().domain([0,1800000]).range([480,10])
         var popChangeScale = d3.scale.linear().domain([-155946,1792786]).range([600,0])
         
@@ -257,12 +266,11 @@ function draw (varname,data,map) {
         d3.selectAll("circle")
         .transition()
         .duration(500)
-        .delay(function(d,i){return i*5})
+       // .delay(function(d,i){return i*5})
         .style("fill",function(d){return cityTypeColors[d.name]})
         .attr("cy",function(d,i){return gmpScale(d.gmp)
         })
         .attr("cx",function(d,i){
-            console.log(d)
             return popChangeScale(d.popChange)+160
         })
         .attr("r",function(d,i){
@@ -271,7 +279,7 @@ function draw (varname,data,map) {
     
         drawKey(typeColors)
             
-            var svg = d3.select("#map svg")
+            var svg = d3.select("#frontpage-map svg")
     var xAxis = d3.svg.axis()
         .scale(popChangeScale)
         .orient("bottom")
@@ -306,14 +314,14 @@ function tick(centers, varname,data) {
       o.y += ((f.y + (f.dy / 2)) - o.y) * e.alpha;
       o.x += ((f.x + (f.dx / 2)) - o.x) * e.alpha;
     }
-    nodes.each(collide(.11,data))
+    nodes.each(collide(.05,data))
       .attr("cx", function (d) { return d.x; })
       .attr("cy", function (d) { return d.y; });
   }
 }
 
 function labels (centers) {
-var svg = d3.select("#map svg")
+var svg = d3.select("#frontpage-map svg")
   svg.selectAll(".label").remove();
   svg.selectAll(".label")
   .data(centers).enter().append("text")

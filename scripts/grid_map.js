@@ -1,9 +1,19 @@
 'use strict';
 
+
 $(function() {
+
+
+var currentCity = document.URL.split("#")[1]
+console.log(currentCity)
 	d3.queue()
-		.defer(d3.json, "grids/chicago")
-        .defer(d3.json,"zipcode_business_geojson/chicago")
+// <<<<<<< HEAD
+		.defer(d3.json, "grids/"+currentCity)
+        .defer(d3.json,"zipcode_business_geojson/"+currentCity)
+// =======
+		// .defer(d3.csv, "grid_values_"+currentCity+".csv")
+        // .defer(d3.json,"zipcode_business_"+currentCity+".json")
+// >>>>>>> 3508b612b6c96b4b648a7634cae917ae6614c7ec
 	//	.defer(d3.json, "grids.geojson")
     .await(dataDidLoad);
 })
@@ -30,8 +40,8 @@ var colors = {
 "8":"#9ecae1",
 "9":"#3182bd",
 }
-//var center = cityCentroids["Chicago"]
-var center = {lat:41.857673, lng:-87.688886}
+var center = cityCentroids["Chicago"]
+//var center = {lat:41.857673, lng:-87.688886}
 var populationChart = dc.barChart("#population")
 var incomeChart = dc.barChart("#income")
 var busDivChart = dc.barChart("#business_diversity")
@@ -43,7 +53,7 @@ var __map = null
 var  __canvas = null
 var __gridData = null
 
-var originalZoom = 8
+var originalZoom = 9
 var maxZoom = 16
 var minZoom  = 8
 var currentZoom = null
@@ -116,8 +126,8 @@ function initCanvas(data,zipcodes){
             minZoom:minZoom
         });
         __map.scrollZoom.disable()
-        __map.addControl(new mapboxgl.Geocoder({position:"top-left"}));       
-        __map.addControl(new mapboxgl.Navigation({position:"top-left"}));
+        __map.addControl(new mapboxgl.Geocoder({position:"bottom-left"}));       
+        __map.addControl(new mapboxgl.Navigation({position:"bottom-left"}));
     }
     
     var map = __map
@@ -159,16 +169,27 @@ function initCanvas(data,zipcodes){
                 if (features.length) {
                     map.setFilter("route-hover", ["==", "name", features[0].properties.name]);
                 
-             //   console.log(features[0].properties)
-                    popup.setLngLat([JSON.stringify(e.lngLat["lng"]),JSON.stringify(e.lngLat["lat"])])
-                            .setHTML("<span style=\"color:#aaa; background:rgba(255,255,255,.4)\">zipcode: "+features[0].properties.name+"</br> other data: ....<h1></span>")
-                            .addTo(map)
+                    var currentZipData = features[0].properties
+                    popup
+                            .setLngLat([JSON.stringify(e.lngLat["lng"]),JSON.stringify(e.lngLat["lat"])])
+                            .setHTML("Zipcode: "
+                            +currentZipData.name+"</br>HMI: "+currentZipData.HMI
+                    +"</br>Total Population: "+currentZipData.TOT_POP
+                    +"</br>Diversity: "+(currentZipData.diversity).toFixed(2)
+                    +"</br>Places: "+currentZipData.places_cou
+                    +"</br>Light Mean: "+(currentZipData.light_mean).toFixed(2)
+                    )   
+                    .addTo(map)
                 } else {
                     map.setFilter("route-hover", ["==", "name", ""]);
                 }
+                if (!features.length) {
+                       popup.remove();
+                       return;
+                   }
 
             });
-        
+   
     })
 
     
@@ -230,7 +251,7 @@ function charts(data){
         d.dev_intensity = +d.dev_intensity//groups
         d.income = +d.income
     })
-    var chartWidth = 400
+    var chartWidth = 380
     
     var ndx = crossfilter(data)
     var all = ndx.groupAll()
@@ -257,7 +278,7 @@ function charts(data){
     var placesDimension = ndx.dimension(function(d){return d.places})
     var placesGroup = placesDimension.group()
 
-        var chartHeight = 80
+        var chartHeight = 65
     busDivChart.width(chartWidth).height(chartHeight)
         .group(busDivGroup).dimension(busDivDimension)        
         .ordinalColors(["#aaaaaa"])
