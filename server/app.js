@@ -64,7 +64,7 @@
   app.use(serveStatic('./scripts'));
 
   app.use(serveStatic('./', {
-    'index': ['grid.html', 'grid.htm']
+    'index': ['index.html', 'index.htm']
   }));
 
   app.get('/', function(req, res) {
