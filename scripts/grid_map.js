@@ -60,10 +60,11 @@ var radius = 1
 var alpha = 1
 var alphaScale = d3.scale.linear().domain([minZoom,maxZoom]).range([0.6,.03])
 function dataDidLoad(error,grid,zipcodes) {
-    charts(grid)
+ //   d3.selectAll("#info").style("display","show")
+    charts(grid)    
     d3.select("#loader").remove()
 initCanvas(grid,zipcodes)
-   
+    d3.selectAll("#info").style("display","inline")
 }
 function project(d) {
     return __map.project(getLL(d));

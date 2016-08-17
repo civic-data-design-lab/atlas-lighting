@@ -243,6 +243,7 @@ canvas {
     top:50px;
     right:0px;
     overflow:auto;
+    display:none;
 }
 #frontpage-map{
     position:absolute;

@@ -106,6 +106,7 @@ $(function() {
     .await(dataDidLoad);
 })
 function dataDidLoad(error,data,comparison,us) {
+    d3.selectAll("#info").style("display","inline")
 
       
     var width = 800, height = 600;
