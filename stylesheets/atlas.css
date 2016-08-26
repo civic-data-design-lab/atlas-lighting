@@ -233,6 +233,9 @@ canvas {
     font-size:12px;
     letter-spacing:2px;
 }
+.intro{
+    z-index:999;
+}
 #info{
     border-radius:10px;
     padding:10px;
@@ -243,6 +246,7 @@ canvas {
     top:50px;
     right:0px;
     overflow:auto;
+    display:none;
 }
 #frontpage-map{
     position:absolute;
