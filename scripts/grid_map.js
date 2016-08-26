@@ -8,11 +8,19 @@ var currentCity = document.URL.split("#")[1]
 console.log(currentCity)
 	d3.queue()
 // <<<<<<< HEAD
+<<<<<<< HEAD
 		.defer(d3.json, "grids/" + currentCity)
         .defer(d3.json,"zipcode_business_geojson/"+ currentCity)
 // =======
 // 		.defer(d3.csv, "grid_values_"+currentCity+".csv")
 //         .defer(d3.json,"zipcode_business_"+currentCity+".json")
+=======
+		.defer(d3.json, "grids/"+currentCity)
+        .defer(d3.json,"zipcode_business_geojson/"+currentCity)
+// =======
+		// .defer(d3.csv, "grid_values_"+currentCity+".csv")
+        // .defer(d3.json,"zipcode_business_"+currentCity+".json")
+>>>>>>> master
 // >>>>>>> 3508b612b6c96b4b648a7634cae917ae6614c7ec
 	//	.defer(d3.json, "grids.geojson")
     .await(dataDidLoad);

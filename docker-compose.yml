@@ -28,7 +28,7 @@ services:
     depends_on:
       - dataservices
     volumes:
-      - ./services:/usr/src/app/services
+      # - ./services:/usr/src/app/services
       - ./stylesheets:/usr/src/app/stylesheets
       - ./server:/usr/src/app/server/
       - ./scripts:/usr/src/scripts
