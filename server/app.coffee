@@ -79,16 +79,9 @@ app.use serveStatic('./scripts')
 
 
 app.use serveStatic('./', 'index': [
-  'index.html'
-  'index.htm'
+  'landing.html'
+  'landing.htm'
 ])
-
-app.get '/', (req, res) ->
-  res.render 'index', (err, html) ->
-    res.send html
-    return
-  return
-
 
 app.get '/', (req, res) ->
   res.render 'index', (err, html) ->
