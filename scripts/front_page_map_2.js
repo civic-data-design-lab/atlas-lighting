@@ -1,14 +1,4 @@
-var nightlightColors = {
-"1":"#fff7bc",
-"2":"#fee391",
-"3":"#fec44f",
-"4":"#fee0d2",
-"5":"#fc9272",
-"6":"#de2d26",
-"7":"#deebf7",
-"8":"#9ecae1",
-"9":"#3182bd"
-}
+
 var icons = {
     "Uncategorized":"Uncategorized",
     "New Economy-Quality of Life Hubs":"New_Economy-Quality_of_Life_Hubs",
@@ -18,43 +8,21 @@ var icons = {
     "Large-Slow Growth":"Large-Slow_Growth"
 }
 
-var cityNameColors = {
-"San Jose":"#ccd29f",
-"Orlando":"#68a0c5",
-"Milwaukee":"#cad848",
-"Washington":"#567e69",
-"Denver":"#72db5b",
-"Chicago":"#d07b38",
-"Pittsburg":"#72d8b9",
-"Portland":"#cea946",
-"Las Vegas":"#609745",
-"Los Angeles":"#8c723d"
-}
-
 var cityTypeColors = {
-"San Jose":"#f5955e",
-"Orlando":"#e9c057",
-"Milwaukee":"#61d89a",
-"Washington":"#e3587b",
-"Denver":"#e3587b",
-"Chicago":"#20c0e2",
-"Pittsburg":"#61d89a",
-"Portland":"#f5955e",
-"Las Vegas":"#e9c057",
-"Los Angeles":"#20c0e2"
+"5":"#e9c057",
+"2":"#e3587b",
+"3":"#61d89a",
+"4":"#f5955e",
+"1":"#20c0e2"
+}
+var cityType = {
+    "1":"Large-Slow Growth",
+    "2":"Large-Faster_Growth",
+    "3":"Rust Belt-Declining",
+    "4":"New_Economy-Quality_of_Life_Hubs",
+    "5":"Growth Magnets"
 }
 
-var groupToWords = {
-"1":"Low Income, Low Intensity",
-"2":"Low Income, Medium Intensity",
-"3":"Low Income, High Intensity",
-"4":"Medium Income, Low Intensity",
-"5":"Medium Income, Medium Intensity",
-"6":"Medium Income, High Intensity",
-"7":"High Income, Low Intensity",
-"8":"High Income, Medium Intensity",
-"9":"High Income, High Intensity"
-}
 var cityCentroids = {
     "Port St. Lucie":{lat:27.273049,lng:-80.358226},
     "Phoenix":{lat:33.448377,lng:-112.074037},
@@ -80,6 +48,9 @@ var cityCentroids = {
     "Houston":{lat:29.760427,lng:-95.369803},
     "Atlanta":{lat:33.748995,lng:-84.387982}
 }
+    var tip = d3.tip()
+    .attr("class","d3-tip")
+    .offset([100,60])
 function drawKey(keyData){
   //  console.log("key")
     d3.selectAll("#bubble-key svg").remove()
@@ -98,8 +69,8 @@ function drawKey(keyData){
     .attr("class",function(d,i){return "_"+i})
     .attr("x",0)
     .attr("y",function(d,i){return i*size+10})
-    .attr("width",45)
-    .attr("height",45)
+    .attr("width",40)
+    .attr("height",40)
     .attr("xlink:href",function(d){
         var fileName = d.key.split(" ").join("_")+".png"
         return "icons/msaselection/"+fileName})
@@ -117,6 +88,7 @@ function drawKey(keyData){
       }
       return d.key})
     .attr("fill",function(d){return d.color})
+     .attr("class", function(d){return d.key})
 }    
 
 var __nodes = null
@@ -147,14 +119,10 @@ function dataDidLoad(error,data,us,msaOverview) {
     }    
     
  //   var groupCenters = getCenters("group",[800,600],data)
-
-    var tip = d3.tip()
-    .attr("class","d3-tip")
-    .offset([100,60])
     
     svg.call(tip)    
-    var nodes = svg.selectAll("circle")
-      .data(data);
+//    var nodes = svg.selectAll("circle")
+//      .data(data);
 //  var filter = svg.append("defs")
 //    .append("filter")
 //      .attr("id", "blur")
@@ -194,6 +162,10 @@ function dataDidLoad(error,data,us,msaOverview) {
         .attr("r",0)
         .attr("cx",300)
         .attr("cy",400)
+        .attr("class",function(d){
+            return cityType[d.Class].split(" ").join("_")
+        })
+    d3.select("#centered").append("div").attr("id","chartTitle")
         
         draw('mapB',data,us,msaOverview);
 
@@ -204,8 +176,6 @@ function dataDidLoad(error,data,us,msaOverview) {
     });
 
 }
-
-
 
 var getCenters = function (vname, size,data) {
   var centers, map;
@@ -228,8 +198,9 @@ function drawPolygons(geoData){
 		.style("fill","none")
         .style("stroke","#ffffff")
         .style("stroke-width",1)
-	    .style("opacity",1)
+	    .style("opacity",.5)
       .attr("transform", "translate(80,0)")
+          d3.select("#chartTitle").html("MSA Locations")
     
 }
 
@@ -252,6 +223,8 @@ function draw (varname,data,map,msaOverview) {
         d3.selectAll(".country").remove()
         d3.select("#yAxisData").remove()
         d3.select("#xAxisData").remove()
+        d3.select("#yAxisArrow").remove()
+        d3.select("#xAxisArrow").remove()
         force.stop();
         drawPolygons(map)
         d3.selectAll("circle")
@@ -259,7 +232,7 @@ function draw (varname,data,map,msaOverview) {
        // .enter()
         //.append("circle")
         .transition()//.delay(100).duration(800)          
-        .style("fill",function(d){return cityTypeColors[d.name]; })
+        .style("fill",function(d){return cityTypeColors[d.Class]; })
         .attr("r",function(d){
             return populationScale(d.Population_2014)
           //  return densityScale(d.density)
@@ -277,12 +250,19 @@ function draw (varname,data,map,msaOverview) {
             var projectedLat = projection([lng,lat])[1]
             return projectedLat
         })
-      .attr("transform", "translate(80,0)")
-    
+        .attr("transform", "translate(80,0)")
         .attr("cursor","pointer")
+
+d3.selectAll("circle")        
+        .on("mouseover",function(d){
+          var tipText = formatTip(d)
+          tip.html(tipText)
+            tip.show()})
+        .on("mouseout",function(){tip.hide()})
+
         d3.selectAll(".axis").remove()
         drawKey(typeColors)  
-        force.stop();        
+ //       force.stop();        
 //    }else if(varname =="group"){
 //        d3.select("#yAxisData").remove()
 //        d3.select("#xAxisData").remove()
@@ -307,7 +287,10 @@ function draw (varname,data,map,msaOverview) {
         d3.selectAll(".country").remove()
         d3.selectAll(".axis").remove()         
              force.resume();
-       
+        d3.select("#yAxisData").remove()
+        d3.select("#xAxisData").remove()
+        d3.select("#yAxisArrow").remove()
+        d3.select("#xAxisArrow").remove()
         drawCustomBubbleChart(__msaOverview)
     }
 }
@@ -322,10 +305,10 @@ var margin = {top: 20, right: 20, bottom: 30, left: 140},
     height = 600 - margin.top - margin.bottom;
 
 var x = d3.scale.linear()
-    .range([0, width]);
+    .range([0, width-30]);
 
 var y = d3.scale.linear()
-    .range([height, 0]);
+    .range([height, 30]);
 
 var r = d3.scale.linear()
     .range([5,20]);
@@ -362,6 +345,21 @@ function drawCustomBubbleChart(data){
 function generateAxis(list,data,xSelection,ySelection,rLabel){
     d3.select("#centered").append("select").attr("id","xAxisData")
     d3.select("#centered").append("select").attr("id","yAxisData")
+          d3.select("#chartTitle").html(ySelection.split("_").join(" ")+"/"+xSelection.split("_").join(" "))
+
+    d3.select("#centered").append("div").attr("id","xAxisArrow").append("svg").append("svg:image")
+    .attr("x",0)
+    .attr("y",0)
+    .attr("width",8)
+    .attr("height",8)
+    .attr("xlink:href","icons/arrow_down.png")
+
+    d3.select("#centered").append("div").attr("id","yAxisArrow").append("svg").append("svg:image")
+    .attr("x",0)
+    .attr("y",0)
+    .attr("width",8)
+    .attr("height",8)
+    .attr("xlink:href","icons/arrow_down.png")
 
       for(var i in list){
           var label = list[i].split("_").join(" ")
@@ -382,17 +380,18 @@ function generateAxis(list,data,xSelection,ySelection,rLabel){
       d3.select("#xAxisData").on("change",function(){
         xSelection = d3.select(this).property('value')
         update(data,xSelection,ySelection,rLabel)
+          d3.select("#chartTitle").html(ySelection.split("_").join(" ")+"/"+xSelection.split("_").join(" "))
       })
       d3.select("#yAxisData").on("change",function(){
         ySelection = d3.select(this).property('value')
         update(data,xSelection,ySelection,rLabel)
+          d3.select("#chartTitle").html(ySelection.split("_").join(" ")+"/"+xSelection.split("_").join(" "))
       })
 
 }
 
 function update(data,xLabel,yLabel,rLabel){
-        d3.select("#yAxisData").remove()
-        d3.select("#xAxisData").remove()
+
   data.forEach(function(d) {
     d[xLabel] = +d[xLabel];
     d[yLabel] = +d[yLabel];
@@ -484,7 +483,7 @@ function drawChart(data,xLabel,yLabel,rLabel){
       .attr("opacity",.5)
       .attr("cx", function(d) { return x(d[xLabel]); })
       .attr("cy", function(d) { return y(d[yLabel] ); })
-        .style("fill",function(d){return cityTypeColors[d.name]; })
+        .style("fill",function(d){return cityTypeColors[d.Class]; })
       .on("mouseover",function(d){
           var tipText = formatTip(d)
           tip.html(tipText)
@@ -517,7 +516,7 @@ function drawChart(data,xLabel,yLabel,rLabel){
 function formatTip(data){
   var formatted = ""
   for (var i in data){
-    formatted+= i
+    formatted+= i.split("_").join(" ")
     formatted+= ": "
     formatted+= data[i]
     formatted+="</br>"

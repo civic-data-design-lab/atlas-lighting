@@ -18,21 +18,46 @@ select {
    border-radius:0px;
    color:#fff;
    width:300px;
-   
+   font-family: 'Dosis', sans-serif;
+   letter-spacing:2px;
 }
 #xAxisData{
-  width:645px;
+  width:615px;
   margin-left:110px;
   margin-top:650px;
   z-index:999;
+  padding-left:20px;
 }
 #yAxisData{
     z-index:999;
-  width:550px;
+  width:520px;
   position:absolute;
-  top:364px;
+  top:378px;
   left:-230px;
   -ms-transform: rotate(-90deg); /* IE 9 */
   -webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
   transform: rotate(-90deg);
+  padding-left:20px;
+  
+}
+#chartTitle{
+    position:absolute;
+    top:80px;
+    left:20px;
+    font-size:18px;
+    font-family: 'Dosis', sans-serif;
+    letter-spacing:2px;
+}
+#xAxisArrow{
+position:absolute;
+top:705px;
+left:125px;
+    z-index:9999;
+}
+
+#yAxisArrow{
+position:absolute;
+top:632px;
+left:26px;
+    z-index:9999;
 }
