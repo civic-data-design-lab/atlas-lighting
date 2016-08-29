@@ -9,7 +9,6 @@ ADD bower_components/. /usr/src/app/bower_components
 ADD server/. /usr/src/app/server
 ADD stylesheets/. /usr/src/app/stylesheets
 ADD font-awesome/. /usr/src/app/font-awesome
-ADD test/. /usr/src/app/test
 ADD bower.json/. /usr/src/app/bower.json
 ADD grid.html/. /usr/src/app/grid.html
 ADD index.html/. /usr/src/app/index.html
