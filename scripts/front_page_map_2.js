@@ -201,7 +201,19 @@ function drawPolygons(geoData){
 	    .style("opacity",.5)
       .attr("transform", "translate(80,0)")
           d3.select("#chartTitle").html("MSA Locations")
+svg.insert("path", ".graticule")
+      .datum(topojson.mesh(geoData, geoData.objects.states, function(a, b) { return a !== b; }))
     
+      //.datum(topojson.feature(geoData, geoData.objects.land))
+    .attr("class", "country")
+    .attr("d", path)
+		.style("fill","none")
+        .style("stroke","#ffffff")
+        .style("stroke-width",1)
+	    .style("opacity",.5)
+      .attr("transform", "translate(80,0)")
+    
+    ;
 }
 
 var projection = d3.geo.albers().scale(1000).center([12, 38.7])

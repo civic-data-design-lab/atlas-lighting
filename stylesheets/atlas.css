@@ -60,10 +60,17 @@ a:hover{
     margin-left:-10px;
     
 }
+.form{
+    padding:10px;
+}
 .overviewby{
-    border-bottom:1px solid #aaa;
     width:100%;
-    font-size:9;
+    font-size:16px;
+}
+#dropdownPrompt{
+    font-size:16px;
+    width:100%;
+    padding-top:10px;
 }
 #about-1{
     letter-spacing:1px;
@@ -269,7 +276,20 @@ canvas {
 .btn-group{
     font-size:18px;
 }
+label > input{ /* HIDE RADIO */
+  visibility: hidden; /* Makes input not-clickable */
+}
+label > input + img{ /* IMAGE STYLES */
+  cursor:pointer;
+  opacity:.5;
+}
 
+label > input:checked{
+    opacity:1;
+}
+label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
+  opacity:1;
+}
 .loader{position:absolute; top:0px; left:0px;overflow:hidden;}
 #moreinfo {position:absolute; top:10px; left:10px;}
 #philips{padding:10px;}
