@@ -7,14 +7,8 @@ $(function() {
 var currentCity = document.URL.split("#")[1]
 console.log(currentCity)
 	d3.queue()
-// <<<<<<< HEAD
 		.defer(d3.json, "grids/"+currentCity)
         .defer(d3.json,"zipcode_business_geojson/"+currentCity)
-// =======
-		// .defer(d3.csv, "grid_values_"+currentCity+".csv")
-        // .defer(d3.json,"zipcode_business_"+currentCity+".json")
-// >>>>>>> 3508b612b6c96b4b648a7634cae917ae6614c7ec
-	//	.defer(d3.json, "grids.geojson")
     .await(dataDidLoad);
 })
 var groupToWords = {
@@ -65,11 +59,11 @@ var radius = 1
 var alpha = 1
 var alphaScale = d3.scale.linear().domain([minZoom,maxZoom]).range([0.6,.03])
 function dataDidLoad(error,grid,zipcodes) {
-    console.log("in grid ,map", zipcodes)
-    charts(grid)
+ //   d3.selectAll("#info").style("display","show")
+    charts(grid)    
     d3.select("#loader").remove()
-initCanvas(grid,zipcodes[0]["geojson"])
-   
+initCanvas(grid,zipcodes)
+    d3.selectAll("#info").style("display","inline")
 }
 function project(d) {
     return __map.project(getLL(d));
