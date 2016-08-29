@@ -58,7 +58,7 @@ a:hover{
     letter-spacing:2px;
     color:#fff; 
     margin-left:-10px;
-     
+    
 }
 .overviewby{
     border-bottom:1px solid #aaa;
@@ -282,7 +282,7 @@ canvas {
 }
 #bubble-key{
     padding:5px;
-    font-size:16px;
+    font-size:10px;
 }
 #info div{
     margin-top:5px;

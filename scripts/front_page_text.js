@@ -27,4 +27,4 @@ function frontPageText(){
   var selectionDiv = d3.select("#text").append("div").attr("id","groupF")
         .html(front_page_text["group"])
 }
-frontPageText()
+//frontPageText()

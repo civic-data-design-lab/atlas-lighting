@@ -1,0 +1,38 @@
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #aaa;
+  shape-rendering: crispEdges;
+}
+
+.dot {
+}
+select {
+   -webkit-appearance: none;
+   -moz-appearance: none;
+   appearance: none;
+   padding:2px;
+   padding-left:10px;
+   background-color:rbga(0,0,0,.2);
+   background:none;
+   border-radius:0px;
+   color:#fff;
+   width:300px;
+   
+}
+#xAxisData{
+  width:645px;
+  margin-left:110px;
+  margin-top:650px;
+  z-index:999;
+}
+#yAxisData{
+    z-index:999;
+  width:550px;
+  position:absolute;
+  top:364px;
+  left:-230px;
+  -ms-transform: rotate(-90deg); /* IE 9 */
+  -webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
+  transform: rotate(-90deg);
+}
