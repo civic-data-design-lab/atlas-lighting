@@ -54,7 +54,7 @@ var cityCentroids = {
 function drawKey(keyData){
   //  console.log("key")
     d3.selectAll("#bubble-key svg").remove()
-    var size = 40
+    var size = 30
     var keyArray = []
     for(var i in keyData){
       keyArray.push({"color":keyData[i],"key":i})
@@ -68,7 +68,7 @@ function drawKey(keyData){
     .append("svg:image")
     .attr("class",function(d,i){return "_"+i})
     .attr("x",0)
-    .attr("y",function(d,i){return i*size+10})
+    .attr("y",function(d,i){return i*size+0})
     .attr("width",40)
     .attr("height",40)
     .attr("xlink:href",function(d){
@@ -80,7 +80,7 @@ function drawKey(keyData){
     .enter()
     .append("text")
     .attr("x",45)
-    .attr("y",function(d,i){return i*40+35})
+    .attr("y",function(d,i){return i*30+25})
     .text(function(d){
       var keys = Object.keys(groupToWords)
       if(keys.indexOf(d.key)>-1){
@@ -197,21 +197,21 @@ function drawPolygons(geoData){
       .attr("d", path)
 		.style("fill","none")
         .style("stroke","#ffffff")
-        .style("stroke-width",1)
+        .style("stroke-width",2)
 	    .style("opacity",.5)
       .attr("transform", "translate(80,0)")
           d3.select("#chartTitle").html("MSA Locations")
-svg.insert("path", ".graticule")
-      .datum(topojson.mesh(geoData, geoData.objects.states, function(a, b) { return a !== b; }))
-    
-      //.datum(topojson.feature(geoData, geoData.objects.land))
-    .attr("class", "country")
-    .attr("d", path)
-		.style("fill","none")
-        .style("stroke","#ffffff")
-        .style("stroke-width",1)
-	    .style("opacity",.5)
-      .attr("transform", "translate(80,0)")
+//svg.insert("path", ".graticule")
+//      .datum(topojson.mesh(geoData, geoData.objects.states, function(a, b) { return a !== b; }))
+//    
+//      //.datum(topojson.feature(geoData, geoData.objects.land))
+//    .attr("class", "country")
+//    .attr("d", path)
+//		.style("fill","none")
+//        .style("stroke","#ffffff")
+//        .style("stroke-width",1)
+//	    .style("opacity",.5)
+//      .attr("transform", "translate(80,0)")
     
     ;
 }
@@ -314,7 +314,7 @@ var units = {
 }
 var margin = {top: 20, right: 20, bottom: 30, left: 140},
     width = 800 - margin.left - margin.right,
-    height = 600 - margin.top - margin.bottom;
+    height = 500 - margin.top - margin.bottom;
 
 var x = d3.scale.linear()
     .range([0, width-30]);

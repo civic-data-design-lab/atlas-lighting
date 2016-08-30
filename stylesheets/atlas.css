@@ -14,6 +14,13 @@ a:hover{
     text-decoration:none;
     
 }
+#index-text{
+    padding:10px;
+    text-align:justify;
+    width:80%;
+    line-height:125%;
+    overflow:auto;
+}
 #logos{
     position:absolute;
     right:10px;
@@ -347,7 +354,8 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 .dropdown {
     position: relative;
     display: inline-block;
-    width:100%;
+    width:80%;
+    margin:10px;
     border:1px solid #fff;
     z-index:9;
 }

@@ -7,6 +7,10 @@
 
 .dot {
 }
+svg circle.dot{
+    fill: green;
+    filter: url(#blur);
+}
 select {
    -webkit-appearance: none;
    -moz-appearance: none;
@@ -24,16 +28,16 @@ select {
 #xAxisData{
   width:615px;
   margin-left:110px;
-  margin-top:650px;
+  margin-top:560px;
   z-index:999;
   padding-left:20px;
 }
 #yAxisData{
     z-index:999;
-  width:520px;
+  width:430px;
   position:absolute;
-  top:378px;
-  left:-230px;
+  top:330px;
+  left:-180px;
   -ms-transform: rotate(-90deg); /* IE 9 */
   -webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
   transform: rotate(-90deg);
@@ -50,14 +54,14 @@ select {
 }
 #xAxisArrow{
 position:absolute;
-top:705px;
+top:615px;
 left:125px;
     z-index:9999;
 }
 
 #yAxisArrow{
 position:absolute;
-top:632px;
-left:26px;
+top:540px;
+left:31px;
     z-index:9999;
 }
