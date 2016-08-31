@@ -96,7 +96,8 @@ a:hover{
     position:absolute;
     width:30%;
     left:5%;
-    padding:20px;
+    padding:30px;
+    padding-top:60px;
 }
 #about-2{
     letter-spacing:1px;
@@ -104,7 +105,8 @@ a:hover{
     position:absolute;
     width:30%;
     left:35%;
-    padding:20px;
+    padding:30px;
+    padding-top:60px;
 }
 #about-3{
     letter-spacing:1px;
@@ -112,7 +114,8 @@ a:hover{
     position:absolute;
     width:30%;
     left:70%;
-    padding:20px;
+    padding:30px;
+    padding-top:60px;
 }
 #loader{
 	width:100hh;
