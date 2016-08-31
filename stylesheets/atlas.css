@@ -9,6 +9,7 @@ body{
 }
 a {
     text-decoration:none;
+    color:rgb(32, 192, 226);;
 }
 a:hover{
     text-decoration:none;

@@ -496,11 +496,13 @@ r.domain([1000000,20000000])
       .text(function(d) { return d; });
 }
 function formatTip(data){
+
+  var formatComma = d3.format("0,000");
   var formatted = ""
   for (var i in data){
     formatted+= i.split("_").join(" ")
     formatted+= ": "
-    formatted+= data[i]
+    formatted+= formatComma(parseFloat(data[i]).toFixed(2))
     formatted+="</br>"
   }
   
