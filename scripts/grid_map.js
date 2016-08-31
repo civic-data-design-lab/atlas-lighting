@@ -5,7 +5,6 @@ $(function() {
 
 
 var currentCity = document.URL.split("#")[1]
-console.log(currentCity)
 	d3.queue()
 		.defer(d3.csv, "grid_values_"+currentCity+".csv")
         .defer(d3.json,"zipcode_business_"+currentCity+".json")
@@ -48,7 +47,7 @@ var __map = null
 var  __canvas = null
 var __gridData = null
 
-var originalZoom = 9
+var originalZoom = 5
 var maxZoom = 16
 var minZoom  = 8
 var currentZoom = null
@@ -120,7 +119,7 @@ function initCanvas(data,zipcodes){
             maxZoom:maxZoom,
             minZoom:minZoom
         });
-        __map.scrollZoom.disable()
+       // __map.scrollZoom.disable()
         __map.addControl(new mapboxgl.Geocoder({position:"bottom-left"}));       
         __map.addControl(new mapboxgl.Navigation({position:"bottom-left"}));
     }
@@ -192,6 +191,8 @@ function initCanvas(data,zipcodes){
     var canvas = d3.select(container).append("canvas").attr("class","datalayer")
         .attr("width",2000)
         .attr("height",  2000)
+    .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
+    
         .node().getContext("2d");
      __canvas = canvas
     
@@ -222,16 +223,25 @@ function initCanvas(data,zipcodes){
        }         
     }
     render()
-    
+    function zoom() {
+        console.log(["map",map.getZoom()])
+        console.log(["event",d3.event.scale])
+      canvas.save();
+      canvas.clearRect(0, 0, 2000,2000);
+      canvas.translate(d3.event.translate[0]*.005, d3.event.translate[1]*.01);
+     // canvas.scale(map.getZoom()/originalZoom, map.getZoom()/originalZoom);
+      render();
+      canvas.restore();
+      render();
+    }
     map.on("viewreset",function(){
-        console.log("viewreset")
-        render()
+      //  console.log(map.getBounds())
+       // render()
     })
     map.on("moveend", function() {
-           render()
-        map.getBounds()
-        console.log("move")
-        
+        console.log(map.getBounds())
+      //  canvas.clearRect(0,0,2000,2000)
+        //render()
          })
 }
 

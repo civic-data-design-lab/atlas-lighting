@@ -1,0 +1,30 @@
+/* these are not necessary */
+
+html {
+    background-color:white;
+}
+
+body {
+    width:100%;
+    height:100%;
+    margin:0;
+    padding:0;
+    background-color:white;
+}
+
+div {
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
+}
+
+#item4 {
+	background-color:#ffc;
+	position:absolute;
+	bottom:200px;
+	left:200px;
+	width:200px;
+	height:200px;
+	border:1px solid yellow;
+	-webkit-transform: skew(45deg);
+	-moz-transform: skew(45deg);
+	-o-transform: skew(45deg);
+}
