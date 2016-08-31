@@ -316,7 +316,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
   opacity:1;
 }
 .loader{position:absolute; top:0px; left:0px;overflow:hidden;}
-#moreinfo {position:absolute; top:10px; left:10px;}
+#moreinfo {position:absolute; top:15px; left:15px;}
 #philips{padding:10px;}
 #civic{padding:10px;}
 .x.axis line {

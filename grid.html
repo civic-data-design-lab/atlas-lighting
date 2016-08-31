@@ -33,25 +33,25 @@
     <div id = "title"><a href="index.html"><span style="color:#fff">ATLAS of LIGHTING</span> </a><sup><small><i>beta</i></small></sup></div>
     
     <div id = "moreinfo">
-    <a href ="about.html"><img src="icons/questionMark.png" style="width:25px "></a>
-    <a href ="index.html"><img src="icons/usa.png" style="width:40px "></a>
-    </div>
+    <a href ="index.html">HOME</a> | 
+    <a href ="about.html">ABOUT</a>
+     </div>
     
-    <div id = "logos"><a href="https://www.phillips.com/" target="_blank"><img src="logos/philips_white.png" style="width:80px"></a> <a href="http://www.civicdatadesignlab.org/" target="_blank"><img src="logos/cddl_white.png" style="width:80px "></a></div>
-  </div>
 
+    <div id = "logos"><a href="https://www.phillips.com/" target="_blank"><img src="logos/philips_white.png" style="width:80px"></a> <a href="http://www.civicdatadesignlab.org/" target="_blank"><img src="logos/cddl_white.png" style="width:80px "></a><a href="http://cau.mit.edu/" target="_blank"><img src="logos/cau.jpg" style="height:30px "></a></div>
+  </div>
 <div id = "loader">
   <div id = "loader-text">
     Loading data for Chicago and its surrounding MSA ...
     <br/><br/>
   </div>
-</div>
+</div> 
   
     <div id = "map"></div>
     <div id = "info">
       <div id = "city-title" class="title2">        
         <div class="dropdown">
-            <button onclick="myFunction()" class="dropbtn">CHICAGO-JOLIET-NAPERVILLE</button>
+            <button onclick="myFunction()" class="dropbtn"><img src="icons/arrow_down.png" style="width:10px"> CHICAGO-JOLIET-NAPERVILLE</button>
             <div id="myDropdown" class="dropdown-content">
               <a href="#">City 2 N/A</a>
               <a href="#">City 3 N/A</a>
@@ -73,39 +73,39 @@
         
         <div id ="light_average" class ="side-chart"><div class = "chart-title">LIGHTING AVERAGE
             <span class="source">
-              <a class="reset" href="javascript:ligAveChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">put the data source here</span></span>
+              <a class="reset" href="javascript:ligAveChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Quantity of light from earths surface measured on a radiometric sensor. Source: NOAA, VIIRS Nighttime Lights, 2015 Average</span></span>
           </div>
         </div>
        <div id ="income"><div class = "chart-title">MEDIAN HOUSEHOLD INCOME
           <span class="source">
-            <a class="reset" href="javascript:incomeChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">put the data source here</span></span>
+            <a class="reset" href="javascript:incomeChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Household income is a measure of the combined incomes of all people sharing a particular household or place of residence. Source: 2010 - 2014 ACS - 5 Year Estimate</span></span>
           </div>
         </div>
 
         <div id ="development_intensity"><div class = "chart-title">DEVELOPMENT INTENSITY 
           <span class="source">
-            <a class="reset" href="javascript:devIntChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">put the data source here</span></span>
+            <a class="reset" href="javascript:devIntChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">NLCD provides spatial reference and descriptive data for characteristics of the land surface such as low,medium and high intensity development. Source: National Land Cover Database 2011</span></span>
           </div>
         </div>
         
         
         <div id ="population"><div class = "chart-title">POPULATION 
           <span class="source">
-            <a class="reset" href="javascript:populationChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">put the data source here</span></span>
+            <a class="reset" href="javascript:populationChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Population density is the measure of the number people per unit area, commonly represented as people per square mile Source: 2010 - 2014 ACS - 5 Year Estimate</span></span>
           </div>
         </div>
         
         
         <div id ="business_diversity" ><div class = "chart-title">BUSINESS DIVERSITY 
           <span class="source">
-            <a class="reset" href="javascript:busDivChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">put the data source here</span></span>
+            <a class="reset" href="javascript:busDivChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Diversity of business types in a grid cell Source: Google Places API</span></span>
           </div>
         </div>
         
         
         <div id ="places" ><div class = "chart-title">PLACE DENSITY 
           <span class="source">
-            <a class="reset" href="javascript:placesChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">put the data source here</span></span>
+            <a class="reset" href="javascript:placesChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Total number of places in a grid cell Source: Google Places API</span></span>
           </div>
         </div>
         
