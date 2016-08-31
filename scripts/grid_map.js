@@ -227,8 +227,9 @@ function initCanvas(data,zipcodes){
         console.log("viewreset")
         render()
     })
-    map.on("move", function() {
+    map.on("moveend", function() {
            render()
+        map.getBounds()
         console.log("move")
         
          })
@@ -259,8 +260,12 @@ function charts(data){
     var populationDimension = ndx.dimension(function(d){return parseInt(d.population)})
     var pGroup = populationDimension.group()
 
+    var latDimension = ndx.dimension(function(d){
+        return d.lat
+    })
+
+
     var incomeDimension = ndx.dimension(function(d){
-       // console.log(parseInt(parseFloat(d.income)/1000)*1000)
         return parseInt(parseFloat(d.income)/1000)*1000})
     var iGroup = incomeDimension.group()
     
