@@ -265,6 +265,10 @@ canvas {
     border-bottom:1px solid white;
     background-color:rgba(0,0,0,.7);
     z-index:20;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
 }
 .btn-group{
     font-size:18px;

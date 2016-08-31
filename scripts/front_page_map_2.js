@@ -60,7 +60,7 @@ function drawKey(keyData){
       keyArray.push({"color":keyData[i],"key":i})
     }
     var height = keyArray.length*size+10
-    var keySvg=d3.select("#bubble-key").append("svg").attr("width",450).attr("height",height)
+    var keySvg=d3.select("#bubble-key").append("svg").attr("width",350).attr("height",height)
     
     keySvg.selectAll("image")
     .data(keyArray)
@@ -222,14 +222,36 @@ var projection = d3.geo.albers().scale(1000).center([12, 38.7])
     .gravity(0.1)
     .charge(-30)
     .start()
+var margin = {top: 20, right: 20, bottom: 30, left: 140},
+    width = 800 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var x = d3.scale.linear()
+    .range([0, width-30]);
+
+var y = d3.scale.linear()
+    .range([height, 30]);
+
+var r = d3.scale.linear()
+    .range([5,20]);
+var color = d3.scale.category10();
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+.orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .ticks(4)
+    .orient("left");
 function draw (varname,data,map,msaOverview) {
     
       var centers = getCenters(varname, [800, 600],data);
       labels(centers)
    //   force.stop();
-        var populationScale = d3.scale.linear().range([5,20])
+      //  var r = d3.scale.linear().range([5,20])
 
-   populationScale.domain(d3.extent(msaOverview, function(d) {return d["Population_2014"];}));
+   r.domain(d3.extent(msaOverview, function(d) {return d["Population_2014"];}));
 
     if(varname == "mapB"){
         d3.selectAll(".country").remove()
@@ -246,7 +268,8 @@ function draw (varname,data,map,msaOverview) {
         .transition()//.delay(100).duration(800)          
         .style("fill",function(d){return cityTypeColors[d.Class]; })
         .attr("r",function(d){
-            return populationScale(d.Population_2014)
+            console.log(d["Population_2014"])
+            return r(d["Population_2014"])
           //  return densityScale(d.density)
         })
         .attr("opacity",.5)
@@ -312,28 +335,7 @@ var units = {
   "gmp":"$",
   "popChange":"%"
 }
-var margin = {top: 20, right: 20, bottom: 30, left: 140},
-    width = 800 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
 
-var x = d3.scale.linear()
-    .range([0, width-30]);
-
-var y = d3.scale.linear()
-    .range([height, 30]);
-
-var r = d3.scale.linear()
-    .range([5,20]);
-var color = d3.scale.category10();
-
-var xAxis = d3.svg.axis()
-    .scale(x)
-.orient("bottom");
-
-var yAxis = d3.svg.axis()
-    .scale(y)
-    .ticks(4)
-    .orient("left");
 
 function drawCustomBubbleChart(data){
 
@@ -491,7 +493,7 @@ function drawChart(data,xLabel,yLabel,rLabel){
       .enter().append("circle")
       .attr("transform", "translate(80,0)")
       .attr("class", xLabel+"_"+yLabel)
-      .attr("r", function(d){ return r(d[rLabel]); return 10;})
+      .attr("r", function(d){ return r(d[rLabel]);;})
       .attr("opacity",.5)
       .attr("cx", function(d) { return x(d[xLabel]); })
       .attr("cy", function(d) { return y(d[yLabel] ); })

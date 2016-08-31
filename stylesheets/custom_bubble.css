@@ -45,7 +45,7 @@ select {
   
 }
 #chartTitle{
-    position:absolute;
+    position:fixed;
     top:80px;
     left:20px;
     font-size:18px;

@@ -29,6 +29,13 @@
 	</head>
 
 <body>
+  <div id = "basemap">  </div>
+
+    <script>
+    L.mapbox.accessToken = 'pk.eyJ1IjoiampqaWlhMTIzIiwiYSI6ImNpbDQ0Z2s1OTN1N3R1eWtzNTVrd29lMDIifQ.gSWjNbBSpIFzDXU2X5YCiQ';
+    var map = L.mapbox.map('basemap', 'mapbox.streets')
+        .setView([40, -74.50], 9);
+    </script>
 <div class = "container-">
   <div id = "header">
     <div id = "title"><a href="index.html"><span style="color:#fff">ATLAS of LIGHTING</span> </a><sup><small><i>beta</i></small></sup></div>
