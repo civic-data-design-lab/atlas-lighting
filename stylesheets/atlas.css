@@ -284,6 +284,7 @@ canvas {
 }
 
 #centered{
+    position:fixed;
 }
 #frontpage svg{
     display:block;
