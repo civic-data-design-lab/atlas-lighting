@@ -502,7 +502,12 @@ function formatTip(data){
   for (var i in data){
     formatted+= i.split("_").join(" ")
     formatted+= ": "
-    formatted+= formatComma(parseFloat(data[i]).toFixed(2))
+      if(isNaN(formatComma(parseFloat(data[i]).toFixed(2)))!=true){
+    formatted+= formatComma(parseFloat(data[i]).toFixed(2))          
+      }
+      else{
+          formatted+=data[i]
+      }
     formatted+="</br>"
   }
   
