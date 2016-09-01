@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Rotation test</title>
+		<link rel="stylesheet" href="style.css" type="text/css" media="screen" />
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+		<script type="text/javascript" src="../../jquery.zoomooz.min.js"></script>
+		
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$(".zoomTarget").click(function(evt) {
+					evt.stopPropagation();
+					$(this).zoomTo({targetsize:0.7,debug:true});
+				});
+				$(document).click(function(evt) {
+					evt.stopPropagation();
+					$("body").zoomTo({targetsize:1.0,debug:true});
+				});
+				$("body").zoomTo({targetsize:1.0,debug:true});
+			});
+		</script>
+	</head>
+	<body>
+		<div id="item1" class="zoomTarget"></div>
+		<div id="item2" class="zoomTarget"></div>
+	</body>
+	
+	<!--************************
+		**  GOOGLE ANALYTICS      **
+		*************************-->
+			
+			<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-16288001-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</html>
+	
