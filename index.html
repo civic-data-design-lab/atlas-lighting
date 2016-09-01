@@ -29,13 +29,21 @@
 	</head>
 
 <body>
+  <div id = "basemap">  </div>
+
+    <script>
+    L.mapbox.accessToken = 'pk.eyJ1IjoiampqaWlhMTIzIiwiYSI6ImNpbDQ0Z2s1OTN1N3R1eWtzNTVrd29lMDIifQ.gSWjNbBSpIFzDXU2X5YCiQ';
+    var map = L.mapbox.map('basemap', 'mapbox.streets')
+        .setView([40, -74.50], 9);
+    </script>
 <div class = "container-">
   <div id = "header">
     <div id = "title"><a href="index.html"><span style="color:#fff">ATLAS of LIGHTING</span> </a><sup><small><i>beta</i></small></sup></div>
+    <div id = "moreinfo">
+    <a href ="about.html">ABOUT</a>
+     </div>
     
-    <a href ="about.html"><div id = "moreinfo"><img src="icons/questionMark.png" style="width:25px "></div></a>
-    
-    <div id = "logos"><a href="https://www.phillips.com/" target="_blank"><img src="logos/philips_white.png" style="width:80px"></a> <a href="http://www.civicdatadesignlab.org/" target="_blank"><img src="logos/cddl_white.png" style="width:80px "></a></div>
+    <div id = "logos"><a href="https://www.phillips.com/" target="_blank"><img src="logos/philips_white.png" style="width:80px"></a> <a href="http://www.civicdatadesignlab.org/" target="_blank"><img src="logos/cddl_white.png" style="width:80px "></a><a href="http://cau.mit.edu/" target="_blank"><img src="logos/cau.jpg" style="height:20px "></a></div>
   </div>
   <div id = "centered">
     <div id = "frontpage-map"></div>
@@ -65,12 +73,12 @@
       <br/>
                 <div id = "index-text">
                   <p>In order to select geographically diverse and economically vibrant set of U.S. cities to best represent the variation of urbanized areas in the country, the team conducted a selection process. Typically, research at this scale focuses on the top 100 MSAs (Metropolitan Statistical Area) by population. This convenient metric accounts for a large portion of the nation’s populous and economy. The research uses one primary cutoff (population) and several factors (pop. growth, pop.-weighted density, and Gross Metropolitan Product) to sort the list of potential MSAs for further study.</p>
-                    <p>The plot helps reveal a system of MSAs that separate into at least five identifiable groups. The following 5 selection sets will serve as the primary source of the final selection to be determined by data compatibility/availability (see plot figure for full groups). The sets were determined by selecting the highest, lowest, and the median 2010 population-weighted density MSA from each group (listed in that order below). The MSA with a density next closest to the median was chosen as the alternate.</p>
+                    <p>The plot helps reveal a system of MSAs that separate into at least five identifiable groups. The following 5 selection sets will serve as the primary source of the final selection to be determined by data compatibility/availability (see plot figure for full groups). The sets were determined by selecting the highest, lowest, and the median 2010 population-weighted density MSA from each group (listed in that order below). The MSA with a density next closest to the median was chosen as the alternate... <a href ="about.html">read more</a></p>
                 
                 
                 
                 </div>
-          <div id = "bubble-key">MSA Categories:</div>
+          <div id = "bubble-key">MSA Categories:<br/></div>
 
           <div id= "dropdownPrompt">View Individual MSAs:</div>
         <div id = "dropdown" class="dropdown">

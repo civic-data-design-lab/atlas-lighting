@@ -1,0 +1,42 @@
+html {
+    background-color:#eee;
+    font: 22px 'Fjord One', serif;
+}
+
+.clearer {
+    clear:both;
+    height:20px;
+    display:block;
+}
+
+#viewport, #content {
+	width:800px;
+}
+
+#viewport {
+	background-color: white;
+    height:600px;
+    
+    /* this needs to have some kind of positioning, absolute
+       or relative, to have the pos of elements inside it calculated correctly,
+       since otherwise the computeTotalTransformation does not work correctly
+       (offsetParent for items would be outside the #content, and offset
+       would be calculated relative to the parent..) */
+	position:relative;
+	
+	margin:35px auto 0px auto;
+	-webkit-box-shadow: 0 0px 10px rgba(0,0,0,0.2);
+	-moz-box-shadow: 0 0px 10px rgba(0,0,0,0.2);
+    
+    overflow-y:scroll;
+    overflow-x:hidden;
+}
+
+.zoomContainer div {
+    float:left;
+    background-color:#eeeedf;
+	width:250px;
+	margin:20px;
+	padding:50px;
+	overflow:hidden;
+}
