@@ -191,7 +191,7 @@ function initCanvas(data,zipcodes){
     var canvas = d3.select(container).append("canvas").attr("class","datalayer")
         .attr("width",2000)
         .attr("height",  2000)
-    .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
+   // .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
     
         .node().getContext("2d");
      __canvas = canvas
@@ -224,8 +224,8 @@ function initCanvas(data,zipcodes){
     }
     render()
     function zoom() {
-        console.log(["map",map.getZoom()])
-        console.log(["event",d3.event.scale])
+  //      console.log(["map",map.getZoom()])
+  //      console.log(["event",d3.event.scale])
       canvas.save();
       canvas.clearRect(0, 0, 2000,2000);
       canvas.translate(d3.event.translate[0]*.005, d3.event.translate[1]*.01);
@@ -236,12 +236,12 @@ function initCanvas(data,zipcodes){
     }
     map.on("viewreset",function(){
       //  console.log(map.getBounds())
-       // render()
+        render()
     })
     map.on("moveend", function() {
         console.log(map.getBounds())
       //  canvas.clearRect(0,0,2000,2000)
-        //render()
+        render()
          })
 }
 
