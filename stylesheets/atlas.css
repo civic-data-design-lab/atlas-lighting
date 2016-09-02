@@ -380,9 +380,11 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
     display: none;
-    position: absolute;
-    background-color: #000;
+    position: absolute;    background-color: rgba(0,0,0,.9);
     min-width: 160px;
+    width: 95%;
+    line-height: 160%;
+    padding:5px;    
 }
 
 /* Links inside the dropdown */
