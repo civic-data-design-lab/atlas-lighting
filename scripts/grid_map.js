@@ -238,7 +238,7 @@ function initCanvas(data,zipcodes){
       //  console.log(map.getBounds())
         render()
     })
-    map.on("moveend", function() {
+    map.on("move", function() {
         console.log(map.getBounds())
       //  canvas.clearRect(0,0,2000,2000)
         render()
