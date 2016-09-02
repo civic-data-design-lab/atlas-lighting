@@ -25,10 +25,14 @@ select {
    font-family: 'Dosis', sans-serif;
    letter-spacing:2px;
 }
+#xAxisArrow{
+    width:20px;
+    height:20px;
+}
 #xAxisData{
   width:615px;
-  margin-left:110px;
-  margin-top:600px;
+  margin-left:105px;
+  margin-top:595px;
   z-index:999;
   padding-left:20px;
 }
@@ -54,8 +58,8 @@ select {
 }
 #xAxisArrow{
 position:absolute;
-top:615px;
-left:125px;
+top:602px;
+left:113px;
     z-index:9999;
 }
 
