@@ -18,7 +18,7 @@ a:hover{
 
 #map { position:absolute; top:0; bottom:0; width:100%;height:100%; }
 #index-text{
-    padding:10px;
+    padding-left:15px;
     text-align:justify;
     width:80%;
     line-height:125%;
@@ -83,10 +83,10 @@ a:hover{
 }
 .overviewby{
     width:100%;
-    font-size:16px;
+    font-size:14px;
 }
-#dropdownPrompt{
-    font-size:16px;
+.dropdownPrompt{
+    font-size:14px;
     width:100%;
     padding-top:10px;
 }

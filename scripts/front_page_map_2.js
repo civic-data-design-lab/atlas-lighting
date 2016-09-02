@@ -71,10 +71,10 @@ function drawKey(keyData){
     .enter()
     .append("svg:image")
     .attr("class",function(d,i){return "_"+i})
-    .attr("x",0)
+    .attr("x",5)
     .attr("y",function(d,i){return i*size+0})
-    .attr("width",40)
-    .attr("height",40)
+    .attr("width",35)
+    .attr("height",35)
     .attr("xlink:href",function(d){
         var fileName = d.key.split(" ").join("_")+".png"
         return "icons/msaselection/"+fileName})
@@ -84,7 +84,7 @@ function drawKey(keyData){
     .enter()
     .append("text")
     .attr("x",45)
-    .attr("y",function(d,i){return i*30+25})
+    .attr("y",function(d,i){return i*30+23})
     .text(function(d){
       var keys = Object.keys(groupToWords)
       if(keys.indexOf(d.key)>-1){
@@ -506,8 +506,10 @@ function formatTip(data){
   var formatComma = d3.format("0,000");
   var formatted = ""
   for (var i in data){
+      if(i.split("_").join(" ")!="name"){
     formatted+= i.split("_").join(" ")
-    formatted+= ": "
+    formatted+= ": "          
+      }
       if(isNaN(formatComma(parseFloat(data[i]).toFixed(2)))!=true){
     formatted+= formatComma(parseFloat(data[i]).toFixed(2))          
       }

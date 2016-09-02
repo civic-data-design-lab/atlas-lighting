@@ -49,17 +49,13 @@
     <div id = "frontpage-map"></div>
     </div>
     <div id = "info">
- <defs>
-        <filter id="blur">
-            <feGaussianBlur stdDeviation="5" />
-        </filter>
-    </defs>
+
       <div id = "text" class="content"> 
 <br/><br/>
       <div id = "city-title" class="title2">
  
                <div class="btn-group" data-toggle="buttons">
-                 <div class = "overviewby">Compare MSAs by:</div><br/>
+                 <div class = "overviewby">COMPARE MSAS</div><br/>
                 <form>
                  <label class="radio" id="mapB">
                    <input type="radio" name="options"  checked="checked"><img src="icons/usa.png" style="height:15px "> Map &nbsp;&nbsp;</label>
@@ -69,8 +65,23 @@
                    <input type="radio" name="options"> LIGHTING AND INCOME &nbsp;&nbsp;</label>-->
                  </form>
              </div>
+            <br/><br/><br/> <div class= "dropdownPrompt">EXPLORE MSAS</div>
+             
+             <div id = "dropdown" class="dropdown">
+                 <button onclick="myFunction()" class="dropbtn"><img src="icons/arrow_down.png" style="width:10px"> Select to go to a MSA</button>
+                 <div id="myDropdown" class="dropdown-content">
+                   <a href="grid.html#chicago">CHICAGO-JOLIET-NAPERVILLE</a>
+                   <a href="grid.html#city2">City 2 N/A</a>
+                   <a href="#">City 3 N/A</a>
+                   <a href="#">City 4 N/A</a>
+                   <a href="#">City 5 N/A</a>
+                   <a href="#">City 6 N/A</a>
+                   <a href="#">City 7 N/A</a>
+                   <a href="#">City 8 N/A</a>
+                 </div>
+               </div>
       </div>
-      <br/>
+               <div class= "dropdownPrompt">METHODOLOGY</div>
                 <div id = "index-text">
                   <p>In order to select geographically diverse and economically vibrant set of U.S. cities to best represent the variation of urbanized areas in the country, the team conducted a selection process. Typically, research at this scale focuses on the top 100 MSAs (Metropolitan Statistical Area) by population. This convenient metric accounts for a large portion of the nation’s populous and economy. The research uses one primary cutoff (population) and several factors (pop. growth, pop.-weighted density, and Gross Metropolitan Product) to sort the list of potential MSAs for further study.</p>
                     <p>The plot helps reveal a system of MSAs that separate into at least five identifiable groups. The following 5 selection sets will serve as the primary source of the final selection to be determined by data compatibility/availability (see plot figure for full groups). The sets were determined by selecting the highest, lowest, and the median 2010 population-weighted density MSA from each group (listed in that order below). The MSA with a density next closest to the median was chosen as the alternate... <a href ="about.html">read more</a></p>
@@ -78,22 +89,10 @@
                 
                 
                 </div>
-          <div id = "bubble-key">MSA Categories:<br/></div>
+          <div id = "bubble-key">
+           <div class= "dropdownPrompt"> MSA CATEGORIES</div></div>
 
-          <div id= "dropdownPrompt">View Individual MSAs:</div>
-        <div id = "dropdown" class="dropdown">
-            <button onclick="myFunction()" class="dropbtn"><img src="icons/arrow_down.png" style="width:10px"> Select to go to a MSA</button>
-            <div id="myDropdown" class="dropdown-content">
-              <a href="grid.html#chicago">CHICAGO-JOLIET-NAPERVILLE</a>
-              <a href="grid.html#city2">City 2 N/A</a>
-              <a href="#">City 3 N/A</a>
-              <a href="#">City 4 N/A</a>
-              <a href="#">City 5 N/A</a>
-              <a href="#">City 6 N/A</a>
-              <a href="#">City 7 N/A</a>
-              <a href="#">City 8 N/A</a>
-            </div>
-          </div>   
+            
       </div>
     </div>
 </div>
