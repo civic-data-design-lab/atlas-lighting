@@ -17,8 +17,7 @@ select {
    appearance: none;
    padding:2px;
    padding-left:10px;
-   background-color:rbga(0,0,0,.2);
-   background:none;
+   background:#000;
    border-radius:0px;
    color:#fff;
    width:300px;
@@ -62,7 +61,6 @@ top:602px;
 left:113px;
     z-index:9999;
 }
-
 #yAxisArrow{
 position:absolute;
 top:540px;
