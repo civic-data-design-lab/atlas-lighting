@@ -1,0 +1,2 @@
+DROP DATABASE IF EXISTS atlasdb;
+CREATE DATABASE atlasdb;

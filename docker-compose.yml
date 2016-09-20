@@ -27,13 +27,27 @@ services:
     build: .
     depends_on:
       - dataservices
-    volumes:
+    # volumes:
       # - ./services:/usr/src/app/services
-      - ./stylesheets:/usr/src/app/stylesheets
-      - ./server:/usr/src/app/server/
-      - ./scripts:/usr/src/scripts
+      # - ./stylesheets:/usr/src/app/stylesheets
+      # - ./server:/usr/src/app/server/
+      # - ./scripts:/usr/src/scripts
     links:
       - postgresql:postgresql
     ports:
       - "8080:8080"
     env_file: .env
+  nginxproxy:
+    restart: always
+    build: ./nginxproxy/
+    ports:
+      - "80:80"
+    volumes:
+      - /www/static
+      - /www/media
+    volumes_from:
+      - web
+    links:
+      - web
+    depends_on:
+      - web

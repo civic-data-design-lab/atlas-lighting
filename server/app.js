@@ -2,7 +2,7 @@
 (function() {
   var path;
   'use strict';
-  var Sequelize, app, async, express, http, path, request, sequelize, serveStatic, server;
+  var Sequelize, app, async, express, http, path, request, sequelize, serveStatic;
 
   express = require('express');
 
@@ -63,6 +63,21 @@
 
   app.use(serveStatic('./scripts'));
 
+  app.use(function(req, res, next) {
+    var auth;
+    auth = void 0;
+    if (req.headers.authorization) {
+      auth = new Buffer(req.headers.authorization.substring(6), 'base64').toString().split(':');
+    }
+    if (!auth || auth[0] !== 'atlas' || auth[1] !== 'Atlas0fL1ght1ng') {
+      res.statusCode = 401;
+      res.setHeader('WWW-Authenticate', 'Basic realm="Access to atlas is restricted in beta version"');
+      res.end('Unauthorized');
+    } else {
+      next();
+    }
+  });
+
   app.use(serveStatic('./', {
     'index': ['landing.html', 'landing.htm']
   }));
@@ -109,6 +124,12 @@
     });
   });
 
+  app.get('/cityComparisonsData', function(req, res) {
+    client.hgetall("city_comparison_data", function(err, object) {
+      res.json(object);
+    });
+  });
+
   app.get('/us_json', function(req, res) {
     sequelize.query('SELECT * FROM us_json', {
       type: sequelize.QueryTypes.SELECT
@@ -125,15 +146,12 @@
     });
   });
 
-  module.exports = app;
-
 
   /* Start the server */
 
-  server = app.listen(process.env.PORT || '8080', '0.0.0.0', function() {
-    console.log('App listening at http://%s:%s', server.address().address, server.address().port);
-    console.log('Press Ctrl+C to quit.');
-    console.log('checking if adjustments work');
-  });
+  module.exports = {
+    app: app,
+    port: 8080
+  };
 
 }).call(this);

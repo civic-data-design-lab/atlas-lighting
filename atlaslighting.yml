@@ -1,0 +1,33 @@
+dataservices:
+  image: 'cddl/atlas:dataservices'
+  links:
+    - postgresql
+  ports:
+    - '8000:8000'
+  restart: always
+  tags:
+    - atlas-of-lighting
+  volumes:
+    - '/usr/src/app/data_services:/usr/src/app'
+  volumes_from:
+    - postgresql
+postgresql:
+  image: 'cddl/atlas:postgres'
+  ports:
+    - '5432:5432'
+  restart: always
+  tags:
+    - atlas-of-lighting
+  volumes:
+    - '/var/lib/postgresql:/usr/src/app/postgresql'
+    - '/var/lib/postgresql:/usr/src/app'
+    - '/var/lib/postgresql:/var/lib/postgresql'
+web:
+  image: 'cddl/atlas:webstaging'
+  links:
+    - postgresql
+  ports:
+    - '80:8080'
+  restart: always
+  tags:
+    - atlas-of-lighting

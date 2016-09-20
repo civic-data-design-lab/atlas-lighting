@@ -23,6 +23,7 @@ WORKDIR /usr/src/app
 RUN npm --unsafe-perm install
 # ADD node_modules/. /usr/src/app/node_modules
 ADD server/app.js /usr/src/app/app.js
+ADD server/cluster.js /usr/src/app/cluster.js
 ADD server/city_comparisons_data.js /usr/src/app/city_comparisons_data.js
 EXPOSE 8080
 CMD [ "npm", "start" ]
