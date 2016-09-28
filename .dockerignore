@@ -2,6 +2,7 @@ node_modules
 .dockerignore
 Dockerfile
 npm-debug.log
+data_services/migrations
 .git
 .hg
 .svn
