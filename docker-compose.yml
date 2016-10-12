@@ -31,7 +31,7 @@ services:
       - ./services:/usr/src/app/services
       - ./stylesheets:/usr/src/app/stylesheets
       - ./server:/usr/src/app/server/
-      - ./scripts:/usr/src/scripts
+      - ./scripts:/usr/src/app/scripts
     links:
       - postgresql:postgresql
     ports:

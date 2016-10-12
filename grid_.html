@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="UTF-8">
+	<title>Atlas of lighting - grid map</title>
+	<script src="jquery.min.js"></script>  
+	<!-- <script src="d3.tip.js"></script> -->
+	<script src="bootstrap.js"></script>  
+  <!-- <link href='mapbox-gl.css' rel='stylesheet' />
+  <script src='mapbox-gl.js'></script> -->
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.20.0/mapbox-gl.css' rel='stylesheet' />
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.20.0/mapbox-gl.js'></script>
+<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v1.3.0/mapbox-gl-geocoder.js'></script>
+<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v1.3.0/mapbox-gl-geocoder.css' type='text/css' />
+  <script src="d3.min.js"></script>
+  <script src="d3-queue.js"></script>
+  <script src="topojson.min.js"></script>
+  <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+  <script src="crossfilter.min.js"></script>
+  <script src="dc.js"></script>
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+
+  <script src='mapbox.js'></script>
+  <link href='mapbox.css' rel='stylesheet' />
+<link href='https://fonts.googleapis.com/css?family=Dosis:500,300|Ropa+Sans' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="atlas.css"> </style>     
+</head>
+
+<body>
+<div class = "container-">
+  <div id = "header">
+    <div id = "title"><a href="index.html"><span style="color:#fff">ATLAS of LIGHTING</span> </a><sup><small><i>beta</i></small></sup></div>
+    
+    <div id = "moreinfo">
+    <a href ="index.html">HOME</a> | 
+    <a href ="about.html">ABOUT</a>
+     </div>
+    
+
+    <div id = "logos"><a href="https://www.phillips.com/" target="_blank"><img src="logos/philips_white.png" style="width:80px"></a> <a href="http://www.civicdatadesignlab.org/" target="_blank"><img src="logos/cddl_white.png" style="width:80px "></a><a href="http://cau.mit.edu/" target="_blank"><img src="logos/cau.jpg" style="height:30px "></a></div>
+  </div>
+<div id = "loader">
+  <div id = "loader-text">
+    Loading data for Chicago and its surrounding MSA ...
+    <br/><br/>
+  </div>
+</div> 
+  
+    <div id = "map"></div>
+    <div id = "info">
+      <div id = "city-title" class="title2">        
+        <div class="dropdown">
+            <button onclick="myFunction()" class="dropbtn"><img src="icons/arrow_down.png" style="width:10px"> CHICAGO-JOLIET-NAPERVILLE</button>
+            <div id="myDropdown" class="dropdown-content">
+              <a href="#">City 2 N/A</a>
+              <a href="#">City 3 N/A</a>
+              <a href="#">City 4 N/A</a>
+              <a href="#">City 5 N/A</a>
+              <a href="#">City 6 N/A</a>
+              <a href="#">City 7 N/A</a>
+              <a href="#">City 8 N/A</a>
+            </div>
+          </div>
+      </div>
+      <div id = "view-selection" class="icons">        
+      </div>
+      <div id = "text" class="content">
+        <div class="dc-data-count">
+            <span class="filter-count"></span> selected out of <span class="total-count">
+            </span> areas | <a href="javascript:dc.filterAll(); dc.redrawAll();">Reset All</a>
+        </div>
+        
+        <div id ="light_average" class ="side-chart"><div class = "chart-title">LIGHTING AVERAGE
+            <span class="source">
+              <a class="reset" href="javascript:ligAveChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Quantity of light from earths surface measured on a radiometric sensor. Source: NOAA, VIIRS Nighttime Lights, 2015 Average</span></span>
+          </div>
+        </div>
+       <div id ="income"><div class = "chart-title">MEDIAN HOUSEHOLD INCOME
+          <span class="source">
+            <a class="reset" href="javascript:incomeChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Household income is a measure of the combined incomes of all people sharing a particular household or place of residence. Source: 2010 - 2014 ACS - 5 Year Estimate</span></span>
+          </div>
+        </div>
+
+        <div id ="development_intensity"><div class = "chart-title">DEVELOPMENT INTENSITY 
+          <span class="source">
+            <a class="reset" href="javascript:devIntChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">NLCD provides spatial reference and descriptive data for characteristics of the land surface such as low,medium and high intensity development. Source: National Land Cover Database 2011</span></span>
+          </div>
+        </div>
+        
+        
+        <div id ="population"><div class = "chart-title">POPULATION 
+          <span class="source">
+            <a class="reset" href="javascript:populationChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Population density is the measure of the number people per unit area, commonly represented as people per square mile Source: 2010 - 2014 ACS - 5 Year Estimate</span></span>
+          </div>
+        </div>
+        
+        
+        <div id ="business_diversity" ><div class = "chart-title">BUSINESS DIVERSITY 
+          <span class="source">
+            <a class="reset" href="javascript:busDivChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Diversity of business types in a grid cell Source: Google Places API</span></span>
+          </div>
+        </div>
+        
+        
+        <div id ="places" ><div class = "chart-title">PLACE DENSITY 
+          <span class="source">
+            <a class="reset" href="javascript:placesChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Total number of places in a grid cell Source: Google Places API</span></span>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+</div>
+<script src="grid_loader.js"></script>
+
+<script src="city_comparisons_data.js"></script>
+<script src="city_dropdown.js"></script>
+
+<script src="grid_map.js"></script>
+<script src="filter_rollovers.js"></script>
+
+<script type="text/javascript" charset="utf-8">
+
+
+</script>
+</body>
+</html>

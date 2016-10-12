@@ -8,13 +8,17 @@ ADD scripts/. /usr/src/app/scripts
 ADD bower_components/. /usr/src/app/bower_components
 ADD server/. /usr/src/app/server
 ADD stylesheets/. /usr/src/app/stylesheets
+ADD data_services/main.py/. /usr/src/app/main.py
 ADD stylesheets/video.css /usr/src/app/stylesheets/video.css
 ADD stylesheets/custom_bubble.css /usr/src/app/stylesheets/custom_bubble.css
 ADD stylesheets/front.css /usr/src/app/stylesheets/front.css
 ADD stylesheets/atlas.css /usr/src/app/stylesheets/atlas.css
+ADD stylesheets/atlas.css /usr/src/app/atlas.css
 ADD font-awesome/. /usr/src/app/font-awesome
 ADD bower.json/. /usr/src/app/bower.json
 ADD grid.html/. /usr/src/app/grid.html
+ADD grid_.html/. /usr/src/app/grid_.html
+
 ADD index.html/. /usr/src/app/index.html
 ADD about.html/. /usr/src/app/about.html
 ADD landing.html/. /usr/src/app/landing.html
