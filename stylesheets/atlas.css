@@ -265,16 +265,16 @@ canvas {
     z-index:999;
 }
 #info{
-    border-radius:10px;
-    padding:10px;
-    background-color:rgba(0,0,0,.7);
-    width:30%;
-    height: 800px;
-    position:absolute;
-    top:50px;
-    right:0px;
-    overflow:auto;
-    display:none;
+border-radius: 10px;
+    padding: 10px;
+    background-color: rgba(0,0,0,.7);
+    width: 30%;
+    /* height: 754px; */
+    position: absolute;
+    top: 50px;
+    right: 0px;
+    overflow: hidden;
+    display: none;
 }
 #frontpage-map{
     position:fixed;
@@ -399,3 +399,12 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 
 /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
 .show {display:block;}
+
+.cellgrids {
+
+}
+
+.cellgrids:hover {
+    fill:white;
+    
+}

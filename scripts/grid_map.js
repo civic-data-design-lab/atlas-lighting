@@ -75,12 +75,10 @@ var alpha = 1
 var alphaScale = d3.scale.linear().domain([minZoom, maxZoom]).range([0.6, .03]);
 
 function dataDidLoad(error, grid, zipcodes) {
-    //   d3.selectAll("#info").style("display","show")
-    console.log(grid);
     charts(grid) ////
     d3.select("#loader").remove()
-    initCanvas(grid, zipcodes) ////
     d3.selectAll("#info").style("display", "inline")
+    initCanvas(grid, zipcodes);
 }
 function project(d) {
     return __map.project(getLL(d));
@@ -89,14 +87,6 @@ function getLL(d) {
     return new mapboxgl.LngLat(+d.lng, +d.lat)
 }
 
-function zoom() {
-    var canvas = __canvas
-
-    canvas.save();
-    canvas.clearRect(0, 0, 1200, 1200);
-    radius = radius * d3.event.scale
-    initCanvas(__gridData)
-}
 
 function initCanvas(data, zipcodes) {
     __gridData = data
@@ -119,7 +109,7 @@ function initCanvas(data, zipcodes) {
     var map = __map
 
     map.style.on("load", function () {
-        map.addSource("zipcodes", {
+/*        map.addSource("zipcodes", {
             "type": "geojson",
             "data": zipcodes
         })
@@ -143,14 +133,14 @@ function initCanvas(data, zipcodes) {
                 "line-width": 2
             },
             "filter": ["==", "name", ""]
-        });
+        });*/
 
         var popup = new mapboxgl.Popup({
             closeButton: false,
             closeOnClick: false
         });
 
-        map.on("mousemove", function (e) {
+/*        map.on("mousemove", function (e) {
             var features = map.queryRenderedFeatures(e.point, { layers: ["state-fills"] });
             if (features.length) {
                 map.setFilter("route-hover", ["==", "name", features[0].properties.name]);
@@ -174,7 +164,7 @@ function initCanvas(data, zipcodes) {
                 return;
             }
 
-        });
+        });*/
 
     })
 
@@ -188,7 +178,7 @@ function initCanvas(data, zipcodes) {
         .style("z-index","10");
 
 
-    var myg = mapsvg.append("g").attr("opacity","0.8");
+    var myg = mapsvg.append("g").attr("opacity","0.6");
 
     var canvas = d3.select(container).append("canvas").attr("class", "datalayer")
         .attr("width", 2000)
@@ -223,10 +213,17 @@ function initCanvas(data, zipcodes) {
             myg.append("rect")
                 .attr("x",project(d).x)
                 .attr("y",project(d).y)
+                .attr("id","cell_"+i)
                 .attr("width",radius)
                 .attr("height",radius)
                 .attr("fill",fillColor)
                 .attr("stroke","rgba(0,0,0,0)")
+                .attr("class","cellgrids")
+                .on("click",function(){
+                    console.log(d3.select(this).attr("name"));
+
+
+                });
         }
     }
     render();
@@ -361,7 +358,16 @@ function charts(data) {
             // console.log("render canvas")
             var canvas = __canvas
 
-            initCanvas(newData)
+            //initCanvas(newData)
+            console.log("newdata"+newData[0].id);
+            
+            d3.selectAll(".cellgrids").style("display","none");
+
+            newData.forEach(function(d){
+                //console.log(d.id);
+                d3.select("#cell_"+d.id).style("display","block");
+            })
+
         })
         .x(d3.scale.linear().domain([1, 250000]))
         .yAxis().ticks(function (d) {
@@ -380,7 +386,6 @@ function charts(data) {
             some: "%filter-count areas out of %total-count fit the selection criteria | <a href='javascript:dc.filterAll(); dc.renderAll();''>Reset All</a>",
             all: "Total %total-count areas."
         })
-    // initCanvas(data)
     dc.renderAll();
     d3.select("#loader").transition().duration(600).style("opacity", 0).remove();
 }
