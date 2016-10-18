@@ -408,3 +408,9 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     fill:white;
     
 }
+
+.mapboxgl-ctrl-bottom-left {
+    bottom: 0;
+    left: 0;
+    z-index: 11 !important;
+}
