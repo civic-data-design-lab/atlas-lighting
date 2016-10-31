@@ -4,13 +4,13 @@
 $(function () {
 
 
-    var currentCity = document.URL.split("#")[1]
+    var currentCity = document.URL.split("#")[1].split("*")[0]
 
     console.log(currentCity);
     console.log("111");
     d3.queue()
         .defer(d3.csv, "data/chicago.csv"/*"grids/" + currentCity*/)
-        .defer(d3.json, "data/chicago_zipcode.json"/*"zipcode_business_geojson/" + currentCity*/)
+        //.defer(d3.json, "data/chicago_zipcode.json"/*"zipcode_business_geojson/" + currentCity*/)
         .await(dataDidLoad);
     
 })
@@ -45,14 +45,25 @@ var colors = {
     "8": "#9ecae1",
     "9": "#3182bd",
 }
+
 var center = cityCentroids["Chicago"]
-//var center = {lat:41.857673, lng:-87.688886}
-var populationChart = dc.barChart("#population")
-var incomeChart = dc.barChart("#income")
-var busDivChart = dc.barChart("#business_diversity")
-var devIntChart = dc.rowChart("#development_intensity")
-var ligAveChart = dc.barChart("#light_average")
-var placesChart = dc.barChart("#places")
+
+var initurl = window.location.href;
+
+var selectedCharts = [];
+
+if(!initurl.split("*")[1]){//if no dataset is specified in the url
+    window.location.href = initurl.split("*")[0] + "*population|income|business_diversity|development_intensity|light_average|places";
+    selectedCharts = ["population","income","business_diversity","development_intensity","light_average","places"];
+}else{//dataset is not null
+    selectedCharts = initurl.split("*")[1].split("|");
+}
+
+
+
+
+
+
 
 var __map = null
 var __canvas = null
@@ -74,21 +85,24 @@ var radius = 1
 var alpha = 1
 var alphaScale = d3.scale.linear().domain([minZoom, maxZoom]).range([0.6, .03]);
 
-function dataDidLoad(error, grid, zipcodes) {
-    charts(grid) ////
-    d3.select("#loader").remove()
+function dataDidLoad(error, grid) {
+    charts(grid,selectedCharts) ////
+
+    d3.select("#loader").transition().duration(600).style("opacity", 0).remove();
     d3.selectAll("#info").style("display", "inline")
-    initCanvas(grid, zipcodes);
+    initCanvas(grid);
 }
+
 function project(d) {
     return __map.project(getLL(d));
 }
+
 function getLL(d) {
     return new mapboxgl.LngLat(+d.lng, +d.lat)
 }
 
 
-function initCanvas(data, zipcodes) {
+function initCanvas(data) {
     __gridData = data
     //draws map tile if map is null
     if (__map == null) {
@@ -108,8 +122,8 @@ function initCanvas(data, zipcodes) {
 
     var map = __map
 
-    map.style.on("load", function () {
-/*        map.addSource("zipcodes", {
+/*    map.style.on("load", function () {
+        map.addSource("zipcodes", {
             "type": "geojson",
             "data": zipcodes
         })
@@ -133,14 +147,14 @@ function initCanvas(data, zipcodes) {
                 "line-width": 2
             },
             "filter": ["==", "name", ""]
-        });*/
+        });
 
         var popup = new mapboxgl.Popup({
             closeButton: false,
             closeOnClick: false
         });
 
-/*        map.on("mousemove", function (e) {
+        map.on("mousemove", function (e) {
             var features = map.queryRenderedFeatures(e.point, { layers: ["state-fills"] });
             if (features.length) {
                 map.setFilter("route-hover", ["==", "name", features[0].properties.name]);
@@ -164,9 +178,9 @@ function initCanvas(data, zipcodes) {
                 return;
             }
 
-        });*/
+        });
 
-    })
+    })*/
 
 
     var container = map.getCanvasContainer()
@@ -198,7 +212,6 @@ function initCanvas(data, zipcodes) {
         canvas.clearRect(0, 0, 2000, 2000)
 
         var radius = 6 / 1400 * Math.pow(2, map.getZoom());
-        console.log("radius:"+radius);
 
         var zoomAlphaScale = d3.scale.linear().domain([8, 16]).range([.8, .2])
         alpha = zoomAlphaScale(map.getZoom())
@@ -213,21 +226,17 @@ function initCanvas(data, zipcodes) {
             myg.append("rect")
                 .attr("x",project(d).x)
                 .attr("y",project(d).y)
-                .attr("id","cell_"+i)
+                .attr("id","c"+i)
                 .attr("width",radius)
                 .attr("height",radius)
                 .attr("fill",fillColor)
-                .attr("stroke","rgba(0,0,0,0)")
                 .attr("class","cellgrids")
                 .on("click",function(){
-                    console.log(d3.select(this).attr("name"));
-
-
+                    console.log(d3.select(this).attr("id"));
                 });
         }
     }
     render();
-    console.log("0");
 
     function zoomed() {
 
@@ -246,11 +255,32 @@ function initCanvas(data, zipcodes) {
     map.on("move", function() {
         zoomed()
     })
-
-
 }
 
-function charts(data) {
+function updateChart(selectedCharts) {
+    d3.selectAll(".dc-chart").style("display","none");
+
+    selectedCharts.forEach(function(d){
+        d3.select("#"+d).style("display","block");
+    })
+}
+
+
+function charts(data,selectedCharts) {
+
+    selectedCharts.forEach(function(d){
+        d3.select("#"+d).style("display","block");
+    })
+
+
+    var populationChart = dc.barChart("#population")
+    var incomeChart = dc.barChart("#income")
+    var busDivChart = dc.barChart("#business_diversity")
+    var devIntChart = dc.rowChart("#development_intensity")
+    var ligAveChart = dc.barChart("#light_average")
+    var placesChart = dc.barChart("#places")
+
+
 
     data.forEach(function (d) {
         d.lng = +d.lng;
@@ -263,6 +293,7 @@ function charts(data) {
         d.dev_intensity = +d.dev_intensity ? +d.dev_intensity:0;//groups
         d.income = +d.income;
     })
+
     var chartWidth = 380;
 
     var ndx = crossfilter(data);
@@ -280,7 +311,6 @@ function charts(data) {
     var latDimension = ndx.dimension(function (d) {
         return d.lat
     })
-
 
     var incomeDimension = ndx.dimension(function (d) {
         return parseInt(parseFloat(d.income) / 1000) * 1000
@@ -355,17 +385,14 @@ function charts(data) {
             var newData = incomeDimension.top(Infinity)
             //reDrawMap(newData)
             d3.select("#map .datalayer").remove()
-            // console.log("render canvas")
             var canvas = __canvas
 
-            //initCanvas(newData)
             console.log("newdata"+newData[0].id);
             
             d3.selectAll(".cellgrids").style("display","none");
 
             newData.forEach(function(d){
-                //console.log(d.id);
-                d3.select("#cell_"+d.id).style("display","block");
+                d3.select("#c"+d.id).style("display","block");
             })
 
         })
@@ -373,6 +400,7 @@ function charts(data) {
         .yAxis().ticks(function (d) {
             return 3
         })
+
     incomeChart.yAxis().ticks(3)
     incomeChart.xAxis().ticks(4)
 
@@ -386,7 +414,7 @@ function charts(data) {
             some: "%filter-count areas out of %total-count fit the selection criteria | <a href='javascript:dc.filterAll(); dc.renderAll();''>Reset All</a>",
             all: "Total %total-count areas."
         })
+        
     dc.renderAll();
-    d3.select("#loader").transition().duration(600).style("opacity", 0).remove();
 }
 
