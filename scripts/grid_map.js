@@ -275,6 +275,7 @@ window.placesChart = dc.barChart("#places")
 
 
 function charts(data,selectedCharts) {
+    d3.selectAll(".dc-chart").style("display","none");
 
     selectedCharts.forEach(function(d){
         d3.select("#"+d).style("display","block");
