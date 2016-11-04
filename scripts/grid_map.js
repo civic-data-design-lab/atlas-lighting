@@ -281,9 +281,6 @@ function charts(data,selectedCharts) {
     })
 
 
-
-
-
     data.forEach(function (d) {
         d.lng = +d.lng;
         d.lat = +d.lat;
