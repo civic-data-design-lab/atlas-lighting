@@ -9,7 +9,7 @@ $(function () {
     console.log(currentCity);
     console.log("111");
     d3.queue()
-        .defer(d3.csv, "data/chicago.csv"/*"grids/" + currentCity*/)
+        .defer(d3.csv, "../data/chicago.csv"/*"grids/" + currentCity*/)
         //.defer(d3.json, "data/chicago_zipcode.json"/*"zipcode_business_geojson/" + currentCity*/)
         .await(dataDidLoad);
     
@@ -266,6 +266,14 @@ function updateChart(selectedCharts) {
 }
 
 
+window.populationChart = dc.barChart("#population")
+window.incomeChart = dc.barChart("#income")
+window.busDivChart = dc.barChart("#business_diversity")
+window.devIntChart = dc.rowChart("#development_intensity")
+window.ligAveChart = dc.barChart("#light_average")
+window.placesChart = dc.barChart("#places")
+
+
 function charts(data,selectedCharts) {
 
     selectedCharts.forEach(function(d){
@@ -273,12 +281,6 @@ function charts(data,selectedCharts) {
     })
 
 
-    var populationChart = dc.barChart("#population")
-    var incomeChart = dc.barChart("#income")
-    var busDivChart = dc.barChart("#business_diversity")
-    var devIntChart = dc.rowChart("#development_intensity")
-    var ligAveChart = dc.barChart("#light_average")
-    var placesChart = dc.barChart("#places")
 
 
 

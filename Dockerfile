@@ -16,8 +16,8 @@ ADD stylesheets/atlas.css /usr/src/app/stylesheets/atlas.css
 ADD stylesheets/atlas.css /usr/src/app/atlas.css
 ADD font-awesome/. /usr/src/app/font-awesome
 ADD bower.json/. /usr/src/app/bower.json
-ADD grid.html/. /usr/src/app/grid.html
-ADD grid_.html/. /usr/src/app/grid_.html
+ADD view/. /usr/src/app/view
+# ADD view/grid.html/. /usr/src/app/view/grid.html
 
 ADD index.html/. /usr/src/app/index.html
 ADD about.html/. /usr/src/app/about.html
