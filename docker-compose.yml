@@ -33,6 +33,8 @@ services:
       - ./server:/usr/src/app/server/
       - ./scripts:/usr/src/app/scripts
       - ./view:/usr/src/app/view
+      - ./icons:/usr/src/app/icons
+      - ./logos:/usr/src/app/logos
 
     links:
       - postgresql:postgresql

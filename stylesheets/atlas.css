@@ -269,12 +269,11 @@ border-radius: 10px;
     padding: 10px;
     background-color: rgba(0,0,0,.7);
     width: 30%;
-    /* height: 754px; */
+    height: 90%;    
     position: absolute;
     top: 50px;
     right: 0px;
     overflow: hidden;
-    display: none;
 }
 #frontpage-map{
     position:fixed;
@@ -416,4 +415,107 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 }
 
 .dc-chart {
+}
+
+#selector {
+    position: absolute;
+    width: 100%;
+    height: calc(100% - 40px);
+    top: 40px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.mapboxgl-ctrl-geocoder {
+    display: none !important;
+}
+
+.data_item {
+    height: 60px;
+    border-bottom: 1px solid rgba(255,255,255,0.5);
+    border-top: 1px solid rgba(255,255,255,0.5);
+    width: 380px;    
+    background-color: rgba(0,0,0,0.5);
+}
+
+.data_item_title{
+    font-size: 20px;
+    padding: 10px;
+}
+
+.data_select_ui {
+    display: none;
+}
+
+#todrop {
+    position: absolute;
+    width: 380px;
+    background-color: rgba(255,255,255,0);
+    border: 1px dashed white;
+    font-size: 20px;
+    width: 380px;
+    height: 100px;
+}
+
+.left_back {
+    position: absolute;
+    width: 380px;
+    height: calc(100% - 40px);
+    background-color: rgba(0,0,0,0.6);
+    top: 40px;
+
+}
+
+#drop_indication {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 20px;
+}
+
+
+
+.drop_indi {
+    position: absolute;
+    left: 50%;
+    top:50%;
+    transform: translate(-50%,-50%);
+}
+
+#city-title {
+    width:30%;
+}
+
+.left_clickbar {
+    position: absolute;
+    width: 30px;
+    left: 380px;
+    height: 50%;
+
+}
+
+.click_data {
+    background-color: rgba(150,150,150,1);
+    border-top-right-radius: 15px;
+    top: 0%;
+}
+
+.click_case {
+    background-color: rgba(150,150,150,0.4);
+    border-bottom-right-radius: 15px;
+    top: 50%;
+
+}
+
+.mybtn:hover {
+    opacity: 0.6;
+}
+
+.selector_arrow {
+    width: 20px;
+    position: absolute;
+    bottom: 10px;
+    left: 5px;
+    cursor: pointer;
 }

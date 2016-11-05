@@ -3,9 +3,13 @@
   <head>
   <meta charset="UTF-8">
 	<title>Atlas of lighting - grid map</title>
-	<script src="../scripts/lib/jquery.min.js"></script>  
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>  
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>  
+
 	<!-- <script src="d3.tip.js"></script> -->
-	<script src="../scripts/lib/bootstrap.min.js"></script>  
+<!--	<script src="../scripts/lib/bootstrap.min.js"></script>  
+-->
+
   <!-- <link href='mapbox-gl.css' rel='stylesheet' />
   <script src='mapbox-gl.js'></script> -->
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.20.0/mapbox-gl.css' rel='stylesheet' />
@@ -48,26 +52,9 @@
 </div> 
   
     <div id = "map"></div>
-    <div id = "selector">
 
-      
-    </div>
+    <div id = "info" class = "data_select_ui">
 
-    <div id = "info">
-      <div id = "city-title" class="title2">        
-        <div class="dropdown">
-            <button onclick="myFunction()" class="dropbtn"><img src="../icons/arrow_down.png" style="width:10px"> CHICAGO-JOLIET-NAPERVILLE</button>
-            <div id="myDropdown" class="dropdown-content">
-              <a href="#">City 2 N/A</a>
-              <a href="#">City 3 N/A</a>
-              <a href="#">City 4 N/A</a>
-              <a href="#">City 5 N/A</a>
-              <a href="#">City 6 N/A</a>
-              <a href="#">City 7 N/A</a>
-              <a href="#">City 8 N/A</a>
-            </div>
-          </div>
-      </div>
       <div id = "view-selection" class="icons">        
       </div>
       
@@ -114,9 +101,61 @@
             <a class="reset" href="javascript:placesChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Total number of places in a grid cell Source: Google Places API</span></span>
           </div>
         </div>
-        
+
+      <div class = "data_select_ui" id = "todrop">
+        <div class = "drop_indi">Drop Selection Here</div>
+      </div>
+
       </div>
     </div>
+
+    <div id = "selector" class = "data_select_ui">
+
+      <div class = "left_back"></div>
+
+      <div class = "left_clickbar click_data">
+        <img src="../icons/triangle_left.png" class = "selector_arrow">
+      </div>
+      <div class = "left_clickbar click_case"></div>
+
+      <div id = "city-title" class="title2">        
+        <div class="dropdown">
+            <button onclick="myFunction()" class="dropbtn"><img src="../icons/arrow_down.png" style="width:10px"> CHICAGO-JOLIET-NAPERVILLE</button>
+            <div id="myDropdown" class="dropdown-content">
+              <a href="#">City 2 N/A</a>
+              <a href="#">City 3 N/A</a>
+              <a href="#">City 4 N/A</a>
+              <a href="#">City 5 N/A</a>
+              <a href="#">City 6 N/A</a>
+              <a href="#">City 7 N/A</a>
+              <a href="#">City 8 N/A</a>
+            </div>
+          </div>
+      </div>
+
+      <div class = "data_item ui-widget-content" id = "d_population">
+        <p class = "data_item_title">population</p>
+      </div>
+      <div class = "data_item ui-widget-content" id = "d_income">
+        <p class = "data_item_title">income</p>
+      </div>
+      <div class = "data_item ui-widget-content" id = "d_business_diversity">
+        <p class = "data_item_title">business diversity</p>
+      </div>
+      <div class = "data_item ui-widget-content" id = "d_development_intensity">
+        <p class = "data_item_title">development intensity</p>
+      </div>
+      <div class = "data_item ui-widget-content" id = "d_light_average">
+        <p class = "data_item_title">light average</p>
+      </div>
+      <div class = "data_item ui-widget-content" id = "d_places">
+        <p class = "data_item_title">places</p>
+      </div>
+
+
+    </div>
+
+
 </div>
 <script src="../scripts/grid_loader.js"></script>
 
