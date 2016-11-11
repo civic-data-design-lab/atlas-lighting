@@ -115,11 +115,16 @@ function initControl() {
 
     $('.data_item').draggable({
         drag:function(event,ui){
-            //console.log(event.screenX,event.screenY);
+            $("#selector").css("width","100%");
+            $("#selector").css("overflow-y","hidden");
+            $("#selector").css("direction","ltr");
         },
 
         stop:function(event,ui){
             //$(this).attr("style","position: relative;");
+            $("#selector").css("width","416px");
+            $("#selector").css("overflow-y","auto");
+            $("#selector").css("direction","rtl");
 
             if($(this).attr("style").indexOf("left")>-1){
                 $(this).attr("style","position: relative;");
@@ -148,15 +153,25 @@ function initControl() {
 
     $(".click_data>img").click(function(){
         if($(this).attr("style") && $(this).attr("style").indexOf("180")>-1){
+            //back to selecting mode
+
             $(this).css("transform","rotate(0deg)");
-            $("#selector").css("width","100%");
-            $("#selector").css("transform","translateX(0%)");
+            $("#selector").css("width","416px");
+            $("#selector").css("overflow-y","auto");
+            $("#selector").css("direction","rtl");
+            $("#selector").css("left","0px");
+            $(".slide_hide").css("left","386px");
+
+
             $("#todrop").show();
 
         }else{
+            //back to folding mode
+
             $(this).css("transform","rotate(180deg)");
-            $("#selector").css("width","410px");
-            $("#selector").css("transform","translateX(-380px)");
+            $("#selector").css("width","416px");
+            $("#selector").css("left","-390px");
+            $(".slide_hide").css("left","0px");
             $("#todrop").hide();
 
         }

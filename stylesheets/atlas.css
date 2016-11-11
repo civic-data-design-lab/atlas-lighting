@@ -1,3 +1,20 @@
+::-webkit-scrollbar
+{
+  width: 6px;  /* for vertical scrollbars */
+  height: 6px; /* for horizontal scrollbars */
+}
+
+::-webkit-scrollbar-track
+{
+  background: rgba(0,0,0,1);
+}
+
+::-webkit-scrollbar-thumb
+{
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 5px;
+
+}
 
 body{
     color:#ddd;
@@ -370,10 +387,12 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 .dropdown {
     position: relative;
     display: inline-block;
-    width:80%;
+    width:350px;
     margin:10px;
     border:1px solid #fff;
     z-index:9;
+    margin-right: 44px;
+    margin-left: 20px;
 }
 
 /* Dropdown Content (Hidden by Default) */
@@ -419,11 +438,13 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 
 #selector {
     position: absolute;
-    width: 100%;
+    width: 416px;
     height: calc(100% - 40px);
     top: 40px;
     overflow-y: auto;
     overflow-x: hidden;
+    direction: rtl;
+    left: 0px;
 }
 
 .mapboxgl-ctrl-geocoder {
@@ -431,16 +452,20 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 }
 
 .data_item {
-    height: 60px;
+    height: 100px;
     border-bottom: 1px solid rgba(255,255,255,0.5);
     border-top: 1px solid rgba(255,255,255,0.5);
     width: 380px;    
     background-color: rgba(0,0,0,0.5);
+    margin-right: 30px;
+    margin-left: 6px;
 }
 
 .data_item_title{
     font-size: 20px;
     padding: 10px;
+    position: absolute;
+    left: 0px;
 }
 
 .data_select_ui {
@@ -488,23 +513,23 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 }
 
 .left_clickbar {
-    position: absolute;
+    position: fixed;
     width: 30px;
-    left: 380px;
-    height: 50%;
+    left: 386px;
+    height: calc(50% - 20px);
 
 }
 
 .click_data {
     background-color: rgba(150,150,150,1);
     border-top-right-radius: 15px;
-    top: 0%;
+    top: 40px;
 }
 
 .click_case {
     background-color: rgba(150,150,150,0.4);
     border-bottom-right-radius: 15px;
-    top: 50%;
+    top: calc(50% + 20px);
 
 }
 
@@ -518,4 +543,8 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     bottom: 10px;
     left: 5px;
     cursor: pointer;
+}
+
+.mapboxgl-ctrl-bottom-left {
+    display: none !important;
 }
