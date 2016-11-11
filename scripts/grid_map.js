@@ -11,7 +11,6 @@ $(function () {
         .defer(d3.csv, "../data/chicago.csv"/*"grids/" + currentCity*/)
         //.defer(d3.json, "data/chicago_zipcode.json"/*"zipcode_business_geojson/" + currentCity*/)
         .await(dataDidLoad);
-    
 })
 
 var test = function(error,data1,data2){

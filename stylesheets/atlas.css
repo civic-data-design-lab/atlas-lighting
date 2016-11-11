@@ -282,13 +282,12 @@ canvas {
     z-index:999;
 }
 #info{
-border-radius: 10px;
     padding: 10px;
     background-color: rgba(0,0,0,.7);
     width: 30%;
-    height: 90%;    
+    height: calc(100% - 60px);
     position: absolute;
-    top: 50px;
+    top: 40px;
     right: 0px;
     overflow: hidden;
 }
@@ -550,4 +549,11 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 
 .mapboxgl-ctrl-bottom-left {
     display: none !important;
+}
+
+.mapboxgl-ctrl-bottom-right {
+    bottom: 0;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 300px;
 }
