@@ -159,8 +159,14 @@ function initControl() {
             $("#selector").css("width","416px");
             $("#selector").css("overflow-y","auto");
             $("#selector").css("direction","rtl");
-            $("#selector").css("left","0px");
-            $(".slide_hide").css("left","386px");
+            $( "#selector" ).animate({
+                left: "0px"
+            }, 300, function() {});
+            $( ".slide_hide" ).animate({
+                left: "386px"
+            }, 300, function() {});
+
+
 
 
             $("#todrop").show();
@@ -170,9 +176,14 @@ function initControl() {
 
             $(this).css("transform","rotate(180deg)");
             $("#selector").css("width","416px");
-            $("#selector").css("left","-390px");
-            $(".slide_hide").css("left","0px");
             $("#todrop").hide();
+
+            $( "#selector" ).animate({
+                left: "-390px",
+            }, 300, function() {});
+            $( ".slide_hide" ).animate({
+                left: "0px"
+            }, 300, function() {});
 
         }
 

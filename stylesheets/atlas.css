@@ -466,6 +466,8 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     padding: 10px;
     position: absolute;
     left: 0px;
+    width: 100px;
+    text-align: left;
 }
 
 .data_select_ui {
