@@ -159,6 +159,9 @@ function initControl() {
             $("#selector").css("width","416px");
             $("#selector").css("overflow-y","auto");
             $("#selector").css("direction","rtl");
+            $( ".left_back" ).animate({
+                left: "0px"
+            }, 300, function() {});
             $( "#selector" ).animate({
                 left: "0px"
             }, 300, function() {});
@@ -177,7 +180,9 @@ function initControl() {
             $(this).css("transform","rotate(180deg)");
             $("#selector").css("width","416px");
             $("#todrop").hide();
-
+            $( ".left_back" ).animate({
+                left: "-390px",
+            }, 300, function() {});
             $( "#selector" ).animate({
                 left: "-390px",
             }, 300, function() {});

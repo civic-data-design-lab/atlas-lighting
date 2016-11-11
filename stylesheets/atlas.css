@@ -485,11 +485,12 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 }
 
 .left_back {
-    position: absolute;
-    width: 380px;
+    position: fixed;
+    width: 416px;
     height: calc(100% - 40px);
     background-color: rgba(0,0,0,0.6);
     top: 40px;
+    left: 0px;
 
 }
 
