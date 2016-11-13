@@ -150,11 +150,11 @@ function initControl() {
 
     });
 
-    $(".click_data>img").click(function(){
+    $(".left_clickbar>img").click(function(){
         if($(this).attr("style") && $(this).attr("style").indexOf("180")>-1){
             //back to selecting mode
 
-            $(this).css("transform","rotate(0deg)");
+            $(".left_clickbar>img").css("transform","rotate(0deg)");
             $("#selector").css("width","416px");
             $("#selector").css("overflow-y","auto");
             $("#selector").css("direction","rtl");
@@ -168,15 +168,12 @@ function initControl() {
                 left: "386px"
             }, 300, function() {});
 
-
-
-
             $("#todrop").show();
 
         }else{
             //back to folding mode
 
-            $(this).css("transform","rotate(180deg)");
+            $(".left_clickbar>img").css("transform","rotate(180deg)");
             $("#selector").css("width","416px");
             $("#todrop").hide();
             $( ".left_back" ).animate({
@@ -194,7 +191,28 @@ function initControl() {
 
     });
 
+    $(".tag_item").click(function(){
 
+        if($(this).attr("class").indexOf("selected")>-1){
+            $(".tag_item").removeClass("selected");
+            $(".data_item").show();
+        }else{
+            $(".tag_item").removeClass("selected");
+            $(this).toggleClass("selected");
+            $(".data_item").hide();
+            $("."+$(this).attr("id")).show();
+        }
+
+    });
+
+    $(".data_searchbox input").keyup(function() {
+        if(!$(this).val()){
+            $(".data_item").show();
+        }else{
+            $(".data_item").hide();
+            $(".data_item[id*='"+$(this).val()+"']").show();
+        }
+    });
 }
 
 

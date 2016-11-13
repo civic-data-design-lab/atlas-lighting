@@ -363,21 +363,22 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 
 /* Dropdown Button */
 .dropbtn {
-    background-color: #000;
+    background-color: rgba(0,0,0,0);
     color: white;
-    padding: 10px;
-    font-size: 16px;
+    font-size: 13px;
     border: none;
     cursor: pointer;
-    width:100%;
-    text-align:left;
-    letter-spacing:2px;
-    font-family: 'Ropa Sans', sans-serif;
-    
+    width: 100%;
+    text-align: left;
+    letter-spacing: 2px;
+    font-family: 'Ropa Sans', sans-serif;    
+    height: 20px;
+    position: absolute;
+    top: 0px;
 }
 
 /* Dropdown button on hover & focus */
-.dropbtn:hover, .dropbtn:focus {
+.dropbtn:hover{
     background-color: #000;
     color:#aaa;
 }
@@ -392,6 +393,8 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     z-index:9;
     margin-right: 44px;
     margin-left: 20px;
+    height:21px;
+    border-radius: 5px;
 }
 
 /* Dropdown Content (Hidden by Default) */
@@ -402,6 +405,8 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     width: 95%;
     line-height: 160%;
     padding:5px;    
+    top:22px;
+    direction: ltr;
 }
 
 /* Links inside the dropdown */
@@ -556,4 +561,70 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     left: 50% !important;
     transform: translateX(-50%) !important;
     width: 300px;
+}
+
+.dropbtn img {
+    position: absolute;
+    right: 5px;
+    top: 6px;
+}
+
+.data_filters {
+    height: 120px;
+}
+
+.data_tags {
+    font-size: 13px;
+    display: block;
+    width: 350px;
+    height: 20px;
+    margin-left: 22px;
+    margin-right: 44px;
+    position: relative;
+}
+
+.tag_item {
+    float: left;
+    padding: 3px;
+    border: 1px solid white;
+    border-radius: 5px;
+    margin-right: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    transform: translateX(-2px);    
+    opacity: 0.6;
+}
+
+.tag_item:hover {
+    background-color: white;
+    color: black;
+    cursor: pointer;
+}
+
+.selected {
+    opacity: 1 !important;
+}
+
+.data_searchbox {
+    font-size: 13px;
+    display: block;
+    width: 350px;
+    height: 20px;
+    margin-left: 22px;
+    margin-right: 44px;
+    position: relative;
+    margin-top: 10px;
+}
+
+.data_searchbox input {
+    background-color: black;
+    color: white;
+    line-height: 20px;
+    font-size: 13px;
+    left: -1px;
+    display: block;
+    position: absolute;
+    width: 337px;
+    height: 13px;
+    direction:ltr;
 }

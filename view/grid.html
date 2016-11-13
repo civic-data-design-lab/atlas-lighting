@@ -125,36 +125,54 @@
       <div class="left_clickbar click_data slide_hide">
         <img src="../icons/triangle_left.png" class="selector_arrow">
       </div>
-      <div class="left_clickbar click_case slide_hide"></div>
+      <div class="left_clickbar click_case slide_hide">
+        <img src="../icons/triangle_left.png" class="selector_arrow">
+      </div>
 
-      <div id="city-title city-title-grid" class="title2 city-title-grid">
-        <div class="dropdown">
-          <button onclick="myFunction()" class="dropbtn"><img src="../icons/arrow_down.png" style="width:10px"> CHICAGO-JOLIET-NAPERVILLE</button>
-          <div id="myDropdown" class="dropdown-content">
-            <a href="#">City 2 N/A</a>
-            <a href="#">City 3 N/A</a>
-            <a href="#">City 4 N/A</a>
-            <a href="#">City 5 N/A</a>
-            <a href="#">City 6 N/A</a>
-            <a href="#">City 7 N/A</a>
-            <a href="#">City 8 N/A</a>
+
+      <div class = "data_filters">
+        <div id="city-title city-title-grid" class="title2 city-title-grid">
+          <div class="dropdown">
+            <button onclick="myFunction()" class="dropbtn"><img src="../icons/arrow_down.png" style="width:10px"> CHICAGO-JOLIET-NAPERVILLE,IL-IN-WI</button>
+            <div id="myDropdown" class="dropdown-content">
+              <a href="#">City 2 N/A</a>
+              <a href="#">City 3 N/A</a>
+              <a href="#">City 4 N/A</a>
+              <a href="#">City 5 N/A</a>
+              <a href="#">City 6 N/A</a>
+              <a href="#">City 7 N/A</a>
+              <a href="#">City 8 N/A</a>
+            </div>
           </div>
         </div>
+
+        <div class = "data_tags">
+          <div CLASS = "tag_item" id = "tag_bus">BUSINESS</div>
+          <div CLASS = "tag_item" id = "tag_dem">DEMOGRAPHICS</div>
+          <div CLASS = "tag_item" id = "tag_soc">SOCIAL MEDIA</div>
+        </div>
+        <div class = "data_searchbox">
+          <input type="text">
+        </div>
+
+
       </div>
 
-      <div class="data_item ui-widget-content" id="d_population">
+
+
+      <div class="data_item ui-widget-content tag_dem" id="d_population">
         <p class="data_item_title">population</p>
       </div>
-      <div class="data_item ui-widget-content" id="d_income">
+      <div class="data_item ui-widget-content tag_dem" id="d_income">
         <p class="data_item_title">income</p>
       </div>
-      <div class="data_item ui-widget-content" id="d_business_diversity">
+      <div class="data_item ui-widget-content tag_bus" id="d_business_diversity">
         <p class="data_item_title">business diversity</p>
       </div>
-      <div class="data_item ui-widget-content" id="d_development_intensity">
+      <div class="data_item ui-widget-content tag_dem" id="d_development_intensity">
         <p class="data_item_title">development intensity</p>
       </div>
-      <div class="data_item ui-widget-content" id="d_light_average">
+      <div class="data_item ui-widget-content " id="d_light_average">
         <p class="data_item_title">light average</p>
       </div>
       <div class="data_item ui-widget-content" id="test">
