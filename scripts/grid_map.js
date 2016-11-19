@@ -1,23 +1,26 @@
 'use strict';
 
-
-$(function () {
-
+var myinit = function () {
+    var panorama = new google.maps.StreetViewPanorama(
+        document.getElementById('street_view'),
+        {
+            position: {lat: 41.878180, lng: -87.630270},
+            pov: {heading: 165, pitch: 0},
+            zoom: 1
+        });
 
     var currentCity = document.URL.split("#")[1].split("*")[0]
 
-    console.log(currentCity);
     d3.queue()
         .defer(d3.csv, "../data/chicago.csv"/*"grids/" + currentCity*/)
         //.defer(d3.json, "data/chicago_zipcode.json"/*"zipcode_business_geojson/" + currentCity*/)
         .await(dataDidLoad);
-})
-
-var test = function(error,data1,data2){
-    console.log(data1);
-    console.log(data2);
+        //.await(mytest);
+}
 
 
+var mytest = function(){
+    
 }
 
 var groupToWords = {
@@ -89,7 +92,8 @@ function dataDidLoad(error, grid) {
     charts(grid,selectedCharts) ////
 
     d3.select("#loader").transition().duration(600).style("opacity", 0).remove();
-    d3.selectAll(".data_select_ui").style("display", "inline")
+    //d3.selectAll(".data_select_ui").style("display", "inline")
+
     initControl();
     initCanvas(grid);
 }
@@ -108,9 +112,6 @@ function initControl() {
     var dropbot = droptop + $("#todrop").height();
     var dropleft = $("#todrop").offset().left;
     var dropright = dropleft + $("#todrop").width();
-
-    console.log(droptop);
-    console.log($("#todrop").position().top);
 
     $('.data_item').draggable({
         drag:function(event,ui){
@@ -505,7 +506,7 @@ function charts(data,selectedCharts) {
             d3.select("#map .datalayer").remove()
             var canvas = __canvas
 
-            console.log("newdata"+newData[0].id);
+            //console.log("newdata"+newData[0].id);
             
             d3.selectAll(".cellgrids").style("display","none");
 

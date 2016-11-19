@@ -135,23 +135,18 @@ a:hover{
     padding-top:60px;
 }
 #loader{
-	width:100hh;
     background: #000000; /* For browsers that do not support gradients */
-    background: -webkit-linear-gradient(#000030, #555,#000020); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(#000030, #555,#000020); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(#000030, #555,#000020); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(#000030, #555,#000020); /* Standard syntax (must be last) */
-    opacity:0.9;
-	z-index:99999;
 	position:absolute;
-	top:50px;
+	top: 41px;
     left:0px;
-	height:100vh;
+    right: 0px;
+    bottom: 0px;
 	font-size:24px;
 	letter-spacing:3px;
 	color:#fff;
 	line-height:175%;
     margin:0px;
+	z-index:99999;
 }
 #loader-text{
     width:60%;
@@ -284,12 +279,12 @@ canvas {
 #info{
     padding: 10px;
     background-color: rgba(0,0,0,.7);
-    width: 30%;
+    width: 380px;    
     height: calc(100% - 60px);
     position: absolute;
     top: 40px;
     right: 0px;
-    overflow: hidden;
+    overflow: auto;
 }
 #frontpage-map{
     position:fixed;
@@ -474,10 +469,6 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     text-align: left;
 }
 
-.data_select_ui {
-    display: none;
-}
-
 #todrop {
     position: absolute;
     width: 380px;
@@ -628,3 +619,10 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     height: 13px;
     direction:ltr;
 }
+
+#street_view {
+    width:380px;
+    height:200px;
+    background-color:white; 
+    margin-bottom:10px; 
+}   

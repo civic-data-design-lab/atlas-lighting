@@ -75,6 +75,7 @@
               <a class="reset" href="javascript:ligAveChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Quantity of light from earths surface measured on a radiometric sensor. Source: NOAA, VIIRS Nighttime Lights, 2015 Average</span></span>
           </div>
         </div>
+
         <div id="income">
           <div class="chart-title">MEDIAN HOUSEHOLD INCOME
             <span class="source">
@@ -112,6 +113,9 @@
             <a class="reset" href="javascript:placesChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Total number of places in a grid cell Source: Google Places API</span></span>
           </div>
         </div>
+        
+        <div id = "street_view" class = "dc-chart"></div>
+
 
         <div class="data_select_ui" id="todrop">
           <div class="drop_indi">Drop Selection Here</div>
@@ -175,8 +179,8 @@
       <div class="data_item ui-widget-content " id="d_light_average">
         <p class="data_item_title">light average</p>
       </div>
-      <div class="data_item ui-widget-content" id="test">
-        <p class="data_item_title">Place Holder</p>
+      <div class="data_item ui-widget-content" id="d_street_view">
+        <p class="data_item_title">Street View</p>
       </div>
       <div class="data_item ui-widget-content" id="test">
         <p class="data_item_title">Place Holder</p>
@@ -201,11 +205,8 @@
   <script src="../scripts/grid_map.js"></script>
   <script src="../scripts/filter_rollovers.js"></script>
 
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBM59LWQXfxJzh06UPYicEM9Ro6RRFCHQc&callback=myinit"></script>
 
-  <script type="text/javascript" charset="utf-8">
-
-
-</script>
 </body>
 
 </html>
