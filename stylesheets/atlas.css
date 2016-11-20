@@ -286,6 +286,9 @@ canvas {
     right: 0px;
     overflow: auto;
 }
+
+
+
 #frontpage-map{
     position:fixed;
     top:100px;
@@ -461,7 +464,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 }
 
 .data_item_title{
-    font-size: 20px;
+    font-size: 17px;
     padding: 10px;
     position: absolute;
     left: 0px;
@@ -533,6 +536,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 
 .mybtn:hover {
     opacity: 0.6;
+    cursor: pointer;
 }
 
 .selector_arrow {
@@ -620,12 +624,13 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     direction:ltr;
 }
 
-#street_view {
+.extra_data {
     width:380px;
     height:200px;
     background-color:white; 
     margin-bottom:10px; 
 }   
+
 
 .svg_overlay {
     position: absolute;
@@ -647,9 +652,58 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 }
 
 #light_digits {
+    
     color: rgb(32, 192, 226);
     font-size: 45px;
     position: absolute;
     left: 10px;
     bottom: 30px;
+}
+
+
+#export {
+    position: absolute;
+    width: 380px;    
+    right: 0px;
+    bottom: 0px;
+    height: 40px;
+    background-color: rgba(100,100,100,.7);
+}
+
+#export_btn {
+    text-align: center;
+    color: white;
+    font-size: 15px;
+    padding-top: 10px;
+}
+
+#export_add {
+    display: none;
+
+    position: absolute;
+    z-index: 10;
+    top: -3px;
+    background-color: black;
+    width: 380px;
+    height: 43px;
+}
+
+#export_add input {
+    background-color: white;
+    color: black;
+    line-height: 20px;
+    font-size: 13px;
+    left: -1px;
+    display: block;
+    position: absolute;
+    top:10px;
+    width: 250px;
+    height: 13px;
+
+}
+
+#cp_btn {
+    position: absolute;
+    right: 10px;
+    top:10px;
 }

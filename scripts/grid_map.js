@@ -68,7 +68,7 @@ if(!initurl.split("*")[1]){//if no dataset is specified in the url
 
 
 window.cell_selected = false;
-window.zoomedData = ["street_view"];
+window.zoomedData = ["street_view","instagram_pics"];
 
 var __map = null
 var __canvas = null
@@ -219,6 +219,26 @@ function initControl() {
             $(".data_item[id*='"+$(this).val()+"']").show();
         }
     });
+
+    $("#export_btn").click(function(){
+        $("#export_add").css("display","block");
+        $("#export_add input").val(window.location.href);
+    });
+
+    $("#cp_btn").click(function(){
+
+        var copyTextarea = document.querySelector('#export_add input');
+        copyTextarea.select();
+
+        try {
+            var successful = document.execCommand('copy');
+            var msg = successful ? 'successful' : 'unsuccessful';
+            console.log('Copying text command was ' + msg);
+        } catch (err) {
+            console.log('Oops, unable to copy');
+        }
+
+    });
 }
 
 
@@ -327,8 +347,6 @@ function initCanvas(data) {
 
     function render() {
         var lightScale = d3.scale.linear().domain([0, 200, 400]).range(["#3182bd", "#fee391", "#fc9272"])
-        //var i = -1, n = data.length, d;
-        //canvas.clearRect(0, 0, 2000, 2000)
 
         var radius = 6 / 1400 * Math.pow(2, map.getZoom());
 
@@ -352,7 +370,6 @@ function initCanvas(data) {
                 .attr("class","cellgrids")
                 .on("click",function(){
                     if(map.getZoom()>=14){
-                        //console.log(map.getZoom(),d3.select(this).attr("id"));
                         var mypos = $(this).position();
 
                         window.panorama.setPosition(unproject([mypos.left,mypos.top]));
@@ -366,7 +383,6 @@ function initCanvas(data) {
                             .style("width",(thisradius-10)+"px")
                             .style("height",(thisradius-10)+"px");
                         cellSelect(d);
-                        
                     }
                 });
         });
@@ -426,6 +442,7 @@ function updateChart(selectedCharts) {
 
     
     selectedCharts.forEach(function(d){
+        d3.select("#d_"+d).style("display","none");
         if(window.zoomedData.indexOf(d)==-1 || window.cell_selected == true)//certain data is shown only if cell is selected
         d3.select("#"+d).style("display","block");
     })
@@ -445,9 +462,9 @@ function charts(data,selectedCharts) {
     d3.select(".lock").style("display","block");
 
     selectedCharts.forEach(function(d){
+        d3.select("#d_"+d).style("display","none");
         if(window.zoomedData.indexOf(d)==-1 || window.cell_selected == true){
             d3.select("#"+d).style("display","block");
-            d3.select("#d_"+d).style("display","none");
         }
     })
 
