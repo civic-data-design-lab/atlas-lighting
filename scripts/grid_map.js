@@ -95,7 +95,6 @@ function dataDidLoad(error, grid) {
 
     d3.select("#loader").transition().duration(600).style("opacity", 0).remove();
     //d3.selectAll(".data_select_ui").style("display", "inline")
-
     initControl();
     initCanvas(grid);
 }
@@ -328,7 +327,7 @@ function initCanvas(data) {
 
     function render() {
         var lightScale = d3.scale.linear().domain([0, 200, 400]).range(["#3182bd", "#fee391", "#fc9272"])
-        var i = -1, n = data.length, d;
+        //var i = -1, n = data.length, d;
         //canvas.clearRect(0, 0, 2000, 2000)
 
         var radius = 6 / 1400 * Math.pow(2, map.getZoom());
@@ -337,8 +336,8 @@ function initCanvas(data) {
         alpha = zoomAlphaScale(map.getZoom())
 
         myg.selectAll("rect").remove();
-        while (++i < n) {
-            d = data[i];
+
+        data.forEach(function(d,i){
             var coordinates = { lat: d.lat, lng: d.lng }
             var light = d.averlight
             var fillColor = lightScale(light)
@@ -353,10 +352,8 @@ function initCanvas(data) {
                 .attr("class","cellgrids")
                 .on("click",function(){
                     if(map.getZoom()>=14){
-                        console.log(map.getZoom(),d3.select(this).attr("id"));
+                        //console.log(map.getZoom(),d3.select(this).attr("id"));
                         var mypos = $(this).position();
-
-                        console.log(unproject([mypos.left,mypos.top]));
 
                         window.panorama.setPosition(unproject([mypos.left,mypos.top]));
                         var thisradius = 6 / 1400 * Math.pow(2, map.getZoom());
@@ -368,17 +365,13 @@ function initCanvas(data) {
                             .style("top",mypos.top+"px")
                             .style("width",(thisradius-10)+"px")
                             .style("height",(thisradius-10)+"px");
-
-                        cellSelect();
+                        cellSelect(d);
                         
                     }
                 });
-        }
+        });
     }
     render();
-
-
-
 
 
     function zoomed() {
@@ -394,31 +387,44 @@ function initCanvas(data) {
     }
 
     map.on("viewreset",function(){
-        zoomed()
+        zoomed();
     })
     map.on("move", function() {
-        zoomed()
+        zoomed();
     })
 }
 
 
-function cellSelect(){
+function cellSelect(d){
     window.cell_selected = true;
-    updateChart(selectedCharts);
+    updateZoomedChart(selectedCharts);
+
+    d3.select("#light_digits").text(d.averlight);
+    
+    console.log(d);
 }
 
 function cellDisselect(){
     window.cell_selected = false;
     d3.select(".overlay_rect").remove();
-    updateChart(selectedCharts);
+    d3.select("#light_digits").text("____");
+    updateZoomedChart(selectedCharts);
+}
 
+function updateZoomedChart(selectedCharts) {
+    selectedCharts.forEach(function(d){
+        if(window.zoomedData.indexOf(d)==-1 || window.cell_selected == true)//certain data is shown only if cell is selected
+        d3.select("#"+d).style("display","block");
+    })
 }
 
 function updateChart(selectedCharts) {
     window.location.href = initurl.split("*")[0] + "*" + selectedCharts.join("|");
     d3.selectAll(".dc-chart").style("display","none");
     d3.select(".dc-data-count").style("display","block");
+    d3.select(".lock").style("display","block");
 
+    
     selectedCharts.forEach(function(d){
         if(window.zoomedData.indexOf(d)==-1 || window.cell_selected == true)//certain data is shown only if cell is selected
         d3.select("#"+d).style("display","block");
@@ -436,6 +442,7 @@ window.placesChart = dc.barChart("#places")
 
 function charts(data,selectedCharts) {
     d3.selectAll(".dc-chart").style("display","none");
+    d3.select(".lock").style("display","block");
 
     selectedCharts.forEach(function(d){
         if(window.zoomedData.indexOf(d)==-1 || window.cell_selected == true){
@@ -478,6 +485,8 @@ function charts(data,selectedCharts) {
     var incomeDimension = ndx.dimension(function (d) {
         return parseInt(parseFloat(d.income) / 1000) * 1000
     })
+
+    //console.log(incomeDimension.top(Infinity));
     var iGroup = incomeDimension.group()
 
     var ligAveDimension = ndx.dimension(function (d) { return parseInt(d.averlight) })
@@ -517,7 +526,7 @@ function charts(data,selectedCharts) {
         .labelOffsetX(-35)
         .xAxis().ticks(4)
 
-    ligAveChart.width(chartWidth).height(chartHeight)
+    ligAveChart.width(chartWidth/3*2).height(chartHeight/5*4)
         .group(laGroup).dimension(ligAveDimension).centerBar(true)
         .elasticY(true)
         .colors(d3.scale.linear().domain([0, 200, 400]).range(["#3182bd", "#fee391", "#fc9272"]))
@@ -525,7 +534,7 @@ function charts(data,selectedCharts) {
         .margins({ top: 0, left: 50, right: 10, bottom: 20 })
         .x(d3.scale.linear().domain([0, 500]))
         .yAxis().ticks(3)
-
+    
     populationChart.width(chartWidth).height(chartHeight).group(pGroup).dimension(populationDimension)
         .round(dc.round.floor)
         .alwaysUseRounding(true)
@@ -551,7 +560,6 @@ function charts(data,selectedCharts) {
             var canvas = __canvas
 
             //console.log("newdata"+newData[0].id);
-            
             d3.selectAll(".cellgrids").style("display","none");
 
             newData.forEach(function(d){
@@ -579,5 +587,6 @@ function charts(data,selectedCharts) {
         })
         
     dc.renderAll();
+
 }
 

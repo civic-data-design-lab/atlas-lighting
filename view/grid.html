@@ -68,11 +68,12 @@
             </span> areas | <a href="javascript:dc.filterAll(); dc.redrawAll();">Reset All</a>
         </div>
 
-        <div id="light_average">
+        <div id="light_average" class = "lock">
           <div class="chart-title">LIGHTING AVERAGE
             <span class="source">
               <a class="reset" href="javascript:ligAveChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Quantity of light from earths surface measured on a radiometric sensor. Source: NOAA, VIIRS Nighttime Lights, 2015 Average</span></span>
           </div>
+          <p id = "light_digits">____</p>
         </div>
 
         <div id="income">
@@ -174,9 +175,6 @@
       </div>
       <div class="data_item ui-widget-content tag_dem" id="d_development_intensity">
         <p class="data_item_title">development intensity</p>
-      </div>
-      <div class="data_item ui-widget-content " id="d_light_average">
-        <p class="data_item_title">light average</p>
       </div>
       <div class="data_item ui-widget-content" id="d_street_view">
         <p class="data_item_title">Street View</p>

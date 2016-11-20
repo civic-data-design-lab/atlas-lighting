@@ -637,3 +637,19 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     z-index: 11;
 }
 
+#light_average {
+    height: 100px;
+    position: relative;
+}
+
+#light_average svg {
+    float: right;
+}
+
+#light_digits {
+    color: rgb(32, 192, 226);
+    font-size: 45px;
+    position: absolute;
+    left: 10px;
+    bottom: 30px;
+}
