@@ -626,3 +626,14 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     background-color:white; 
     margin-bottom:10px; 
 }   
+
+.svg_overlay {
+    position: absolute;
+}
+
+.overlay_rect {
+    position: absolute;
+    border: 5px solid rgb(32, 192, 226);
+    z-index: 11;
+}
+

@@ -1,7 +1,7 @@
 'use strict';
 
 var myinit = function () {
-    var panorama = new google.maps.StreetViewPanorama(
+    window.panorama = new google.maps.StreetViewPanorama(
         document.getElementById('street_view'),
         {
             position: {lat: 41.878180, lng: -87.630270},
@@ -60,13 +60,15 @@ if(!initurl.split("*")[1]){//if no dataset is specified in the url
     selectedCharts = initurl.split("*")[1].split("|");
 
 
+
 }
 
 
 
 
 
-
+window.cell_selected = false;
+window.zoomedData = ["street_view"];
 
 var __map = null
 var __canvas = null
@@ -101,7 +103,9 @@ function dataDidLoad(error, grid) {
 function project(d) {
     return __map.project(getLL(d));
 }
-
+function unproject(d) {
+    return __map.unproject(d);
+}
 function getLL(d) {
     return new mapboxgl.LngLat(+d.lng, +d.lat)
 }
@@ -112,6 +116,8 @@ function initControl() {
     var dropbot = droptop + $("#todrop").height();
     var dropleft = $("#todrop").offset().left;
     var dropright = dropleft + $("#todrop").width();
+
+
 
     $('.data_item').draggable({
         drag:function(event,ui){
@@ -126,7 +132,7 @@ function initControl() {
             $("#selector").css("overflow-y","auto");
             $("#selector").css("direction","rtl");
 
-            if($(this).attr("style").indexOf("left")>-1){
+            if($(this).attr("style").indexOf("left")>-1){//get back to original position
                 $(this).attr("style","position: relative;");
             }
         }
@@ -300,22 +306,20 @@ function initCanvas(data) {
 
 
     var container = map.getCanvasContainer()
+
     d3.select(container).select("svg").remove();
+
+
     var mapsvg = d3.select(container).append("svg")
         .style("width","100%")
         .style("height","100%")
         .style("position","absolute")
         .style("z-index","10");
 
+    d3.select(container).append("div").attr("class","svg_overlay");
+
 
     var myg = mapsvg.append("g").attr("opacity","0.6");
-
-/*    var canvas = d3.select(container).append("canvas").attr("class", "datalayer")
-        .attr("width", 2000)
-        .attr("height", 2000)
-        // .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
-        .node().getContext("2d");
-    __canvas = canvas;*/
 
     __bounds = map.getBounds();
     window.__DisX = Math.abs(project(__bounds._sw).x-project(__bounds._ne).x);
@@ -348,13 +352,37 @@ function initCanvas(data) {
                 .attr("fill",fillColor)
                 .attr("class","cellgrids")
                 .on("click",function(){
-                    console.log(d3.select(this).attr("id"));
+                    if(map.getZoom()>=14){
+                        console.log(map.getZoom(),d3.select(this).attr("id"));
+                        var mypos = $(this).position();
+
+                        console.log(unproject([mypos.left,mypos.top]));
+
+                        window.panorama.setPosition(unproject([mypos.left,mypos.top]));
+                        var thisradius = 6 / 1400 * Math.pow(2, map.getZoom());
+
+                        d3.select(".overlay_rect").remove();
+                        d3.select(".svg_overlay").append("div")
+                            .attr("class","overlay_rect")
+                            .style("left",mypos.left+"px")
+                            .style("top",mypos.top+"px")
+                            .style("width",(thisradius-10)+"px")
+                            .style("height",(thisradius-10)+"px");
+
+                        cellSelect();
+                        
+                    }
                 });
         }
     }
     render();
 
+
+
+
+
     function zoomed() {
+        cellDisselect();
 
         var disX = Math.abs(project(__bounds._sw).x-project(__bounds._ne).x);
         var Corners = [project(__bounds._sw).x,project(__bounds._ne).y];
@@ -373,12 +401,26 @@ function initCanvas(data) {
     })
 }
 
+
+function cellSelect(){
+    window.cell_selected = true;
+    updateChart(selectedCharts);
+}
+
+function cellDisselect(){
+    window.cell_selected = false;
+    d3.select(".overlay_rect").remove();
+    updateChart(selectedCharts);
+
+}
+
 function updateChart(selectedCharts) {
     window.location.href = initurl.split("*")[0] + "*" + selectedCharts.join("|");
     d3.selectAll(".dc-chart").style("display","none");
     d3.select(".dc-data-count").style("display","block");
 
     selectedCharts.forEach(function(d){
+        if(window.zoomedData.indexOf(d)==-1 || window.cell_selected == true)//certain data is shown only if cell is selected
         d3.select("#"+d).style("display","block");
     })
 }
@@ -396,8 +438,10 @@ function charts(data,selectedCharts) {
     d3.selectAll(".dc-chart").style("display","none");
 
     selectedCharts.forEach(function(d){
-        d3.select("#"+d).style("display","block");
-        d3.select("#d_"+d).style("display","none");
+        if(window.zoomedData.indexOf(d)==-1 || window.cell_selected == true){
+            d3.select("#"+d).style("display","block");
+            d3.select("#d_"+d).style("display","none");
+        }
     })
 
 
