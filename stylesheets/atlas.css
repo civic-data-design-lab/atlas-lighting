@@ -663,7 +663,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 
 #export {
     position: absolute;
-    width: 380px;    
+    width: 400px;    
     right: 0px;
     bottom: 0px;
     height: 40px;
@@ -684,7 +684,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     z-index: 10;
     top: -3px;
     background-color: black;
-    width: 380px;
+    width: 400px;
     height: 43px;
 }
 
