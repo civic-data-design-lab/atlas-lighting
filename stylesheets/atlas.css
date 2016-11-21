@@ -693,7 +693,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     color: black;
     line-height: 20px;
     font-size: 13px;
-    left: -1px;
+    left: 10px;
     display: block;
     position: absolute;
     top:10px;
@@ -703,6 +703,12 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 }
 
 #cp_btn {
+    position: absolute;
+    right: 30px;
+    top:10px;
+}
+
+#bk_btn {
     position: absolute;
     right: 10px;
     top:10px;

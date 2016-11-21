@@ -239,6 +239,13 @@ function initControl() {
         }
 
     });
+
+    $("#bk_btn").click(function(){
+
+        $("#export_add").css("display","none");
+
+    });
+    
 }
 
 
