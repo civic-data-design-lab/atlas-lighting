@@ -697,19 +697,25 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     display: block;
     position: absolute;
     top:10px;
-    width: 250px;
+    width: 220px;    
     height: 13px;
 
 }
 
 #cp_btn {
     position: absolute;
-    right: 50px;
+    right: 110px;
     top:10px;
 }
 
 #bk_btn {
     position: absolute;
-    right: 10px;
+    right:10px;
     top:10px;
+}
+
+#exportcsv {
+    position: absolute;
+    right: 50px;
+    top: 10px;
 }

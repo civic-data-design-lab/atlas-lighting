@@ -66,9 +66,10 @@ if(!initurl.split("*")[1]){//if no dataset is specified in the url
 
 
 
-
 window.cell_selected = false;
 window.zoomedData = ["street_view","instagram_pics"];
+
+window.newData;
 
 var __map = null
 var __canvas = null
@@ -108,6 +109,8 @@ function unproject(d) {
 function getLL(d) {
     return new mapboxgl.LngLat(+d.lng, +d.lat)
 }
+
+
 
 function initControl() {
 
@@ -223,6 +226,23 @@ function initControl() {
     $("#export_btn").click(function(){
         $("#export_add").css("display","block");
         $("#export_add input").val(window.location.href);
+
+        var data = window.newData;
+        var csvContent = "";
+
+        csvContent += Object.keys(data[0]).join(",")+"\n";
+        data.forEach(function(infoArray, index){
+            var dataString = Object.values(infoArray).join(",");
+            csvContent += index < data.length ? dataString+ "\n" : dataString;
+        }); 
+
+        var encodedUri = encodeURI(csvContent);
+        var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
+        var link = document.getElementById("exportcsv");
+        link.setAttribute("href", URL.createObjectURL(blob));
+        link.setAttribute("download", "exported_data.csv");
+
     });
 
     $("#cp_btn").click(function(){
@@ -430,7 +450,7 @@ function cellSelect(d){
 function cellDisselect(){
     window.cell_selected = false;
     d3.select(".overlay_rect").remove();
-    d3.select("#light_digits").text("____");
+    d3.select("#light_digits").text(d3.select("#light_digits").attr("sv_val"));
     updateZoomedChart(selectedCharts);
 }
 
@@ -578,7 +598,7 @@ function charts(data,selectedCharts) {
         .elasticX(true)
         .margins({ top: 0, left: 50, right: 10, bottom: 20 })
         .on('renderlet', function (d) {
-            var newData = incomeDimension.top(Infinity)
+            window.newData = incomeDimension.top(Infinity)
             //reDrawMap(newData)
             d3.select("#map .datalayer").remove()
             var canvas = __canvas
@@ -586,9 +606,18 @@ function charts(data,selectedCharts) {
             //console.log("newdata"+newData[0].id);
             d3.selectAll(".cellgrids").style("display","none");
 
-            newData.forEach(function(d){
+
+            //d3.select("#light_digits").text("____");
+            
+            var ave_lit = 0;
+            window.newData.forEach(function(d){
                 d3.select("#c"+d.id).style("display","block");
+                ave_lit +=d.averlight
             })
+            ave_lit /= window.newData.length;
+            ave_lit = Math.round(ave_lit * 100) / 100
+            d3.select("#light_digits").text(ave_lit);
+            d3.select("#light_digits").attr("sv_val" ,ave_lit);
 
         })
         .x(d3.scale.linear().domain([1, 250000]))
