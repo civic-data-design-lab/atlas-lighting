@@ -24,6 +24,7 @@
   <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
   <script src="../scripts/lib/crossfilter.min.js"></script>
   <script src="../scripts/lib/dc.js"></script>
+
   <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
 
   <script src='../scripts/lib/mapbox.js'></script>
@@ -56,155 +57,210 @@
       </div>
     </div>
 
+    <!-- cases -->
+    <div id="cases" style="display:none">
+      <div id="centered">
+        <div id="frontpage-map"></div>
+      </div>
+    </div>
+    <!-- end cases -->
+
     <div id="map"></div>
     <div id="info" class="data_select_ui">
+      <!-- case info -->
+      <div id="case-info" style="display:none">
+        <div id="hide_cases"><img src="../icons/back.png" style="height:30px"> Close Case Studies</div>
+        <div id="text" class="content">
+          <br/><br/>
+          <div id="city-title" class="title2">
 
-      <div id="view-selection" class="icons">
+            <div class="btn-group" data-toggle="buttons">
+              <div class="overviewby">COMPARE MSAS</div><br/>
+              <form>
+                <label class="radio" id="mapB">
+                       <input type="radio" name="options"  checked="checked"><img src="../icons/usa.png" style="height:15px "> Map &nbsp;&nbsp;</label>
+                <label class="radio" id="msaB">
+                      <input type="radio" name="options" id="msaB"> <img src="../icons/bubble.png" style="height:15px "> Chart &nbsp;&nbsp;</label>
+                <!-- <label class="radio" id="group">
+                       <input type="radio" name="options"> LIGHTING AND INCOME &nbsp;&nbsp;</label>-->
+              </form>
+            </div>
+          </div>
+
+          <div class="dropdownPrompt">METHODOLOGY</div>
+          <div id="index-text">
+            <p>In order to select geographically diverse and economically vibrant set of U.S. cities to best represent the variation
+              of urbanized areas in the country, the team conducted a selection process. Typically, research at this scale
+              focuses on the top 100 MSAs (Metropolitan Statistical Area) by population. This convenient metric accounts
+              for a large portion of the nation’s populous and economy. The research uses one primary cutoff (population)
+              and several factors (pop. growth, pop.-weighted density, and Gross Metropolitan Product) to sort the list of
+              potential MSAs for further study.</p>
+            <p>The plot helps reveal a system of MSAs that separate into at least five identifiable groups. The following 5
+              selection sets will serve as the primary source of the final selection to be determined by data compatibility/availability
+              (see plot figure for full groups). The sets were determined by selecting the highest, lowest, and the median
+              2010 population-weighted density MSA from each group (listed in that order below). The MSA with a density next
+              closest to the median was chosen as the alternate... <a href="about.html">read more</a></p>
+          </div>
+        </div>
+        <div id="bubble-key">
+          <div class="dropdownPrompt"> MSA CATEGORIES</div>
+        </div>
       </div>
+      <!-- end case info -->
 
-      <div id="text" class="content">
-        <div class="dc-data-count">
-          <span class="filter-count"></span> selected out of <span class="total-count">
-            </span> areas | <a href="javascript:dc.filterAll(); dc.redrawAll();">Reset All</a>
+      <!-- map info -->
+      <div id="map-info">
+        <div id="view-selection" class="icons">
         </div>
 
-        <div id="light_average" class = "lock">
-          <div class="chart-title">LIGHTING AVERAGE
-            <span class="source">
-              <a class="reset" href="javascript:ligAveChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Quantity of light from earths surface measured on a radiometric sensor. Source: NOAA, VIIRS Nighttime Lights, 2015 Average</span></span>
+        <div id="text" class="content">
+          <div class="dc-data-count">
+            <span class="filter-count"></span> selected out of <span class="total-count">
+              </span> areas | <a href="javascript:dc.filterAll(); dc.redrawAll();">Reset All</a>
           </div>
-          <p id = "light_digits">____</p>
-        </div>
 
-        <div id="income">
-          <div class="chart-title">MEDIAN HOUSEHOLD INCOME
-            <span class="source">
-            <a class="reset" href="javascript:incomeChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Household income is a measure of the combined incomes of all people sharing a particular household or place of residence. Source: 2010 - 2014 ACS - 5 Year Estimate</span></span>
+          <div id="light_average" class="lock">
+            <div class="chart-title">LIGHTING AVERAGE
+              <span class="source">
+                <a class="reset" href="javascript:ligAveChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Quantity of light from earths surface measured on a radiometric sensor. Source: NOAA, VIIRS Nighttime Lights, 2015 Average</span></span>
+            </div>
+            <p id="light_digits">____</p>
           </div>
-        </div>
 
-        <div id="development_intensity">
-          <div class="chart-title">DEVELOPMENT INTENSITY
-            <span class="source">
-            <a class="reset" href="javascript:devIntChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">NLCD provides spatial reference and descriptive data for characteristics of the land surface such as low,medium and high intensity development. Source: National Land Cover Database 2011</span></span>
+          <div id="income">
+            <div class="chart-title">MEDIAN HOUSEHOLD INCOME
+              <span class="source">
+              <a class="reset" href="javascript:incomeChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Household income is a measure of the combined incomes of all people sharing a particular household or place of residence. Source: 2010 - 2014 ACS - 5 Year Estimate</span></span>
+            </div>
           </div>
-        </div>
 
-
-        <div id="population">
-          <div class="chart-title">POPULATION
-            <span class="source">
-            <a class="reset" href="javascript:populationChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Population density is the measure of the number people per unit area, commonly represented as people per square mile Source: 2010 - 2014 ACS - 5 Year Estimate</span></span>
+          <div id="development_intensity">
+            <div class="chart-title">DEVELOPMENT INTENSITY
+              <span class="source">
+              <a class="reset" href="javascript:devIntChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">NLCD provides spatial reference and descriptive data for characteristics of the land surface such as low,medium and high intensity development. Source: National Land Cover Database 2011</span></span>
+            </div>
           </div>
-        </div>
 
 
-        <div id="business_diversity">
-          <div class="chart-title">BUSINESS DIVERSITY
-            <span class="source">
-            <a class="reset" href="javascript:busDivChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Diversity of business types in a grid cell Source: Google Places API</span></span>
+          <div id="population">
+            <div class="chart-title">POPULATION
+              <span class="source">
+              <a class="reset" href="javascript:populationChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Population density is the measure of the number people per unit area, commonly represented as people per square mile Source: 2010 - 2014 ACS - 5 Year Estimate</span></span>
+            </div>
           </div>
-        </div>
 
 
-        <div id="places">
-          <div class="chart-title">PLACE DENSITY
-            <span class="source">
-            <a class="reset" href="javascript:placesChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Total number of places in a grid cell Source: Google Places API</span></span>
+          <div id="business_diversity">
+            <div class="chart-title">BUSINESS DIVERSITY
+              <span class="source">
+              <a class="reset" href="javascript:busDivChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Diversity of business types in a grid cell Source: Google Places API</span></span>
+            </div>
           </div>
-        </div>
-
-        <div id = "street_view" class = "extra_data dc-chart"></div>
-        <div id = "instagram_pics" class = "extra_data dc-chart"></div>
-
-        <div class="data_select_ui" id="todrop">
-          <div class="drop_indi">Drop Selection Here</div>
-        </div>
-
-        <div id="export">
-          <p id = "export_btn" class = "mybtn">EXPORT</p>
-          <div id = "export_add">
-            <input type="text">
-            <p class = "mybtn" id = "cp_btn">COPY</p>
-            <p class = "mybtn" id = "bk_btn">BACK</p>
-
-            <a href="" id = "exportcsv">Download</a>
 
 
+          <div id="places">
+            <div class="chart-title">PLACE DENSITY
+              <span class="source">
+              <a class="reset" href="javascript:placesChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Total number of places in a grid cell Source: Google Places API</span></span>
+            </div>
           </div>
-        </div>
 
+          <div id="street_view" class="extra_data dc-chart"></div>
+          <div id="instagram_pics" class="extra_data dc-chart"></div>
+
+          <div class="data_select_ui" id="todrop">
+            <div class="drop_indi">Drop Selection Here</div>
+          </div>
+
+          <div id="export">
+            <p id="export_btn" class="mybtn">EXPORT</p>
+            <div id="export_add">
+              <input type="text">
+              <p class="mybtn" id="cp_btn">COPY</p>
+              <p class="mybtn" id="bk_btn">BACK</p>
+
+              <a href="" id="exportcsv">Download</a>
+
+
+            </div>
+          </div>
+
+        </div>
       </div>
+      <!-- end map info -->
     </div>
 
 
     <div id="selector" class="data_select_ui">
       <div class="left_back"></div>
-      <div class="left_clickbar click_data slide_hide">
+      <div class="left_clickbar datasets click_data slide_hide selectedTab">
         <img src="../icons/triangle_left.png" class="selector_arrow">
       </div>
-      <div class="left_clickbar click_case slide_hide">
+      <div class="left_clickbar case_studies click_case slide_hide">
         <img src="../icons/triangle_left.png" class="selector_arrow">
       </div>
 
 
-      <div class = "data_filters">
-        <div id="city-title city-title-grid" class="title2 city-title-grid">
-          <div class="dropdown">
-            <button onclick="myFunction()" class="dropbtn"><img src="../icons/arrow_down.png" style="width:10px"> CHICAGO-JOLIET-NAPERVILLE,IL-IN-WI</button>
-            <div id="myDropdown" class="dropdown-content">
-              <a href="#">City 2 N/A</a>
-              <a href="#">City 3 N/A</a>
-              <a href="#">City 4 N/A</a>
-              <a href="#">City 5 N/A</a>
-              <a href="#">City 6 N/A</a>
-              <a href="#">City 7 N/A</a>
-              <a href="#">City 8 N/A</a>
+      <div id="datasets">
+        <div class="data_filters">
+          <div id="city-title city-title-grid" class="title2 city-title-grid">
+            <div class="dropdown">
+              <button onclick="myFunction()" class="dropbtn"><img src="../icons/arrow_down.png" style="width:10px"> CHICAGO-JOLIET-NAPERVILLE,IL-IN-WI</button>
+              <div id="myDropdown" class="dropdown-content">
+                <a href="#">City 2 N/A</a>
+                <a href="#">City 3 N/A</a>
+                <a href="#">City 4 N/A</a>
+                <a href="#">City 5 N/A</a>
+                <a href="#">City 6 N/A</a>
+                <a href="#">City 7 N/A</a>
+                <a href="#">City 8 N/A</a>
+              </div>
             </div>
           </div>
+
+          <div class="data_tags">
+            <div CLASS="tag_item" id="tag_bus">BUSINESS</div>
+            <div CLASS="tag_item" id="tag_dem">DEMOGRAPHICS</div>
+            <div CLASS="tag_item" id="tag_soc">SOCIAL MEDIA</div>
+          </div>
+          <div class="data_searchbox">
+            <input type="text">
+          </div>
+
+
         </div>
 
-        <div class = "data_tags">
-          <div CLASS = "tag_item" id = "tag_bus">BUSINESS</div>
-          <div CLASS = "tag_item" id = "tag_dem">DEMOGRAPHICS</div>
-          <div CLASS = "tag_item" id = "tag_soc">SOCIAL MEDIA</div>
+        <div class="data_item ui-widget-content tag_dem" id="d_population">
+          <p class="data_item_title">POPULATION</p>
         </div>
-        <div class = "data_searchbox">
-          <input type="text">
+        <div class="data_item ui-widget-content tag_dem" id="d_income">
+          <p class="data_item_title">INCOME</p>
+        </div>
+        <div class="data_item ui-widget-content tag_bus" id="d_business_diversity">
+          <p class="data_item_title">BUSINESS DIVERSITY</p>
+        </div>
+        <div class="data_item ui-widget-content tag_dem" id="d_development_intensity">
+          <p class="data_item_title">DEVELOPMENT INTENSITY</p>
+        </div>
+        <div class="data_item ui-widget-content" id="d_street_view">
+          <p class="data_item_title">STREET VIEW</p>
+        </div>
+        <div class="data_item ui-widget-content" id="d_instagram_pics">
+          <p class="data_item_title">INSTAGRAM POST THUMBNAILS</p>
+        </div>
+        <div class="data_item ui-widget-content tag_bus" id="d_places">
+          <p class="data_item_title">BUSINESS DENSITY</p>
         </div>
 
-
       </div>
 
-
-
-      <div class="data_item ui-widget-content tag_dem" id="d_population">
-        <p class="data_item_title">POPULATION</p>
+      <div id="case_studies" style="display:none">
+        <div class="data_item" id="case_study_1">
+          <p class="data_item_title">CASE STUDIES 1: CHICAGO</p>
+        </div>
       </div>
-      <div class="data_item ui-widget-content tag_dem" id="d_income">
-        <p class="data_item_title">INCOME</p>
-      </div>
-      <div class="data_item ui-widget-content tag_bus" id="d_business_diversity">
-        <p class="data_item_title">BUSINESS DIVERSITY</p>
-      </div>
-      <div class="data_item ui-widget-content tag_dem" id="d_development_intensity">
-        <p class="data_item_title">DEVELOPMENT INTENSITY</p>
-      </div>
-      <div class="data_item ui-widget-content" id="d_street_view">
-        <p class="data_item_title">STREET VIEW</p>
-      </div>
-      <div class="data_item ui-widget-content" id="d_instagram_pics">
-        <p class="data_item_title">INSTAGRAM POST THUMBNAILS</p>
-      </div>
-      <div class="data_item ui-widget-content tag_bus" id="d_places">
-        <p class="data_item_title">BUSINESS DENSITY</p>
-      </div>
-      <div class="data_item ui-widget-content" id="test">
-        <p class="data_item_title">Place Holder</p>
-      </div>
-
-
     </div>
+
 
 
   </div>
@@ -215,6 +271,11 @@
 
   <script src="../scripts/grid_map.js"></script>
   <script src="../scripts/filter_rollovers.js"></script>
+
+  <script src="../scripts/underscore.js"></script>
+  <script src="../scripts/front_page_text.js"></script>
+  <script src="../scripts/front_page_map_2.js"></script>
+
 
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBM59LWQXfxJzh06UPYicEM9Ro6RRFCHQc&callback=myinit"></script>
 

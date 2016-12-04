@@ -280,7 +280,7 @@ canvas {
     padding: 10px;
     background-color: rgba(0,0,0,.7);
     width: 380px;    
-    height: calc(100% - 60px);
+    height: calc(100% - 100px);    
     position: absolute;
     top: 40px;
     right: 0px;
@@ -522,7 +522,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 }
 
 .click_data {
-    background-color: rgba(150,150,150,1);
+    background-color: rgba(150,150,150,0.4);
     border-top-right-radius: 15px;
     top: 40px;
 }
@@ -531,7 +531,10 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     background-color: rgba(150,150,150,0.4);
     border-bottom-right-radius: 15px;
     top: calc(50% + 20px);
+}
 
+.selectedTab {
+    background-color: rgba(150,150,150,1) !important;
 }
 
 .mybtn:hover {
@@ -662,7 +665,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 
 
 #export {
-    position: absolute;
+    position: fixed;
     width: 400px;    
     right: 0px;
     bottom: 0px;

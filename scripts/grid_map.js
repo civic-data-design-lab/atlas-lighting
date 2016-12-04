@@ -159,7 +159,22 @@ function initControl() {
 
     });
 
-    $(".left_clickbar>img").click(function(){
+    $(".click_data").click(function(){
+        $("#datasets").show()
+        $("#case_studies").hide()
+        $(this).addClass("selectedTab");
+        $(".click_case").removeClass("selectedTab");
+
+    });
+
+    $(".click_case").click(function(){
+        $("#datasets").hide()
+        $("#case_studies").show();
+        $(this).addClass("selectedTab");
+        $(".click_data").removeClass("selectedTab");
+    });
+
+    $(".left_clickbar.datasets>img").click(function(){
         if($(this).attr("style") && $(this).attr("style").indexOf("180")>-1){
             //back to selecting mode
 
@@ -177,7 +192,9 @@ function initControl() {
                 left: "386px"
             }, 300, function() {});
 
+            //$("#case_studies").hide()
             $("#todrop").show();
+            //$("#datasets").show()
 
         }else{
             //back to folding mode
@@ -196,9 +213,60 @@ function initControl() {
             }, 300, function() {});
 
         }
+    })
 
+    $(".left_clickbar.case_studies>img").click(function(){
+        if($(this).attr("style") && $(this).attr("style").indexOf("180")>-1){
+            //back to selecting mode
 
+            $(".left_clickbar>img").css("transform","rotate(0deg)");
+            $("#selector").css("width","416px");
+            $("#selector").css("overflow-y","auto");
+            $("#selector").css("direction","rtl");
+            $( ".left_back" ).animate({
+                left: "0px"
+            }, 300, function() {});
+            $( "#selector" ).animate({
+                left: "0px"
+            }, 300, function() {});
+            $( ".slide_hide" ).animate({
+                left: "386px"
+            }, 300, function() {});
+
+            //$("#datasets").hide()
+            //$("#case_studies").show();
+
+        }else{
+            //back to folding mode
+
+            $(".left_clickbar>img").css("transform","rotate(180deg)");
+            $("#selector").css("width","416px");
+            $( ".left_back" ).animate({
+                left: "-390px",
+            }, 300, function() {});
+            $( "#selector" ).animate({
+                left: "-390px",
+            }, 300, function() {});
+            $( ".slide_hide" ).animate({
+                left: "0px"
+            }, 300, function() {});
+            $("#todrop").hide();
+        }
     });
+
+    $("#case_studies .data_item").click(function(){
+        $("#map").hide();
+        $("#map-info").hide();
+        $("#cases").show();
+        $("#case-info").show();
+    })
+
+    $("#hide_cases").click(function(){
+        $("#cases").hide();
+        $("#case-info").hide();
+        $("#map").show();
+        $("#map-info").show();
+    })
 
     $(".tag_item").click(function(){
 
@@ -316,17 +384,14 @@ function initCanvas(data) {
             },
             "filter": ["==", "name", ""]
         });
-
         var popup = new mapboxgl.Popup({
             closeButton: false,
             closeOnClick: false
         });
-
         map.on("mousemove", function (e) {
             var features = map.queryRenderedFeatures(e.point, { layers: ["state-fills"] });
             if (features.length) {
                 map.setFilter("route-hover", ["==", "name", features[0].properties.name]);
-
                 var currentZipData = features[0].properties
                 popup
                     .setLngLat([JSON.stringify(e.lngLat["lng"]), JSON.stringify(e.lngLat["lat"])])
@@ -345,9 +410,7 @@ function initCanvas(data) {
                 popup.remove();
                 return;
             }
-
         });
-
     })*/
 
 
@@ -479,7 +542,7 @@ function updateChart(selectedCharts) {
 window.populationChart = dc.barChart("#population")
 window.incomeChart = dc.barChart("#income")
 window.busDivChart = dc.barChart("#business_diversity")
-window.devIntChart = dc.rowChart("#development_intensity")
+window.devIntChart = dc.bubbleChart("#development_intensity")
 window.ligAveChart = dc.barChart("#light_average")
 window.placesChart = dc.barChart("#places")
 
@@ -565,10 +628,27 @@ function charts(data,selectedCharts) {
     var chartColors = { "1": "#fff7bc", "2": "#fee391", "3": "#fec44f", "4": "#fee0d2", "5": "#fc9272", "6": "#de2d26", "7": "#deebf7", "8": "#9ecae1", "9": "#3182bd" }
     devIntChart.width(chartWidth).height(chartHeight)
         .group(devIntGroup).dimension(devIntDimension)
-        .ordinalColors(["#888", "#888", "#888"])
+        //.ordinalColors(["#888", "#888", "#888"])
+        .colorDomain([-500, 500])
         .margins({ top: 0, left: 50, right: 10, bottom: 20 })
-        .labelOffsetX(-35)
-        .xAxis().ticks(4)
+        .x(d3.scale.linear().domain([0, 4]))
+        .y(d3.scale.linear().domain([0, 1]))
+        .r(d3.scale.linear().domain([0, 5000]))
+        .colors(["#808080"])
+        .keyAccessor(function (p) {
+            return p.key;
+        })
+        .valueAccessor(function (p) {
+            return 0.5
+        })
+        .radiusValueAccessor(function (p) {
+            return p.value / 100;
+        })
+        .label(function (p) {
+            return p.value
+        })
+        .yAxis().ticks(0)
+    devIntChart.xAxis().ticks(5)
 
     ligAveChart.width(chartWidth/3*2).height(chartHeight/5*4)
         .group(laGroup).dimension(ligAveDimension).centerBar(true)
@@ -642,4 +722,3 @@ function charts(data,selectedCharts) {
     dc.renderAll();
 
 }
-

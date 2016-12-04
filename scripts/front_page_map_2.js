@@ -1,4 +1,3 @@
-
 var icons = {
     "Uncategorized":"Uncategorized",
     "New Economy-Quality of Life Hubs":"New_Economy-Quality_of_Life_Hubs",
@@ -77,7 +76,7 @@ function drawKey(keyData){
     .attr("height",35)
     .attr("xlink:href",function(d){
         var fileName = d.key.split(" ").join("_")+".png"
-        return "icons/msaselection/"+fileName})
+        return "../icons/msaselection/"+fileName})
 
     keySvg.selectAll("text")
     .data(keyArray)
@@ -101,13 +100,13 @@ var __msaOverview = null
  //drawKey(typeColors)
 $(function() {
 	d3.queue()
-		.defer(d3.csv, "data/groupdata.csv")
+		.defer(d3.csv, "../data/groupdata.csv")
         //.defer(d3.csv,"data/city_comparisons_all.csv")
-        .defer(d3.json,"data/us_corrected.json")
-		.defer(d3.csv, "data/msa_overview.csv")
-    .await(dataDidLoad);
+        .defer(d3.json,"../data/us_corrected.json")
+		.defer(d3.csv, "../data/msa_overview.csv")
+    .await(caseDataDidLoad);
 })
-function dataDidLoad(error,data,us,msaOverview) {
+function caseDataDidLoad(error,data,us,msaOverview) {
      __msaOverview = msaOverview
     d3.selectAll("#info").style("display","inline")
     var width = 800, height = 600;
@@ -334,7 +333,7 @@ function generateAxis(list,data,xSelection,ySelection,rLabel){
     .attr("y",0)
     .attr("width",8)
     .attr("height",8)
-    .attr("xlink:href","icons/arrow_down.png")
+    .attr("xlink:href","../icons/arrow_down.png")
 
     d3.select("#centered").append("svg").attr("id","yAxisArrow")
     .attr("width",8)
@@ -344,7 +343,7 @@ function generateAxis(list,data,xSelection,ySelection,rLabel){
     .attr("y",0)
     .attr("width",8)
     .attr("height",8)
-    .attr("xlink:href","icons/arrow_down.png")
+    .attr("xlink:href","../icons/arrow_down.png")
 
       for(var i in list){
           var label = list[i].split("_").join(" ")
