@@ -73,3 +73,15 @@ var groupToWords = {
 "8":"High Income, Medium Intensity",
 "9":"High Income, High Intensity"
 }
+
+var colors = {
+    "1": "#fff7bc",
+    "2": "#fee391",
+    "3": "#fec44f",
+    "4": "#fee0d2",
+    "5": "#fc9272",
+    "6": "#de2d26",
+    "7": "#deebf7",
+    "8": "#9ecae1",
+    "9": "#3182bd",
+}

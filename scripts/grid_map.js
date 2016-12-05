@@ -1,74 +1,27 @@
 'use strict';
 
-var myinit = function () {
-    window.panorama = new google.maps.StreetViewPanorama(
-        document.getElementById('street_view'),
-        {
-            position: {lat: 41.878180, lng: -87.630270},
-            pov: {heading: 165, pitch: 0},
-            zoom: 1
-        });
-
-    var currentCity = document.URL.split("#")[1].split("*")[0]
-
-    d3.queue()
-        .defer(d3.csv, "../data/chicago.csv"/*"grids/" + currentCity*/)
-        //.defer(d3.json, "data/chicago_zipcode.json"/*"zipcode_business_geojson/" + currentCity*/)
-        .await(dataDidLoad);
-        //.await(mytest);
+String.prototype.lowercase = function () {
+    return this.charAt(0).toLowerCase() + this.slice(1);
 }
 
+var currentCity_o = document.URL.split("#")[1].split("*")[0];
+var currentCity = document.URL.split("#")[1].split("*")[0].lowercase();
 
-var mytest = function(){
-    
-}
 
-var groupToWords = {
-    "1": "Low Income, Low Intensity",
-    "2": "Low Income, Medium Intensity",
-    "3": "Low Income, High Intensity",
-    "4": "Medium Income, Low Intensity",
-    "5": "Medium Income, Medium Intensity",
-    "6": "Medium Income, High Intensity",
-    "7": "High Income, Low Intensity",
-    "8": "High Income, Medium Intensity",
-    "9": "High Income, High Intensity"
-}
-
-var colors = {
-    "1": "#fff7bc",
-    "2": "#fee391",
-    "3": "#fec44f",
-    "4": "#fee0d2",
-    "5": "#fc9272",
-    "6": "#de2d26",
-    "7": "#deebf7",
-    "8": "#9ecae1",
-    "9": "#3182bd",
-}
-
-var center = cityCentroids["Chicago"]
+var center = cityCentroids[currentCity_o];
 
 var initurl = window.location.href;
 
 var selectedCharts = [];
 
-if(!initurl.split("*")[1]){//if no dataset is specified in the url
-    //window.location.href = initurl.split("*")[0] + "*population|income|business_diversity|development_intensity|light_average|places";
-    //selectedCharts = ["population","income","business_diversity","development_intensity","light_average","places"];
-}else{//dataset is not null
+if (!initurl.split("*")[1]) {//if no dataset is specified in the url
+} else {//dataset is not null
     selectedCharts = initurl.split("*")[1].split("|");
-
-
-
 }
 
-
-
-
 window.cell_selected = false;
-window.zoomedData = ["street_view","instagram_pics"];
-
+window.dataLst = [];
+window.zoomedData = ["street_view", "instagram_pics"];
 window.newData;
 
 var __map = null
@@ -91,13 +44,33 @@ var radius = 1
 var alpha = 1
 var alphaScale = d3.scale.linear().domain([minZoom, maxZoom]).range([0.6, .03]);
 
-function dataDidLoad(error, grid) {
-    charts(grid,selectedCharts) ////
 
+
+var myinit = function () {
+    window.panorama = new google.maps.StreetViewPanorama(
+        document.getElementById('street_view'),
+        {
+            position: { lat: 41.878180, lng: -87.630270 },
+            pov: { heading: 165, pitch: 0 },
+            zoom: 1
+        });
+
+    d3.queue()
+        .defer(d3.csv, "../data/" + currentCity + ".csv"/*"grids/" + currentCity*/)
+        //.defer(d3.json, "data/"+currentCity+"_zipcode.json"/*"zipcode_business_geojson/" + currentCity*/)
+        .await(dataDidLoad);
+}
+
+function dataDidLoad(error, grid) {
     d3.select("#loader").transition().duration(600).style("opacity", 0).remove();
-    //d3.selectAll(".data_select_ui").style("display", "inline")
-    initControl();
+
+    window.dataLst = Object.keys(grid[0])
+    console.log(window.dataLst);
+
+    charts(grid, selectedCharts)
+
     initCanvas(grid);
+    initControl();
 }
 
 function project(d) {
@@ -110,8 +83,6 @@ function getLL(d) {
     return new mapboxgl.LngLat(+d.lng, +d.lat)
 }
 
-
-
 function initControl() {
 
     var droptop = $("#todrop").offset().top;
@@ -119,47 +90,42 @@ function initControl() {
     var dropleft = $("#todrop").offset().left;
     var dropright = dropleft + $("#todrop").width();
 
-
-
     $('.data_item').draggable({
-        drag:function(event,ui){
-            $("#selector").css("width","100%");
-            $("#selector").css("overflow-y","hidden");
-            $("#selector").css("direction","ltr");
+        drag: function (event, ui) {
+            $("#selector").css("width", "100%");
+            $("#selector").css("overflow-y", "hidden");
+            $("#selector").css("direction", "ltr");
         },
 
-        stop:function(event,ui){
-            //$(this).attr("style","position: relative;");
-            $("#selector").css("width","416px");
-            $("#selector").css("overflow-y","auto");
-            $("#selector").css("direction","rtl");
+        stop: function (event, ui) {
+            $("#selector").css("width", "416px");
+            $("#selector").css("overflow-y", "auto");
+            $("#selector").css("direction", "rtl");
 
-            if($(this).attr("style").indexOf("left")>-1){//get back to original position
-                $(this).attr("style","position: relative;");
+            if ($(this).attr("style").indexOf("left") > -1) {//get back to original position
+                $(this).attr("style", "position: relative;");
             }
         }
 
     });
     $('#todrop').droppable({
-      drop: function( event, ui ) {
-            $(ui.draggable).attr("style","position: relative;display:none");
-            //$(ui.draggable).hide();
+        drop: function (event, ui) {
+            $(ui.draggable).attr("style", "position: relative;display:none");
             selectedCharts.push($(ui.draggable).attr("id").split("d_")[1]);
             updateChart(selectedCharts);
-            $(this).css("background-color","rgba(255,255,255,0)");
-
-      },
-      over: function( event, ui ){
-          $(this).css("background-color","rgba(255,255,255,0.2)");
-      },
-      out: function( event, ui ){
-          $(this).css("background-color","rgba(255,255,255,0)");
-      }
+            $(this).css("background-color", "rgba(255,255,255,0)");
+        },
+        over: function (event, ui) {
+            $(this).css("background-color", "rgba(255,255,255,0.2)");
+        },
+        out: function (event, ui) {
+            $(this).css("background-color", "rgba(255,255,255,0)");
+        }
 
 
     });
 
-    $(".click_data").click(function(){
+    $(".click_data").click(function () {
         $("#datasets").show()
         $("#case_studies").hide()
         $(this).addClass("selectedTab");
@@ -167,142 +133,129 @@ function initControl() {
 
     });
 
-    $(".click_case").click(function(){
+    $(".click_case").click(function () {
         $("#datasets").hide()
         $("#case_studies").show();
         $(this).addClass("selectedTab");
         $(".click_data").removeClass("selectedTab");
     });
 
-    $(".left_clickbar.datasets>img").click(function(){
-        if($(this).attr("style") && $(this).attr("style").indexOf("180")>-1){
+    $(".left_clickbar.datasets>img").click(function () {
+        if ($(this).attr("style") && $(this).attr("style").indexOf("180") > -1) {
             //back to selecting mode
-
-            $(".left_clickbar>img").css("transform","rotate(0deg)");
-            $("#selector").css("width","416px");
-            $("#selector").css("overflow-y","auto");
-            $("#selector").css("direction","rtl");
-            $( ".left_back" ).animate({
+            $(".left_clickbar>img").css("transform", "rotate(0deg)");
+            $("#selector").css("width", "416px");
+            $("#selector").css("overflow-y", "auto");
+            $("#selector").css("direction", "rtl");
+            $(".left_back").animate({
                 left: "0px"
-            }, 300, function() {});
-            $( "#selector" ).animate({
+            }, 300, function () { });
+            $("#selector").animate({
                 left: "0px"
-            }, 300, function() {});
-            $( ".slide_hide" ).animate({
+            }, 300, function () { });
+            $(".slide_hide").animate({
                 left: "386px"
-            }, 300, function() {});
-
-            //$("#case_studies").hide()
+            }, 300, function () { });
             $("#todrop").show();
-            //$("#datasets").show()
-
-        }else{
+        } else {
             //back to folding mode
-
-            $(".left_clickbar>img").css("transform","rotate(180deg)");
-            $("#selector").css("width","416px");
+            $(".left_clickbar>img").css("transform", "rotate(180deg)");
+            $("#selector").css("width", "416px");
             $("#todrop").hide();
-            $( ".left_back" ).animate({
+            $(".left_back").animate({
                 left: "-390px",
-            }, 300, function() {});
-            $( "#selector" ).animate({
+            }, 300, function () { });
+            $("#selector").animate({
                 left: "-390px",
-            }, 300, function() {});
-            $( ".slide_hide" ).animate({
+            }, 300, function () { });
+            $(".slide_hide").animate({
                 left: "0px"
-            }, 300, function() {});
-
+            }, 300, function () { });
         }
     })
 
-    $(".left_clickbar.case_studies>img").click(function(){
-        if($(this).attr("style") && $(this).attr("style").indexOf("180")>-1){
+    $(".left_clickbar.case_studies>img").click(function () {
+        if ($(this).attr("style") && $(this).attr("style").indexOf("180") > -1) {
             //back to selecting mode
-
-            $(".left_clickbar>img").css("transform","rotate(0deg)");
-            $("#selector").css("width","416px");
-            $("#selector").css("overflow-y","auto");
-            $("#selector").css("direction","rtl");
-            $( ".left_back" ).animate({
+            $(".left_clickbar>img").css("transform", "rotate(0deg)");
+            $("#selector").css("width", "416px");
+            $("#selector").css("overflow-y", "auto");
+            $("#selector").css("direction", "rtl");
+            $(".left_back").animate({
                 left: "0px"
-            }, 300, function() {});
-            $( "#selector" ).animate({
+            }, 300, function () { });
+            $("#selector").animate({
                 left: "0px"
-            }, 300, function() {});
-            $( ".slide_hide" ).animate({
+            }, 300, function () { });
+            $(".slide_hide").animate({
                 left: "386px"
-            }, 300, function() {});
-
-            //$("#datasets").hide()
-            //$("#case_studies").show();
-
-        }else{
+            }, 300, function () { });
+        } else {
             //back to folding mode
-
-            $(".left_clickbar>img").css("transform","rotate(180deg)");
-            $("#selector").css("width","416px");
-            $( ".left_back" ).animate({
+            $(".left_clickbar>img").css("transform", "rotate(180deg)");
+            $("#selector").css("width", "416px");
+            $(".left_back").animate({
                 left: "-390px",
-            }, 300, function() {});
-            $( "#selector" ).animate({
+            }, 300, function () { });
+            $("#selector").animate({
                 left: "-390px",
-            }, 300, function() {});
-            $( ".slide_hide" ).animate({
+            }, 300, function () { });
+            $(".slide_hide").animate({
                 left: "0px"
-            }, 300, function() {});
+            }, 300, function () { });
             $("#todrop").hide();
         }
     });
 
-    $("#case_studies .data_item").click(function(){
+    $("#case_studies .data_item").click(function () {
         $("#map").hide();
         $("#map-info").hide();
         $("#cases").show();
         $("#case-info").show();
     })
 
-    $("#hide_cases").click(function(){
+    $("#hide_cases").click(function () {
         $("#cases").hide();
         $("#case-info").hide();
         $("#map").show();
         $("#map-info").show();
     })
 
-    $(".tag_item").click(function(){
+    $(".tag_item").click(function () {
 
-        if($(this).attr("class").indexOf("selected")>-1){
+        if ($(this).attr("class").indexOf("selected") > -1) {
             $(".tag_item").removeClass("selected");
             $(".data_item").show();
-        }else{
+        } else {
             $(".tag_item").removeClass("selected");
             $(this).toggleClass("selected");
             $(".data_item").hide();
-            $("."+$(this).attr("id")).show();
+            $("." + $(this).attr("id")).show();
         }
 
     });
 
-    $(".data_searchbox input").keyup(function() {
-        if(!$(this).val()){
+    $(".data_searchbox input").keyup(function () {
+        if (!$(this).val()) {
             $(".data_item").show();
-        }else{
+        } else {
             $(".data_item").hide();
-            $(".data_item[id*='"+$(this).val()+"']").show();
+            $(".data_item[id*='" + $(this).val() + "']").show();
         }
     });
 
-    $("#export_btn").click(function(){
-        $("#export_add").css("display","block");
+    $("#export_btn").click(function () {
+        $("#export_add").css("display", "block");
         $("#export_add input").val(window.location.href);
 
         var data = window.newData;
         var csvContent = "";
 
-        csvContent += Object.keys(data[0]).join(",")+"\n";
-        data.forEach(function(infoArray, index){
+        csvContent += Object.keys(data[0]).join(",") + "\n";
+        data.forEach(function (infoArray, index) {
             var dataString = Object.values(infoArray).join(",");
-            csvContent += index < data.length ? dataString+ "\n" : dataString;
-        }); 
+            csvContent += index < data.length ? dataString + "\n" : dataString;
+        });
 
         var encodedUri = encodeURI(csvContent);
         var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -313,11 +266,9 @@ function initControl() {
 
     });
 
-    $("#cp_btn").click(function(){
-
+    $("#cp_btn").click(function () {
         var copyTextarea = document.querySelector('#export_add input');
         copyTextarea.select();
-
         try {
             var successful = document.execCommand('copy');
             var msg = successful ? 'successful' : 'unsuccessful';
@@ -325,17 +276,11 @@ function initControl() {
         } catch (err) {
             console.log('Oops, unable to copy');
         }
-
     });
-
-    $("#bk_btn").click(function(){
-
-        $("#export_add").css("display","none");
-
+    $("#bk_btn").click(function () {
+        $("#export_add").css("display", "none");
     });
-    
 }
-
 
 
 function initCanvas(data) {
@@ -351,127 +296,58 @@ function initCanvas(data) {
             maxZoom: maxZoom,
             minZoom: minZoom
         });
-        // __map.scrollZoom.disable()
-        __map.addControl(new mapboxgl.Geocoder({ position: "bottom-left" }));
-        __map.addControl(new mapboxgl.Navigation({ position: "bottom-left" }));
     }
 
     var map = __map
 
-/*    map.style.on("load", function () {
-        map.addSource("zipcodes", {
-            "type": "geojson",
-            "data": zipcodes
-        })
-        map.addLayer({
-            "id": "state-fills",
-            "type": "fill",
-            "source": "zipcodes",
-            "layout": {},
-            "paint": {
-                "fill-color": "#627BC1",
-                "fill-opacity": 0
-            }
-        });
-        map.addLayer({
-            "id": "route-hover",
-            "type": "line",
-            "source": "zipcodes",
-            "layout": {},
-            "paint": {
-                "line-color": "#fff",
-                "line-width": 2
-            },
-            "filter": ["==", "name", ""]
-        });
-        var popup = new mapboxgl.Popup({
-            closeButton: false,
-            closeOnClick: false
-        });
-        map.on("mousemove", function (e) {
-            var features = map.queryRenderedFeatures(e.point, { layers: ["state-fills"] });
-            if (features.length) {
-                map.setFilter("route-hover", ["==", "name", features[0].properties.name]);
-                var currentZipData = features[0].properties
-                popup
-                    .setLngLat([JSON.stringify(e.lngLat["lng"]), JSON.stringify(e.lngLat["lat"])])
-                    .setHTML("Zipcode: "
-                    + currentZipData.name + "</br>HMI: " + currentZipData.HMI
-                    + "</br>Total Population: " + currentZipData.TOT_POP
-                    + "</br>Diversity: " + (currentZipData.diversity).toFixed(2)
-                    + "</br>Places: " + currentZipData.places_cou
-                    + "</br>Light Mean: " + (currentZipData.light_mean).toFixed(2)
-                    )
-                    .addTo(map)
-            } else {
-                map.setFilter("route-hover", ["==", "name", ""]);
-            }
-            if (!features.length) {
-                popup.remove();
-                return;
-            }
-        });
-    })*/
-
-
     var container = map.getCanvasContainer()
-
     d3.select(container).select("svg").remove();
 
-
     var mapsvg = d3.select(container).append("svg")
-        .style("width","100%")
-        .style("height","100%")
-        .style("position","absolute")
-        .style("z-index","10");
+        .style("width", "100%")
+        .style("height", "100%")
+        .style("position", "absolute")
+        .style("z-index", "10");
 
-    d3.select(container).append("div").attr("class","svg_overlay");
+    d3.select(container).append("div").attr("class", "svg_overlay");
 
-
-    var myg = mapsvg.append("g").attr("opacity","0.6");
+    var myg = mapsvg.append("g").attr("opacity", "0.6");
 
     __bounds = map.getBounds();
-    window.__DisX = Math.abs(project(__bounds._sw).x-project(__bounds._ne).x);
-    window.__Corners = [project(__bounds._sw).x,project(__bounds._ne).y];
-
+    window.__DisX = Math.abs(project(__bounds._sw).x - project(__bounds._ne).x);
+    window.__Corners = [project(__bounds._sw).x, project(__bounds._ne).y];
 
     function render() {
         var lightScale = d3.scale.linear().domain([0, 200, 400]).range(["#3182bd", "#fee391", "#fc9272"])
-
         var radius = 6 / 1400 * Math.pow(2, map.getZoom());
-
         var zoomAlphaScale = d3.scale.linear().domain([8, 16]).range([.8, .2])
         alpha = zoomAlphaScale(map.getZoom())
-
         myg.selectAll("rect").remove();
 
-        data.forEach(function(d,i){
+        data.forEach(function (d, i) {
             var coordinates = { lat: d.lat, lng: d.lng }
             var light = d.averlight
             var fillColor = lightScale(light)
-
             myg.append("rect")
-                .attr("x",project(d).x)
-                .attr("y",project(d).y)
-                .attr("id","c"+i)
-                .attr("width",radius)
-                .attr("height",radius)
-                .attr("fill",fillColor)
-                .attr("class","cellgrids")
-                .on("click",function(){
-                    if(map.getZoom()>=14){
+                .attr("x", project(d).x)
+                .attr("y", project(d).y)
+                .attr("id", "c" + i)
+                .attr("width", radius)
+                .attr("height", radius)
+                .attr("fill", fillColor)
+                .attr("class", "cellgrids")
+                .on("click", function () {
+                    if (map.getZoom() >= 14) {
                         var mypos = $(this).position();
-
-                        window.panorama.setPosition(unproject([mypos.left,mypos.top]));
+                        window.panorama.setPosition(unproject([mypos.left, mypos.top]));
                         var thisradius = 6 / 1400 * Math.pow(2, map.getZoom());
-
                         d3.select(".overlay_rect").remove();
                         d3.select(".svg_overlay").append("div")
-                            .attr("class","overlay_rect")
-                            .style("left",mypos.left+"px")
-                            .style("top",mypos.top+"px")
-                            .style("width",(thisradius-10)+"px")
-                            .style("height",(thisradius-10)+"px");
+                            .attr("class", "overlay_rect")
+                            .style("left", mypos.left + "px")
+                            .style("top", mypos.top + "px")
+                            .style("width", (thisradius - 10) + "px")
+                            .style("height", (thisradius - 10) + "px");
                         cellSelect(d);
                     }
                 });
@@ -482,35 +358,31 @@ function initCanvas(data) {
 
     function zoomed() {
         cellDisselect();
-
-        var disX = Math.abs(project(__bounds._sw).x-project(__bounds._ne).x);
-        var Corners = [project(__bounds._sw).x,project(__bounds._ne).y];
-
-        var myscale = disX/window.__DisX;
-        var mytranslate = (Corners[0]-window.__Corners[0])+","+(Corners[1]-window.__Corners[1]);
-
+        var disX = Math.abs(project(__bounds._sw).x - project(__bounds._ne).x);
+        var Corners = [project(__bounds._sw).x, project(__bounds._ne).y];
+        var myscale = disX / window.__DisX;
+        var mytranslate = (Corners[0] - window.__Corners[0]) + "," + (Corners[1] - window.__Corners[1]);
         myg.attr("transform", "translate(" + mytranslate + ")scale(" + myscale + ")");
     }
 
-    map.on("viewreset",function(){
+    map.on("viewreset", function () {
         zoomed();
     })
-    map.on("move", function() {
+    map.on("move", function () {
         zoomed();
     })
 }
 
 
-function cellSelect(d){
+function cellSelect(d) {
     window.cell_selected = true;
     updateZoomedChart(selectedCharts);
-
     d3.select("#light_digits").text(d.averlight);
-    
+
     console.log(d);
 }
 
-function cellDisselect(){
+function cellDisselect() {
     window.cell_selected = false;
     d3.select(".overlay_rect").remove();
     d3.select("#light_digits").text(d3.select("#light_digits").attr("sv_val"));
@@ -518,26 +390,25 @@ function cellDisselect(){
 }
 
 function updateZoomedChart(selectedCharts) {
-    selectedCharts.forEach(function(d){
-        if(window.zoomedData.indexOf(d)==-1 || window.cell_selected == true)//certain data is shown only if cell is selected
-        d3.select("#"+d).style("display","block");
+    selectedCharts.forEach(function (d) {
+        if (window.zoomedData.indexOf(d) == -1 || window.cell_selected == true)//certain data is shown only if cell is selected
+            d3.select("#" + d).style("display", "block");
     })
 }
 
 function updateChart(selectedCharts) {
     window.location.href = initurl.split("*")[0] + "*" + selectedCharts.join("|");
-    d3.selectAll(".dc-chart").style("display","none");
-    d3.select(".dc-data-count").style("display","block");
-    d3.select(".lock").style("display","block");
+    d3.selectAll(".dc-chart").style("display", "none");
+    d3.select(".dc-data-count").style("display", "block");
+    d3.select(".lock").style("display", "block");
 
-    
-    selectedCharts.forEach(function(d){
-        d3.select("#d_"+d).style("display","none");
-        if(window.zoomedData.indexOf(d)==-1 || window.cell_selected == true)//certain data is shown only if cell is selected
-        d3.select("#"+d).style("display","block");
+
+    selectedCharts.forEach(function (d) {
+        d3.select("#d_" + d).style("display", "none");
+        if (window.zoomedData.indexOf(d) == -1 || window.cell_selected == true)//certain data is shown only if cell is selected
+            d3.select("#" + d).style("display", "block");
     })
 }
-
 
 window.populationChart = dc.barChart("#population")
 window.incomeChart = dc.barChart("#income")
@@ -546,28 +417,26 @@ window.devIntChart = dc.bubbleChart("#development_intensity")
 window.ligAveChart = dc.barChart("#light_average")
 window.placesChart = dc.barChart("#places")
 
+function charts(data, selectedCharts) {
+    d3.selectAll(".dc-chart").style("display", "none");
+    d3.select(".lock").style("display", "block");
 
-function charts(data,selectedCharts) {
-    d3.selectAll(".dc-chart").style("display","none");
-    d3.select(".lock").style("display","block");
-
-    selectedCharts.forEach(function(d){
-        d3.select("#d_"+d).style("display","none");
-        if(window.zoomedData.indexOf(d)==-1 || window.cell_selected == true){
-            d3.select("#"+d).style("display","block");
+    selectedCharts.forEach(function (d) {
+        d3.select("#d_" + d).style("display", "none");
+        if (window.zoomedData.indexOf(d) == -1 || window.cell_selected == true) {
+            d3.select("#" + d).style("display", "block");
         }
     })
-
 
     data.forEach(function (d) {
         d.lng = +d.lng;
         d.lat = +d.lat;
         d.id = +d.id;
-        d.population = +d.population ? +d.population:0;
-        d.averlight = +d.averlight ? +d.averlight:0;
-        d.places = +d.places ? +d.places:0;
-        d.b_diversity = +d.b_diversity ? +d.b_diversity:0;
-        d.dev_intensity = +d.dev_intensity ? +d.dev_intensity:0;//groups
+        d.population = +d.population ? +d.population : 0;
+        d.averlight = +d.averlight ? +d.averlight : 0;
+        d.places = +d.places ? +d.places : 0;
+        d.b_diversity = +d.b_diversity ? +d.b_diversity : 0;
+        d.dev_intensity = +d.dev_intensity ? +d.dev_intensity : 0;//groups
         d.income = +d.income;
     })
 
@@ -577,7 +446,6 @@ function charts(data,selectedCharts) {
     var all = ndx.groupAll();
 
     var busDivDimension = ndx.dimension(function (d) {
-        // console.log(parseFloat(parseInt(d.b_diversity*100))/100)
         return parseFloat(parseInt(d.b_diversity * 100)) / 100
     })
     var busDivGroup = busDivDimension.group()
@@ -593,7 +461,6 @@ function charts(data,selectedCharts) {
         return parseInt(parseFloat(d.income) / 1000) * 1000
     })
 
-    //console.log(incomeDimension.top(Infinity));
     var iGroup = incomeDimension.group()
 
     var ligAveDimension = ndx.dimension(function (d) { return parseInt(d.averlight) })
@@ -650,7 +517,7 @@ function charts(data,selectedCharts) {
         .yAxis().ticks(0)
     devIntChart.xAxis().ticks(5)
 
-    ligAveChart.width(chartWidth/3*2).height(chartHeight/5*4)
+    ligAveChart.width(chartWidth / 3 * 2).height(chartHeight / 5 * 4)
         .group(laGroup).dimension(ligAveDimension).centerBar(true)
         .elasticY(true)
         .colors(d3.scale.linear().domain([0, 200, 400]).range(["#3182bd", "#fee391", "#fc9272"]))
@@ -658,7 +525,7 @@ function charts(data,selectedCharts) {
         .margins({ top: 0, left: 50, right: 10, bottom: 20 })
         .x(d3.scale.linear().domain([0, 500]))
         .yAxis().ticks(3)
-    
+
     populationChart.width(chartWidth).height(chartHeight).group(pGroup).dimension(populationDimension)
         .round(dc.round.floor)
         .alwaysUseRounding(true)
@@ -679,25 +546,20 @@ function charts(data,selectedCharts) {
         .margins({ top: 0, left: 50, right: 10, bottom: 20 })
         .on('renderlet', function (d) {
             window.newData = incomeDimension.top(Infinity)
-            //reDrawMap(newData)
             d3.select("#map .datalayer").remove()
             var canvas = __canvas
 
-            //console.log("newdata"+newData[0].id);
-            d3.selectAll(".cellgrids").style("display","none");
+            d3.selectAll(".cellgrids").style("display", "none");
 
-
-            //d3.select("#light_digits").text("____");
-            
             var ave_lit = 0;
-            window.newData.forEach(function(d){
-                d3.select("#c"+d.id).style("display","block");
-                ave_lit +=d.averlight
+            window.newData.forEach(function (d) {
+                d3.select("#c" + d.id).style("display", "block");
+                ave_lit += d.averlight
             })
             ave_lit /= window.newData.length;
             ave_lit = Math.round(ave_lit * 100) / 100
             d3.select("#light_digits").text(ave_lit);
-            d3.select("#light_digits").attr("sv_val" ,ave_lit);
+            d3.select("#light_digits").attr("sv_val", ave_lit);
 
         })
         .x(d3.scale.linear().domain([1, 250000]))
@@ -718,7 +580,7 @@ function charts(data,selectedCharts) {
             some: "%filter-count areas out of %total-count fit the selection criteria | <a href='javascript:dc.filterAll(); dc.renderAll();''>Reset All</a>",
             all: "Total %total-count areas."
         })
-        
+
     dc.renderAll();
 
 }
