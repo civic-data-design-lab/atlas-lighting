@@ -55,7 +55,7 @@ var myinit = function () {
         });
 
     d3.queue()
-        .defer(d3.csv, "../data/" + currentCity + ".csv"/*"grids/" + currentCity*/)
+        .defer(d3.csv, "../data/" + currentCity_o + ".csv"/*"grids/" + currentCity*/)
         //.defer(d3.json, "data/"+currentCity+"_zipcode.json"/*"zipcode_business_geojson/" + currentCity*/)
         .await(dataDidLoad);
 }
