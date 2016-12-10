@@ -8,7 +8,7 @@ var cityCentroids = {
     "Pittsburg":{lat:40,lng:-79},
     "Portland":{lat:45.523062,lng:-122.676482},
     "Las Vegas":{lat:36.084,lng:-115.153739},
-    "Los Angeles":{lat:34,lng:-118}
+    "LA":{lat:34,lng:-118}
 }
 
 var nightlightColors = {
@@ -23,16 +23,16 @@ var nightlightColors = {
 "9":"#3182bd",
 }
 var fullName = {
-"San Jose":"San Jose-Sunnyvale-Santa Clara, CA",
+"San Jose":"SAN JOSE-SUNNYVALE-SANTA CLARA, CA",
 "Orlando":"Orlando-Kissimmee-Sanford, FL",
 "Milwaukee":"Milwaukee-Waukesha-West Allis, WI",
 "Washington":"Washington-Arlington-Alexandria, DC-VA-MD-WV",
-"Denver":"Denver-Aurora-Broomfield, CO",
-"Chicago":"Chicago-Joliet-Naperville, IL-IN-WI",
-"Pittsburg":"Pittsburgh, PA",
+"Denver":"DENVER-AURORA-BROOMFIELD, CO",
+"Chicago":"CHICAGO-JOLIET-NAPERVILLE,IL-IN-W",
+"Pittsburg":"PITTSBURGH, PA",
 "Portland":"Portland-Vancouver-Hillsboro, OR-WA",
-"Las Vegas":"Las Vegas-Paradise, NV",
-"Los Angeles":"Los Angeles-Long Beach-Santa Ana, CA"
+"LV":"Las Vegas-Paradise, NV",
+"LA":"LOS ANGELES-LONG BEACH-SANTA ANA, CA"
 }
 var cityColors = {
 "San Jose":"#B6DCAE",

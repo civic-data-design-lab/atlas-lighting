@@ -7,6 +7,7 @@ String.prototype.lowercase = function () {
 var currentCity_o = document.URL.split("#")[1].split("*")[0];
 var currentCity = document.URL.split("#")[1].split("*")[0].lowercase();
 
+d3.selectAll("#nowmsa").text(fullName[currentCity_o]);
 
 var center = cityCentroids[currentCity_o];
 
@@ -43,8 +44,6 @@ var radius = 1
 
 var alpha = 1
 var alphaScale = d3.scale.linear().domain([minZoom, maxZoom]).range([0.6, .03]);
-
-
 
 var myinit = function () {
     window.panorama = new google.maps.StreetViewPanorama(
@@ -320,6 +319,10 @@ function initCanvas(data) {
     function render() {
         var lightScale = d3.scale.linear().domain([0, 200, 400]).range(["#3182bd", "#fee391", "#fc9272"])
         var radius = 6 / 1400 * Math.pow(2, map.getZoom());
+        if(currentCity_o != "Chicago"){
+            radius = 1.8 * radius;
+        }
+
         var zoomAlphaScale = d3.scale.linear().domain([8, 16]).range([.8, .2])
         alpha = zoomAlphaScale(map.getZoom())
         myg.selectAll("rect").remove();
@@ -328,10 +331,12 @@ function initCanvas(data) {
             var coordinates = { lat: d.lat, lng: d.lng }
             var light = d.averlight
             var fillColor = lightScale(light)
+
+            //console.log(project(d).x,project(d).y);
             myg.append("rect")
                 .attr("x", project(d).x)
                 .attr("y", project(d).y)
-                .attr("id", "c" + i)
+                .attr("id", "c" + d.cell_id)
                 .attr("width", radius)
                 .attr("height", radius)
                 .attr("fill", fillColor)
@@ -341,6 +346,10 @@ function initCanvas(data) {
                         var mypos = $(this).position();
                         window.panorama.setPosition(unproject([mypos.left, mypos.top]));
                         var thisradius = 6 / 1400 * Math.pow(2, map.getZoom());
+                        if(currentCity_o != "Chicago"){
+                            thisradius = 1.8 * thisradius;
+                        }
+
                         d3.select(".overlay_rect").remove();
                         d3.select(".svg_overlay").append("div")
                             .attr("class", "overlay_rect")
@@ -431,7 +440,7 @@ function charts(data, selectedCharts) {
     data.forEach(function (d) {
         d.lng = +d.lng;
         d.lat = +d.lat;
-        d.id = +d.id;
+        d.cell_id = +d.cell_id;
         d.population = +d.population ? +d.population : 0;
         d.averlight = +d.averlight ? +d.averlight : 0;
         d.places = +d.places ? +d.places : 0;
@@ -553,7 +562,7 @@ function charts(data, selectedCharts) {
 
             var ave_lit = 0;
             window.newData.forEach(function (d) {
-                d3.select("#c" + d.id).style("display", "block");
+                d3.select("#c" + d.cell_id).style("display", "block");
                 ave_lit += d.averlight
             })
             ave_lit /= window.newData.length;
