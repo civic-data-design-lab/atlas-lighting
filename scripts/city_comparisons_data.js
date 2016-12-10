@@ -28,7 +28,7 @@ var fullName = {
 "Milwaukee":"Milwaukee-Waukesha-West Allis, WI",
 "Washington":"Washington-Arlington-Alexandria, DC-VA-MD-WV",
 "Denver":"DENVER-AURORA-BROOMFIELD, CO",
-"Chicago":"CHICAGO-JOLIET-NAPERVILLE,IL-IN-W",
+"Chicago":"CHICAGO-JOLIET-NAPERVILLE,IL-IN-WI",
 "Pittsburg":"PITTSBURGH, PA",
 "Portland":"Portland-Vancouver-Hillsboro, OR-WA",
 "LV":"Las Vegas-Paradise, NV",
