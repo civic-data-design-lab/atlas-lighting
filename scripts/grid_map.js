@@ -445,6 +445,7 @@ function cellDisselect() {
     updateZoomedChart(selectedCharts);
     d3.select("#street_view").style("opacity", "1");
     d3.select("#street_view").style("position", "relative");
+    d3.select("#street_view").style("display", "none");
 
 }
 
