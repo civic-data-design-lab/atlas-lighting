@@ -47,18 +47,34 @@ var alphaScale = d3.scale.linear().domain([minZoom, maxZoom]).range([0.6, .03]);
 
 var myinit = function () {
     window.panorama = new google.maps.StreetViewPanorama(
-        document.getElementById('street_view'),
+        document.getElementById('streetview_window'),
         {
             position: { lat: 41.878180, lng: -87.630270 },
             pov: { heading: 165, pitch: 0 },
             zoom: 1
         });
 
+    // Initialize Firebase
+    // TODO: Replace with your project's customized code snippet
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyAiBlTxG8xEPP_5Zioj167WIxXMtI2pcVk",
+        authDomain: "atlaslighting-25bbb.firebaseapp.com",
+        databaseURL: "https://atlaslighting-25bbb.firebaseio.com",
+        storageBucket: "atlaslighting-25bbb.appspot.com",
+        messagingSenderId: "1085151504834"
+    };
+    firebase.initializeApp(config);
+    var rootRef = firebase.database().ref();
+
+
     d3.queue()
         .defer(d3.csv, "../data/" + currentCity_o + ".csv"/*"grids/" + currentCity*/)
         //.defer(d3.json, "data/"+currentCity+"_zipcode.json"/*"zipcode_business_geojson/" + currentCity*/)
         .await(dataDidLoad);
 }
+
+
 
 function dataDidLoad(error, grid) {
     d3.select("#loader").transition().duration(600).style("opacity", 0).remove();
@@ -319,7 +335,7 @@ function initCanvas(data) {
     function render() {
         var lightScale = d3.scale.linear().domain([0, 200, 400]).range(["#3182bd", "#fee391", "#fc9272"])
         var radius = 6 / 1400 * Math.pow(2, map.getZoom());
-        if(currentCity_o != "Chicago"){
+        if (currentCity_o != "Chicago") {
             radius = 1.8 * radius;
         }
 
@@ -346,7 +362,7 @@ function initCanvas(data) {
                         var mypos = $(this).position();
                         window.panorama.setPosition(unproject([mypos.left, mypos.top]));
                         var thisradius = 6 / 1400 * Math.pow(2, map.getZoom());
-                        if(currentCity_o != "Chicago"){
+                        if (currentCity_o != "Chicago") {
                             thisradius = 1.8 * thisradius;
                         }
 
@@ -389,6 +405,37 @@ function cellSelect(d) {
     d3.select("#light_digits").text(d.averlight);
 
     console.log(d);
+
+    var cell_id = d.cell_id;
+
+    //if(selectedCharts.indexOf("instagram")>-1)
+
+    var ref = firebase.database().ref(cell_id);
+    ref.once("value")
+        .then(function (snapshot) {
+            d3.selectAll(".ins_thumb").remove();
+            var insdata = snapshot.val();
+
+            if (insdata) {
+                var limit = 48;
+                var count = 0;
+                for (var k in insdata) {
+                    if (count < limit) {
+                        //console.log(k);
+                        d3.select("#instagram_pics").append("img").attr("src", insdata[k]["url"]).attr("class", "ins_thumb")
+                            .on('error', function() {
+                                console.log('error');
+                                d3.select(this).remove();
+                                count--;
+                            })
+
+                    }
+                    count++;
+
+                }
+            }
+        });
+
 }
 
 function cellDisselect() {
@@ -396,9 +443,16 @@ function cellDisselect() {
     d3.select(".overlay_rect").remove();
     d3.select("#light_digits").text(d3.select("#light_digits").attr("sv_val"));
     updateZoomedChart(selectedCharts);
+    d3.select("#street_view").style("opacity", "1");
+    d3.select("#street_view").style("position", "relative");
+
 }
 
 function updateZoomedChart(selectedCharts) {
+    selectedCharts.forEach(function (d) {
+        d3.select("#" + d).style("display", "none");
+    })
+
     selectedCharts.forEach(function (d) {
         if (window.zoomedData.indexOf(d) == -1 || window.cell_selected == true)//certain data is shown only if cell is selected
             d3.select("#" + d).style("display", "block");
@@ -428,6 +482,7 @@ window.placesChart = dc.barChart("#places")
 
 function charts(data, selectedCharts) {
     d3.selectAll(".dc-chart").style("display", "none");
+    d3.select("#street_view").style("display", "block");
     d3.select(".lock").style("display", "block");
 
     selectedCharts.forEach(function (d) {
