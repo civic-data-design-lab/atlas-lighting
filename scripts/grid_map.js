@@ -646,7 +646,7 @@ function charts(data, selectedCharts) {
             }
         })
     busDivChart.xAxis().ticks(4);        
-    busDivChart.xAxis().ticks(0);        
+    busDivChart.yAxis().ticks(0);        
 
     placesChart.width(chartWidth).height(chartHeight)
         .group(placesGroup).dimension(placesDimension)
