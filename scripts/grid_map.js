@@ -130,6 +130,7 @@ function initControl() {
         drop: function (event, ui) {
             $(ui.draggable).attr("style", "position: relative;display:none");
             selectedCharts.push($(ui.draggable).attr("id").split("d_")[1]);
+
             updateChart(selectedCharts);
             $(this).css("background-color", "rgba(255,255,255,0)");
         },
@@ -515,9 +516,13 @@ window.busDivChart = dc.bubbleChart("#business_diversity")
 window.devIntChart = dc.barChart("#development_intensity")
 window.ligAveChart = dc.barChart("#light_average")
 window.placesChart = dc.barChart("#places")
-window.insChart = dc.barChart("#ins")
+
+if (currentCity_o == "LA"){
+    window.insChart = dc.barChart("#ins")
+}
 
 function charts(data, selectedCharts) {
+    console.log("tester");
     d3.selectAll(".dc-chart").style("display", "none");
     d3.select("#street_view").style("display", "block");
     d3.select(".lock").style("display", "block");
@@ -585,8 +590,20 @@ function charts(data, selectedCharts) {
     var placesDimension = ndx.dimension(function (d) { return d.places })
     var placesGroup = placesDimension.group()
 
-    var insDimension = ndx.dimension(function (d) { return d.insta_cnt })
-    var insGroup = insDimension.group()
+    if (currentCity_o == "LA"){
+
+        var insDimension = ndx.dimension(function (d) { return d.insta_cnt })
+        var insGroup = insDimension.group()
+
+        window.insChart.width(chartWidth).height(chartHeight)
+            .group(insGroup).dimension(insDimension)
+            .elasticY(true)
+            .ordinalColors(["#aaaaaa"])
+            .gap(0)
+            .margins({ top: 0, left: 50, right: 10, bottom: 20 })
+            .x(d3.scale.linear().domain([0, 20]))
+        window.insChart.yAxis().ticks(2)
+    }
 
     var chartHeight = 65
     busDivChart.width(chartWidth).height(chartHeight)
@@ -634,14 +651,6 @@ function charts(data, selectedCharts) {
         .x(d3.scale.linear().domain([0, 20]))
     placesChart.yAxis().ticks(2)
 
-    insChart.width(chartWidth).height(chartHeight)
-        .group(insGroup).dimension(insDimension)
-        .elasticY(true)
-        .ordinalColors(["#aaaaaa"])
-        .gap(0)
-        .margins({ top: 0, left: 50, right: 10, bottom: 20 })
-        .x(d3.scale.linear().domain([0, 20]))
-    insChart.yAxis().ticks(2)
 
 
     var chartColors = { "1": "#fff7bc", "2": "#fee391", "3": "#fec44f", "4": "#fee0d2", "5": "#fc9272", "6": "#de2d26", "7": "#deebf7", "8": "#9ecae1", "9": "#3182bd" }
