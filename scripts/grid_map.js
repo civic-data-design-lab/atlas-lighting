@@ -229,6 +229,15 @@ function initControl() {
         $("#case-info").show();
     })
 
+    $("#case_studies #case_study_1").click(function () {
+        $("#case-info #case-2").hide()
+        $("#case-info #case-1").show()
+    })
+    $("#case_studies #case_study_2").click(function () {
+        $("#case-info #case-1").hide()
+        $("#case-info #case-2").show()
+    })
+
     $("#hide_cases").click(function () {
         $("#cases").hide();
         $("#case-info").hide();
@@ -476,8 +485,8 @@ function updateChart(selectedCharts) {
 
 window.populationChart = dc.barChart("#population")
 window.incomeChart = dc.barChart("#income")
-window.busDivChart = dc.barChart("#business_diversity")
-window.devIntChart = dc.bubbleChart("#development_intensity")
+window.busDivChart = dc.bubbleChart("#business_diversity")
+window.devIntChart = dc.barChart("#development_intensity")
 window.ligAveChart = dc.barChart("#light_average")
 window.placesChart = dc.barChart("#places")
 
@@ -493,6 +502,9 @@ function charts(data, selectedCharts) {
         }
     })
 
+    var maxBDiv = null;
+    var minBDiv = null;
+
     data.forEach(function (d) {
         d.lng = +d.lng;
         d.lat = +d.lat;
@@ -503,15 +515,24 @@ function charts(data, selectedCharts) {
         d.b_diversity = +d.b_diversity ? +d.b_diversity : 0;
         d.dev_intensity = +d.dev_intensity ? +d.dev_intensity : 0;//groups
         d.income = +d.income;
+
+        if (d.b_diversity) {
+            if (maxBDiv == null || d.b_diversity > maxBDiv) {
+                maxBDiv = d.b_diversity
+            }
+            if (minBDiv == null || d.b_diversity < minBDiv) {
+                minBDiv = d.b_diversity
+            }
+        }
     })
 
     var chartWidth = 380;
 
     var ndx = crossfilter(data);
     var all = ndx.groupAll();
-
+    window.count = 0
     var busDivDimension = ndx.dimension(function (d) {
-        return parseFloat(parseInt(d.b_diversity * 100)) / 100
+        return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0
     })
     var busDivGroup = busDivDimension.group()
 
@@ -531,7 +552,7 @@ function charts(data, selectedCharts) {
     var ligAveDimension = ndx.dimension(function (d) { return parseInt(d.averlight) })
     var laGroup = ligAveDimension.group()
 
-    var devIntDimension = ndx.dimension(function (d) { return d.dev_intensity })
+    var devIntDimension = ndx.dimension(function (d) { return parseInt(d.dev_intensity) })
     var devIntGroup = devIntDimension.group()
 
     var placesDimension = ndx.dimension(function (d) { return d.places })
@@ -543,9 +564,36 @@ function charts(data, selectedCharts) {
         .ordinalColors(["#aaaaaa"])
         .margins({ top: 0, left: 50, right: 10, bottom: 20 })
         .x(d3.scale.linear().domain([0, 5]))
-
-    busDivChart.yAxis().ticks(2)
-    busDivChart.xAxis().ticks(4)
+        .y(d3.scale.linear().domain([0, 1]))
+        .r(d3.scale.linear().domain([0, 1000000]))
+        .colors(["#808080"])
+        .keyAccessor(function (p) {
+            return p.key;
+        })
+        .valueAccessor(function (p) {
+            return 0.5
+        })
+        .radiusValueAccessor(function (p) {
+            return p.value;
+        })
+        .label(function (p) {
+            return p.value
+        })
+        .xAxis().tickFormat(function(d, i){
+            switch(i) {
+            case 1:
+                return "VERY LOW"
+            case 2:
+                return "LOW"
+            case 3:
+                return "MEDIUM"
+            case 4:
+                return "HIGH"
+            default:
+                return ""
+            }
+        })
+    busDivChart.xAxis().ticks(4)        
 
     placesChart.width(chartWidth).height(chartHeight)
         .group(placesGroup).dimension(placesDimension)
@@ -560,7 +608,13 @@ function charts(data, selectedCharts) {
     var chartColors = { "1": "#fff7bc", "2": "#fee391", "3": "#fec44f", "4": "#fee0d2", "5": "#fc9272", "6": "#de2d26", "7": "#deebf7", "8": "#9ecae1", "9": "#3182bd" }
     devIntChart.width(chartWidth).height(chartHeight)
         .group(devIntGroup).dimension(devIntDimension)
-        //.ordinalColors(["#888", "#888", "#888"])
+        .ordinalColors(["#888", "#888", "#888"])
+        .x(d3.scale.linear().domain([0, 10]))
+        .margins({ top: 0, left: 50, right: 10, bottom: 20 })
+        .xAxis().ticks(10)
+    devIntChart.yAxis().ticks(2)
+
+        /*
         .colorDomain([-500, 500])
         .margins({ top: 0, left: 50, right: 10, bottom: 20 })
         .x(d3.scale.linear().domain([0, 4]))
@@ -580,7 +634,7 @@ function charts(data, selectedCharts) {
             return p.value
         })
         .yAxis().ticks(0)
-    devIntChart.xAxis().ticks(5)
+    devIntChart.xAxis().ticks(5)*/
 
     ligAveChart.width(chartWidth / 3 * 2).height(chartHeight / 5 * 4)
         .group(laGroup).dimension(ligAveDimension).centerBar(true)
@@ -648,4 +702,6 @@ function charts(data, selectedCharts) {
 
     dc.renderAll();
 
+    // hide the axes for the bubble charts (must run after render)
+    $("#business_diversity .axis.y").hide()
 }
