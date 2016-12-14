@@ -544,7 +544,7 @@ function charts(data, selectedCharts) {
         d.population = +d.population ? +d.population : 0;
         d.averlight = +d.averlight ? +d.averlight : 0;
         d.places = +d.places ? +d.places : 0;
-        d.b_diversity = +d.b_diversity ? +d.b_diversity : 0;
+        d.b_diversity = +d.b_diversity// ? +d.b_diversity : 0;
         d.dev_intensity = +d.dev_intensity ? +d.dev_intensity : 0;//groups
         d.income = +d.income;
 
@@ -559,13 +559,18 @@ function charts(data, selectedCharts) {
     })
 
     var chartWidth = 380;
+    var chartHeight = 65
 
     var ndx = crossfilter(data);
     var all = ndx.groupAll();
-    window.count = 0
+    window.count = data.length;
+
+    console.log(window.count);
+
     var busDivDimension = ndx.dimension(function (d) {
         return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0
     })
+
     var busDivGroup = busDivDimension.group()
 
     var populationDimension = ndx.dimension(function (d) { return parseInt(d.population) })
@@ -592,8 +597,8 @@ function charts(data, selectedCharts) {
 
     if (currentCity_o == "LA"){
 
-        var insDimension = ndx.dimension(function (d) { return d.insta_cnt })
-        var insGroup = insDimension.group()
+        var insDimension = ndx.dimension(function (d) { return d.insta_cnt });
+        var insGroup = insDimension.group();
 
         window.insChart.width(chartWidth).height(chartHeight)
             .group(insGroup).dimension(insDimension)
@@ -601,27 +606,27 @@ function charts(data, selectedCharts) {
             .ordinalColors(["#aaaaaa"])
             .gap(0)
             .margins({ top: 0, left: 50, right: 10, bottom: 20 })
-            .x(d3.scale.linear().domain([0, 20]))
-        window.insChart.yAxis().ticks(2)
+            .x(d3.scale.linear().domain([1, 2000]));
+        window.insChart.yAxis().ticks(2);
     }
 
-    var chartHeight = 65
-    busDivChart.width(chartWidth).height(chartHeight)
+
+    busDivChart.width(chartWidth).height(chartHeight*2)
         .group(busDivGroup).dimension(busDivDimension)
         .ordinalColors(["#aaaaaa"])
         .margins({ top: 0, left: 50, right: 10, bottom: 20 })
         .x(d3.scale.linear().domain([0, 5]))
         .y(d3.scale.linear().domain([0, 1]))
-        .r(d3.scale.linear().domain([0, 1000000]))
+        //.r(d3.scale.linear().domain([0, window.count*5]))
         .colors(["#808080"])
         .keyAccessor(function (p) {
             return p.key;
         })
         .valueAccessor(function (p) {
-            return 0.5
+            return 0.5;
         })
         .radiusValueAccessor(function (p) {
-            return p.value;
+            return p.value/window.count*chartHeight;
         })
         .label(function (p) {
             return p.value
@@ -640,7 +645,8 @@ function charts(data, selectedCharts) {
                 return ""
             }
         })
-    busDivChart.xAxis().ticks(4)        
+    busDivChart.xAxis().ticks(4);        
+    busDivChart.xAxis().ticks(0);        
 
     placesChart.width(chartWidth).height(chartHeight)
         .group(placesGroup).dimension(placesDimension)
