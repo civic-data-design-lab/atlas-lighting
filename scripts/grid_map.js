@@ -54,6 +54,9 @@ var myinit = function () {
             zoom: 1
         });
 
+    window.streetviewService = new google.maps.StreetViewService;
+
+
     // Initialize Firebase
     // TODO: Replace with your project's customized code snippet
     // Initialize Firebase
@@ -367,10 +370,30 @@ function initCanvas(data) {
                 .attr("fill", fillColor)
                 .attr("class", "cellgrids")
                 .on("click", function () {
-                    if (map.getZoom() >= 14) {
+
+
+                    if (map.getZoom() >= 12) {
                         var mypos = $(this).position();
-                        window.panorama.setPosition(unproject([mypos.left, mypos.top]));
                         var thisradius = 6 / 1400 * Math.pow(2, map.getZoom());
+
+                        streetviewService.getPanorama(
+                            {location: unproject([mypos.left+(thisradius - 10)/2, mypos.top+(thisradius - 10)/2])},
+                            function(result, status) {
+                                if (status === 'OK') {
+                                    console.log("ok");
+                                    d3.select("#street_view_plc").style("display", "none");
+                                    d3.select("#streetview_window").style("display", "block");
+                                    window.panorama.setPosition(unproject([mypos.left+(thisradius - 10)/2, mypos.top+(thisradius - 10)/2]));
+
+                                }else{
+                                    console.log("not ok");
+                                    d3.select("#streetview_window").style("display", "none");
+                                    d3.select("#street_view_plc").style("display", "block");
+
+                                }
+                            });
+
+
                         if (currentCity_o != "Chicago") {
                             thisradius = 1.8 * thisradius;
                         }
@@ -412,6 +435,7 @@ function cellSelect(d) {
     window.cell_selected = true;
     updateZoomedChart(selectedCharts);
     d3.select("#light_digits").text(d.averlight);
+    $("#instagram_plc").hide();
 
     console.log(d);
 
@@ -437,11 +461,12 @@ function cellSelect(d) {
                                 d3.select(this).remove();
                                 count--;
                             })
-
                     }
                     count++;
-
                 }
+            }
+            else{
+                $("#instagram_plc").show();
             }
         });
 
@@ -455,6 +480,7 @@ function cellDisselect() {
     d3.select("#street_view").style("opacity", "1");
     d3.select("#street_view").style("position", "relative");
     d3.select("#street_view").style("display", "none");
+
 
 }
 
@@ -489,6 +515,7 @@ window.busDivChart = dc.bubbleChart("#business_diversity")
 window.devIntChart = dc.barChart("#development_intensity")
 window.ligAveChart = dc.barChart("#light_average")
 window.placesChart = dc.barChart("#places")
+window.insChart = dc.barChart("#ins")
 
 function charts(data, selectedCharts) {
     d3.selectAll(".dc-chart").style("display", "none");
@@ -558,6 +585,9 @@ function charts(data, selectedCharts) {
     var placesDimension = ndx.dimension(function (d) { return d.places })
     var placesGroup = placesDimension.group()
 
+    var insDimension = ndx.dimension(function (d) { return d.insta_cnt })
+    var insGroup = insDimension.group()
+
     var chartHeight = 65
     busDivChart.width(chartWidth).height(chartHeight)
         .group(busDivGroup).dimension(busDivDimension)
@@ -601,9 +631,18 @@ function charts(data, selectedCharts) {
         .ordinalColors(["#aaaaaa"])
         .gap(0)
         .margins({ top: 0, left: 50, right: 10, bottom: 20 })
-
         .x(d3.scale.linear().domain([0, 20]))
     placesChart.yAxis().ticks(2)
+
+    insChart.width(chartWidth).height(chartHeight)
+        .group(insGroup).dimension(insDimension)
+        .elasticY(true)
+        .ordinalColors(["#aaaaaa"])
+        .gap(0)
+        .margins({ top: 0, left: 50, right: 10, bottom: 20 })
+        .x(d3.scale.linear().domain([0, 20]))
+    insChart.yAxis().ticks(2)
+
 
     var chartColors = { "1": "#fff7bc", "2": "#fee391", "3": "#fec44f", "4": "#fee0d2", "5": "#fc9272", "6": "#de2d26", "7": "#deebf7", "8": "#9ecae1", "9": "#3182bd" }
     devIntChart.width(chartWidth).height(chartHeight)
@@ -675,6 +714,7 @@ function charts(data, selectedCharts) {
                 d3.select("#c" + d.cell_id).style("display", "block");
                 ave_lit += d.averlight
             })
+
             ave_lit /= window.newData.length;
             ave_lit = Math.round(ave_lit * 100) / 100
             d3.select("#light_digits").text(ave_lit);

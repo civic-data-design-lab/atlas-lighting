@@ -166,16 +166,29 @@
               <a class="reset" href="javascript:placesChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Total number of places in a grid cell Source: Google Places API</span></span>
             </div>
           </div>
-          
+
+
           <div id="street_view" class="extra_data dc-chart">
             <div class="chart-title">GOOGLE STREETVIEW
             </div>
+            <img src="../icons/placeholder_streetview2.png" id = "street_view_plc">
             <div id="streetview_window"></div>
           </div>
+
+          <div id="ins">
+            <div class="chart-title">INSTAGRAM DENSITY
+              <span class="source">
+              <a class="reset" href="javascript:insChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Total number of places in a grid cell Source: Google Places API</span></span>
+            </div>
+          </div>
+
 
           <div id="instagram_pics" class="extra_data dc-chart">
             <div class="chart-title">INSTAGRAM POSTS
             </div>
+          <img src="../icons/placeholder_instagram2.png" id = "instagram_plc">
+
+
           </div>
 
           <div class="data_select_ui" id="todrop">
@@ -213,10 +226,11 @@
               <button onclick="myFunction()" class="dropbtn" id="nowmsa"><img src="../icons/arrow_down.png" style="width:10px"> CHICAGO-JOLIET-NAPERVILLE,IL-IN-WI</button>
               <div id="myDropdown" class="dropdown-content">
                 <a href="javascript:window.location.assign('grid.html#Chicago');window.location.reload();">CHICAGO-JOLIET-NAPERVILLE,IL-IN-WI</a>
+                <a href="javascript:window.location.assign('grid.html#LA');window.location.reload();">LOS ANGELES-LONG BEACH-SANTA ANA, CA</a>
+<!--                <a href="javascript:window.location.assign('grid.html#Pittsburgh');window.location.reload();">PITTSBURGH, PA</a>
                 <a href="javascript:window.location.assign('grid.html#Sanjose');window.location.reload();">SAN JOSE-SUNNYVALE-SANTA CLARA, CA</a>
                 <a href="javascript:window.location.assign('grid.html#Denver');window.location.reload();">DENVER-AURORA-BROOMFIELD, CO</a>
-                <a href="javascript:window.location.assign('grid.html#LA');window.location.reload();">LOS ANGELES-LONG BEACH-SANTA ANA, CA</a>
-                <a href="javascript:window.location.assign('grid.html#Pittsburgh');window.location.reload();">PITTSBURGH, PA</a>
+-->              
               </div>
             </div>
           </div>
@@ -243,15 +257,21 @@
         <div class="data_item ui-widget-content tag_dem" id="d_development_intensity">
           <p class="data_item_title">DEVELOPMENT INTENSITY</p>
         </div>
+        <div class="data_item ui-widget-content tag_bus" id="d_places">
+          <p class="data_item_title">BUSINESS DENSITY</p>
+        </div>
+        <div class="data_item ui-widget-content tag_bus" id="d_ins">
+          <p class="data_item_title">INSTAGRAM DENSITY</p>
+        </div>
+
         <div class="data_item ui-widget-content" id="d_street_view">
           <p class="data_item_title">STREET VIEW</p>
         </div>
         <div class="data_item ui-widget-content" id="d_instagram_pics">
           <p class="data_item_title">INSTAGRAM POST THUMBNAILS</p>
         </div>
-        <div class="data_item ui-widget-content tag_bus" id="d_places">
-          <p class="data_item_title">BUSINESS DENSITY</p>
-        </div>
+
+
       </div>
 
       <div id="case_studies" style="display:none">
