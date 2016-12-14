@@ -615,7 +615,7 @@ function charts(data, selectedCharts) {
         .group(busDivGroup).dimension(busDivDimension)
         .ordinalColors(["#aaaaaa"])
         .margins({ top: 0, left: 50, right: 10, bottom: 20 })
-        .x(d3.scale.linear().domain([0, 5]))
+        .x(d3.scale.linear().domain([0.5, 4.5]))
         .y(d3.scale.linear().domain([0, 1]))
         //.r(d3.scale.linear().domain([0, window.count*5]))
         .colors(["#808080"])
@@ -626,27 +626,31 @@ function charts(data, selectedCharts) {
             return 0.5;
         })
         .radiusValueAccessor(function (p) {
-            return p.value/window.count*chartHeight;
+            return p.value/window.count*chartHeight*4/5;
         })
         .label(function (p) {
             return p.value
         })
         .xAxis().tickFormat(function(d, i){
             switch(i) {
-            case 1:
+            case 0:
                 return "VERY LOW"
-            case 2:
+            case 1:
                 return "LOW"
-            case 3:
+            case 2:
                 return "MEDIUM"
-            case 4:
+            case 3:
                 return "HIGH"
             default:
                 return ""
             }
         })
     busDivChart.xAxis().ticks(4);        
-    busDivChart.yAxis().ticks(0);        
+    busDivChart.yAxis().ticks(0); 
+
+
+
+
 
     placesChart.width(chartWidth).height(chartHeight)
         .group(placesGroup).dimension(placesDimension)
@@ -758,5 +762,10 @@ function charts(data, selectedCharts) {
     dc.renderAll();
 
     // hide the axes for the bubble charts (must run after render)
-    $("#business_diversity .axis.y").hide()
+    //$("#business_diversity .axis.y").hide();
+    d3.selectAll("#business_diversity path").remove();
+    d3.selectAll("#business_diversity line").remove();
+
+
+
 }
