@@ -520,6 +520,7 @@ window.placesChart = dc.barChart("#places")
 
 if (currentCity_o == "LA"){
     window.insChart = dc.barChart("#ins")
+    window.insLikesChart = dc.barChart("#ins_likes")
     //window.busi_openingChart = dc.barChart("#business_opening")
     window.busPriChart = dc.barChart("#business_price")
 
@@ -556,6 +557,7 @@ function charts(data, selectedCharts) {
         d.income = +d.income;
         d.b_price = +d.b_price;
         d.insta_cnt = +d.insta_cnt ? +d.insta_cnt : 0;
+        d.insta_like = +d.insta_like ? +d.insta_like : 0;
 
         if (d.b_diversity) {
             if (maxBDiv == null || d.b_diversity > maxBDiv) {
@@ -639,6 +641,20 @@ function charts(data, selectedCharts) {
 
         window.insChart.yAxis().ticks(2);
 
+        /////////////////////
+        var insLikesDimension = ndx.dimension(function (d) { return d.insta_like });
+        var insLikesGroup = insLikesDimension.group();
+
+        window.insLikesChart.width(chartWidth).height(chartHeight)
+            .group(insLikesGroup).dimension(insLikesDimension)
+            //.elasticY(true)
+            .ordinalColors(["#aaaaaa"])
+            .gap(0)
+            .margins({ top: 0, left: 50, right: 10, bottom: 20 })
+            .x(d3.scale.linear().domain([1, 50000]))
+            .y(d3.scale.linear().domain([0, 600]));
+
+        window.insLikesChart.yAxis().ticks(2);
 
         var busPriDimension = ndx.dimension(function (d) { return d.b_price });
         var busPriGroup = busPriDimension.group();
@@ -646,13 +662,12 @@ function charts(data, selectedCharts) {
         window.busPriChart.width(chartWidth).height(chartHeight)
             .group(busPriGroup).dimension(busPriDimension)
             //.elasticY(true)
-            .ordinalColors(["#aaaaaa"])
-            .gap(0)
+            .ordinalColors(["#888", "#888", "#888"])
             .margins({ top: 0, left: 50, right: 10, bottom: 20 })
-            .x(d3.scale.linear().domain([0.5, 4.5]));
+            .x(d3.scale.linear().domain([0.5, 4]))
+            .xUnits(function(){return 50;})
+            .yAxis().ticks(2);
             //.y(d3.scale.linear().domain([0, 600]));
-
-        window.insChart.yAxis().ticks(2);
 
 
 
