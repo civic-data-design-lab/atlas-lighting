@@ -642,7 +642,10 @@ function charts(data, selectedCharts) {
         window.insChart.yAxis().ticks(2);
 
         /////////////////////
-        var insLikesDimension = ndx.dimension(function (d) { return d.insta_like });
+        var insLikesDimension = ndx.dimension(function (d) { 
+            if(d.insta_like > 1000 ) return 1000;
+            else return d.insta_like });
+
         var insLikesGroup = insLikesDimension.group();
 
         window.insLikesChart.width(chartWidth).height(chartHeight)
@@ -651,8 +654,8 @@ function charts(data, selectedCharts) {
             .ordinalColors(["#aaaaaa"])
             .gap(0)
             .margins({ top: 0, left: 50, right: 10, bottom: 20 })
-            .x(d3.scale.linear().domain([1, 50000]))
-            .y(d3.scale.linear().domain([0, 600]));
+            .x(d3.scale.linear().domain([1, 1001]))
+            .y(d3.scale.linear().domain([0, 200]));
 
         window.insLikesChart.yAxis().ticks(2);
 
@@ -668,9 +671,6 @@ function charts(data, selectedCharts) {
             .xUnits(function(){return 50;})
             .yAxis().ticks(2);
             //.y(d3.scale.linear().domain([0, 600]));
-
-
-
     }
 
 
