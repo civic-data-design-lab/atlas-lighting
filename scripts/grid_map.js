@@ -524,7 +524,6 @@ if (currentCity_o == "LA"){
 }
 
 function charts(data, selectedCharts) {
-    console.log("tester");
     d3.selectAll(".dc-chart").style("display", "none");
     d3.select("#street_view").style("display", "block");
     d3.select(".lock").style("display", "block");
@@ -588,8 +587,6 @@ function charts(data, selectedCharts) {
     var all = ndx.groupAll();
     window.count = data.length;
 
-    console.log(window.count);
-
     var busDivDimension = ndx.dimension(function (d) {
         return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0
     })
@@ -623,7 +620,7 @@ function charts(data, selectedCharts) {
     if (currentCity_o == "LA"){
 
         var insDimension = ndx.dimension(function (d) { 
-            if(d.insta_cnt > 25 ) return 25;
+            if(d.insta_cnt > 50 ) return 50;
             else return d.insta_cnt });
         var insGroup = insDimension.group();
 
@@ -633,7 +630,7 @@ function charts(data, selectedCharts) {
             .ordinalColors(["#aaaaaa"])
             .gap(0)
             .margins({ top: 0, left: 50, right: 10, bottom: 20 })
-            .x(d3.scale.linear().domain([1, 26]))
+            .x(d3.scale.linear().domain([1, 51]))
             .y(d3.scale.linear().domain([0, 600]));
 
         window.insChart.yAxis().ticks(2);
@@ -641,7 +638,6 @@ function charts(data, selectedCharts) {
 
         var busi_openingDimension = ndx.dimension(function (d) { return d.insta_cnt });
         var busi_openingGroup = busi_openingDimension.group();
-        console.log(busi_openingGroup.all());
 
         window.busi_openingChart.width(chartWidth).height(chartHeight)
             .group(busi_openingGroup).dimension(busi_openingDimension)
@@ -750,10 +746,11 @@ function charts(data, selectedCharts) {
     populationChart.width(chartWidth).height(chartHeight).group(pGroup).dimension(populationDimension)
         .round(dc.round.floor)
         .alwaysUseRounding(true)
-        .elasticY(true)
+        //.elasticY(true)
         .elasticX(true)
         .ordinalColors(["#ffffff"])
         .x(d3.scale.linear().domain([0, 30]))
+        //.y(d3.scale.linear().domain([0, 200]))
         .margins({ top: 0, left: 50, right: 10, bottom: 20 })
         .yAxis().ticks(2)
     populationChart.xAxis().ticks(4)
@@ -762,7 +759,7 @@ function charts(data, selectedCharts) {
         .round(dc.round.floor)
         .ordinalColors(["#ffffff"])
         .alwaysUseRounding(true)
-        .elasticY(true)
+        //.elasticY(true)
         .elasticX(true)
         .margins({ top: 0, left: 50, right: 10, bottom: 20 })
         .on('renderlet', function (d) {
@@ -784,11 +781,8 @@ function charts(data, selectedCharts) {
             d3.select("#light_digits").attr("sv_val", ave_lit);
 
         })
-        .x(d3.scale.linear().domain([1, 250000]))
-        .y(d3.scale.linear().domain([1, 500]))
-        .yAxis().ticks(function (d) {
-            return 3
-        })
+        .x(d3.scale.linear().domain([1, window.count]))
+        .y(d3.scale.linear().domain([1, 1000]));
 
     incomeChart.yAxis().ticks(2)
     incomeChart.xAxis().ticks(4)
