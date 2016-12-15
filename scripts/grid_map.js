@@ -519,6 +519,8 @@ window.placesChart = dc.barChart("#places")
 
 if (currentCity_o == "LA"){
     window.insChart = dc.barChart("#ins")
+    window.busi_openingChart = dc.barChart("#business_opening")
+
 }
 
 function charts(data, selectedCharts) {
@@ -536,6 +538,8 @@ function charts(data, selectedCharts) {
 
     var maxBDiv = null;
     var minBDiv = null;
+    var maxDInt = null;
+
 
     data.forEach(function (d) {
         d.lng = +d.lng;
@@ -556,6 +560,13 @@ function charts(data, selectedCharts) {
                 minBDiv = d.b_diversity
             }
         }
+        if (d.dev_intensity) {
+            if (maxDInt == null || d.dev_intensity > maxDInt) {
+                maxDInt = d.dev_intensity
+            }
+        }
+
+
     })
 
     var chartWidth = 380;
@@ -608,6 +619,21 @@ function charts(data, selectedCharts) {
             .margins({ top: 0, left: 50, right: 10, bottom: 20 })
             .x(d3.scale.linear().domain([1, 2000]));
         window.insChart.yAxis().ticks(2);
+
+
+        var busi_openingDimension = ndx.dimension(function (d) { return d.insta_cnt });
+        var busi_openingGroup = busi_openingDimension.group();
+        console.log(busi_openingGroup.all());
+
+        window.busi_openingChart.width(chartWidth).height(chartHeight)
+            .group(busi_openingGroup).dimension(busi_openingDimension)
+            .elasticY(true)
+            .ordinalColors(["#aaaaaa"])
+            .gap(0)
+            .margins({ top: 0, left: 50, right: 10, bottom: 20 })
+            .x(d3.scale.linear().domain([0, 24]));
+        window.insChart.yAxis().ticks(2);
+
     }
 
 
@@ -651,15 +677,15 @@ function charts(data, selectedCharts) {
 
 
 
-
     placesChart.width(chartWidth).height(chartHeight)
         .group(placesGroup).dimension(placesDimension)
         .elasticY(true)
         .ordinalColors(["#aaaaaa"])
         .gap(0)
         .margins({ top: 0, left: 50, right: 10, bottom: 20 })
-        .x(d3.scale.linear().domain([0, 20]))
+        .x(d3.scale.linear().domain([0, 100]))
     placesChart.yAxis().ticks(2)
+
 
 
 
@@ -667,7 +693,7 @@ function charts(data, selectedCharts) {
     devIntChart.width(chartWidth).height(chartHeight)
         .group(devIntGroup).dimension(devIntDimension)
         .ordinalColors(["#888", "#888", "#888"])
-        .x(d3.scale.linear().domain([0, 10]))
+        .x(d3.scale.linear().domain([0, maxDInt]))
         .margins({ top: 0, left: 50, right: 10, bottom: 20 })
         .xAxis().ticks(10)
     devIntChart.yAxis().ticks(2)
@@ -741,11 +767,12 @@ function charts(data, selectedCharts) {
 
         })
         .x(d3.scale.linear().domain([1, 250000]))
+        .y(d3.scale.linear().domain([1, 500]))
         .yAxis().ticks(function (d) {
             return 3
         })
 
-    incomeChart.yAxis().ticks(3)
+    incomeChart.yAxis().ticks(2)
     incomeChart.xAxis().ticks(4)
 
     dc.dataCount(".dc-data-count")
