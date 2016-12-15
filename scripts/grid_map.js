@@ -555,6 +555,7 @@ function charts(data, selectedCharts) {
         d.dev_intensity = +d.dev_intensity ? +d.dev_intensity : 0;//groups
         d.income = +d.income;
         d.b_price = +d.b_price;
+        d.insta_cnt = +d.insta_cnt ? +d.insta_cnt : 0;
 
         if (d.b_diversity) {
             if (maxBDiv == null || d.b_diversity > maxBDiv) {
