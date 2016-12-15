@@ -655,7 +655,7 @@ function charts(data, selectedCharts) {
             .gap(0)
             .margins({ top: 0, left: 50, right: 10, bottom: 20 })
             .x(d3.scale.linear().domain([1, 1001]))
-            .y(d3.scale.linear().domain([0, 200]));
+            .y(d3.scale.linear().domain([0, 20]));
 
         window.insLikesChart.yAxis().ticks(2);
 
