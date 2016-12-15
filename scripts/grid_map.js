@@ -513,13 +513,15 @@ function updateChart(selectedCharts) {
 window.populationChart = dc.barChart("#population")
 window.incomeChart = dc.barChart("#income")
 window.busDivChart = dc.bubbleChart("#business_diversity")
+
 window.devIntChart = dc.barChart("#development_intensity")
 window.ligAveChart = dc.barChart("#light_average")
 window.placesChart = dc.barChart("#places")
 
 if (currentCity_o == "LA"){
     window.insChart = dc.barChart("#ins")
-    window.busi_openingChart = dc.barChart("#business_opening")
+    //window.busi_openingChart = dc.barChart("#business_opening")
+    window.busPriChart = dc.barChart("#business_price")
 
 }
 
@@ -552,6 +554,7 @@ function charts(data, selectedCharts) {
         d.b_diversity = +d.b_diversity// ? +d.b_diversity : 0;
         d.dev_intensity = +d.dev_intensity ? +d.dev_intensity : 0;//groups
         d.income = +d.income;
+        d.b_price = +d.b_price;
 
         if (d.b_diversity) {
             if (maxBDiv == null || d.b_diversity > maxBDiv) {
@@ -636,17 +639,21 @@ function charts(data, selectedCharts) {
         window.insChart.yAxis().ticks(2);
 
 
-        var busi_openingDimension = ndx.dimension(function (d) { return d.insta_cnt });
-        var busi_openingGroup = busi_openingDimension.group();
+        var busPriDimension = ndx.dimension(function (d) { return d.b_price });
+        var busPriGroup = busPriDimension.group();
 
-        window.busi_openingChart.width(chartWidth).height(chartHeight)
-            .group(busi_openingGroup).dimension(busi_openingDimension)
-            .elasticY(true)
+        window.busPriChart.width(chartWidth).height(chartHeight)
+            .group(busPriGroup).dimension(busPriDimension)
+            //.elasticY(true)
             .ordinalColors(["#aaaaaa"])
             .gap(0)
             .margins({ top: 0, left: 50, right: 10, bottom: 20 })
-            .x(d3.scale.linear().domain([0, 24]));
-        //window.insChart.yAxis().ticks(2);
+            .x(d3.scale.linear().domain([0.5, 4.5]));
+            //.y(d3.scale.linear().domain([0, 600]));
+
+        window.insChart.yAxis().ticks(2);
+
+
 
     }
 
@@ -697,7 +704,7 @@ function charts(data, selectedCharts) {
         .ordinalColors(["#aaaaaa"])
         .gap(0)
         .margins({ top: 0, left: 50, right: 10, bottom: 20 })
-        .x(d3.scale.linear().domain([1, 100]))
+        .x(d3.scale.linear().domain([1, 101]))
     placesChart.yAxis().ticks(2)
 
 
