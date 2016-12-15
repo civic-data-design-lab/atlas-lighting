@@ -539,6 +539,8 @@ function charts(data, selectedCharts) {
     var maxBDiv = null;
     var minBDiv = null;
     var maxDInt = null;
+    var maxLight = null;
+    var maxPlaces = null;
 
 
     data.forEach(function (d) {
@@ -563,6 +565,16 @@ function charts(data, selectedCharts) {
         if (d.dev_intensity) {
             if (maxDInt == null || d.dev_intensity > maxDInt) {
                 maxDInt = d.dev_intensity
+            }
+        }
+        if (d.averlight) {
+            if (maxLight == null || d.averlight > maxLight) {
+                maxLight = d.averlight
+            }
+        }
+        if (d.places) {
+            if (maxPlaces == null || d.places > maxPlaces) {
+                maxPlaces = d.places
             }
         }
 
@@ -603,21 +615,27 @@ function charts(data, selectedCharts) {
     var devIntDimension = ndx.dimension(function (d) { return parseInt(d.dev_intensity) })
     var devIntGroup = devIntDimension.group()
 
-    var placesDimension = ndx.dimension(function (d) { return d.places })
+    var placesDimension = ndx.dimension(function (d) { 
+        if (d.places>100) return 100; 
+        else return d.places })
     var placesGroup = placesDimension.group()
 
     if (currentCity_o == "LA"){
 
-        var insDimension = ndx.dimension(function (d) { return d.insta_cnt });
+        var insDimension = ndx.dimension(function (d) { 
+            if(d.insta_cnt > 25 ) return 25;
+            else return d.insta_cnt });
         var insGroup = insDimension.group();
 
         window.insChart.width(chartWidth).height(chartHeight)
             .group(insGroup).dimension(insDimension)
-            .elasticY(true)
+            //.elasticY(true)
             .ordinalColors(["#aaaaaa"])
             .gap(0)
             .margins({ top: 0, left: 50, right: 10, bottom: 20 })
-            .x(d3.scale.linear().domain([1, 2000]));
+            .x(d3.scale.linear().domain([1, 26]))
+            .y(d3.scale.linear().domain([0, 600]));
+
         window.insChart.yAxis().ticks(2);
 
 
@@ -632,7 +650,7 @@ function charts(data, selectedCharts) {
             .gap(0)
             .margins({ top: 0, left: 50, right: 10, bottom: 20 })
             .x(d3.scale.linear().domain([0, 24]));
-        window.insChart.yAxis().ticks(2);
+        //window.insChart.yAxis().ticks(2);
 
     }
 
@@ -683,7 +701,7 @@ function charts(data, selectedCharts) {
         .ordinalColors(["#aaaaaa"])
         .gap(0)
         .margins({ top: 0, left: 50, right: 10, bottom: 20 })
-        .x(d3.scale.linear().domain([0, 100]))
+        .x(d3.scale.linear().domain([1, 100]))
     placesChart.yAxis().ticks(2)
 
 
@@ -726,7 +744,7 @@ function charts(data, selectedCharts) {
         .colors(d3.scale.linear().domain([0, 200, 400]).range(["#3182bd", "#fee391", "#fc9272"]))
         .colorAccessor(function (d) { return d.key })
         .margins({ top: 0, left: 50, right: 10, bottom: 20 })
-        .x(d3.scale.linear().domain([0, 500]))
+        .x(d3.scale.linear().domain([0, maxLight]))
         .yAxis().ticks(3)
 
     populationChart.width(chartWidth).height(chartHeight).group(pGroup).dimension(populationDimension)
