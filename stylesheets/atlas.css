@@ -749,3 +749,10 @@ div#streetview_window {
 
 #street_view_plc {
 }
+
+#selected_time {
+    font-size: 28px;
+    position: absolute;
+    transform: translateY(10px);
+    left: 18px;
+}

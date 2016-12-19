@@ -22,6 +22,7 @@ if (!initurl.split("*")[1]) {//if no dataset is specified in the url
 
 window.cell_selected = false;
 window.dataLst = [];
+window.mydata;
 window.zoomedData = ["street_view", "instagram_pics"];
 window.newData;
 
@@ -83,6 +84,7 @@ function dataDidLoad(error, grid) {
     d3.select("#loader").transition().duration(600).style("opacity", 0).remove();
 
     window.dataLst = Object.keys(grid[0])
+    window.mydata = grid;
     console.log(window.dataLst);
 
     charts(grid, selectedCharts)
@@ -510,6 +512,9 @@ function updateChart(selectedCharts) {
     })
 }
 
+
+
+
 window.populationChart = dc.barChart("#population")
 window.incomeChart = dc.barChart("#income")
 window.busDivChart = dc.bubbleChart("#business_diversity")
@@ -587,7 +592,7 @@ function charts(data, selectedCharts) {
     })
 
     var chartWidth = 380;
-    var chartHeight = 65
+    var chartHeight = 65;
 
     var ndx = crossfilter(data);
     var all = ndx.groupAll();
@@ -711,9 +716,6 @@ function charts(data, selectedCharts) {
     busDivChart.xAxis().ticks(4);        
     busDivChart.yAxis().ticks(0); 
 
-
-
-
     placesChart.width(chartWidth).height(chartHeight)
         .group(placesGroup).dimension(placesDimension)
         .elasticY(true)
@@ -723,9 +725,6 @@ function charts(data, selectedCharts) {
         .x(d3.scale.linear().domain([1, 101]))
     placesChart.yAxis().ticks(2)
 
-
-
-
     var chartColors = { "1": "#fff7bc", "2": "#fee391", "3": "#fec44f", "4": "#fee0d2", "5": "#fc9272", "6": "#de2d26", "7": "#deebf7", "8": "#9ecae1", "9": "#3182bd" }
     devIntChart.width(chartWidth).height(chartHeight)
         .group(devIntGroup).dimension(devIntDimension)
@@ -733,29 +732,7 @@ function charts(data, selectedCharts) {
         .x(d3.scale.linear().domain([0, maxDInt]))
         .margins({ top: 0, left: 50, right: 10, bottom: 20 })
         .xAxis().ticks(10)
-    devIntChart.yAxis().ticks(2)
-
-        /*
-        .colorDomain([-500, 500])
-        .margins({ top: 0, left: 50, right: 10, bottom: 20 })
-        .x(d3.scale.linear().domain([0, 4]))
-        .y(d3.scale.linear().domain([0, 1]))
-        .r(d3.scale.linear().domain([0, 5000]))
-        .colors(["#808080"])
-        .keyAccessor(function (p) {
-            return p.key;
-        })
-        .valueAccessor(function (p) {
-            return 0.5
-        })
-        .radiusValueAccessor(function (p) {
-            return p.value / 100;
-        })
-        .label(function (p) {
-            return p.value
-        })
-        .yAxis().ticks(0)
-    devIntChart.xAxis().ticks(5)*/
+    devIntChart.yAxis().ticks(2);
 
     ligAveChart.width(chartWidth / 3 * 2).height(chartHeight / 5 * 4)
         .group(laGroup).dimension(ligAveDimension).centerBar(true)
@@ -792,16 +769,14 @@ function charts(data, selectedCharts) {
 
             d3.selectAll(".cellgrids").style("display", "none");
 
-            var ave_lit = 0;
-            window.newData.forEach(function (d) {
-                d3.select("#c" + d.cell_id).style("display", "block");
-                ave_lit += d.averlight
-            })
 
-            ave_lit /= window.newData.length;
-            ave_lit = Math.round(ave_lit * 100) / 100
-            d3.select("#light_digits").text(ave_lit);
-            d3.select("#light_digits").attr("sv_val", ave_lit);
+            var mytime = $("#selected_time").text().split(" - ");
+            var start = mytime[0];
+            var end = mytime[1];
+
+            filterhour(window.newData,start,end);
+            
+
 
         })
         .x(d3.scale.linear().domain([1, window.count]))
@@ -828,6 +803,126 @@ function charts(data, selectedCharts) {
     d3.selectAll("#business_diversity path").remove();
     d3.selectAll("#business_diversity line").remove();
 
+    selectTime(chartWidth,chartHeight);
+
+}
+
+
+function selectTime(chartWidth,chartHeight){
+    var margin = { top: 0, left: 100, right: 10, bottom: 20 },
+        width = chartWidth - margin.left - margin.right,
+        height = chartHeight - margin.top - margin.bottom;
+
+
+	var start = 0;
+	var end = 0;
+
+	var start0 = 0;
+	var end0 = 24;
+
+    var svg = d3.select("#business_opening").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+	svg.append("rect")
+	    .attr("width", width)
+	    .attr("height", height)
+        .attr("fill", "rgb(50,50,50)").attr("stroke","rgba(255,255,255,0.3)");
+
+	var context = svg.append('g')
+		.attr('class', 'context');
+
+	var x = d3.scale.linear()
+		.range([0, width])
+		.domain([start0,end0]);
+
+	var brush = d3.svg.brush()
+		.x(x).extent([start,end])
+		.on('brushend', brushend);
+
+	context.append('g')
+		.attr('class', 'x brush')
+		.call(brush)
+		.selectAll('rect')
+		.attr('y', 0)
+		.attr('height', height);
+
+	svg.append("g")
+	    .attr("class", "x axis hour myhour")
+	    .call(d3.svg.axis().tickValues([0,3,6,9,12,15,18,21,24]).tickSize(45,0)
+	      .scale(x)
+	      .orient("bottom"))
+	  .selectAll("text")
+	    .attr("x", -4).attr("y",51)
+	    .style("text-anchor", null);
+
+	d3.select(".extent").attr("height", 29);
+	d3.select(".background").attr("height", 50);
+	d3.selectAll(".resize rect").attr("height", 29);
+    d3.selectAll(".tick line").style("opacity","0.3");
+
+
+	var featureGroup;
+	var featurelst = [];
+
+	function brushend() {
+
+        brush.extent()[0] = Math.round(brush.extent()[0])
+        brush.extent()[1] = Math.round(brush.extent()[1])
+        var rdstart = Math.round(brush.extent()[0]);
+        var rdend = Math.round(brush.extent()[1]);
+
+        brush.extent([rdstart,rdend]);
+
+        if (rdend - rdstart == 0){
+            d3.select("#selected_time").text(0+" - "+24);
+            //d3.selectAll(".cellgrids").style("display", "block");
+
+            filterhour(window.newData,rdstart,rdend);
+        }else{
+            d3.select("#selected_time").text(rdstart+" - "+rdend);
+            filterhour(window.newData,rdstart,rdend);
+        }
+	}
+
+
+
 
 
 }
+
+    function filterhour(data,start,end){
+
+        d3.selectAll(".cellgrids").style("display", "none");
+
+        var ave_lit = 0;
+
+        data.forEach(function (d) {
+
+            var count = 0;
+
+            if(start == end || start == 0 && end == 24){
+                d3.select("#c" + d.cell_id).style("display", "block");
+                ave_lit += d.averlight
+            }
+
+            for(var i=start;i<end;i++){
+                count += +d['b_opening_'+i];
+            }
+
+            if(count!=0){
+                d3.select("#c" + d.cell_id).style("display", "block");
+                ave_lit += d.averlight
+
+            }
+        })
+
+        ave_lit /= window.newData.length;
+        ave_lit = Math.round(ave_lit * 100) / 100
+        d3.select("#light_digits").text(ave_lit);
+        d3.select("#light_digits").attr("sv_val", ave_lit);
+
+
+    }

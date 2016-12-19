@@ -20,6 +20,8 @@
   <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v1.3.0/mapbox-gl-geocoder.css'
     type='text/css' />
   <script src="../scripts/lib/d3.min.js"></script>
+<!--<script src="https://d3js.org/d3.v4.min.js"></script>
+-->
   <script src="../scripts/lib/d3-queue.js"></script>
   <script src="../scripts/lib/topojson.min.js"></script>
   <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
@@ -187,16 +189,18 @@
             </div>
           </div>
 
-<!--          <div id="business_opening">
+          <div id="business_opening" class = "dc-chart">
             <div class="chart-title">BUSINESS OPENING HOURS
-              <span class="source">
+<!--              <span class="source">
               <a class="reset" href="javascript:insChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Total number of Instagram posts in a grid cell Source: Google Places API</span></span>
+-->            
             </div>
+            <p id = "selected_time">0 - 24</p>
           </div>
--->
+
 
           <div id="street_view" class="extra_data dc-chart">
-            <div class="chart-title">GOOGLE STREETVIEW
+            <div class="chart-title">GOOGLE STREET VIEW
             </div>
             <img src="../icons/placeholder_streetview2.png" id = "street_view_plc">
             <div id="streetview_window"></div>
@@ -287,12 +291,12 @@
         <div class="data_item ui-widget-content tag_soc" id="d_ins">
           <p class="data_item_title">INSTAGRAM DENSITY</p>
         </div>
-<!--        <div class="data_item ui-widget-content tag_bus" id="d_business_opening">
+        <div class="data_item ui-widget-content tag_bus" id="d_business_opening">
           <p class="data_item_title">BUSINESS OPENING HOURS</p>
         </div>
--->
+
         <div class="data_item ui-widget-content tag_soc" id="d_street_view">
-          <p class="data_item_title">STREET VIEW</p>
+          <p class="data_item_title">GOOGLE STREET VIEW</p>
         </div>
         <div class="data_item ui-widget-content tag_soc" id="d_instagram_pics">
           <p class="data_item_title">INSTAGRAM POST THUMBNAILS</p>
