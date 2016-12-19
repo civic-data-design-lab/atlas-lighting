@@ -898,7 +898,7 @@ function selectTime(chartWidth,chartHeight){
         d3.selectAll(".cellgrids").style("display", "none");
 
         var ave_lit = 0;
-
+        var count_ = 0;
         data.forEach(function (d) {
 
             var count = 0;
@@ -906,6 +906,7 @@ function selectTime(chartWidth,chartHeight){
             if(start == end || start == 0 && end == 24){
                 d3.select("#c" + d.cell_id).style("display", "block");
                 ave_lit += d.averlight
+                count_ ++;
             }
 
             for(var i=start;i<end;i++){
@@ -914,12 +915,13 @@ function selectTime(chartWidth,chartHeight){
 
             if(count!=0){
                 d3.select("#c" + d.cell_id).style("display", "block");
-                ave_lit += d.averlight
+                ave_lit += d.averlight;
+                count_ ++;
 
             }
         })
 
-        ave_lit /= window.newData.length;
+        ave_lit /= count_;
         ave_lit = Math.round(ave_lit * 100) / 100
         d3.select("#light_digits").text(ave_lit);
         d3.select("#light_digits").attr("sv_val", ave_lit);
