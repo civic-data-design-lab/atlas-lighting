@@ -903,7 +903,7 @@ function selectTime(chartWidth,chartHeight){
 
             var count = 0;
 
-            if(start == end || start == 0 && end == 24){
+            if(start == end || start == 0 && end == 24 || currentCity_o == "Chicago"){
                 d3.select("#c" + d.cell_id).style("display", "block");
                 ave_lit += d.averlight
                 count_ ++;
