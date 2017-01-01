@@ -456,16 +456,32 @@ function cellSelect(d) {
                 var limit = 48;
                 var count = 0;
                 for (var k in insdata) {
-                    if (count < limit) {
-                        //console.log(k);
-                        d3.select("#instagram_pics").append("img").attr("src", insdata[k]["url"]).attr("class", "ins_thumb")
-                            .on('error', function() {
-                                console.log('error');
-                                d3.select(this).remove();
-                                count--;
-                            })
-                    }
-                    count++;
+                    (function(k){
+                        if (count < limit) {
+                            //console.log(k);
+                            d3.select("#instagram_pics").append("img").attr("src", insdata[k]["url"]).attr("class", "ins_thumb")
+                                .on('error', function() {
+                                    console.log('error');
+                                    d3.select(this).remove();
+                                    count--;
+                                })
+                                .on("mousemove",function(){
+                                    var myx = d3.event.clientX;
+                                    var myy = d3.event.clientY;
+                                    d3.select(".toolip_img").remove();
+                                    d3.select("body").append("img").attr("src", insdata[k]["url"]).attr("class", "toolip_img")
+                                        .style("left",(myx+5)+"px")
+                                        .style("top",(myy+5)+"px");
+                                })
+                                .on("mouseout",function(){
+                                    d3.select(".toolip_img").remove();
+                                })
+                        }
+                        count++;
+
+
+                    })(k)
+
                 }
             }
             else{
@@ -887,10 +903,6 @@ function selectTime(chartWidth,chartHeight){
         }
 	}
 
-
-
-
-
 }
 
     function filterhour(data,start,end){
@@ -900,7 +912,6 @@ function selectTime(chartWidth,chartHeight){
         var ave_lit = 0;
         var count_ = 0;
         data.forEach(function (d) {
-
             var count = 0;
 
             if(start == end || start == 0 && end == 24 || currentCity_o == "Chicago"){

@@ -729,6 +729,8 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     height: 31.6px;
 }
 
+
+
 #street_view {
     opacity: 0;
     position: absolute;
@@ -755,4 +757,19 @@ div#streetview_window {
     position: absolute;
     transform: translateY(10px);
     left: 18px;
+}
+
+.toolip_img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 150px;
+}
+
+.data_icon {
+    width: 275px;
+    position: absolute;
+    right: 0px;
+    top: 50%;
+    transform: translateY(-50%);
 }
