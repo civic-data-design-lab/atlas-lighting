@@ -773,3 +773,13 @@ div#streetview_window {
     top: 50%;
     transform: translateY(-50%);
 }
+
+.data_intro {
+    width: 265px;
+    position: absolute;
+    right: 380px;
+    text-align: left;
+    height: 80px;
+    background-color: black;
+    padding: 10px;
+}

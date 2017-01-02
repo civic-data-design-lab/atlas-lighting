@@ -110,6 +110,25 @@ function initControl() {
     var dropleft = $("#todrop").offset().left;
     var dropright = dropleft + $("#todrop").width();
 
+    $('.data_item').mouseenter(function(){
+        $(this).children(".data_intro")
+        .animate({
+            right:"0px"
+        },300,function(){
+            console.log("sdfsdfsdfsdf");
+        })
+    });
+
+    $('.data_item').mouseleave(function(){
+        $(this).children(".data_intro")
+        .animate({
+            right:"380px"
+        },300,function(){
+            console.log("sdfsdfsdfsdf");
+        })
+    });
+
+
     $('.data_item').draggable({
         drag: function (event, ui) {
             $("#selector").css("width", "100%");
@@ -128,6 +147,7 @@ function initControl() {
         }
 
     });
+
     $('#todrop').droppable({
         drop: function (event, ui) {
             $(ui.draggable).attr("style", "position: relative;display:none");
