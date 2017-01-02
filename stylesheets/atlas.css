@@ -778,6 +778,7 @@ div#streetview_window {
     width: 265px;
     position: absolute;
     right: 380px;
+    display: none;
     text-align: left;
     height: 80px;
     background-color: black;

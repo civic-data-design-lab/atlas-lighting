@@ -112,6 +112,7 @@ function initControl() {
 
     $('.data_item').mouseenter(function(){
         $(this).children(".data_intro")
+        .show()
         .animate({
             right:"0px"
         },300,function(){
@@ -124,6 +125,7 @@ function initControl() {
         .animate({
             right:"380px"
         },300,function(){
+            $(this).hide();
             console.log("sdfsdfsdfsdf");
         })
     });
