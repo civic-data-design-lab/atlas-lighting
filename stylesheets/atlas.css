@@ -777,7 +777,7 @@ div#streetview_window {
 .data_intro {
     width: 265px;
     position: absolute;
-    right: 380px;
+    right: -380px;
     display: none;
     text-align: left;
     height: 80px;

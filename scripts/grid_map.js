@@ -110,7 +110,8 @@ function initControl() {
     var dropleft = $("#todrop").offset().left;
     var dropright = dropleft + $("#todrop").width();
 
-    $('.data_item').mouseenter(function(){
+    $('.data_item').mouseenter(function(event){
+        event.preventDefault();
         $(this).children(".data_intro")
         .show()
         .animate({
@@ -120,10 +121,11 @@ function initControl() {
         })
     });
 
-    $('.data_item').mouseleave(function(){
+    $('.data_item').mouseleave(function(event){
+        event.preventDefault();
         $(this).children(".data_intro")
         .animate({
-            right:"380px"
+            right:"-380px"
         },300,function(){
             $(this).hide();
             console.log("sdfsdfsdfsdf");
