@@ -771,17 +771,17 @@ div.ui-slider-range.ui-widget-header {
     height: 48px;
     top: -16px;
     left: 4px;
-  display: inline-block !important;
+  	display: inline-block !important;
 }
 
 #time {
-  background: none;
-  border: none;
+  	background: none;
+  	border: none;
 }
 
 #time_label {
-  margin-top: 18px;
-  display: inline-block;
+  	margin-top: 18px;
+  	display: inline-block;
 }
 
 
