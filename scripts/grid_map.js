@@ -58,6 +58,7 @@ var myinit = function () {
     d3.queue()
         .defer(d3.csv, "../data/" + currentCity + ".csv"/*"grids/" + currentCity*/)
         //.defer(d3.json, "data/"+currentCity+"_zipcode.json"/*"zipcode_business_geojson/" + currentCity*/)
+        .defer(d3.csv, "../data/atlas_time_template.csv")
         .await(dataDidLoad);
 }
 
@@ -416,6 +417,41 @@ window.busDivChart = dc.barChart("#business_diversity")
 window.devIntChart = dc.bubbleChart("#development_intensity")
 window.ligAveChart = dc.barChart("#light_average")
 window.placesChart = dc.barChart("#places")
+window.timeFilter = document.getElementById('time_filter');
+
+$(function() {
+    $("#slider").slider({
+        range: true,
+        min: 0,
+        max: 24,
+        values: [0,3],
+        step: 3,
+        create: function(event, ui) {
+            setSliderTicks(event.target);
+        },
+        slide: function(event, ui) {
+            //add AM/PM label
+            var from = ui.values[0]
+            var to = ui.values[1]
+            $("#time").val(ui.values[0] + " - " + ui.values[1]);
+        }
+    });
+    $("#time").val( $("#slider").slider("values", 0) + " - " + $("#slider").slider("values", 1) );
+});
+
+function setSliderTicks(){
+    var $slider = $('#slider');
+    var max = $slider.slider("option", "max");
+    var step = $slider.slider("option", "step");
+    var spacing = 99/(max);
+
+    $slider.find('.ui-slider-tick-mark').remove();
+    for (var i = 0; i <= max ; i+=3) {
+        $('<span class="ui-slider-tick-mark"></span>').css('left', (spacing * i) +  '%').appendTo($slider); //append tick marks
+        $('<span class="ui-slider-label">'+i+'</span>').css('left', (spacing * i) +  '%').appendTo($slider); //append hour labels
+     }
+}
+
 
 function charts(data, selectedCharts) {
     d3.selectAll(".dc-chart").style("display", "none");

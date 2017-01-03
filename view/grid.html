@@ -6,6 +6,7 @@
   <title>Atlas of lighting - grid map</title>
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.6.3/firebase.js"></script>
 
   <!-- <script src="d3.tip.js"></script> -->
   <!--	<script src="../scripts/lib/bootstrap.min.js"></script>  
@@ -26,12 +27,17 @@
   <script src="../scripts/lib/dc.js"></script>
 
   <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <!--<link href="https://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" rel="stylesheet" />-->
+
+  <!--<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css">
+  <http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css-->
 
   <script src='../scripts/lib/mapbox.js'></script>
   <link href='../scripts/lib/mapbox.css' rel='stylesheet' />
   <link href='https://fonts.googleapis.com/css?family=Dosis:500,300|Ropa+Sans' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="../scripts/lib/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="../stylesheets/atlas.css"> </style>
+	<link rel="stylesheet" type="text/css" href="../scripts/lib/noUiSlider.9.1.0/nouisliderbkp.css"> </style>
 </head>
 
 <body>
@@ -52,7 +58,8 @@
     </div>
     <div id="loader">
       <div id="loader-text">
-        Loading data for Chicago and its surrounding MSA ...
+        Loading data for
+        <p id="nowmsa"></p>...
         <br/><br/>
       </div>
     </div>
@@ -70,7 +77,7 @@
       <!-- case info -->
       <div id="case-info" style="display:none">
         <div id="hide_cases"><img src="../icons/back.png" style="height:30px"> Close Case Studies</div>
-        <div id="text" class="content">
+        <div id="case-1" class="content">
           <br/><br/>
           <div id="city-title" class="title2">
 
@@ -101,10 +108,17 @@
               2010 population-weighted density MSA from each group (listed in that order below). The MSA with a density next
               closest to the median was chosen as the alternate... <a href="about.html">read more</a></p>
           </div>
+           <div id="bubble-key">
+            <div class="dropdownPrompt"> MSA CATEGORIES</div>
+          </div>
         </div>
-        <div id="bubble-key">
-          <div class="dropdownPrompt"> MSA CATEGORIES</div>
+        <div id="case-2" class="content">
+          Case 2 Data
+          <p></p>
+          <div id="prev">PREVIOUS</div>
+          <div id="next">NEXT</div>
         </div>
+       
       </div>
       <!-- end case info -->
 
@@ -133,6 +147,20 @@
               <a class="reset" href="javascript:incomeChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Household income is a measure of the combined incomes of all people sharing a particular household or place of residence. Source: 2010 - 2014 ACS - 5 Year Estimate</span></span>
             </div>
           </div>
+
+           <div id="time_filter" class="extra_data dc-chart">
+             <div class="chart-title">TIME FILTER
+               <span class="source">
+               <a class="reset" href="javascript:timeFilter.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Filter by time of activity. Source: Google Places API</span></span>
+             </div>
+						 <div id="time_label">
+      				<p>
+         				<!--<label for = "time">Time:</label>-->
+         				<input type = "text" id = "time">
+      				</p>
+             </div> 
+						 <div id="slider"></div>
+           </div> 
 
           <div id="development_intensity">
             <div class="chart-title">DEVELOPMENT INTENSITY
@@ -164,9 +192,28 @@
               <a class="reset" href="javascript:placesChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Total number of places in a grid cell Source: Google Places API</span></span>
             </div>
           </div>
+         
 
-          <div id="street_view" class="extra_data dc-chart"></div>
-          <div id="instagram_pics" class="extra_data dc-chart"></div>
+           <div id="business_density" class="extra_data dc-chart">
+             <div class="chart-title">BUSINESS DENSITY
+               <span class="source">
+               <a class="reset" href="javascript:placesChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Proportion of business types in a grid cell Source: Google Places API</span></span>
+             </div>
+           </div> 
+
+
+          <div id="street_view" class="extra_data dc-chart">
+            <div class="chart-title">GOOGLE STREETVIEW
+            </div>
+            <div id="streetview_window"></div>
+          </div>
+
+
+          <div id="instagram_pics" class="extra_data dc-chart">
+            <div class="chart-title">INSTAGRAM POSTS
+            </div>
+          </div>
+
 
           <div class="data_select_ui" id="todrop">
             <div class="drop_indi">Drop Selection Here</div>
@@ -200,13 +247,13 @@
         <div class="data_filters">
           <div id="city-title city-title-grid" class="title2 city-title-grid">
             <div class="dropdown">
-              <button onclick="myFunction()" class="dropbtn"><img src="../icons/arrow_down.png" style="width:10px"> CHICAGO-JOLIET-NAPERVILLE,IL-IN-WI</button>
+              <button onclick="myFunction()" class="dropbtn" id="nowmsa"><img src="../icons/arrow_down.png" style="width:10px"> CHICAGO-JOLIET-NAPERVILLE,IL-IN-WI</button>
               <div id="myDropdown" class="dropdown-content">
                 <a href="javascript:window.location.assign('grid.html#Chicago');window.location.reload();">CHICAGO-JOLIET-NAPERVILLE,IL-IN-WI</a>
-                <a href="javascript:window.location.assign('grid.html#Sanjose');window.location.reload();">San Jose-CA</a>
-                <a href="javascript:window.location.assign('grid.html#Denver');window.location.reload();">Denver-CO</a>
-                <a href="javascript:window.location.assign('grid.html#La');window.location.reload();">Los Angeles-CA</a>
-                <a href="javascript:window.location.assign('grid.html#Pittsburgh');window.location.reload();">Pittsburgh-PA</a>
+                <a href="javascript:window.location.assign('grid.html#Sanjose');window.location.reload();">SAN JOSE-SUNNYVALE-SANTA CLARA, CA</a>
+                <a href="javascript:window.location.assign('grid.html#Denver');window.location.reload();">DENVER-AURORA-BROOMFIELD, CO</a>
+                <a href="javascript:window.location.assign('grid.html#LA');window.location.reload();">LOS ANGELES-LONG BEACH-SANTA ANA, CA</a>
+                <a href="javascript:window.location.assign('grid.html#Pittsburgh');window.location.reload();">PITTSBURGH, PA</a>
               </div>
             </div>
           </div>
@@ -227,6 +274,9 @@
         <div class="data_item ui-widget-content tag_dem" id="d_income">
           <p class="data_item_title">INCOME</p>
         </div>
+        <div class="data_item ui-widget-content tag_bus" id="d_time_filter">
+          <p class="data_item_title">TIME FILTER</p>
+        </div>
         <div class="data_item ui-widget-content tag_bus" id="d_business_diversity">
           <p class="data_item_title">BUSINESS DIVERSITY</p>
         </div>
@@ -239,7 +289,7 @@
         <div class="data_item ui-widget-content" id="d_instagram_pics">
           <p class="data_item_title">INSTAGRAM POST THUMBNAILS</p>
         </div>
-        <div class="data_item ui-widget-content tag_bus" id="d_places">
+        <div class="data_item ui-widget-content tag_bus" id="d_business_density">
           <p class="data_item_title">BUSINESS DENSITY</p>
         </div>
       </div>
@@ -247,6 +297,9 @@
       <div id="case_studies" style="display:none">
         <div class="data_item" id="case_study_1">
           <p class="data_item_title">CASE STUDIES 1: CHICAGO</p>
+        </div>
+        <div class="data_item" id="case_study_2">
+          <p class="data_item_title">CASE STUDIES 2: CHICAGO</p>
         </div>
       </div>
     </div>
