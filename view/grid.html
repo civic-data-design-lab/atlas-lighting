@@ -29,6 +29,10 @@
   <script src="../scripts/lib/dc.js"></script>
 
   <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <!--<link href="https://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" rel="stylesheet" />-->
+
+  <!--<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css">
+  <http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css-->
 
   <script src='../scripts/lib/mapbox.js'></script>
   <link href='../scripts/lib/mapbox.css' rel='stylesheet' />
@@ -74,7 +78,7 @@
       <!-- case info -->
       <div id="case-info" style="display:none">
         <div id="hide_cases"><img src="../icons/back.png" style="height:30px"> Close Case Studies</div>
-        <div id="text" class="content">
+        <div id="case-1" class="content">
           <br/><br/>
           <div id="city-title" class="title2">
 
@@ -105,10 +109,17 @@
               2010 population-weighted density MSA from each group (listed in that order below). The MSA with a density next
               closest to the median was chosen as the alternate... <a href="about.html">read more</a></p>
           </div>
+           <div id="bubble-key">
+            <div class="dropdownPrompt"> MSA CATEGORIES</div>
+          </div>
         </div>
-        <div id="bubble-key">
-          <div class="dropdownPrompt"> MSA CATEGORIES</div>
+        <div id="case-2" class="content">
+          Case 2 Data
+          <p></p>
+          <div id="prev">PREVIOUS</div>
+          <div id="next">NEXT</div>
         </div>
+       
       </div>
       <!-- end case info -->
 
@@ -137,6 +148,20 @@
               <a class="reset" href="javascript:incomeChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Household income is a measure of the combined incomes of all people sharing a particular household or place of residence. Source: 2010 - 2014 ACS - 5 Year Estimate</span></span>
             </div>
           </div>
+
+           <div id="time_filter"> 
+             <div class="chart-title">TIME FILTER
+               <span class="source">
+               <a class="reset" href="javascript:timeFilter.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Filter by time of activity. Source: Google Places API</span></span>
+             </div>
+						 <div id="time_label">
+      				<p>
+         				<!--<label for = "time">Time:</label>-->
+         				<input type = "text" id = "time">
+      				</p>
+             </div> 
+						 <div id="slider"></div>
+           </div> 
 
           <div id="development_intensity">
             <div class="chart-title">DEVELOPMENT INTENSITY
@@ -172,6 +197,27 @@
             <div class="chart-title">PLACE DENSITY
               <span class="source">
               <a class="reset" href="javascript:placesChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Total number of places in a grid cell Source: Google Places API</span></span>
+            </div>
+          </div>
+         
+
+           <div id="business_density" class="extra_data dc-chart">
+             <div class="chart-title">BUSINESS DENSITY
+               <span class="source">
+               <a class="reset" href="javascript:placesChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Proportion of business types in a grid cell Source: Google Places API</span></span>
+             </div>
+           </div> 
+
+
+          <div id="street_view" class="extra_data dc-chart">
+            <div class="chart-title">GOOGLE STREETVIEW
+            </div>
+            <div id="streetview_window"></div>
+          </div>
+
+
+          <div id="instagram_pics" class="extra_data dc-chart">
+            <div class="chart-title">INSTAGRAM POSTS
             </div>
           </div>
 
@@ -256,6 +302,10 @@
                 <a href="javascript:window.location.assign('grid.html#Sanjose');window.location.reload();">SAN JOSE-SUNNYVALE-SANTA CLARA, CA</a>
                 <a href="javascript:window.location.assign('grid.html#Denver');window.location.reload();">DENVER-AURORA-BROOMFIELD, CO</a>
 -->              
+                <a href="javascript:window.location.assign('grid.html#Sanjose');window.location.reload();">SAN JOSE-SUNNYVALE-SANTA CLARA, CA</a>
+                <a href="javascript:window.location.assign('grid.html#Denver');window.location.reload();">DENVER-AURORA-BROOMFIELD, CO</a>
+                <a href="javascript:window.location.assign('grid.html#LA');window.location.reload();">LOS ANGELES-LONG BEACH-SANTA ANA, CA</a>
+                <a href="javascript:window.location.assign('grid.html#Pittsburgh');window.location.reload();">PITTSBURGH, PA</a>
               </div>
             </div>
           </div>
@@ -281,6 +331,9 @@
           <img src="../icons/data_icon/income.jpg" class = "data_icon">
           <p class = "data_intro">Household income is a measure of the combined incomes of all people sharing a particular household or place of residence. Source: 2010 - 2014 ACS - 5 Year Estimate</p>
 
+        </div>
+        <div class="data_item ui-widget-content tag_bus" id="d_time_filter">
+          <p class="data_item_title">TIME FILTER</p>
         </div>
         <div class="data_item ui-widget-content tag_bus" id="d_business_diversity">
           <p class="data_item_title">BUSINESS DIVERSITY</p>
@@ -334,6 +387,8 @@
           <img src="../icons/data_icon/ins_likes.jpg" class = "data_icon">
           <p class = "data_intro">Instagram likes in a grid cell. Source: Instagram API</p>
 
+        <div class="data_item ui-widget-content tag_bus" id="d_business_density">
+          <p class="data_item_title">BUSINESS DENSITY</p>
         </div>
 
 
@@ -342,6 +397,9 @@
       <div id="case_studies" style="display:none">
         <div class="data_item" id="case_study_1">
           <p class="data_item_title">CASE STUDIES 1: CHICAGO</p>
+        </div>
+        <div class="data_item" id="case_study_2">
+          <p class="data_item_title">CASE STUDIES 2: CHICAGO</p>
         </div>
       </div>
     </div>
