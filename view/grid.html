@@ -71,6 +71,11 @@
 
     <div id="map"></div>
     <div id="info" class="data_select_ui">
+
+      <div class = "fold_bar">
+        <img src="../icons/triangle_left.png" class="selector_arrow rightbar">
+      </div>
+
       <!-- case info -->
       <div id="case-info" style="display:none">
         <div id="hide_cases"><img src="../icons/back.png" style="height:30px"> Close Case Studies</div>
@@ -126,81 +131,111 @@
           <div id="light_average" class="lock">
             <div class="chart-title">LIGHTING AVERAGE
               <span class="source">
-                <a class="reset" href="javascript:ligAveChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Quantity of light from earths surface measured on a radiometric sensor. Source: NOAA, VIIRS Nighttime Lights, 2015 Average</span></span>
+                <a class="reset" href="javascript:ligAveChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
+              </span>
             </div>
-            <p id="light_digits">____</p>
+            <p id="light_digits">___</p>
           </div>
 
           <div id="income">
             <div class="chart-title">MEDIAN HOUSEHOLD INCOME
               <span class="source">
-              <a class="reset" href="javascript:incomeChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Household income is a measure of the combined incomes of all people sharing a particular household or place of residence. Source: 2010 - 2014 ACS - 5 Year Estimate</span></span>
+                <a class="reset" href="javascript:incomeChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
+                <span class = "rm_data">| x</span>
+              </span>
             </div>
+            <p id="" class = "plc_digits">___</p>
           </div>
 
           <div id="development_intensity">
             <div class="chart-title">DEVELOPMENT INTENSITY
               <span class="source">
-              <a class="reset" href="javascript:devIntChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">NLCD provides spatial reference and descriptive data for characteristics of the land surface such as low,medium and high intensity development. Source: National Land Cover Database 2011</span></span>
+                <a class="reset" href="javascript:devIntChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
+                <span class = "rm_data">| x</span>
+              </span>
             </div>
+            <p id="" class = "plc_digits">___</p>
           </div>
 
 
           <div id="population">
             <div class="chart-title">POPULATION
               <span class="source">
-              <a class="reset" href="javascript:populationChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Population density is the measure of the number people per unit area, commonly represented as people per square mile Source: 2010 - 2014 ACS - 5 Year Estimate</span></span>
+                <a class="reset" href="javascript:populationChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
+                <span class = "rm_data">| x</span>
+              </span>
             </div>
+            <p id="" class = "plc_digits">___</p>
           </div>
 
 
           <div id="business_diversity">
             <div class="chart-title">BUSINESS DIVERSITY
               <span class="source">
-              <a class="reset" href="javascript:busDivChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Diversity of business types in a grid cell Source: Google Places API</span></span>
+                <a class="reset" href="javascript:busDivChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
+                <span class = "rm_data">| x</span>
+              </span>
             </div>
+            <p id="" class = "plc_digits">___</p>
           </div>
 
           <div id="business_price">
             <div class="chart-title">BUSINESS PRICE
               <span class="source">
-              <a class="reset" href="javascript:busPriChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Average price of business in a grid cell Source: Google Places API</span></span>
+                <a class="reset" href="javascript:busPriChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
+                <span class = "rm_data">| x</span>
+              </span>
             </div>
+            <p id="" class = "plc_digits">___</p>
           </div>
 
           <div id="places">
             <div class="chart-title">PLACE DENSITY
               <span class="source">
-              <a class="reset" href="javascript:placesChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Total number of places in a grid cell Source: Google Places API</span></span>
+                <a class="reset" href="javascript:placesChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
+                <span class = "rm_data">| x</span>
+              </span>
             </div>
+            <p id="" class = "plc_digits">___</p>
           </div>
 
           <div id="ins">
             <div class="chart-title">INSTAGRAM DENSITY
               <span class="source">
-              <a class="reset" href="javascript:insChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Total number of Instagram posts in a grid cell Source: Google Places API</span></span>
+                <a class="reset" href="javascript:insChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
+                <span class = "rm_data">| x</span>
+              </span>
             </div>
+            <p id="" class = "plc_digits">___</p>
           </div>
 
           <div id="ins_likes">
             <div class="chart-title">INSTAGRAM LIKES
               <span class="source">
-              <a class="reset" href="javascript:insLikesChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Total number of Instagram likes in a grid cell Source: Google Places API</span></span>
+                <a class="reset" href="javascript:insLikesChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
+                <span class = "rm_data">| x</span>
+              </span>
             </div>
+            <p id="" class = "plc_digits">___</p>
           </div>
 
           <div id="business_opening" class = "dc-chart">
             <div class="chart-title">BUSINESS OPENING HOURS
-<!--              <span class="source">
-              <a class="reset" href="javascript:insChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>| INFO<span class="sourcetext">Total number of Instagram posts in a grid cell Source: Google Places API</span></span>
--->            
+              <span class="source">
+                <span class = "rm_data">| x</span>
+              </span>
             </div>
-            <p id = "selected_time">0 - 24</p>
+
+            <p id = "selected_time" class = "plc_digits">0 - 24</p>
+
           </div>
 
 
           <div id="street_view" class="extra_data dc-chart">
             <div class="chart-title">GOOGLE STREET VIEW
+              <span class="source">
+                <span class = "rm_data">| x</span>
+              </span>
             </div>
             <img src="../icons/placeholder_streetview2.png" id = "street_view_plc">
             <div id="streetview_window"></div>
@@ -210,10 +245,11 @@
 
           <div id="instagram_pics" class="extra_data dc-chart">
             <div class="chart-title">INSTAGRAM POSTS
+              <span class="source">
+                <span class = "rm_data">| x</span>
+              </span>
             </div>
           <img src="../icons/placeholder_instagram2.png" id = "instagram_plc">
-
-
           </div>
 
           <div class="data_select_ui" id="todrop">

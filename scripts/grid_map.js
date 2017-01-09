@@ -113,23 +113,13 @@ function initControl() {
     $('.data_item').mouseenter(function(event){
         event.preventDefault();
         $(this).children(".data_intro")
-        .show()
-        .animate({
-            right:"0px"
-        },300,function(){
-            console.log("sdfsdfsdfsdf");
-        })
+        .fadeIn(300);
     });
 
     $('.data_item').mouseleave(function(event){
         event.preventDefault();
         $(this).children(".data_intro")
-        .animate({
-            right:"-380px"
-        },300,function(){
-            $(this).hide();
-            console.log("sdfsdfsdfsdf");
-        })
+        .fadeOut(300);
     });
 
 
@@ -184,6 +174,47 @@ function initControl() {
         $(this).addClass("selectedTab");
         $(".click_data").removeClass("selectedTab");
     });
+
+    $(".rightbar").click(function(){
+        if(!$(this).attr("style") || ($(this).attr("style") && $(this).attr("style").indexOf("180") > -1)){
+            $(this).css("transform", "rotate(0deg)");
+
+            $("#info").animate({
+                right: "-430px"
+            }, 300, function () { });
+
+            $(".fold_bar").animate({
+                right: "0px"
+            }, 300, function () { });
+
+
+            $("#export").animate({
+                right: "-430px"
+            }, 300, function () { });
+
+        }
+        else{
+            $(this).css("transform", "rotate(180deg)");
+
+            $("#info").animate({
+                right: "0px"
+            }, 300, function () { });
+
+            $(".fold_bar").animate({
+                right: "430px"
+            }, 300, function () { });
+
+            $("#export").animate({
+                right: "0px"
+            }, 300, function () { });
+
+        }
+
+
+
+    });
+
+
 
     $(".left_clickbar.datasets>img").click(function () {
         if ($(this).attr("style") && $(this).attr("style").indexOf("180") > -1) {
@@ -275,16 +306,34 @@ function initControl() {
         $("#map-info").show();
     })
 
+    $(".rm_data").click(function(){
+        var myid = $(this).parent().parent().parent().attr("id");
+        
+        $("#"+myid).hide();
+        $("#d_"+myid).show();
+
+        var myindex = selectedCharts.indexOf(myid);
+        if (myindex > -1) {
+            selectedCharts.splice(myindex, 1);
+        }
+
+        updateChart(selectedCharts);
+
+    })
+
+
     $(".tag_item").click(function () {
 
         if ($(this).attr("class").indexOf("selected") > -1) {
             $(".tag_item").removeClass("selected");
             $(".data_item").show();
+            updateChart(selectedCharts);
         } else {
             $(".tag_item").removeClass("selected");
             $(this).toggleClass("selected");
             $(".data_item").hide();
             $("." + $(this).attr("id")).show();
+            updateChart(selectedCharts);
         }
 
     });
@@ -494,7 +543,7 @@ function cellSelect(d) {
                                     var myy = d3.event.clientY;
                                     d3.select(".toolip_img").remove();
                                     d3.select("body").append("img").attr("src", insdata[k]["url"]).attr("class", "toolip_img")
-                                        .style("left",(myx+5)+"px")
+                                        .style("left",(myx-5-150)+"px")
                                         .style("top",(myy+5)+"px");
                                 })
                                 .on("mouseout",function(){
@@ -631,8 +680,8 @@ function charts(data, selectedCharts) {
 
     })
 
-    var chartWidth = 380;
-    var chartHeight = 65;
+    var chartWidth = 304;
+    var chartHeight = 52;
 
     var ndx = crossfilter(data);
     var all = ndx.groupAll();
@@ -774,7 +823,7 @@ function charts(data, selectedCharts) {
         .xAxis().ticks(10)
     devIntChart.yAxis().ticks(2);
 
-    ligAveChart.width(chartWidth / 3 * 2).height(chartHeight / 5 * 4)
+    ligAveChart.width(chartWidth).height(chartHeight)
         .group(laGroup).dimension(ligAveDimension).centerBar(true)
         .elasticY(true)
         .colors(d3.scale.linear().domain([0, 200, 400]).range(["#3182bd", "#fee391", "#fc9272"]))
@@ -850,7 +899,7 @@ function charts(data, selectedCharts) {
 
 function selectTime(chartWidth,chartHeight){
     var margin = { top: 0, left: 100, right: 10, bottom: 20 },
-        width = chartWidth - margin.left - margin.right,
+        width = chartWidth - margin.right,
         height = chartHeight - margin.top - margin.bottom;
 
 
@@ -891,11 +940,11 @@ function selectTime(chartWidth,chartHeight){
 
 	svg.append("g")
 	    .attr("class", "x axis hour myhour")
-	    .call(d3.svg.axis().tickValues([0,3,6,9,12,15,18,21,24]).tickSize(45,0)
+	    .call(d3.svg.axis().tickValues([0,3,6,9,12,15,18,21,24]).tickSize(32,0)
 	      .scale(x)
 	      .orient("bottom"))
 	  .selectAll("text")
-	    .attr("x", -4).attr("y",51)
+	    .attr("x", -4).attr("y",35)
 	    .style("text-anchor", null);
 
 	d3.select(".extent").attr("height", 29);
