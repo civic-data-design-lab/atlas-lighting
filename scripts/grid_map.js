@@ -62,11 +62,11 @@ var myinit = function () {
     // TODO: Replace with your project's customized code snippet
     // Initialize Firebase
     var config = {
-        apiKey: "AIzaSyAiBlTxG8xEPP_5Zioj167WIxXMtI2pcVk",
-        authDomain: "atlaslighting-25bbb.firebaseapp.com",
-        databaseURL: "https://atlaslighting-25bbb.firebaseio.com",
-        storageBucket: "atlaslighting-25bbb.appspot.com",
-        messagingSenderId: "1085151504834"
+        apiKey: "AIzaSyClx2B45ikrkZ5mYRvMnC8hIAcSN23LZXE",
+        authDomain: "atlas-lighting.firebaseapp.com",
+        databaseURL: "https://atlas-lighting.firebaseio.com",
+        storageBucket: "atlas-lighting.appspot.com",
+        messagingSenderId: "784412993307"
     };
     firebase.initializeApp(config);
     var rootRef = firebase.database().ref();
