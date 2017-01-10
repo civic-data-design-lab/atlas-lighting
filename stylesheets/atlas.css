@@ -768,12 +768,21 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 
 div#streetview_window {
     height: 160px;
+    width: 410px;
 }
 
 #instagram_plc {
+    display: none;
 }
 
 #street_view_plc {
+    display: none;
+}
+#street_view_plc0 {
+}
+#streetview_window {
+    opacity: 0;
+    position: absolute;
 }
 
 #selected_time {
