@@ -473,7 +473,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 }
 
 .data_item_title{
-    font-size: 17px;
+    font-size: 15px;
     padding: 10px;
     position: absolute;
     left: 0px;
@@ -495,9 +495,9 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     top: 0px;
     bottom: 0px;
     width: 30px;
-    background-color: rgba(150,150,150,0.4);
+    background-color: rgb(150,150,150);
     right: 430px;
-    height: calc(100% - 40px);
+    height: 100%;
 }
 
 .left_back {
@@ -689,7 +689,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 
 #export {
     position: fixed;
-    width: 460px;    
+    width: 430px;    
     right: 0px;
     bottom: 0px;
     height: 40px;
@@ -723,26 +723,26 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     display: block;
     position: absolute;
     top:10px;
-    width: 285px;    
+    width: 245px;    
     height: 13px;
 
 }
 
 #cp_btn {
     position: absolute;
-    right: 110px;
+    right: 155px;
     top:10px;
 }
 
 #bk_btn {
     position: absolute;
-    right:10px;
+    right:35px;
     top:10px;
 }
 
 #exportcsv {
     position: absolute;
-    right: 50px;
+    right: 85px;
     top: 10px;
 }
 
@@ -798,6 +798,16 @@ div#streetview_window {
     left: 0px;
     top: 0px;
     width: 150px;
+}
+
+.toolip_cell {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 150px;
+    font-size: 8px;
+    background: black;
+    padding: 5px;
 }
 
 .data_icon {

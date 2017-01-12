@@ -487,7 +487,41 @@ function initCanvas(data) {
                             .style("height", (thisradius - 10) + "px");
                         cellSelect(d);
                     }
-                });
+                })
+                .on("mouseenter",function(){
+
+                    if (map.getZoom() >= 10) {
+
+                        var myx = d3.event.clientX;
+                        var myy = d3.event.clientY;
+
+                        var loc = unproject([myx, myy]);
+                        var mykey = "AIzaSyBM59LWQXfxJzh06UPYicEM9Ro6RRFCHQc";
+                        var latlng = loc.lat+","+loc.lng
+
+                        var myreq = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+latlng+"&key="+mykey
+                        
+
+                        d3.json(myreq, function(error, data) {
+                            if (error) throw error;
+                            d3.selectAll(".toolip_cell").remove();
+
+                            var infobox = d3.select("body").append("div").attr("class", "toolip_cell")
+                                .style("left",(myx)+"px")
+                                .style("top",(myy)+"px");
+                            
+                            var address = data.results[0].formatted_address;
+                            infobox.text(address);
+
+                        });
+
+                    }
+
+
+                })
+                .on("mouseout",function(){
+                    d3.selectAll(".toolip_cell").remove();
+                })
         });
     }
     render();
