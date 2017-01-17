@@ -85,7 +85,7 @@ function dataDidLoad(error, grid) {
 
     window.dataLst = Object.keys(grid[0])
     window.mydata = grid;
-    console.log(window.dataLst);
+    // console.log(window.dataLst);
 
     charts(grid, selectedCharts)
 
@@ -427,6 +427,7 @@ function initCanvas(data) {
     function render() {
         var lightScale = d3.scale.linear().domain([0, 200, 400]).range(["#3182bd", "#fee391", "#fc9272"])
         var radius = 6 / 1400 * Math.pow(2, map.getZoom());
+        var openBusinessScale = d3.scale.linear().domain([0, 2515]).range([0.7,1]);
         if (currentCity_o != "Chicago") {
             radius = 1.8 * radius;
         }
@@ -448,6 +449,7 @@ function initCanvas(data) {
                 .attr("width", radius)
                 .attr("height", radius)
                 .attr("fill", fillColor)
+                .attr("fill-opacity", openBusinessScale(parseInt(d.places)))
                 .attr("class", "cellgrids")
                 .on("click", function () {
 
@@ -523,6 +525,15 @@ function initCanvas(data) {
                     d3.selectAll(".toolip_cell").remove();
                 })
         });
+        var increment=0;
+        (function tick() {
+          var now = new Date();
+          if (increment<23) { filterhour(data, increment, increment+1); }
+          else {increment = 0;}
+          // setTimeout(tick, 1000 - (now % 1000));
+          setTimeout(tick, 300);
+          ++increment;
+        })();
     }
     render();
 
@@ -980,7 +991,6 @@ function selectTime(chartWidth,chartHeight){
 
 	var start = 0;
 	var end = 0;
-
 	var start0 = 0;
 	var end0 = 24;
 
@@ -1053,37 +1063,36 @@ function selectTime(chartWidth,chartHeight){
 
 }
 
-    function filterhour(data,start,end){
+function filterhour(data,start,end){
+    console.log(start, end)
+    d3.selectAll(".cellgrids").style("display", "none");
 
-        d3.selectAll(".cellgrids").style("display", "none");
+    var ave_lit = 0;
+    var count_ = 0;
+    data.forEach(function (d) {
+        var count = 0;
 
-        var ave_lit = 0;
-        var count_ = 0;
-        data.forEach(function (d) {
-            var count = 0;
+        if(start == end || start == 0 && end == 24 || currentCity_o == "Chicago"){
+            d3.select("#c" + d.cell_id).style("display", "block");
+            ave_lit += d.averlight
+            count_ ++;
+        }
 
-            if(start == end || start == 0 && end == 24 || currentCity_o == "Chicago"){
-                d3.select("#c" + d.cell_id).style("display", "block");
-                ave_lit += d.averlight
-                count_ ++;
-            }
+        for(var i=start;i<end;i++){
+            count += +d['b_opening_'+i];
+        }
 
-            for(var i=start;i<end;i++){
-                count += +d['b_opening_'+i];
-            }
+        if(count!=0){
+            d3.select("#c" + d.cell_id).style("display", "block");
+            ave_lit += d.averlight;
+            count_ ++;
+        }
+    })
 
-            if(count!=0){
-                d3.select("#c" + d.cell_id).style("display", "block");
-                ave_lit += d.averlight;
-                count_ ++;
-
-            }
-        })
-
-        ave_lit /= count_;
-        ave_lit = Math.round(ave_lit * 100) / 100
-        d3.select("#light_digits").text(ave_lit);
-        d3.select("#light_digits").attr("sv_val", ave_lit);
+    ave_lit /= count_;
+    ave_lit = Math.round(ave_lit * 100) / 100
+    d3.select("#light_digits").text(ave_lit);
+    d3.select("#light_digits").attr("sv_val", ave_lit);
 
 
-    }
+}
