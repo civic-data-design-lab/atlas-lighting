@@ -1064,7 +1064,7 @@ function selectTime(chartWidth,chartHeight){
 }
 
 function filterhour(data,start,end){
-    console.log(start, end)
+    d3.select("#selected_time").text(start+" - "+end);
     d3.selectAll(".cellgrids").style("display", "none");
 
     var ave_lit = 0;
