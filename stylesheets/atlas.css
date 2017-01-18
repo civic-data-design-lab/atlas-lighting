@@ -435,7 +435,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 
 .cellgrids:hover {
     fill:white;
-    
+    cursor: crosshair;
 }
 
 .mapboxgl-ctrl-bottom-left {
@@ -857,5 +857,5 @@ div#streetview_window {
     border: 1px solid #fff;
     background-color: rgba(32, 192, 226, 0.05);
     cursor: move;
-    
+
 }
