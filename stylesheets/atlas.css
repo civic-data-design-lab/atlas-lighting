@@ -836,3 +836,10 @@ div#streetview_window {
 #business_opening svg {
     margin-left: 0px;
 }
+
+
+
+.data-item-title:hover {
+    margin-left: 20px;
+    font-size: 29px;
+}
