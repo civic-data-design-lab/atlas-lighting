@@ -843,14 +843,19 @@ div#streetview_window {
     padding-left: 2px;
     border: 1px solid #fff;
     background-color: rgba(32, 192, 226, 0.05);
+    cursor: move;
 }
 .data_item.ui-widget-content.tag_bus.ui-draggable.ui-draggable-handle:hover {
     padding-left: 2px;
     border: 1px solid #fff;
     background-color: rgba(32, 192, 226, 0.05);
+    cursor: move;
+
 }
 .data_item.ui-widget-content.tag_soc.ui-draggable.ui-draggable-handle:hover {
     padding-left: 2px;
     border: 1px solid #fff;
     background-color: rgba(32, 192, 226, 0.05);
+    cursor: move;
+    
 }
