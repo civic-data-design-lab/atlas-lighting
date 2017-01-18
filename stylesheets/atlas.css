@@ -837,9 +837,20 @@ div#streetview_window {
     margin-left: 0px;
 }
 
+/*--------------------------------------------- Kalli additions -------------------*/
 
-
-.data-item-title:hover {
-    margin-left: 20px;
-    font-size: 29px;
+.data_item.ui-widget-content.tag_dem.ui-draggable.ui-draggable-handle:hover {
+    padding-left: 2px;
+    border: 1px solid #fff;
+    background-color: rgba(32, 192, 226, 0.05);
+}
+.data_item.ui-widget-content.tag_bus.ui-draggable.ui-draggable-handle:hover {
+    padding-left: 2px;
+    border: 1px solid #fff;
+    background-color: rgba(32, 192, 226, 0.05);
+}
+.data_item.ui-widget-content.tag_soc.ui-draggable.ui-draggable-handle:hover {
+    padding-left: 2px;
+    border: 1px solid #fff;
+    background-color: rgba(32, 192, 226, 0.05);
 }
