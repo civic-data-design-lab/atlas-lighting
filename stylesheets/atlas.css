@@ -870,7 +870,7 @@ div#streetview_window {
     z-index: 100;
     height: 30px;
     top: calc(100% - 30px);
-    background: linear-gradient(to bottom, rgb(0,0,0), rgba(32, 192, 226, 0.2));
+    background: linear-gradient(to bottom, rgba(0,0,0, 0.1), rgba(32, 192, 226, 0.15));
 }
 
 /*.gradient_container:after {
