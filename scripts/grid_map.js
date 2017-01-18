@@ -342,6 +342,19 @@ function initControl() {
 
     });
 
+    $(".data_searchbox input").val("Enter your search term").css({
+       'font-size' : '10px',
+       'color' : 'gray'
+    });
+    $(".data_searchbox input").focus(function () { 
+        $(this).val("");
+    });
+    $(".data_searchbox input").focusout(function () { 
+        $(".data_searchbox input").val("Enter your search term").css({
+       'font-size' : '10px',
+       'color' : 'gray'
+        });
+    });
     $(".data_searchbox input").keyup(function () {
         if (!$(this).val()) {
             $(".data_item").show();
@@ -419,6 +432,7 @@ function initCanvas(data) {
     d3.select(container).append("div").attr("class", "svg_overlay");
 
     var myg = mapsvg.append("g").attr("opacity", "0.6");
+    // var mygOBI = mapsvg.append("g").attr("opacity", "0.6");
 
     __bounds = map.getBounds();
     window.__DisX = Math.abs(project(__bounds._sw).x - project(__bounds._ne).x);
@@ -427,7 +441,10 @@ function initCanvas(data) {
     function render() {
         var lightScale = d3.scale.linear().domain([0, 200, 400]).range(["#3182bd", "#fee391", "#fc9272"])
         var radius = 6 / 1400 * Math.pow(2, map.getZoom());
-        var openBusinessScale = d3.scale.linear().domain([0, 2515]).range([0.7,1]);
+
+        var openBusinessScale = d3.scale.linear().domain([0, 2515]).range([0.2,1]);
+        var openBusinessScaleColor = d3.scale.linear().domain([0, 2515]).range(["#E5DEF7", "#8D6EDE", "#2C1764"]);
+
         if (currentCity_o != "Chicago") {
             radius = 1.8 * radius;
         }
@@ -435,13 +452,24 @@ function initCanvas(data) {
         var zoomAlphaScale = d3.scale.linear().domain([8, 16]).range([.8, .2])
         alpha = zoomAlphaScale(map.getZoom())
         myg.selectAll("rect").remove();
+        // mygOBI.selectAll("rect").remove();
 
         data.forEach(function (d, i) {
             var coordinates = { lat: d.lat, lng: d.lng }
             var light = d.averlight
             var fillColor = lightScale(light)
+            var fillOBIColor = openBusinessScaleColor(parseInt(d.places))
 
             //console.log(project(d).x,project(d).y);
+            // mygOBI.append("rect")
+            //     .attr("x", project(d).x)
+            //     .attr("y", project(d).y)
+            //     .attr("id", "c" + d.cell_id)
+            //     .attr("width", radius)
+            //     .attr("height", radius)
+            //     .attr("fill", fillOBIColor)
+                // .attr("fill-opacity", openBusinessScale(parseInt(d.places)));
+
             myg.append("rect")
                 .attr("x", project(d).x)
                 .attr("y", project(d).y)
@@ -449,7 +477,7 @@ function initCanvas(data) {
                 .attr("width", radius)
                 .attr("height", radius)
                 .attr("fill", fillColor)
-                .attr("fill-opacity", openBusinessScale(parseInt(d.places)))
+                // .attr("fill-opacity", openBusinessScale(parseInt(d.places)))
                 .attr("class", "cellgrids")
                 .on("click", function () {
 
@@ -531,7 +559,7 @@ function initCanvas(data) {
           if (increment<23) { filterhour(data, increment, increment+1); }
           else {increment = 0;}
           // setTimeout(tick, 1000 - (now % 1000));
-          setTimeout(tick, 300);
+          // setTimeout(tick, 300);
           ++increment;
         })();
     }
@@ -545,6 +573,7 @@ function initCanvas(data) {
         var myscale = disX / window.__DisX;
         var mytranslate = (Corners[0] - window.__Corners[0]) + "," + (Corners[1] - window.__Corners[1]);
         myg.attr("transform", "translate(" + mytranslate + ")scale(" + myscale + ")");
+        // mygOBI.attr("transform", "translate(" + mytranslate + ")scale(" + myscale + ")");
     }
 
     map.on("viewreset", function () {
