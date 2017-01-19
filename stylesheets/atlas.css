@@ -817,3 +817,22 @@ div#streetview_window {
 #business_opening svg {
     margin-left: 0px;
 }
+
+
+/*____________________________*/
+
+/* Business Types */
+
+#business_types svg {
+    margin-left: 0px;  
+}
+
+#business_types .textElements {
+    color: rgb(32, 192, 226);
+    position: absolute;  
+    display: inline-block;
+    *display: inline;
+    margin-left: 5px;
+    margin-top:3px;
+}
+
