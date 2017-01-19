@@ -459,7 +459,6 @@ function initCanvas(data) {
             var light = d.averlight
             var fillColor = lightScale(light)
             var fillOBIColor = openBusinessScaleColor(parseInt(d.places))
-
             //console.log(project(d).x,project(d).y);
             // mygOBI.append("rect")
             //     .attr("x", project(d).x)
@@ -553,14 +552,24 @@ function initCanvas(data) {
                     d3.selectAll(".toolip_cell").remove();
                 })
         });
+
+        // ----------------------------------------------------------- Animation behavior
         var increment=0;
-        (function tick() {
-          var now = new Date();
-          if (increment<23) { filterhour(data, increment, increment+1); }
-          else {increment = 0;}
-          // setTimeout(tick, 1000 - (now % 1000));
-          // setTimeout(tick, 300);
-          ++increment;
+        var animationIsRunning=false;
+        (function tick() {  
+            console.log("tick", animationIsRunning);
+            $('button.toggleAnimation').off().on('click', function(e) {
+                e.preventDefault();
+                animationIsRunning = !animationIsRunning;
+                console.log("click", animationIsRunning);
+            })
+            if (animationIsRunning) {  
+                console.log("running");
+                if (increment<23) {  filterhour(data, increment, increment+1); }
+                else { increment = 0; }
+                ++increment; 
+            }
+            setTimeout(tick, 1000);
         })();
     }
     render();
@@ -1013,10 +1022,9 @@ function charts(data, selectedCharts) {
 
 
 function selectTime(chartWidth,chartHeight){
-    var margin = { top: 0, left: 100, right: 10, bottom: 20 },
+    var margin = { top: 10, left: 80, right: 0, bottom: 0 },
         width = chartWidth - margin.right,
         height = chartHeight - margin.top - margin.bottom;
-
 
 	var start = 0;
 	var end = 0;
@@ -1030,16 +1038,16 @@ function selectTime(chartWidth,chartHeight){
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 	svg.append("rect")
-	    .attr("width", width)
-	    .attr("height", height)
+	    .attr("width", 270)
+	    .attr("height", 2)
         .attr("fill", "rgb(50,50,50)").attr("stroke","rgba(255,255,255,0.3)");
 
 	var context = svg.append('g')
 		.attr('class', 'context');
 
 	var x = d3.scale.linear()
-		.range([0, width])
-		.domain([start0,end0]);
+        .domain([start0,end0])
+		.range([0, 270]);
 
 	var brush = d3.svg.brush()
 		.x(x).extent([start,end])
@@ -1054,11 +1062,11 @@ function selectTime(chartWidth,chartHeight){
 
 	svg.append("g")
 	    .attr("class", "x axis hour myhour")
-	    .call(d3.svg.axis().tickValues([0,3,6,9,12,15,18,21,24]).tickSize(32,0)
+	    .call(d3.svg.axis().tickValues([0,3,6,9,12,15,18,21,24]).tickSize(10,0)
 	      .scale(x)
 	      .orient("bottom"))
 	  .selectAll("text")
-	    .attr("x", -4).attr("y",35)
+	    .attr("x", -4).attr("y",15)
 	    .style("text-anchor", null);
 
 	d3.select(".extent").attr("height", 29);
