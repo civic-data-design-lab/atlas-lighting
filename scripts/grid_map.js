@@ -234,6 +234,9 @@ function initControl() {
                 left: "386px"
             }, 300, function () { });
             $("#todrop").show();
+            setTimeout(function(){
+               $('.gradient_container').show(); 
+           }, 300);
         } else {
             //back to folding mode
             $(".left_clickbar>img").css("transform", "rotate(180deg)");
@@ -248,6 +251,10 @@ function initControl() {
             $(".slide_hide").animate({
                 left: "0px"
             }, 300, function () { });
+            setTimeout(function(){
+               $('.gradient_container').hide(); 
+           }, 100);
+
         }
     })
 
@@ -268,6 +275,9 @@ function initControl() {
                 left: "386px"
             }, 300, function () { });
             $("#todrop").show();
+            setTimeout(function(){
+               $('.gradient_container').show(); 
+           }, 300);
 
         } else {
             //back to folding mode
@@ -283,6 +293,9 @@ function initControl() {
                 left: "0px"
             }, 300, function () { });
             $("#todrop").hide();
+            setTimeout(function(){
+               $('.gradient_container').hide(); 
+           }, 100);
         }
     });
 
@@ -1069,9 +1082,9 @@ function selectTime(chartWidth,chartHeight){
 	    .attr("x", -4).attr("y",15)
 	    .style("text-anchor", null);
 
-	// d3.select(".extent").attr("height", 10);
-	// d3.select(".background").attr("height", 10);
-	// d3.selectAll(".resize rect").attr("height", 10);
+	d3.select(".extent").attr("height", 29);
+	d3.select(".background").attr("height", 50);
+	d3.selectAll(".resize rect").attr("height", 29);
     d3.selectAll(".tick line").style("opacity","0.3");
 
 
