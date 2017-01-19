@@ -884,3 +884,20 @@ div#streetview_window {
     top:1%; 
     left: 50%;
 }*/
+
+button.toggleAnimation {
+    font-size: 10px;
+    color: #fff;
+    width: auto;
+    background-color: rgba(0,0,0,0.5);
+    border: 1px solid gray;
+    border-radius: 5px;
+    /*margin-top: 30px;*/
+    margin-bottom: 5px;
+    margin-left: 375px;
+    position: absolute;
+}
+
+button.toggleAnimation:hover {
+    background-color: rgba(255,255,255,0.2);
+}
