@@ -1069,9 +1069,9 @@ function selectTime(chartWidth,chartHeight){
 	    .attr("x", -4).attr("y",15)
 	    .style("text-anchor", null);
 
-	d3.select(".extent").attr("height", 29);
-	d3.select(".background").attr("height", 50);
-	d3.selectAll(".resize rect").attr("height", 29);
+	// d3.select(".extent").attr("height", 10);
+	// d3.select(".background").attr("height", 10);
+	// d3.selectAll(".resize rect").attr("height", 10);
     d3.selectAll(".tick line").style("opacity","0.3");
 
 
