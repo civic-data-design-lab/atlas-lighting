@@ -240,6 +240,19 @@ canvas {
     fill-opacity: 1;
     cursor:pointer;
 }
+
+/* dc-chart class extended for Business Types widget*/
+
+.dc-chart.bus-types{
+    fill-opacity: .5;
+    cursor:pointer;
+}
+
+.dc-chart.bus-types:hover{
+    fill-opacity: .5;
+    cursor:pointer;
+}
+
 .dc-chart .selected{
     fill:#fff;
 }
@@ -442,9 +455,6 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     bottom: 0;
     left: 0;
     z-index: 11 !important;
-}
-
-.dc-chart {
 }
 
 #selector {
@@ -835,4 +845,14 @@ div#streetview_window {
     margin-left: 5px;
     margin-top:3px;
 }
+
+.types-text {
+    fill-opacity: 0.5;
+}
+
+.types-text.active {
+    fill-opacity: 1;
+}
+
+
 

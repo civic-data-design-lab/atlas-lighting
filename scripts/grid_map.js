@@ -25,6 +25,7 @@ window.dataLst = [];
 window.mydata;
 window.zoomedData = ["street_view", "instagram_pics"];
 window.newData;
+window.typesData = [];
 
 var __map = null
 var __canvas = null
@@ -46,13 +47,16 @@ var radius = 1
 var alpha = 1
 var alphaScale = d3.scale.linear().domain([minZoom, maxZoom]).range([0.6, .03]);
 
-// busTypes is for business types chart
+// busTypes is a list of predefined types utilized in the business types chart.
 
 var busTypes = ['beauty','culture','education','entertainment',
         'finance','food','health','nightclub','office','other','public_use',
         'recreation','religious','residential','restaurant','retail','service',
         'transportation'];
 
+// Business Types Widget is initiated here.
+
+var newBusTypesChart = busTypesChart(390, 100);
 
 var myinit = function () {
     window.panorama = new google.maps.StreetViewPanorama(
@@ -95,10 +99,14 @@ function dataDidLoad(error, grid) {
     window.mydata = grid;
     console.log(window.dataLst);
 
-    charts(grid, selectedCharts)
+    //console.log(grid[25].other);
+
+    charts(grid, selectedCharts);
 
     initCanvas(grid);
+
     initControl();
+    
 }
 
 function project(d) {
@@ -496,7 +504,6 @@ function initCanvas(data) {
     }
     render();
 
-
     function zoomed() {
         cellDisselect();
         var disX = Math.abs(project(__bounds._sw).x - project(__bounds._ne).x);
@@ -520,8 +527,6 @@ function cellSelect(d) {
     updateZoomedChart(selectedCharts);
     d3.select("#light_digits").text(d.averlight);
     $("#instagram_plc").hide();
-
-    console.log(d);
 
     var cell_id = d.cell_id;
 
@@ -570,30 +575,9 @@ function cellSelect(d) {
             }
         });
 
-    // Functions for business type calculations
 
-    /* Creating an array of objects
-     * containing business types and their numbers for each parcel of the city.
-     */
-
-    var typeCounts = [];
-
-    busTypes.forEach(function(el){
-        var typeCount = +d[el] ? +d[el] : 0 ;
-        typeCounts.push({
-            category: el, 
-            count: typeCount
-        });
-    })
-
-    console.log(typeCounts);
-
-    d3.select("#business_types svg").remove();
-    var newBusTypesChart = busTypesChart(390, 60);
-    newBusTypesChart.updateBusTypes(typeCounts);
-
-
-
+    newBusTypesChart.assignSelect(true);
+    newBusTypesChart.updateBusTypes(d);
 
 }
 
@@ -607,6 +591,8 @@ function cellDisselect() {
     d3.select("#street_view").style("display", "none");
 
 
+    newBusTypesChart.assignSelect(false);
+    newBusTypesChart.updateBusTypes(window.typesData);
 }
 
 function updateZoomedChart(selectedCharts) {
@@ -673,7 +659,6 @@ function charts(data, selectedCharts) {
     var maxLight = null;
     var maxPlaces = null;
 
-
     data.forEach(function (d) {
         d.lng = +d.lng;
         d.lat = +d.lat;
@@ -706,7 +691,7 @@ function charts(data, selectedCharts) {
         d.restaurant = +d.restaurant ? +d.restaurant : 0; 
         d.retail = +d.retail ? +d.retail : 0; 
         d.service = +d.service ? +d.service : 0; 
-        d.transportation = +d.transportation ? +d.transportation : 0;                       
+        d.transportation = +d.transportation ? +d.transportation : 0;   
 
         if (d.b_diversity) {
             if (maxBDiv == null || d.b_diversity > maxBDiv) {
@@ -732,16 +717,38 @@ function charts(data, selectedCharts) {
             }
         }
 
-
     })
-
 
     var chartWidth = 304;
     var chartHeight = 52;
 
+
     var ndx = crossfilter(data);
     var all = ndx.groupAll();
-    window.count = data.length;
+
+    /* Creating an array of objects
+     * containing business types and their sum for each city.
+     * @method initialFormat
+     * @param {Array} Data to be formatted
+     */
+
+    var typeSums = [];
+    busTypes.forEach(function(el){
+        var typeSum = ndx.groupAll().reduceSum(function(d){return d[el];}).value();
+        if (typeSum){
+            typeSums.push({
+                category: el, 
+                count: typeSum
+            });
+        }
+    });
+
+    console.log(typeSums);
+
+    window.typesData = typeSums;
+    
+    newBusTypesChart.bindData(data);
+    newBusTypesChart.updateBusTypes(typeSums);
 
     var busDivDimension = ndx.dimension(function (d) {
         return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0
@@ -772,8 +779,6 @@ function charts(data, selectedCharts) {
         if (d.places>100) return 100; 
         else return d.places })
     var placesGroup = placesDimension.group()
-
-    /* Hashtag Count Chart comes here */
 
     if (currentCity_o == "LA"){
 
@@ -823,53 +828,6 @@ function charts(data, selectedCharts) {
             .xUnits(function(){return 50;})
             .yAxis().ticks(2);
             //.y(d3.scale.linear().domain([0, 600]));
-
-        // Preparation for the business type category fields
-        
-        /*
-
-        var busTypes = ['beauty','culture','education','entertainment',
-                'finance','food','health','nightclub','office','other','public_use',
-                'recreation','religious','residential','restaurant','retail','service',
-                'transportation'];
-        */
-
-        function consolidatedFilters(passedData, passedFilter) {
-            var dataKeys = Object.keys(data[0]);
-            var filteredData = passedData.filter(
-                function(el) { // executed for each row
-                    for (var i = 1; i < passedFilter.length; i++) { // iterate over filter
-                        if (el[0].indexOf(passedFilter[i]) != -1) {
-                            return true; // if this person knows this language
-                        }
-                    }  
-                    return false;
-                }
-            );     
-            return filteredArray;
-        }
-
-        var beauty = ndx.dimension(function(d){return d.beauty;});
-
-        /* @method sumTypeTotals
-         * Creating an array of objects
-         * containing business types and their sum for each city.
-         * @param {Array} index for calculating neighbor indices
-         * @oaram {Object} Context object
-         */
-
-        var typeSums = [];
-
-        busTypes.forEach(function(el){
-            var typeSum = ndx.groupAll().reduceSum(function(d){return d[el];}).value();
-            typeSums.push({
-                category: el, 
-                count: typeSum
-            });
-        })
-
-        console.log(typeSums);
-
 
     }
 
@@ -999,8 +957,6 @@ function charts(data, selectedCharts) {
     d3.selectAll("#business_diversity line").remove();
 
     selectTime(chartWidth,chartHeight);
-    var newBusTypesChart = busTypesChart(390, 60);
-    newBusTypesChart.updateBusTypes(typeSums);
 
 }
 
@@ -1119,202 +1075,3 @@ function selectTime(chartWidth,chartHeight){
 
 
     }
-
-/* Business types chart comes here 
- * Categories: beauty,culture,education,entertainment,finance,food,health,nightclub,
- * office,other,public_use,recreation,religious,residential,restaurant,retail,service,transportation
- *
-*/
-
-var busTypesChart = function(chartWidth,chartHeight) {
-
-    var that = {};
-
-    var that = Object.create(busTypesChart.prototype);
-
-    var margin = { top: 0, left: 10, right: 10, bottom: 20 },
-        width = chartWidth - margin.right - margin.left, //chartWidth = 304
-        height = chartHeight - margin.top - margin.bottom; // chartHeight = 52
-
-    var textMargin = {top:25, left:5, right: 5, bottom:3},
-        btwMargin  = 10,
-        letterSize = 7.15;
-
-    var t = d3.transition().duration(750);
-
-    var maxTextSize = 32,
-        minTextSize = 14;
-
-
-    var svg = d3.select("#business_types").append("svg")
-        .attr("width", width + margin.right + margin.left)
-        .attr("height", height + margin.top + margin.bottom);
-
-    var g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    /* Calculate relative size of each text element
-     */
-
-    var formatData = function (arr) {
-       var maxCount = d3.max(arr, function(d) { return d.count;});
-       var minCount = d3.min(arr, function(d) { return d.count;});
-       var countRange = maxCount - minCount;
-       var range = maxTextSize - minTextSize;
-
-       // If not try using appending arrays
-       var newArr = arr.map(function(el, i){
-           if (el.count == maxCount){
-               return {category:el.category, count: el.count, textSize: maxTextSize};
-           } else if (el.count == minCount){
-               return {category:el.category, count: el.count, textSize: minTextSize};
-           } else {
-               var ratio = el.count*1.0/countRange;
-               var newTextSize = minTextSize + Math.round(range*ratio);
-               return {category:el.category, count: el.count, textSize: newTextSize};
-           }
-           
-       });
-
-        return newArr;
-     }
-
-    // This may not be necessary. If we are to append elements consecutively
-    // Width and height parameter of each element might help to automatically position
-    // each element
-
-    /* Calculate x and y values
-     *
-     */
-
-     var calcXAndY = function (arr) {
-
-        var firstRow = [],
-            secondRow = [],
-            thirdRow = []
-
-        var bestArr = [];
-        
-        var range = maxTextSize - minTextSize;
-
-        var calcedArr = arr.map(function(el){
-            var textLength = el.category.length; 
-            var ratio = (el.textSize-minTextSize)*1.0/range;
-            var actualWidth = textLength*(letterSize * (1 + ratio)); // 7.15 is actual size, it can be changed
-            return {count:el.count, category: el.category, textSize: el.textSize, textWidth:actualWidth};
-        })
-
-        calcedArr.sort(function(a, b){return b.count - a.count});
-
-        var cpCalcedArr = calcedArr.slice();
-
-        bestArr = calcedArr.map(function(el, i){
-            var count = 0;
-            for (var j = 0; j < i; j++){
-                count += cpCalcedArr[j].textWidth + btwMargin;
-            }
-            var posX = count + el.textWidth;
-            var actualPosX = posX % width;
-            var row = Math.floor(posX/width);
-            if(row == 0){
-                firstRow.push(el);
-                if (firstRow.length > 1){
-                    return {category:el.category, count: el.count, textSize: el.textSize, x: count, y:0};
-                } else {
-                    return {category:el.category, count: el.count, textSize: el.textSize, x: 0, y:0}
-                }
-            } else if (row == 1){
-                secondRow.push(el);
-                if (secondRow.length > 1){
-                    var aCount = 0;
-                    for (var k=0; k<secondRow.length-1; k++){
-                        aCount += secondRow[k].textWidth + btwMargin;
-                    }
-                    return {category:el.category, count: el.count, textSize: el.textSize, x: aCount, y:15};
-                } else {
-                    return {category:el.category, count: el.count, textSize: el.textSize, x: 0, y:15};
-                }
-            } else {
-                thirdRow.push(el);
-                if (thirdRow.length > 1){
-                    var bCount = 0;
-                    for (var l=0; l<thirdRow.length-1; l++){
-                        bCount += thirdRow[l].textWidth + btwMargin;
-                    }
-                    return {category:el.category, count: el.count, textSize: el.textSize, x: bCount, y:30};
-                } else {
-                    return {category:el.category, count: el.count, textSize: el.textSize, x: 0, y:30};
-                }
-            }
-
-        });
-
-        return bestArr;
-     } 
-
-    // enter, update, exit pattern might not be necessary as we redraw the elements 
-
-    //TO-DO's:
-
-    // 1. Filter out items that have no member of a business type, then if the length
-    // of array is larger than 14 slice it.
-
-    // 2. Determine more sound values for the y in the widget
-
-    // 3. Create a click and filter cells functionality for the widget
-    // If possible use & method to make compound queries
-
-    // 4. Tweak the letterSize parameter to obtain better results
-
-    // 5. Remove the hashtags
-
-    that.updateBusTypes = function(data) {
-
-        var fData = formatData(data);
-
-        var fData = fData.sort(function(a, b) {return b.count - a.count});
-
-        console.log(fData);
-
-        var fiData = calcXAndY(fData);
-
-        var typeSort = g.selectAll("text")
-                    .data(fiData.slice(0, 13))
-                    /*.filter(function(e,i){return i < 15 ? true : false })*/;
-
-        console.log(typeSort);
-
-        //exit pattern
-        typeSort.exit()
-            .transition(t)
-            .style("fill-opacity", 1e-6)
-            .remove();
-
-
-        //update pattern
-        typeSort
-            .transition(t)
-            .style("fill-opacity", 1)
-            .style("font-size", function(d) { return d.textSize + "px"; })
-            .style("font-family", "Ropa Sans")
-            .style("fill", "rgb(32, 192, 226")
-            .attr("y", function(d){ return textMargin.top + d.y;})
-            .attr("x", function(d) { return textMargin.left + d.x; });
-
-
-        //enter pattern
-        typeSort.enter()
-            .append("text")
-            .style("font-family", "Ropa Sans")
-            .style("font-size", function(d) { return d.textSize + "px"; }) // use textScale here
-            .style("fill", "rgb(32, 192, 226")
-            .text(function(d){return d.category;})
-            .attr("y", function(d){ return textMargin.top + d.y;})
-            .attr("x", function(d) { return textMargin.left + d.x;});
-
-    }
-
-    Object.freeze(that);
-    return that;
-
-} 
-
