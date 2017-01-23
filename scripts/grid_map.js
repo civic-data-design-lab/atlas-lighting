@@ -574,6 +574,12 @@ function initCanvas(data) {
             $('button.toggleAnimation').off().on('click', function(e) {
                 e.preventDefault();
                 animationIsRunning = !animationIsRunning;
+                if (animationIsRunning) {
+                    $('button.toggleAnimation').addClass('isPressed');
+                }
+                else {
+                    $('button.toggleAnimation').addClass('isNotPressed');
+                }
                 console.log("click", animationIsRunning);
             })
             if (animationIsRunning) {  
