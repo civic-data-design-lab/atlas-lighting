@@ -1064,12 +1064,15 @@ function charts(data, selectedCharts) {
     d3.selectAll("#business_diversity line").remove();
 
     //////////////////////////////////// OBIchart   --- d3.js ---- ///////////////////////////////////
-    OBIchart(chartWidth,chartHeight);
+
+    // chartWidth = 304 and chartHeight = 52;
+
+    OBIchart(chartWidth,100);
 
 }
 
 function OBIchart(chartWidth,chartHeight){
-    var margin = { top: 10, left: 80, right: 0, bottom: 0 },
+    var margin = { top: 70, left: 80, right: 0, bottom: 0 },
         width = chartWidth - margin.right,
         height = chartHeight - margin.top - margin.bottom;
 
@@ -1104,8 +1107,8 @@ function OBIchart(chartWidth,chartHeight){
 		.attr('class', 'x brush')
 		.call(brush)
 		.selectAll('rect')
-		.attr('y', 0)
-		.attr('height', height);
+		.attr('y', -10)
+		.attr('height', 20);
 
 	svg.append("g")
 	    .attr("class", "x axis hour myhour")
