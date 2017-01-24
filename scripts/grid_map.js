@@ -1037,8 +1037,6 @@ function charts(data, selectedCharts) {
             var end = mytime[1];
 
             filterhour(window.newData,start,end);
-            
-
 
         })
         .x(d3.scale.linear().domain([1, window.count]))
@@ -1065,13 +1063,12 @@ function charts(data, selectedCharts) {
     d3.selectAll("#business_diversity path").remove();
     d3.selectAll("#business_diversity line").remove();
 
-    //////////////////////////////////// OPEN BUSINESS INDEX CHART CALL ///////////////////////////////////
-    selectTime(chartWidth,chartHeight);
+    //////////////////////////////////// OBIchart   --- d3.js ---- ///////////////////////////////////
+    OBIchart(chartWidth,chartHeight);
 
 }
 
-//////////////////////////////////// OPEN BUSINESS INDEX CHART  ///////////////////////////////////
-function selectTime(chartWidth,chartHeight){
+function OBIchart(chartWidth,chartHeight){
     var margin = { top: 10, left: 80, right: 0, bottom: 0 },
         width = chartWidth - margin.right,
         height = chartHeight - margin.top - margin.bottom;
