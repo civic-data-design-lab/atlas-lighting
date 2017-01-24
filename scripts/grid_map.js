@@ -73,7 +73,7 @@ var myinit = function () {
 
 
     d3.queue()
-        .defer(d3.csv, "../data/" + currentCity_o + ".csv"/*"grids/" + currentCity*/)
+        .defer(d3.csv, "../data/" + currentCity_o + "_grid.csv"/*"grids/" + currentCity*/)
         //.defer(d3.json, "data/"+currentCity+"_zipcode.json"/*"zipcode_business_geojson/" + currentCity*/)
         .await(dataDidLoad);
 }
@@ -102,6 +102,16 @@ function unproject(d) {
 function getLL(d) {
     return new mapboxgl.LngLat(+d.lng, +d.lat)
 }
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//  initControl()                                                             //
+//                                                                            //
+//  Initializing the controls                                                 //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+
 
 function initControl() {
 
@@ -210,9 +220,6 @@ function initControl() {
             }, 300, function () { });
 
         }
-
-
-
     });
 
 
@@ -415,6 +422,13 @@ function initControl() {
     });
 }
 
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//  initCanvas(data)                                                          //
+//                                                                            //
+//  Initializing  and rendering the canvas                                    //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 
 function initCanvas(data) {
     __gridData = data
@@ -450,6 +464,14 @@ function initCanvas(data) {
     __bounds = map.getBounds();
     window.__DisX = Math.abs(project(__bounds._sw).x - project(__bounds._ne).x);
     window.__Corners = [project(__bounds._sw).x, project(__bounds._ne).y];
+
+    ////////////////////////////////////////////////////////////////////////////////
+    //                                                                            //
+    //  render()                                                                  //
+    //                                                                            //
+    //  Rendering the canvas                                                      //
+    //                                                                            //
+    ////////////////////////////////////////////////////////////////////////////////
 
     function render() {
         var lightScale = d3.scale.linear().domain([0, 200, 400]).range(["#3182bd", "#fee391", "#fc9272"])
@@ -542,7 +564,6 @@ function initCanvas(data) {
                         var latlng = loc.lat+","+loc.lng
 
                         var myreq = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+latlng+"&key="+mykey
-                        
 
                         d3.json(myreq, function(error, data) {
                             if (error) throw error;
@@ -556,17 +577,14 @@ function initCanvas(data) {
                             infobox.text(address);
 
                         });
-
                     }
-
-
                 })
                 .on("mouseout",function(){
                     d3.selectAll(".toolip_cell").remove();
                 })
         });
 
-        // ----------------------------------------------------------- Animation behavior
+        //////////////////////////////////// ANIMATION BEHAVIOR /////////////////////////////////// 
         var increment=0;
         var animationIsRunning=false;
         (function tick() {  
@@ -591,9 +609,10 @@ function initCanvas(data) {
             setTimeout(tick, 1000);
         })();
     }
+
     render();
 
-
+    //////////////////////////////////// ZOOM ///////////////////////////////////
     function zoomed() {
         cellDisselect();
         var disX = Math.abs(project(__bounds._sw).x - project(__bounds._ne).x);
@@ -612,7 +631,7 @@ function initCanvas(data) {
     })
 }
 
-
+//////////////////////////////////// CELL SELECT ///////////////////////////////////
 function cellSelect(d) {
     window.cell_selected = true;
     updateZoomedChart(selectedCharts);
@@ -668,8 +687,9 @@ function cellSelect(d) {
                 $("#instagram_plc").show();
             }
         });
-
 }
+
+//////////////////////////////////// UNSELECT A CELL ///////////////////////////////////
 
 function cellDisselect() {
     window.cell_selected = false;
@@ -678,6 +698,8 @@ function cellDisselect() {
     updateZoomedChart(selectedCharts);
 
 }
+
+//////////////////////////////////// UPDATE ZOOMED CHART ///////////////////////////////////
 
 function updateZoomedChart(selectedCharts) {
     selectedCharts.forEach(function (d) {
@@ -714,8 +736,9 @@ function updateZoomedChart(selectedCharts) {
     }else{
         d3.select("#instagram_pics").style("display", "none");
     }
-
 }
+
+//////////////////////////////////// UPDATE CHARTS ///////////////////////////////////
 
 function updateChart(selectedCharts) {
     window.location.href = initurl.split("*")[0] + "*" + selectedCharts.join("|");
@@ -731,9 +754,7 @@ function updateChart(selectedCharts) {
     })
 
     updateZoomedChart(selectedCharts);
-
 }
-
 
 
 
@@ -752,6 +773,15 @@ if (currentCity_o == "LA"){
     window.busPriChart = dc.barChart("#business_price")
 
 }
+
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//  charts(data, selectedCharts)    --- dc.js ---                             //
+//                                                                            //
+//  Rendering the charts                                                      //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+
 
 function charts(data, selectedCharts) {
     d3.selectAll(".dc-chart").style("display", "none");
@@ -1035,11 +1065,12 @@ function charts(data, selectedCharts) {
     d3.selectAll("#business_diversity path").remove();
     d3.selectAll("#business_diversity line").remove();
 
+    //////////////////////////////////// OPEN BUSINESS INDEX CHART CALL ///////////////////////////////////
     selectTime(chartWidth,chartHeight);
 
 }
 
-
+//////////////////////////////////// OPEN BUSINESS INDEX CHART  ///////////////////////////////////
 function selectTime(chartWidth,chartHeight){
     var margin = { top: 10, left: 80, right: 0, bottom: 0 },
         width = chartWidth - margin.right,
@@ -1119,6 +1150,8 @@ function selectTime(chartWidth,chartHeight){
 
 }
 
+//////////////////////////////////// FILTER HOUR ///////////////////////////////////
+
 function filterhour(data,start,end){
     d3.select("#selected_time").text(start+" - "+end);
     d3.selectAll(".cellgrids").style("display", "none");
@@ -1149,6 +1182,4 @@ function filterhour(data,start,end){
     ave_lit = Math.round(ave_lit * 100) / 100
     d3.select("#light_digits").text(ave_lit);
     d3.select("#light_digits").attr("sv_val", ave_lit);
-
-
 }
