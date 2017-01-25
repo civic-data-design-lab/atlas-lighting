@@ -137,7 +137,7 @@
           <div id="light_average" class="lock">
             <div class="chart-title">LIGHTING AVERAGE
               <span class="source">
-                <a class="reset" href="javascript:ligAveChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
+                <a class="reset" href="javascript:ligAveChart.filterAll();dc.redrawAll();" style="display: none;">RESET </a>
               </span>
             </div>
             <p id="light_digits">___</p>
@@ -158,8 +158,6 @@
               <span class="source">
                 <a class="reset" href="javascript:devIntChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
                 <a href="javascript:devIntChart.filterAll();dc.redrawAll();" 			><span class = "rm_data"> x</span> </a>
-
-                
               </span>
             </div>
             <p id="" class = "plc_digits">___</p>
@@ -171,8 +169,6 @@
               <span class="source">
                 <a class="reset" href="javascript:populationChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
                 <a href="javascript:populationChart.filterAll();dc.redrawAll();" 			><span class = "rm_data"> x</span> </a>
-
-                
               </span>
             </div>
             <p id="" class = "plc_digits">___</p>
@@ -184,8 +180,6 @@
               <span class="source">
                 <a class="reset" href="javascript:busDivChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
                 <a href="javascript:busDivChart.filterAll();dc.redrawAll();" 			><span class = "rm_data"> x</span> </a>
-
-                
               </span>
             </div>
             <p id="" class = "plc_digits">___</p>
@@ -194,10 +188,19 @@
           <div id="business_price">
             <div class="chart-title">BUSINESS PRICE
               <span class="source">
-                <a class="reset" href="javascript:busPriChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
-                <a href="javascript:busPriChart.filterAll();dc.redrawAll();" 			><span class = "rm_data"> x</span> </a>
+                <a class="reset" href="javascript:busPriChart.filterAll();dc.redrawAll();"      style="display: none;">RESET </a>
+                <a href="javascript:busPriChart.filterAll();dc.redrawAll();"      ><span class = "rm_data"> x</span> </a>
+              </span>
+            </div>
+            <p id="" class = "plc_digits">___</p>
+          </div>          
 
-                
+
+          <div id="business_opening">
+            <div class="chart-title">OPEN BUSINESS INDEX
+              <span class="source">
+                <a class="reset" href="javascript:OBI.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
+                <a href="javascript:OBI.filterAll();dc.redrawAll();" 			><span class = "rm_data"> x</span> </a>
               </span>
             </div>
             <p id="" class = "plc_digits">___</p>
@@ -208,8 +211,6 @@
               <span class="source">
                 <a class="reset" href="javascript:placesChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
                 <a href="javascript:placesChart.filterAll();dc.redrawAll();" 			><span class = "rm_data"> x</span> </a>
-
-                
               </span>
             </div>
             <p id="" class = "plc_digits">___</p>
@@ -237,7 +238,7 @@
           </div>
 
 
-          <div id="business_opening" class = "dc-chart">
+          <div id="time_selector" class = "dc-chart">
             <div class="chart-title">BUSINESS OPENING HOURS
               <span class="source">
                 <a><span class = "rm_data"> x</span></a>
@@ -245,7 +246,6 @@
             </div>
             <p id = "selected_time" class = "plc_digits">0 - 24</p>
             <button class="toggleAnimation"><img src="../icons/play.png" width="8px"></button>
-
           </div>
 
 
@@ -345,9 +345,14 @@
           <img src="../icons/data_icon/places.jpg" class = "data_icon">
           <p class = "data_intro">Total number of places in a grid cell. Source: Google Places API</p>
         </div>
-        <div class="data_item ui-widget-content tag_bus" id="d_business_opening">
+        <div class="data_item ui-widget-content tag_bus" id="d_time_selector">
           <p class="data_item_title">BUSINESS OPENING HOURS</p>
           <img src="../icons/data_icon/business_opening.jpg" class = "data_icon">
+          <p class = "data_intro">Time selector</p>
+        </div>
+        <div class="data_item ui-widget-content tag_bus" id="d_business_opening">
+          <p class="data_item_title">OPEN BUSINESS INDEX</p>
+          <img src="../icons/data_icon/business_price.jpg" class = "data_icon">
           <p class = "data_intro">Places open in a grid cell for a given time period. Source: Google Places API</p>
         </div>
         <!-- ************************************************************** Dem filters **************************************************************-->
