@@ -831,7 +831,7 @@ function charts(data, selectedCharts) {
         d.insta_like = +d.insta_like ? +d.insta_like : 0;
 
         //getting the OBI values
-        for (var i=10;i<11;i++){
+        for (var i=14;i<15;i++){
             if  ((+d['b_opening_'+i]) !== undefined) {
                 d.OBI = +d['b_opening_'+i];
             }
@@ -950,20 +950,24 @@ function charts(data, selectedCharts) {
             .margins({ top: 0, left: 50, right: 10, bottom: 20 })
             .x(d3.scale.linear().domain([0.5, 4]))
             .xUnits(function(){return 50;})
+            .gap(1)
+            .centerBar(true)
             .yAxis().ticks(2);
             //.y(d3.scale.linear().domain([0, 600]));        
 
-
-        var OBIDimension = ndx.dimension(function (d) {return d.OBI });
+        var OBIDimension = ndx.dimension(function (d) {return d.OBI; });
         var OBIGroup = OBIDimension.group();
         window.OBI.width(410).height(chartHeight)
             .group(OBIGroup).dimension(OBIDimension)
             //.elasticY(true)
             .ordinalColors(["#888", "#888", "#888"])
             .margins({ top: 0, left: 130, right: 10, bottom: 20 })
-            .x(d3.scale.linear().domain([0, 10]))
-            .xUnits(function(){return 20;})
-            .yAxis().ticks(3);
+            .x(d3.scale.linear().domain([-0.5, 10.5]))
+            // .y(d3.scale.linear().domain([0, 20000]))
+            .gap(1)
+            .centerBar(true)
+            .xUnits(function(){return 50;})
+            .yAxis().ticks(2);
             //.y(d3.scale.linear().domain([0, 600]));
     }
 
@@ -1097,7 +1101,7 @@ function charts(data, selectedCharts) {
 
 function timeSelector(chartWidth,chartHeight){
     // chartWidth = 304 and chartHeight = 52;
-    var margin = { top: 10, left: 5, right: 0, bottom: 0 },
+    var margin = { top: 10, left: 10, right: 0, bottom: 0 },
         width = chartWidth - margin.right,
         height = chartHeight - margin.top - margin.bottom;
 
@@ -1113,7 +1117,7 @@ function timeSelector(chartWidth,chartHeight){
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 	svg.append("rect")
-	    .attr("width", 270)
+	    .attr("width", 240)
 	    .attr("height", 2)
         .attr("fill", "rgb(50,50,50)").attr("stroke","rgba(255,255,255,0.3)");
 
@@ -1122,7 +1126,7 @@ function timeSelector(chartWidth,chartHeight){
 
 	var x = d3.scale.linear()
         .domain([start0,end0])
-		.range([0, 270]);
+		.range([0, 240]);
 
 	var brush = d3.svg.brush()
 		.x(x).extent([start,end])
