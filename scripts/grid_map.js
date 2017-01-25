@@ -769,9 +769,8 @@ window.placesChart = dc.barChart("#places")
 if (currentCity_o == "LA"){
     window.insChart = dc.barChart("#ins")
     window.insLikesChart = dc.barChart("#ins_likes")
-    //window.busi_openingChart = dc.barChart("#business_opening")
     window.busPriChart = dc.barChart("#business_price")
-
+    window.OBI = dc.barChart("#business_opening")
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -811,6 +810,11 @@ function charts(data, selectedCharts) {
     var maxLight = null;
     var maxPlaces = null;
 
+    ////////////////////////////////////////////////////////////////////////////////
+    //                                                                            //
+    //  Getting the data for each cell                                            //
+    //                                                                            //
+    ////////////////////////////////////////////////////////////////////////////////
 
     data.forEach(function (d) {
         d.lng = +d.lng;
@@ -826,6 +830,13 @@ function charts(data, selectedCharts) {
         d.insta_cnt = +d.insta_cnt ? +d.insta_cnt : 0;
         d.insta_like = +d.insta_like ? +d.insta_like : 0;
 
+        //getting the OBI values
+        for (var i=10;i<11;i++){
+            if  ((+d['b_opening_'+i]) !== undefined) {
+                d.OBI = +d['b_opening_'+i];
+            }
+        }
+        // console.log(d.OBI)
         if (d.b_diversity) {
             if (maxBDiv == null || d.b_diversity > maxBDiv) {
                 maxBDiv = d.b_diversity
@@ -849,16 +860,19 @@ function charts(data, selectedCharts) {
                 maxPlaces = d.places
             }
         }
-
-
     })
-
     var chartWidth = 304;
     var chartHeight = 52;
 
     var ndx = crossfilter(data);
     var all = ndx.groupAll();
     window.count = data.length;
+    
+    ////////////////////////////////////////////////////////////////////////////////
+    //                                                                            //
+    //  Creating the charts for each type                                         //
+    //                                                                            //
+    ////////////////////////////////////////////////////////////////////////////////
 
     var busDivDimension = ndx.dimension(function (d) {
         return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0
@@ -908,7 +922,6 @@ function charts(data, selectedCharts) {
 
         window.insChart.yAxis().ticks(2);
 
-        /////////////////////
         var insLikesDimension = ndx.dimension(function (d) { 
             if(d.insta_like > 1000 ) return 1000;
             else return d.insta_like });
@@ -926,6 +939,7 @@ function charts(data, selectedCharts) {
 
         window.insLikesChart.yAxis().ticks(2);
 
+
         var busPriDimension = ndx.dimension(function (d) { return d.b_price });
         var busPriGroup = busPriDimension.group();
 
@@ -937,6 +951,19 @@ function charts(data, selectedCharts) {
             .x(d3.scale.linear().domain([0.5, 4]))
             .xUnits(function(){return 50;})
             .yAxis().ticks(2);
+            //.y(d3.scale.linear().domain([0, 600]));        
+
+
+        var OBIDimension = ndx.dimension(function (d) {return d.OBI });
+        var OBIGroup = OBIDimension.group();
+        window.OBI.width(410).height(chartHeight)
+            .group(OBIGroup).dimension(OBIDimension)
+            //.elasticY(true)
+            .ordinalColors(["#888", "#888", "#888"])
+            .margins({ top: 0, left: 130, right: 10, bottom: 20 })
+            .x(d3.scale.linear().domain([0, 10]))
+            .xUnits(function(){return 20;})
+            .yAxis().ticks(3);
             //.y(d3.scale.linear().domain([0, 600]));
     }
 
@@ -1063,16 +1090,14 @@ function charts(data, selectedCharts) {
     d3.selectAll("#business_diversity path").remove();
     d3.selectAll("#business_diversity line").remove();
 
-    //////////////////////////////////// OBIchart   --- d3.js ---- ///////////////////////////////////
-
-    // chartWidth = 304 and chartHeight = 52;
-
-    OBIchart(chartWidth,100);
+    //////////////////////////////////// timeSelector   --- d3.js ---- ///////////////////////////////////
+    timeSelector(chartWidth,100);
 
 }
 
-function OBIchart(chartWidth,chartHeight){
-    var margin = { top: 70, left: 80, right: 0, bottom: 0 },
+function timeSelector(chartWidth,chartHeight){
+    // chartWidth = 304 and chartHeight = 52;
+    var margin = { top: 10, left: 5, right: 0, bottom: 0 },
         width = chartWidth - margin.right,
         height = chartHeight - margin.top - margin.bottom;
 
@@ -1081,7 +1106,7 @@ function OBIchart(chartWidth,chartHeight){
 	var start0 = 0;
 	var end0 = 24;
 
-    var svg = d3.select("#business_opening").append("svg")
+    var svg = d3.select("#time_selector").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
