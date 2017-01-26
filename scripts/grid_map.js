@@ -815,8 +815,16 @@ function charts(data, selectedCharts) {
     //  Getting the data for each cell                                            //
     //                                                                            //
     ////////////////////////////////////////////////////////////////////////////////
+    var count = 0;
+    var countZero = 0;
+    var dataOBI = {};
+    data.forEach(function(d,i){
+        dataOBI[i] = [+d['b_opening_0'], +d['b_opening_1'], +d['b_opening_2'], +d['b_opening_3'], +d['b_opening_4'], +d['b_opening_5'],+d['b_opening_6'],+d['b_opening_7'],+d['b_opening_8'],+d['b_opening_9'],+d['b_opening_10'],+d['b_opening_11'],+d['b_opening_12'],+d['b_opening_13'],+d['b_opening_14'],+d['b_opening_15'],+d['b_opening_16'],+d['b_opening_17'],+d['b_opening_18'],+d['b_opening_19'],+d['b_opening_20'],+d['b_opening_21'], +d['b_opening_22'],+d['b_opening_23']];
+    });
+    console.log(dataOBI[1000]);
 
     data.forEach(function (d) {
+        d.OBI = 0;
         d.lng = +d.lng;
         d.lat = +d.lat;
         d.cell_id = +d.cell_id;
@@ -830,12 +838,16 @@ function charts(data, selectedCharts) {
         d.insta_cnt = +d.insta_cnt ? +d.insta_cnt : 0;
         d.insta_like = +d.insta_like ? +d.insta_like : 0;
 
-        //getting the OBI values
-        for (var i=14;i<15;i++){
+        // -------------------------------------------------------------------------- OBI values
+        for (var i=0;i<24;i++){
             if  ((+d['b_opening_'+i]) !== undefined) {
-                d.OBI = +d['b_opening_'+i];
+                d.OBI += +d['b_opening_'+i];
+                if (+d['b_opening_'+i]===0) {++countZero;}
+                if (+d['b_opening_'+i]>800) {console.log(+d['b_opening_'+i]);}
             }
+            ++count;
         }
+
         // console.log(d.OBI)
         if (d.b_diversity) {
             if (maxBDiv == null || d.b_diversity > maxBDiv) {
@@ -861,6 +873,7 @@ function charts(data, selectedCharts) {
             }
         }
     })
+    console.log(countZero/count*100)
     var chartWidth = 304;
     var chartHeight = 52;
 
@@ -955,14 +968,15 @@ function charts(data, selectedCharts) {
             .yAxis().ticks(2);
             //.y(d3.scale.linear().domain([0, 600]));        
 
+        // -------------------------------------------------------------------------- OBI graph
         var OBIDimension = ndx.dimension(function (d) {return d.OBI; });
         var OBIGroup = OBIDimension.group();
-        window.OBI.width(410).height(chartHeight)
+        window.OBI.width(400).height(chartHeight)
             .group(OBIGroup).dimension(OBIDimension)
             //.elasticY(true)
             .ordinalColors(["#888", "#888", "#888"])
-            .margins({ top: 0, left: 130, right: 10, bottom: 20 })
-            .x(d3.scale.linear().domain([-0.5, 10.5]))
+            .margins({ top: 5, left: 150, right: 10, bottom: 20 })
+            .x(d3.scale.linear().domain([-1, 100]))
             // .y(d3.scale.linear().domain([0, 20000]))
             .gap(1)
             .centerBar(true)
@@ -1169,7 +1183,6 @@ function timeSelector(chartWidth,chartHeight){
         if (rdend - rdstart == 0){
             d3.select("#selected_time").text(0+" - "+24);
             //d3.selectAll(".cellgrids").style("display", "block");
-
             filterhour(window.newData,rdstart,rdend);
         }else{
             d3.select("#selected_time").text(rdstart+" - "+rdend);
@@ -1205,7 +1218,28 @@ function filterhour(data,start,end){
             ave_lit += d.averlight;
             count_ ++;
         }
+
+        for (var i=start;i<end;i++){
+            if  ((+d['b_opening_'+i]) !== undefined) {
+                d.OBI += +d['b_opening_'+i];
+            }
+            else {
+                d.OBI += 0;
+            }
+        }
     })
+    // dc.barChart("#business_opening").filterAll();
+    // var OBIDimension = crossfilter(data).dimension(function (d) {return d.OBI; });
+    // var OBIGroup = OBIDimension.group();
+    // dc.barChart("#business_opening").width(410).height(52)
+    //         .group(OBIGroup).dimension(OBIDimension)
+    //         .ordinalColors(["#888", "#888", "#888"])
+    //         .margins({ top: 0, left: 130, right: 10, bottom: 20 })
+    //         .x(d3.scale.linear().domain([-0.5, 10.5]))
+    //         .gap(1)
+    //         .centerBar(true)
+    //         .xUnits(function(){return 50;})
+    //         .yAxis().ticks(2);
 
     ave_lit /= count_;
     ave_lit = Math.round(ave_lit * 100) / 100
