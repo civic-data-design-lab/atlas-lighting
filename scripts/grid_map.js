@@ -1163,7 +1163,6 @@ function timeSelector(chartWidth,chartHeight){
         brush.extent([rdstart,rdend]);
         if (rdend - rdstart == 0){
             d3.select("#selected_time").text(0+" - "+24);
-            //d3.selectAll(".cellgrids").style("display", "block");
             filterhour(window.newData,rdstart,rdend);
             updateOBI(window.newData, rdstart,rdend);
         }else{
@@ -1189,7 +1188,7 @@ function filterhour(data,start,end){
 
         if(start == end || start == 0 && end == 24 || currentCity_o == "Chicago"){
             d3.select("#c" + d.cell_id).style("display", "block");
-            ave_lit += d.averlight
+            ave_lit += d.averlight;
             count_ ++;
         }
 
@@ -1216,11 +1215,9 @@ function updateOBI(data,start,end){
     cf.remove();
     data.forEach(function (d) {
        d.OBI=0;
+
        for (var i=start;i<end;i++){
-            if  ((+d['b_opening_'+i]) !== undefined) {
-                d.OBI += +d['b_opening_'+i];
-                // d.OBI = 1;
-            }
+            d.OBI += +d['b_opening_'+i];
         }
     })
     cf.add(data);
