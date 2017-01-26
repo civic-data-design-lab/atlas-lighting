@@ -496,7 +496,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     border: 1px dashed white;
     font-size: 20px;
     width: 410px;
-    height: 100px;
+    height: calc(100% - 150px);
 }
 
 .fold_bar {
@@ -820,9 +820,16 @@ div#streetview_window {
 }
 
 .data_icon {
-    width: 270px;
+    width: 80px;
     position: absolute;
-    right: 0px;
+    right: 30%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.data_icon_handle {
+    width: 40px;
+    position: absolute;
+    right: 0%;
     top: 50%;
     transform: translateY(-50%);
 }
@@ -851,19 +858,19 @@ div#streetview_window {
 .data_item.ui-widget-content.tag_dem.ui-draggable.ui-draggable-handle:hover {
     padding-left: 2px;
     border: 1px solid #fff;
-    background-color: rgba(32, 192, 226, 0.05);
+    background-color: rgba(32, 192, 226, 0.1);
     cursor: move;
 }
 .data_item.ui-widget-content.tag_bus.ui-draggable.ui-draggable-handle:hover {
     padding-left: 2px;
     border: 1px solid #fff;
-    background-color: rgba(32, 192, 226, 0.05);
+    background-color: rgba(32, 192, 226, 0.1);
     cursor: move;
 }
 .data_item.ui-widget-content.tag_soc.ui-draggable.ui-draggable-handle:hover {
     padding-left: 2px;
     border: 1px solid #fff;
-    background-color: rgba(32, 192, 226, 0.05);
+    background-color: rgba(32, 192, 226, 0.1);
     cursor: move;
 }
 
