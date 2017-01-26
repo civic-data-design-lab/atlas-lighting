@@ -292,6 +292,7 @@ canvas {
     top: 40px;
     right: 0px;
     overflow: auto;
+    /*overflow-y: hidden;*/
     padding-left: 40px;
 }
 
@@ -403,6 +404,10 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     border-radius: 5px;
 }
 
+.dropdown > img {
+    opacity: 0.7;
+}
+
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
     display: none;
@@ -498,15 +503,16 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     position: fixed;
     top: 0px;
     bottom: 0px;
-    width: 30px;
+    width: 20px;
     background-color: rgb(150,150,150);
     right: 430px;
-    height: 100%;
+    height: 190px;
+    border-bottom-left-radius: 20px;
 }
 
 .left_back {
     position: fixed;
-    width: 416px;
+    width: 385px;
     height: calc(100% - 40px);
     background-color: rgba(0,0,0,0.6);
     top: 40px;
@@ -537,21 +543,21 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 
 .left_clickbar {
     position: fixed;
-    width: 30px;
+    width: 20px;
     left: 386px;
-    height: calc(50% - 20px);
+    height: calc(20% - 20px);
 }
 
 .click_data {
     background-color: rgba(150,150,150,0.4);
-    border-top-right-radius: 15px;
+    border-top-right-radius: 20px;
     top: 40px;
 }
 
 .click_case {
     background-color: rgba(150,150,150,0.4);
-    border-bottom-right-radius: 15px;
-    top: calc(50% + 20px);
+    border-bottom-right-radius: 20px;
+    top: calc(20% + 20px);
 }
 
 .selectedTab {
@@ -564,7 +570,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 }
 
 .selector_arrow {
-    width: 20px;
+    width: 10px;
     position: absolute;
     bottom: 10px;
     left: 5px;
@@ -913,7 +919,3 @@ button.toggleAnimation.isNotPressed {
 
 }
 
-/*rect.extent {
-    height: 20px;
-    y: -5px;
-}*/

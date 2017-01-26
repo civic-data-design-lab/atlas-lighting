@@ -362,7 +362,7 @@ function initControl() {
 
     });
 
-    $(".data_searchbox input").val("Enter your search term").css({
+    $(".data_searchbox input").val("Enter your search term...").css({
        'font-size' : '10px',
        'color' : 'gray'
     });
@@ -370,7 +370,7 @@ function initControl() {
         $(this).val("");
     });
     $(".data_searchbox input").focusout(function () { 
-        $(".data_searchbox input").val("Enter your search term").css({
+        $(".data_searchbox input").val("Enter your search term..").css({
        'font-size' : '10px',
        'color' : 'gray'
         });
@@ -911,6 +911,7 @@ function charts(data, selectedCharts) {
             //.elasticY(true)
             .ordinalColors(["#aaaaaa"])
             .gap(0)
+            .centerBar(true)
             .margins({ top: 0, left: 50, right: 10, bottom: 20 })
             .x(d3.scale.linear().domain([1, 51]))
             .y(d3.scale.linear().domain([0, 600]));
@@ -928,6 +929,7 @@ function charts(data, selectedCharts) {
             //.elasticY(true)
             .ordinalColors(["#aaaaaa"])
             .gap(0)
+            .centerBar(true)
             .margins({ top: 0, left: 50, right: 10, bottom: 20 })
             .x(d3.scale.linear().domain([1, 1001]))
             .y(d3.scale.linear().domain([0, 20]));
