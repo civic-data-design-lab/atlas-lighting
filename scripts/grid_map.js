@@ -487,22 +487,11 @@ function initCanvas(data) {
         var zoomAlphaScale = d3.scale.linear().domain([8, 16]).range([.8, .2])
         alpha = zoomAlphaScale(map.getZoom())
         myg.selectAll("rect").remove();
-        // mygOBI.selectAll("rect").remove();
 
         data.forEach(function (d, i) {
             var coordinates = { lat: d.lat, lng: d.lng }
             var light = d.averlight
             var fillColor = lightScale(light)
-            var fillOBIColor = openBusinessScaleColor(parseInt(d.places))
-            //console.log(project(d).x,project(d).y);
-            // mygOBI.append("rect")
-            //     .attr("x", project(d).x)
-            //     .attr("y", project(d).y)
-            //     .attr("id", "c" + d.cell_id)
-            //     .attr("width", radius)
-            //     .attr("height", radius)
-            //     .attr("fill", fillOBIColor)
-                // .attr("fill-opacity", openBusinessScale(parseInt(d.places)));
 
             myg.append("rect")
                 .attr("x", project(d).x)
@@ -511,7 +500,6 @@ function initCanvas(data) {
                 .attr("width", radius)
                 .attr("height", radius)
                 .attr("fill", fillColor)
-                // .attr("fill-opacity", openBusinessScale(parseInt(d.places)))
                 .attr("class", "cellgrids")
                 .on("click", function () {
 
@@ -620,7 +608,6 @@ function initCanvas(data) {
         var myscale = disX / window.__DisX;
         var mytranslate = (Corners[0] - window.__Corners[0]) + "," + (Corners[1] - window.__Corners[1]);
         myg.attr("transform", "translate(" + mytranslate + ")scale(" + myscale + ")");
-        // mygOBI.attr("transform", "translate(" + mytranslate + ")scale(" + myscale + ")");
     }
 
     map.on("viewreset", function () {
@@ -821,7 +808,6 @@ function charts(data, selectedCharts) {
     data.forEach(function(d,i){
         dataOBI[i] = [+d['b_opening_0'], +d['b_opening_1'], +d['b_opening_2'], +d['b_opening_3'], +d['b_opening_4'], +d['b_opening_5'],+d['b_opening_6'],+d['b_opening_7'],+d['b_opening_8'],+d['b_opening_9'],+d['b_opening_10'],+d['b_opening_11'],+d['b_opening_12'],+d['b_opening_13'],+d['b_opening_14'],+d['b_opening_15'],+d['b_opening_16'],+d['b_opening_17'],+d['b_opening_18'],+d['b_opening_19'],+d['b_opening_20'],+d['b_opening_21'], +d['b_opening_22'],+d['b_opening_23']];
     });
-    console.log(dataOBI[1000]);
 
     data.forEach(function (d) {
         d.OBI = 0;
@@ -842,10 +828,7 @@ function charts(data, selectedCharts) {
         for (var i=0;i<24;i++){
             if  ((+d['b_opening_'+i]) !== undefined) {
                 d.OBI += +d['b_opening_'+i];
-                if (+d['b_opening_'+i]===0) {++countZero;}
-                if (+d['b_opening_'+i]>800) {console.log(+d['b_opening_'+i]);}
             }
-            ++count;
         }
 
         // console.log(d.OBI)
@@ -873,7 +856,6 @@ function charts(data, selectedCharts) {
             }
         }
     })
-    console.log(countZero/count*100)
     var chartWidth = 304;
     var chartHeight = 52;
 
@@ -977,7 +959,7 @@ function charts(data, selectedCharts) {
             .ordinalColors(["#888", "#888", "#888"])
             .margins({ top: 5, left: 150, right: 10, bottom: 20 })
             .x(d3.scale.linear().domain([-1, 100]))
-            // .y(d3.scale.linear().domain([0, 20000]))
+            .y(d3.scale.linear().domain([0, 1000]))
             .gap(1)
             .centerBar(true)
             .xUnits(function(){return 50;})
@@ -1179,14 +1161,15 @@ function timeSelector(chartWidth,chartHeight){
         var rdend = Math.round(brush.extent()[1]);
 
         brush.extent([rdstart,rdend]);
-
         if (rdend - rdstart == 0){
             d3.select("#selected_time").text(0+" - "+24);
             //d3.selectAll(".cellgrids").style("display", "block");
             filterhour(window.newData,rdstart,rdend);
+            updateOBI(window.newData, rdstart,rdend);
         }else{
             d3.select("#selected_time").text(rdstart+" - "+rdend);
             filterhour(window.newData,rdstart,rdend);
+            updateOBI(window.newData, rdstart,rdend);
         }
 	}
 
@@ -1200,6 +1183,7 @@ function filterhour(data,start,end){
 
     var ave_lit = 0;
     var count_ = 0;
+
     data.forEach(function (d) {
         var count = 0;
 
@@ -1218,31 +1202,30 @@ function filterhour(data,start,end){
             ave_lit += d.averlight;
             count_ ++;
         }
-
-        for (var i=start;i<end;i++){
-            if  ((+d['b_opening_'+i]) !== undefined) {
-                d.OBI += +d['b_opening_'+i];
-            }
-            else {
-                d.OBI += 0;
-            }
-        }
     })
-    // dc.barChart("#business_opening").filterAll();
-    // var OBIDimension = crossfilter(data).dimension(function (d) {return d.OBI; });
-    // var OBIGroup = OBIDimension.group();
-    // dc.barChart("#business_opening").width(410).height(52)
-    //         .group(OBIGroup).dimension(OBIDimension)
-    //         .ordinalColors(["#888", "#888", "#888"])
-    //         .margins({ top: 0, left: 130, right: 10, bottom: 20 })
-    //         .x(d3.scale.linear().domain([-0.5, 10.5]))
-    //         .gap(1)
-    //         .centerBar(true)
-    //         .xUnits(function(){return 50;})
-    //         .yAxis().ticks(2);
 
     ave_lit /= count_;
     ave_lit = Math.round(ave_lit * 100) / 100
     d3.select("#light_digits").text(ave_lit);
     d3.select("#light_digits").attr("sv_val", ave_lit);
+}
+
+function updateOBI(data,start,end){
+    console.log("updating")
+    var cf = crossfilter(data);
+    cf.remove();
+    data.forEach(function (d) {
+       d.OBI=0;
+       for (var i=start;i<end;i++){
+            if  ((+d['b_opening_'+i]) !== undefined) {
+                d.OBI += +d['b_opening_'+i];
+                // d.OBI = 1;
+            }
+        }
+    })
+    cf.add(data);
+    var OBIDimension_ = cf.dimension(function (d) {return d.OBI; });
+    var OBIGroup_ = OBIDimension_.group();
+    window.OBI.group(OBIGroup_).dimension(OBIDimension_);
+    dc.redrawAll();
 }
