@@ -120,13 +120,13 @@ function initControl() {
     var dropleft = $("#todrop").offset().left;
     var dropright = dropleft + $("#todrop").width();
 
-    $('.data_item').mouseenter(function(event){
+    $('.data_item').off().mouseenter(function(event){
         event.preventDefault();
         $(this).children(".data_intro")
         .fadeIn(300);
     });
 
-    $('.data_item').mouseleave(function(event){
+    $('.data_item').off().mouseleave(function(event){
         event.preventDefault();
         $(this).children(".data_intro")
         .fadeOut(300);
@@ -154,7 +154,8 @@ function initControl() {
 
     $('#todrop').droppable({
         drop: function (event, ui) {
-            $(ui.draggable).attr("style", "position: relative;display:none");
+            $(ui.draggable).attr("style", "position: relative; display: none;");
+            // $(ui.draggable).attr("style", "opacity: 0.5;");
             selectedCharts.push($(ui.draggable).attr("id").split("d_")[1]);
 
             updateChart(selectedCharts);
@@ -335,6 +336,7 @@ function initControl() {
         console.log(myid);
         $("#"+myid).hide();
         $("#d_"+myid).show();
+        // $("#d_"+myid).attr("style", "opacity: 1");
 
         var myindex = selectedCharts.indexOf(myid);
         if (myindex > -1) {
