@@ -66,7 +66,7 @@ a:hover{
 }
 .chart-title{
     border-bottom:1px solid #aaa;
-    font-size:10px;
+    font-size:15px;
     margin:10px;
 }
 
@@ -479,7 +479,9 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     background-color: rgba(0,0,0,0.5);
     margin-right: 30px;
     margin-left: 6px;
+    z-index: 999;
 }
+
 
 .data_item_title{
     font-size: 15px;
@@ -488,6 +490,8 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     left: 0px;
     width: 100px;
     text-align: left;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 #todrop {
@@ -525,7 +529,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     left: 50%;
     top: 50%;
     transform: translate(-50%,-50%);
-    font-size: 20px;
+    font-size: 26px;
 }
 
 
@@ -546,6 +550,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     width: 20px;
     left: 386px;
     height: calc(20% - 20px);
+    cursor: pointer;
 }
 
 .click_data {
@@ -575,6 +580,10 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     bottom: 10px;
     left: 5px;
     cursor: pointer;
+}
+
+.selector_arrow:hover {
+    width: 11px;
 }
 
 .mapboxgl-ctrl-bottom-left {
@@ -820,11 +829,12 @@ div#streetview_window {
 }
 
 .data_icon {
-    width: 80px;
+    width: 60px;
     position: absolute;
-    right: 30%;
+    right: 35%;
     top: 50%;
     transform: translateY(-50%);
+    opacity: 0.8;
 }
 .data_icon_handle {
     width: 40px;
