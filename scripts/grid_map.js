@@ -578,7 +578,6 @@ function initCanvas(data) {
         var increment=0;
         var animationIsRunning=false;
         (function tick() {  
-            console.log("tick", animationIsRunning);
             $('button.toggleAnimation').off().on('click', function(e) {
                 e.preventDefault();
                 animationIsRunning = !animationIsRunning;
@@ -591,7 +590,6 @@ function initCanvas(data) {
                 console.log("click", animationIsRunning);
             })
             if (animationIsRunning) {  
-                console.log("running");
                 if (increment<23) {  filterhour(data, increment, increment+1); }
                 else { increment = 0; }
                 ++increment; 
@@ -629,7 +627,7 @@ function cellSelect(d) {
     $("#instagram_plc0").hide();
 
     console.log(d);
-
+    
     var cell_id = d.cell_id;
 
     //if(selectedCharts.indexOf("instagram")>-1)
@@ -804,12 +802,6 @@ function charts(data, selectedCharts) {
     //  Getting the data for each cell                                            //
     //                                                                            //
     ////////////////////////////////////////////////////////////////////////////////
-    var count = 0;
-    var countZero = 0;
-    var dataOBI = {};
-    data.forEach(function(d,i){
-        dataOBI[i] = [+d['b_opening_0'], +d['b_opening_1'], +d['b_opening_2'], +d['b_opening_3'], +d['b_opening_4'], +d['b_opening_5'],+d['b_opening_6'],+d['b_opening_7'],+d['b_opening_8'],+d['b_opening_9'],+d['b_opening_10'],+d['b_opening_11'],+d['b_opening_12'],+d['b_opening_13'],+d['b_opening_14'],+d['b_opening_15'],+d['b_opening_16'],+d['b_opening_17'],+d['b_opening_18'],+d['b_opening_19'],+d['b_opening_20'],+d['b_opening_21'], +d['b_opening_22'],+d['b_opening_23']];
-    });
 
     data.forEach(function (d) {
         d.OBI = 0;
@@ -828,7 +820,7 @@ function charts(data, selectedCharts) {
 
         // -------------------------------------------------------------------------- OBI values
         for (var i=0;i<24;i++){
-            if  ((+d['b_opening_'+i]) !== undefined) {
+            if  (+d['b_opening_'+i] !== undefined) {
                 d.OBI += +d['b_opening_'+i];
             }
         }
@@ -858,6 +850,7 @@ function charts(data, selectedCharts) {
             }
         }
     })
+
     var chartWidth = 304;
     var chartHeight = 52;
 
@@ -1158,21 +1151,19 @@ function timeSelector(chartWidth,chartHeight){
 	var featurelst = [];
 
 	function brushend() {
-
         brush.extent()[0] = Math.round(brush.extent()[0])
         brush.extent()[1] = Math.round(brush.extent()[1])
         var rdstart = Math.round(brush.extent()[0]);
         var rdend = Math.round(brush.extent()[1]);
 
         brush.extent([rdstart,rdend]);
+
         if (rdend - rdstart == 0){
             d3.select("#selected_time").text(0+" - "+24);
             filterhour(window.newData,rdstart,rdend);
-            updateOBI(window.newData, rdstart,rdend);
         }else{
             d3.select("#selected_time").text(rdstart+" - "+rdend);
             filterhour(window.newData,rdstart,rdend);
-            updateOBI(window.newData, rdstart,rdend);
         }
 	}
 
@@ -1190,40 +1181,48 @@ function filterhour(data,start,end){
     data.forEach(function (d) {
         var count = 0;
 
-        if(start == end || start == 0 && end == 24 || currentCity_o == "Chicago"){
+        if (start == end || start == 0 && end == 24 || currentCity_o == "Chicago"){
             d3.select("#c" + d.cell_id).style("display", "block");
             ave_lit += d.averlight;
             count_ ++;
         }
 
-        for(var i=start;i<end;i++){
+        for (var i=start;i<end;i++){
             count += +d['b_opening_'+i];
         }
 
-        if(count!=0){
+        if (count!=0){
             d3.select("#c" + d.cell_id).style("display", "block");
             ave_lit += d.averlight;
             count_ ++;
         }
+
     })
 
-    ave_lit /= count_;
-    ave_lit = Math.round(ave_lit * 100) / 100
-    d3.select("#light_digits").text(ave_lit);
-    d3.select("#light_digits").attr("sv_val", ave_lit);
+    if (count_!==0) {
+        ave_lit /= count_;
+        ave_lit = Math.round(ave_lit * 100) / 100; 
+        d3.select("#light_digits").text(ave_lit);
+        d3.select("#light_digits").attr("sv_val", ave_lit);
+        if (selectedCharts.includes("business_opening")) {updateOBI(data, start,end);}
+    }
+
 }
 
+//////////////////////////////////// UPDATE OBI ///////////////////////////////////
 function updateOBI(data,start,end){
-    console.log("updating")
+    console.log("updating OBI")
     var cf = crossfilter(data);
     cf.remove();
     data.forEach(function (d) {
        d.OBI=0;
-
        for (var i=start;i<end;i++){
-            d.OBI += +d['b_opening_'+i];
+            if (+d['b_opening_'+i] !== undefined) {
+                d.OBI += +d['b_opening_'+i];
+            }
+            else {debugger;}
         }
-    })
+    });
     cf.add(data);
     var OBIDimension_ = cf.dimension(function (d) {return d.OBI; });
     var OBIGroup_ = OBIDimension_.group();
