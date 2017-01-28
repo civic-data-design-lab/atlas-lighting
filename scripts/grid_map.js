@@ -825,7 +825,6 @@ function charts(data, selectedCharts) {
             }
         }
 
-        // console.log(d.OBI)
         if (d.b_diversity) {
             if (maxBDiv == null || d.b_diversity > maxBDiv) {
                 maxBDiv = d.b_diversity
@@ -961,7 +960,6 @@ function charts(data, selectedCharts) {
             .centerBar(true)
             .xUnits(function(){return 50;})
             .yAxis().ticks(2);
-            //.y(d3.scale.linear().domain([0, 600]));
     }
 
 
@@ -1146,10 +1144,6 @@ function timeSelector(chartWidth,chartHeight){
 	d3.selectAll(".resize rect").attr("height", 29);
     d3.selectAll(".tick line").style("opacity","0.3");
 
-
-	var featureGroup;
-	var featurelst = [];
-
 	function brushend() {
         brush.extent()[0] = Math.round(brush.extent()[0])
         brush.extent()[1] = Math.round(brush.extent()[1])
@@ -1161,9 +1155,12 @@ function timeSelector(chartWidth,chartHeight){
         if (rdend - rdstart == 0){
             d3.select("#selected_time").text(0+" - "+24);
             filterhour(window.newData,rdstart,rdend);
-        }else{
+            if (selectedCharts.includes("business_opening")) {updateOBI(window.newData, rdstart,rdend);}
+        }
+        else {
             d3.select("#selected_time").text(rdstart+" - "+rdend);
             filterhour(window.newData,rdstart,rdend);
+            if (selectedCharts.includes("business_opening")) {updateOBI(window.newData, rdstart,rdend);}
         }
 	}
 
@@ -1173,30 +1170,30 @@ function timeSelector(chartWidth,chartHeight){
 
 function filterhour(data,start,end){
     d3.select("#selected_time").text(start+" - "+end);
-    d3.selectAll(".cellgrids").style("display", "none");
+    // d3.selectAll(".cellgrids").style("display", "none");
 
     var ave_lit = 0;
     var count_ = 0;
 
     data.forEach(function (d) {
-        var count = 0;
 
         if (start == end || start == 0 && end == 24 || currentCity_o == "Chicago"){
             d3.select("#c" + d.cell_id).style("display", "block");
             ave_lit += d.averlight;
             count_ ++;
         }
-
-        for (var i=start;i<end;i++){
-            count += +d['b_opening_'+i];
+        else {
+            d3.select("#c" + d.cell_id).style("display", "none");
         }
 
-        if (count!=0){
+        if (d.OBI!=0){
             d3.select("#c" + d.cell_id).style("display", "block");
             ave_lit += d.averlight;
             count_ ++;
         }
-
+        else {
+            d3.select("#c" + d.cell_id).style("display", "none");
+        }
     })
 
     if (count_!==0) {
@@ -1204,26 +1201,24 @@ function filterhour(data,start,end){
         ave_lit = Math.round(ave_lit * 100) / 100; 
         d3.select("#light_digits").text(ave_lit);
         d3.select("#light_digits").attr("sv_val", ave_lit);
-        if (selectedCharts.includes("business_opening")) {updateOBI(data, start,end);}
     }
 
 }
 
 //////////////////////////////////// UPDATE OBI ///////////////////////////////////
-function updateOBI(data,start,end){
+function updateOBI(dataUpdate,start,end){
     console.log("updating OBI")
-    var cf = crossfilter(data);
+    var cf = crossfilter(dataUpdate);
     cf.remove();
-    data.forEach(function (d) {
+    dataUpdate.forEach(function (d) {
        d.OBI=0;
        for (var i=start;i<end;i++){
             if (+d['b_opening_'+i] !== undefined) {
-                d.OBI += +d['b_opening_'+i];
+                 d.OBI += +d['b_opening_'+i];   
             }
-            else {debugger;}
         }
     });
-    cf.add(data);
+    cf.add(dataUpdate);
     var OBIDimension_ = cf.dimension(function (d) {return d.OBI; });
     var OBIGroup_ = OBIDimension_.group();
     window.OBI.group(OBIGroup_).dimension(OBIDimension_);
