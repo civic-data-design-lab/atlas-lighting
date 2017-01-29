@@ -59,6 +59,12 @@
         <p id="nowmsa"></p>...
         <br/><br/>
       </div>
+
+    <video autoplay  poster="../img/MatatusVideo2.jpg" id="bgvid" loop>
+  <!-- WCAG general accessibility recommendation is that media such as background video play through only once. Loop turned on for the purposes of illustration; if removed, the end of the video will fade in the same way created by pressing the "Pause" button  -->
+	<source src="../website_video4_small.mp4" type="video/mp4"></source>
+	</video>
+
     </div>
 
     <!-- cases -->
@@ -141,7 +147,7 @@
             <div class="chart-title">MEDIAN HOUSEHOLD INCOME
               <span class="source">
                 <a class="reset" href="javascript:incomeChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
-                <span class = "rm_data">| x</span>
+                <a href="javascript:incomeChart.filterAll();dc.redrawAll();"  ><span class = "rm_data"> x</span> </a>
               </span>
             </div>
             <p id="" class = "plc_digits">___</p>
@@ -151,7 +157,9 @@
             <div class="chart-title">DEVELOPMENT INTENSITY
               <span class="source">
                 <a class="reset" href="javascript:devIntChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
-                <span class = "rm_data">| x</span>
+                <a href="javascript:devIntChart.filterAll();dc.redrawAll();" 			><span class = "rm_data"> x</span> </a>
+
+                
               </span>
             </div>
             <p id="" class = "plc_digits">___</p>
@@ -162,7 +170,9 @@
             <div class="chart-title">POPULATION
               <span class="source">
                 <a class="reset" href="javascript:populationChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
-                <span class = "rm_data">| x</span>
+                <a href="javascript:populationChart.filterAll();dc.redrawAll();" 			><span class = "rm_data"> x</span> </a>
+
+                
               </span>
             </div>
             <p id="" class = "plc_digits">___</p>
@@ -173,7 +183,9 @@
             <div class="chart-title">BUSINESS DIVERSITY
               <span class="source">
                 <a class="reset" href="javascript:busDivChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
-                <span class = "rm_data">| x</span>
+                <a href="javascript:busDivChart.filterAll();dc.redrawAll();" 			><span class = "rm_data"> x</span> </a>
+
+                
               </span>
             </div>
             <p id="" class = "plc_digits">___</p>
@@ -183,7 +195,9 @@
             <div class="chart-title">BUSINESS PRICE
               <span class="source">
                 <a class="reset" href="javascript:busPriChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
-                <span class = "rm_data">| x</span>
+                <a href="javascript:busPriChart.filterAll();dc.redrawAll();" 			><span class = "rm_data"> x</span> </a>
+
+                
               </span>
             </div>
             <p id="" class = "plc_digits">___</p>
@@ -193,7 +207,9 @@
             <div class="chart-title">PLACE DENSITY
               <span class="source">
                 <a class="reset" href="javascript:placesChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
-                <span class = "rm_data">| x</span>
+                <a href="javascript:placesChart.filterAll();dc.redrawAll();" 			><span class = "rm_data"> x</span> </a>
+
+                
               </span>
             </div>
             <p id="" class = "plc_digits">___</p>
@@ -203,7 +219,8 @@
             <div class="chart-title">INSTAGRAM DENSITY
               <span class="source">
                 <a class="reset" href="javascript:insChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
-                <span class = "rm_data">| x</span>
+                <a href="javascript:insChart.filterAll();dc.redrawAll();"<span class = "rm_data"> x</span> </a>
+                
               </span>
             </div>
             <p id="" class = "plc_digits">___</p>
@@ -213,7 +230,7 @@
             <div class="chart-title">INSTAGRAM LIKES
               <span class="source">
                 <a class="reset" href="javascript:insLikesChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
-                <span class = "rm_data">| x</span>
+                <a href="javascript:insLikesChart.filterAll();dc.redrawAll();" 			><span class = "rm_data"> x</span> </a>
               </span>
             </div>
             <p id="" class = "plc_digits">___</p>
@@ -222,7 +239,7 @@
           <div id="business_opening" class = "dc-chart">
             <div class="chart-title">BUSINESS OPENING HOURS
               <span class="source">
-                <span class = "rm_data">| x</span>
+                <a><span class = "rm_data"> x</span></a>
               </span>
             </div>
 
@@ -242,10 +259,12 @@
           <div id="street_view" class="extra_data dc-chart">
             <div class="chart-title">GOOGLE STREET VIEW
               <span class="source">
-                <span class = "rm_data">| x</span>
+                <a><span class = "rm_data"> x</span></a>
               </span>
             </div>
             <img src="../icons/placeholder_streetview2.png" id = "street_view_plc">
+            <img src="../icons/select_streetview.png" id = "street_view_plc0">
+
             <div id="streetview_window"></div>
           </div>
 
@@ -254,10 +273,12 @@
           <div id="instagram_pics" class="extra_data dc-chart">
             <div class="chart-title">INSTAGRAM POSTS
               <span class="source">
-                <span class = "rm_data">| x</span>
+                <a><span class = "rm_data"> x</span></a>
               </span>
             </div>
-          <img src="../icons/placeholder_instagram2.png" id = "instagram_plc">
+            <img src="../icons/placeholder_instagram2.png" id = "instagram_plc">
+            <img src="../icons/select_instagram2 copy.png" id = "instagram_plc0">
+
           </div>
 
           <div class="data_select_ui" id="todrop">

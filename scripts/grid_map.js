@@ -74,11 +74,11 @@ var myinit = function () {
     // TODO: Replace with your project's customized code snippet
     // Initialize Firebase
     var config = {
-        apiKey: "AIzaSyAiBlTxG8xEPP_5Zioj167WIxXMtI2pcVk",
-        authDomain: "atlaslighting-25bbb.firebaseapp.com",
-        databaseURL: "https://atlaslighting-25bbb.firebaseio.com",
-        storageBucket: "atlaslighting-25bbb.appspot.com",
-        messagingSenderId: "1085151504834"
+        apiKey: "AIzaSyClx2B45ikrkZ5mYRvMnC8hIAcSN23LZXE",
+        authDomain: "atlas-lighting.firebaseapp.com",
+        databaseURL: "https://atlas-lighting.firebaseio.com",
+        storageBucket: "atlas-lighting.appspot.com",
+        messagingSenderId: "784412993307"
     };
     firebase.initializeApp(config);
     var rootRef = firebase.database().ref();
@@ -164,6 +164,7 @@ function initControl() {
             selectedCharts.push($(ui.draggable).attr("id").split("d_")[1]);
 
             updateChart(selectedCharts);
+
             $(this).css("background-color", "rgba(255,255,255,0)");
         },
         over: function (event, ui) {
@@ -282,6 +283,8 @@ function initControl() {
             $(".slide_hide").animate({
                 left: "386px"
             }, 300, function () { });
+            $("#todrop").show();
+
         } else {
             //back to folding mode
             $(".left_clickbar>img").css("transform", "rotate(180deg)");
@@ -323,8 +326,9 @@ function initControl() {
     })
 
     $(".rm_data").click(function(){
-        var myid = $(this).parent().parent().parent().attr("id");
+        var myid = $(this).parent().parent().parent().parent().attr("id");
         
+        console.log(myid);
         $("#"+myid).hide();
         $("#d_"+myid).show();
 
@@ -463,7 +467,6 @@ function initCanvas(data) {
                 .attr("class", "cellgrids")
                 .on("click", function () {
 
-
                     if (map.getZoom() >= 12) {
                         var mypos = $(this).position();
                         var thisradius = 6 / 1400 * Math.pow(2, map.getZoom());
@@ -473,18 +476,19 @@ function initCanvas(data) {
                             function(result, status) {
                                 if (status === 'OK') {
                                     console.log("ok");
-                                    d3.select("#street_view_plc").style("display", "none");
-                                    d3.select("#streetview_window").style("display", "block");
                                     window.panorama.setPosition(unproject([mypos.left+(thisradius - 10)/2, mypos.top+(thisradius - 10)/2]));
+                                    d3.select("#street_view_plc").style("display", "none");
+                                    d3.select("#street_view_plc0").style("display", "none");
+                                    d3.select("#streetview_window").style("display", "block");
 
                                 }else{
                                     console.log("not ok");
                                     d3.select("#streetview_window").style("display", "none");
                                     d3.select("#street_view_plc").style("display", "block");
+                                    d3.select("#street_view_plc0").style("display", "none");
 
                                 }
                             });
-
 
                         if (currentCity_o != "Chicago") {
                             thisradius = 1.8 * thisradius;
@@ -499,7 +503,41 @@ function initCanvas(data) {
                             .style("height", (thisradius - 10) + "px");
                         cellSelect(d);
                     }
-                });
+                })
+                .on("mouseenter",function(){
+
+                    if (map.getZoom() >= 10) {
+
+                        var myx = d3.event.clientX;
+                        var myy = d3.event.clientY;
+
+                        var loc = unproject([myx, myy]);
+                        var mykey = "AIzaSyBM59LWQXfxJzh06UPYicEM9Ro6RRFCHQc";
+                        var latlng = loc.lat+","+loc.lng
+
+                        var myreq = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+latlng+"&key="+mykey
+                        
+
+                        d3.json(myreq, function(error, data) {
+                            if (error) throw error;
+                            d3.selectAll(".toolip_cell").remove();
+
+                            var infobox = d3.select("body").append("div").attr("class", "toolip_cell")
+                                .style("left",(myx)+"px")
+                                .style("top",(myy)+"px");
+                            
+                            var address = data.results[0].formatted_address;
+                            infobox.text(address);
+
+                        });
+
+                    }
+
+
+                })
+                .on("mouseout",function(){
+                    d3.selectAll(".toolip_cell").remove();
+                })
         });
     }
     render();
@@ -527,6 +565,7 @@ function cellSelect(d) {
     updateZoomedChart(selectedCharts);
     d3.select("#light_digits").text(d.averlight);
     $("#instagram_plc").hide();
+    $("#instagram_plc0").hide();
 
     var cell_id = d.cell_id;
 
@@ -592,6 +631,7 @@ function cellDisselect() {
 
     newBusTypesChart.assignSelect(false);
     newBusTypesChart.updateBusTypes(window.typesData);
+
 }
 
 function updateZoomedChart(selectedCharts) {
@@ -603,6 +643,33 @@ function updateZoomedChart(selectedCharts) {
         if (window.zoomedData.indexOf(d) == -1 || window.cell_selected == true)//certain data is shown only if cell is selected
             d3.select("#" + d).style("display", "block");
     })
+
+    d3.select("#street_view").style("opacity", "1");
+    d3.select("#street_view").style("position", "relative");
+    d3.select("#street_view").style("display", "none");
+
+    if(selectedCharts.indexOf("street_view")>-1){
+        d3.select("#street_view").style("display", "block");
+        d3.select("#streetview_window").style("opacity", "1");
+        d3.select("#street_view_plc0").style("display", "block");
+        d3.select("#street_view_plc").style("display", "none");
+
+    }else{
+        d3.select("#street_view").style("display", "none");
+    }
+    d3.select("#streetview_window").style("opacity", "1");
+    d3.select("#streetview_window").style("position", "relative");
+    d3.select("#streetview_window").style("display", "none");
+
+    if(selectedCharts.indexOf("instagram_pics")>-1){
+        d3.select("#instagram_pics").style("display", "block");
+        $("#instagram_plc0").show();
+        $("#instagram_plc").hide();
+        d3.selectAll(".ins_thumb").remove();
+    }else{
+        d3.select("#instagram_pics").style("display", "none");
+    }
+
 }
 
 function updateChart(selectedCharts) {
@@ -617,6 +684,9 @@ function updateChart(selectedCharts) {
         if (window.zoomedData.indexOf(d) == -1 || window.cell_selected == true)//certain data is shown only if cell is selected
             d3.select("#" + d).style("display", "block");
     })
+
+    updateZoomedChart(selectedCharts);
+
 }
 
 
@@ -642,7 +712,9 @@ if (currentCity_o == "LA"){
 function charts(data, selectedCharts) {
     d3.selectAll(".dc-chart").style("display", "none");
     d3.select("#street_view").style("display", "block");
-    d3.select(".lock").style("display", "block");
+
+
+    d3.selectAll(".lock").style("display", "block");
 
     selectedCharts.forEach(function (d) {
         d3.select("#d_" + d).style("display", "none");
@@ -650,6 +722,14 @@ function charts(data, selectedCharts) {
             d3.select("#" + d).style("display", "block");
         }
     })
+
+    if(selectedCharts.indexOf("street_view")>-1){
+        d3.select("#street_view").style("opacity", "1");
+        d3.select("#street_view").style("position", "relative");
+    }
+    if(selectedCharts.indexOf("instagram_pics")>-1){
+        d3.select("#instagram_pics").style("display", "block");
+    }
 
     var maxBDiv = null;
     var minBDiv = null;
