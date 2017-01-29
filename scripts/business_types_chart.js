@@ -1,14 +1,14 @@
 
-/* Business types chart
+/* Generic tag cloud maker for Business types chart and Vision API Topics chart
  * This has the module functionality in order to use the update function.
- * @module busTypesChart
+ * @module tagCloudChart
  * @params chartWidth, chartHeight
 */
 
-var busTypesChart = function(chartWidth,chartHeight) {
+var tagCloudChart = function(chartWidth,chartHeight) {
 
     var that = {};
-    var that = Object.create(busTypesChart.prototype);
+    var that = Object.create(tagCloudChart.prototype);
 
     var selectedTypes = [];
     var cellsData = [];
@@ -33,7 +33,7 @@ var busTypesChart = function(chartWidth,chartHeight) {
 
     var g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    /* Creating an array containing an object
+    /* Create an array containing an object
      * with business types and their sum for each city.
      * @method initialFormat2
      * @param {data} Data to be formatted
@@ -94,7 +94,11 @@ var busTypesChart = function(chartWidth,chartHeight) {
         var firstRow = [],
             secondRow = [],
             thirdRow = [],
-            fourthRow = []
+            fourthRow = [];
+
+        var firstRowOpen = true, 
+            secondRowOpen = true,
+            thirdRowOpen = true;
 
         var bestArr = [];
         
@@ -194,8 +198,6 @@ var busTypesChart = function(chartWidth,chartHeight) {
 
          var avg_light = 0;
          var count = 0;
-
-         console.log(selectedTypes);
 
          data.forEach(function(el){
              var total = selectedTypes.reduce(function(acc, e){

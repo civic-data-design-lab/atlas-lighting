@@ -56,7 +56,7 @@ var busTypes = ['beauty','culture','education','entertainment',
 
 // Business Types Widget is initiated here.
 
-var newBusTypesChart = busTypesChart(390, 100);
+var newBusTypesChart = tagCloudChart(390, 100);
 
 var myinit = function () {
     window.panorama = new google.maps.StreetViewPanorama(
@@ -97,8 +97,8 @@ function dataDidLoad(error, grid) {
 
     window.dataLst = Object.keys(grid[0])
     window.mydata = grid;
-    console.log(window.dataLst);
-
+    
+    //console.log(window.dataLst);
     //console.log(grid[25].other);
 
     charts(grid, selectedCharts);
@@ -590,7 +590,6 @@ function cellDisselect() {
     d3.select("#street_view").style("position", "relative");
     d3.select("#street_view").style("display", "none");
 
-
     newBusTypesChart.assignSelect(false);
     newBusTypesChart.updateBusTypes(window.typesData);
 }
@@ -638,7 +637,6 @@ if (currentCity_o == "LA"){
     //window.busi_openingChart = dc.barChart("#business_opening")
     window.busPriChart = dc.barChart("#business_price")
 
-
 }
 
 function charts(data, selectedCharts) {
@@ -681,8 +679,9 @@ function charts(data, selectedCharts) {
         d.entertainment = +d.entertainment ? +d.entertainment : 0; 
         d.finance = +d.finance ? +d.finance : 0; 
         d.food = +d.food ? +d.food : 0; 
-        d.health = +d.health ? +d.health : 0; 
-        d.nightclub = +d.office ? +d.office : 0; 
+        d.health = +d.health ? +d.health : 0;
+        d.nightclub = +d.nightclub ? +d.nightclub : 0;
+        d.office = +d.office ? +d.office : 0; 
         d.other = +d.other ? +d.other : 0; 
         d.public_use = +d.public_use ? +d.public_use : 0; 
         d.recreation = +d.recreation ? +d.recreation : 0; 
@@ -722,6 +721,7 @@ function charts(data, selectedCharts) {
     var chartWidth = 304;
     var chartHeight = 52;
 
+    var chartMargins = {top: 0, left: 50, right: 10, bottom: 20};
 
     var ndx = crossfilter(data);
     var all = ndx.groupAll();
@@ -743,8 +743,6 @@ function charts(data, selectedCharts) {
         }
     });
 
-    console.log(typeSums);
-
     window.typesData = typeSums;
     
     newBusTypesChart.bindData(data);
@@ -752,33 +750,30 @@ function charts(data, selectedCharts) {
 
     var busDivDimension = ndx.dimension(function (d) {
         return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0
-    })
+    });
 
-    var busDivGroup = busDivDimension.group()
+    var busDivGroup = busDivDimension.group();
 
     var populationDimension = ndx.dimension(function (d) { return parseInt(d.population) })
     var pGroup = populationDimension.group()
 
     var latDimension = ndx.dimension(function (d) {
         return d.lat
-    })
+    });
 
     var incomeDimension = ndx.dimension(function (d) {
         return parseInt(parseFloat(d.income) / 1000) * 1000
-    })
+    });
 
-    var iGroup = incomeDimension.group()
+    var iGroup = incomeDimension.group();
 
-    var ligAveDimension = ndx.dimension(function (d) { return parseInt(d.averlight) })
-    var laGroup = ligAveDimension.group()
-
-    var devIntDimension = ndx.dimension(function (d) { return parseInt(d.dev_intensity) })
-    var devIntGroup = devIntDimension.group()
+    var devIntDimension = ndx.dimension(function (d) { return parseInt(d.dev_intensity) });
+    var devIntGroup = devIntDimension.group();
 
     var placesDimension = ndx.dimension(function (d) { 
         if (d.places>100) return 100; 
-        else return d.places })
-    var placesGroup = placesDimension.group()
+        else return d.places });
+    var placesGroup = placesDimension.group();
 
     if (currentCity_o == "LA"){
 
@@ -792,7 +787,7 @@ function charts(data, selectedCharts) {
             //.elasticY(true)
             .ordinalColors(["#aaaaaa"])
             .gap(0)
-            .margins({ top: 0, left: 50, right: 10, bottom: 20 })
+            .margins(chartMargins)
             .x(d3.scale.linear().domain([1, 51]))
             .y(d3.scale.linear().domain([0, 600]));
 
@@ -810,7 +805,7 @@ function charts(data, selectedCharts) {
             //.elasticY(true)
             .ordinalColors(["#aaaaaa"])
             .gap(0)
-            .margins({ top: 0, left: 50, right: 10, bottom: 20 })
+            .margins(chartMargins)
             .x(d3.scale.linear().domain([1, 1001]))
             .y(d3.scale.linear().domain([0, 20]));
 
@@ -823,7 +818,7 @@ function charts(data, selectedCharts) {
             .group(busPriGroup).dimension(busPriDimension)
             //.elasticY(true)
             .ordinalColors(["#888", "#888", "#888"])
-            .margins({ top: 0, left: 50, right: 10, bottom: 20 })
+            .margins(chartMargins)
             .x(d3.scale.linear().domain([0.5, 4]))
             .xUnits(function(){return 50;})
             .yAxis().ticks(2);
@@ -835,7 +830,7 @@ function charts(data, selectedCharts) {
     busDivChart.width(chartWidth).height(chartHeight*2)
         .group(busDivGroup).dimension(busDivDimension)
         .ordinalColors(["#aaaaaa"])
-        .margins({ top: 0, left: 50, right: 10, bottom: 20 })
+        .margins(chartMargins)
         .x(d3.scale.linear().domain([0.5, 4.5]))
         .y(d3.scale.linear().domain([0, 1]))
         //.r(d3.scale.linear().domain([0, window.count*5]))
@@ -874,7 +869,7 @@ function charts(data, selectedCharts) {
         .elasticY(true)
         .ordinalColors(["#aaaaaa"])
         .gap(0)
-        .margins({ top: 0, left: 50, right: 10, bottom: 20 })
+        .margins(chartMargins)
         .x(d3.scale.linear().domain([1, 101]))
     placesChart.yAxis().ticks(2)
 
@@ -883,18 +878,80 @@ function charts(data, selectedCharts) {
         .group(devIntGroup).dimension(devIntDimension)
         .ordinalColors(["#888", "#888", "#888"])
         .x(d3.scale.linear().domain([0, maxDInt]))
-        .margins({ top: 0, left: 50, right: 10, bottom: 20 })
+        .margins(chartMargins)
         .xAxis().ticks(10)
     devIntChart.yAxis().ticks(2);
+
+    /* Average Light Index chart
+     * {Previous considerations}
+     * We are calculating predefined ranges to represent low, medium and high intensities of light.
+    */
+
+    var ligAveDimension = ndx.dimension(function (d) { return parseInt(d.averlight) });
+    var laGroup = ligAveDimension.group();
+
+    var sortedLights = data.map(function(el){return parseInt(el.averlight)}).sort(function(a, b){return a - b});
+
+    var actualChartWidth = 244;
+    var xOfFirstQ = Math.round(actualChartWidth * 0.33);//244 is the current width of each chart
+    var xOfSecondQ = Math.round(actualChartWidth * 0.66);
+
+    var appendable = true;
 
     ligAveChart.width(chartWidth).height(chartHeight)
         .group(laGroup).dimension(ligAveDimension).centerBar(true)
         .elasticY(true)
         .colors(d3.scale.linear().domain([0, 200, 400]).range(["#3182bd", "#fee391", "#fc9272"]))
         .colorAccessor(function (d) { return d.key })
-        .margins({ top: 0, left: 50, right: 10, bottom: 20 })
+        .margins(chartMargins)
+
+        // Draw range lines
+        .on('renderlet', function(chart){
+
+            if (appendable){
+
+            chart.select("svg")
+                 .append("g").attr("transform", "translate(" + chartMargins.left + "," + chartMargins.top + ")")
+                 .append("line")
+                 .attr("x1", xOfFirstQ)
+                 .attr("y1", 0)
+                 .attr("x2", xOfFirstQ)
+                 .attr("y2", chartHeight - chartMargins.bottom)
+                 .style("stroke", "lightgrey")
+                 .style("stroke-width", "0.7");
+                 
+
+            chart.select("svg")
+                 .append("g").attr("transform", "translate(" + chartMargins.left + "," + chartMargins.top + ")")
+                 .append("line")
+                 .attr("x1", xOfSecondQ)
+                 .attr("y1", 0)
+                 .attr("x2", xOfSecondQ)
+                 .attr("y2", chartHeight - chartMargins.bottom)
+                 .style("stroke", "lightgrey")
+                 .style("stroke-width", "0.7")
+            
+            var textConst = (xOfFirstQ/2)-10;
+            var texts = [{text:"LOW", x: textConst}, { text:"MEDIUM", x: xOfFirstQ + textConst/2 + 2 }, {text:"HIGH",x:xOfSecondQ + textConst}];
+
+            var g = chart.select("svg").append("g").attr("transform", "translate(" + chartMargins.left + "," + chartMargins.top + ")");
+            var newChart = g.selectAll("text").data(texts);
+            
+            newChart.enter()
+             .append("text")
+             .text(function(el){return el.text;})
+             .attr("y", chartHeight - chartMargins.bottom - 20)
+             .attr("x", function(el){return el.x})
+             .style("font-size", "10px")
+             .style("color", "lightgrey")
+             .style("font-family", "Ropa Sans")
+
+            appendable = false;
+
+            }
+        })
         .x(d3.scale.linear().domain([0, maxLight]))
-        .yAxis().ticks(3)
+        .yAxis().ticks(3);
 
     populationChart.width(chartWidth).height(chartHeight).group(pGroup).dimension(populationDimension)
         .round(dc.round.floor)
