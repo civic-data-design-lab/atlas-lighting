@@ -434,9 +434,6 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
 .show {display:block;}
 
-.cellgrids {
-
-}
 
 .cellgrids:hover {
     fill:white;
@@ -501,7 +498,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     border: 1px dashed white;
     font-size: 20px;
     width: 410px;
-    height: 250px;
+    height: calc(100% - 150px);
 }
 
 .fold_bar {
@@ -848,15 +845,15 @@ div#streetview_window {
 
 .data_icon_handle:hover {
     cursor: pointer;
+    width: 8px;
+    opacity: 1;
 }
 
 .data_intro {
-    width: 250px;
+    width: 300px;
     position: absolute;
-    right: 0px;
     display: none;
-    text-align: left;
-    height: 80px;
+    height: 30px;
     background-color: black;
     padding: 10px;
 }

@@ -120,16 +120,14 @@ function initControl() {
     var dropleft = $("#todrop").offset().left;
     var dropright = dropleft + $("#todrop").width();
 
-    $('.data_item').off().mouseenter(function(event){
+    $('.data_icon_handle').mouseenter(function(event){
         event.preventDefault();
-        $(this).children(".data_intro")
-        .fadeIn(300);
+        $(this).siblings(".data_intro").css("display", "block");
     });
 
-    $('.data_item').off().mouseleave(function(event){
+    $('.data_icon_handle').mouseleave(function(event){
         event.preventDefault();
-        $(this).children(".data_intro")
-        .fadeOut(300);
+        $(this).siblings(".data_intro").css("display", "none");
     });
 
 
@@ -141,9 +139,8 @@ function initControl() {
         },
 
         stop: function (event, ui) {
-            $("#selector").css("width", "416px");
+            $("#selector").css("width", "335px");
             $("#selector").css("overflow-y", "auto");
-            $("#selector").css("direction", "rtl");
 
             if ($(this).attr("style").indexOf("left") > -1) {//get back to original position
                 $(this).attr("style", "position: relative;");
@@ -157,10 +154,10 @@ function initControl() {
             $(ui.draggable).attr("style", "position: relative; display: none;");
             // $(ui.draggable).attr("style", "opacity: 0.5;");
             selectedCharts.push($(ui.draggable).attr("id").split("d_")[1]);
-
             updateChart(selectedCharts);
-
             $(this).css("background-color", "rgba(255,255,255,0)");
+            var currentToDropHeight = $('#todrop').css('height');
+            $('#todrop').css('height', 'calc(100%-300px)');
         },
         over: function (event, ui) {
             $(this).css("background-color", "rgba(255,255,255,0.2)");
@@ -340,7 +337,6 @@ function initControl() {
         if (myindex > -1) {
             selectedCharts.splice(myindex, 1);
         }
-
         updateChart(selectedCharts);
 
     })
