@@ -229,9 +229,8 @@ function initControl() {
         if ($(this).attr("style") && $(this).attr("style").indexOf("180") > -1) {
             //back to selecting mode
             $(".left_clickbar>img").css("transform", "rotate(0deg)");
-            $("#selector").css("width", "416px");
+            $("#selector").css("width", "335px");
             $("#selector").css("overflow-y", "auto");
-            $("#selector").css("direction", "rtl");
             $(".left_back").animate({
                 left: "0px"
             }, 300, function () { });
@@ -239,7 +238,7 @@ function initControl() {
                 left: "0px"
             }, 300, function () { });
             $(".slide_hide").animate({
-                left: "386px"
+                left: "331px"
             }, 300, function () { });
             $("#todrop").show();
             setTimeout(function(){
@@ -248,13 +247,13 @@ function initControl() {
         } else {
             //back to folding mode
             $(".left_clickbar>img").css("transform", "rotate(180deg)");
-            $("#selector").css("width", "416px");
+            $("#selector").css("width", "335px");
             $("#todrop").hide();
             $(".left_back").animate({
-                left: "-390px",
+                left: "-335px",
             }, 300, function () { });
             $("#selector").animate({
-                left: "-390px",
+                left: "-335px",
             }, 300, function () { });
             $(".slide_hide").animate({
                 left: "0px"
@@ -270,9 +269,8 @@ function initControl() {
         if ($(this).attr("style") && $(this).attr("style").indexOf("180") > -1) {
             //back to selecting mode
             $(".left_clickbar>img").css("transform", "rotate(0deg)");
-            $("#selector").css("width", "416px");
+            $("#selector").css("width", "335px");
             $("#selector").css("overflow-y", "auto");
-            $("#selector").css("direction", "rtl");
             $(".left_back").animate({
                 left: "0px"
             }, 300, function () { });
@@ -280,7 +278,7 @@ function initControl() {
                 left: "0px"
             }, 300, function () { });
             $(".slide_hide").animate({
-                left: "386px"
+                left: "331px"
             }, 300, function () { });
             $("#todrop").show();
             setTimeout(function(){
@@ -290,12 +288,12 @@ function initControl() {
         } else {
             //back to folding mode
             $(".left_clickbar>img").css("transform", "rotate(180deg)");
-            $("#selector").css("width", "416px");
+            $("#selector").css("width", "335px");
             $(".left_back").animate({
-                left: "-390px",
+                left: "-335px",
             }, 300, function () { });
             $("#selector").animate({
-                left: "-390px",
+                left: "-335px",
             }, 300, function () { });
             $(".slide_hide").animate({
                 left: "0px"

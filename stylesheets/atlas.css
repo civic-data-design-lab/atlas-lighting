@@ -293,7 +293,6 @@ canvas {
     right: 0px;
     overflow: auto;
     /*overflow-y: hidden;*/
-    padding-left: 40px;
 }
 
 
@@ -394,18 +393,20 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 .dropdown {
     position: relative;
     display: inline-block;
-    width:350px;
+    width:310px;
     margin:10px;
     border:1px solid #fff;
     z-index:9;
     margin-right: 44px;
-    margin-left: 20px;
     height:21px;
     border-radius: 5px;
 }
 
 .dropdown > img {
     opacity: 0.7;
+    width: 7px;
+    left: 295px;
+    position: relative;
 }
 
 /* Dropdown Content (Hidden by Default) */
@@ -453,12 +454,11 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 
 #selector {
     position: absolute;
-    width: 416px;
+    width: 335px;
     height: calc(100% - 40px);
     top: 40px;
     overflow-y: auto;
     overflow-x: hidden;
-    direction: rtl;
     left: 0px;
 }
 
@@ -476,7 +476,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     color: rgba(255,255,255,0.8);
     border-bottom: 1px solid rgba(255,255,255,0.5);
     border-top: 1px solid rgba(255,255,255,0.5);
-    width: 380px;    
+    width: 323px;    
     background-color: rgba(0,0,0,0.5);
     margin-right: 30px;
     margin-left: 6px;
@@ -517,7 +517,8 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 
 .left_back {
     position: fixed;
-    width: 385px;
+    border-right: 1px solid rgba(255,255,255,0.5);
+    width: 331px;
     height: calc(100% - 40px);
     background-color: rgba(0,0,0,0.6);
     top: 40px;
@@ -530,16 +531,14 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     left: 50%;
     top: 50%;
     transform: translate(-50%,-50%);
-    font-size: 26px;
 }
-
-
 
 .drop_indi {
     position: absolute;
     left: 50%;
     top:50%;
     transform: translate(-50%,-50%);
+    font-size: 26px;
 }
 
 .city-title-grid {
@@ -549,7 +548,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 .left_clickbar {
     position: fixed;
     width: 20px;
-    left: 386px;
+    left: 331px;
     height: calc(20% - 20px);
     cursor: pointer;
 }
@@ -613,7 +612,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     display: block;
     width: 350px;
     height: 20px;
-    margin-left: 22px;
+    margin-left: 12px;
     margin-right: 44px;
     position: relative;
 }
@@ -646,7 +645,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     display: block;
     width: 350px;
     height: 20px;
-    margin-left: 22px;
+    margin-left: 12px;
     margin-right: 44px;
     position: relative;
     margin-top: 15px;
@@ -660,7 +659,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     left: -1px;
     display: block;
     position: absolute;
-    width: 337px;
+    width: 298px;
     height: 13px;
     direction:ltr;
 }
@@ -839,12 +838,16 @@ div#streetview_window {
     opacity: 0.8;
 }
 .data_icon_handle {
-    width: 20px;
+    width: 8px;
     position: absolute;
-    right: 0%;
+    right: 5%;
     top: 50%;
     opacity: 0.7;
     transform: translateY(-50%);
+}
+
+.data_icon_handle:hover {
+    cursor: pointer;
 }
 
 .data_intro {
@@ -891,7 +894,7 @@ div#streetview_window {
 .gradient_container {
     position: fixed;
     display: block;
-    width: 385px;   
+    width: 330px;   
     left: 0px;
     z-index: 100;
     height: 30px;
