@@ -240,6 +240,7 @@ function drawDotsMap(cities){
     var tip = d3.tip()
         .attr("class","d3-tip")
         .style("font-size","11px")
+        .style("pointer-events", "none !important")
         .offset([0,30])
     
     var svg = d3.select("#map svg")

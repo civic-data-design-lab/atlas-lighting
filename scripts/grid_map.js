@@ -25,6 +25,7 @@ window.dataLst = [];
 window.mydata;
 window.zoomedData = ["street_view", "instagram_pics"];
 window.newData;
+window.typesData = [];
 
 var __map = null
 var __canvas = null
@@ -45,6 +46,17 @@ var radius = 1
 
 var alpha = 1
 var alphaScale = d3.scale.linear().domain([minZoom, maxZoom]).range([0.6, .03]);
+
+// busTypes is a list of predefined types utilized in the business types chart.
+
+var busTypes = ['beauty','culture','education','entertainment',
+        'finance','food','health','nightclub','office','other','public_use',
+        'recreation','religious','residential','restaurant','retail','service',
+        'transportation'];
+
+// Business Types Widget is initiated here.
+
+var newBusTypesChart = tagCloudChart(390, 100);
 
 var myinit = function () {
     window.panorama = new google.maps.StreetViewPanorama(
@@ -85,12 +97,13 @@ function dataDidLoad(error, grid) {
 
     window.dataLst = Object.keys(grid[0])
     window.mydata = grid;
-    // console.log(window.dataLst);
 
-    charts(grid, selectedCharts)
+    charts(grid, selectedCharts);
 
     initCanvas(grid);
+
     initControl();
+    
 }
 
 function project(d) {
@@ -595,6 +608,7 @@ function initCanvas(data) {
     render();
 
     //////////////////////////////////// ZOOM ///////////////////////////////////
+
     function zoomed() {
         cellDisselect();
         var disX = Math.abs(project(__bounds._sw).x - project(__bounds._ne).x);
@@ -620,8 +634,6 @@ function cellSelect(d) {
     $("#instagram_plc").hide();
     $("#instagram_plc0").hide();
 
-    console.log(d);
-    
     var cell_id = d.cell_id;
 
     //if(selectedCharts.indexOf("instagram")>-1)
@@ -668,6 +680,8 @@ function cellSelect(d) {
                 $("#instagram_plc").show();
             }
         });
+    newBusTypesChart.assignSelect(true);
+    newBusTypesChart.updateBusTypes(d);
 }
 
 //////////////////////////////////// UNSELECT A CELL ///////////////////////////////////
@@ -677,6 +691,12 @@ function cellDisselect() {
     d3.select(".overlay_rect").remove();
     d3.select("#light_digits").text(d3.select("#light_digits").attr("sv_val"));
     updateZoomedChart(selectedCharts);
+    d3.select("#street_view").style("opacity", "1");
+    d3.select("#street_view").style("position", "relative");
+    d3.select("#street_view").style("display", "none");
+
+    newBusTypesChart.assignSelect(false);
+    newBusTypesChart.updateBusTypes(window.typesData);
 
 }
 
@@ -747,6 +767,7 @@ window.devIntChart = dc.barChart("#development_intensity")
 window.ligAveChart = dc.barChart("#light_average")
 window.placesChart = dc.barChart("#places")
 
+
 if (currentCity_o == "LA"){
     window.insChart = dc.barChart("#ins")
     window.insLikesChart = dc.barChart("#ins_likes")
@@ -812,6 +833,26 @@ function charts(data, selectedCharts) {
         d.insta_cnt = +d.insta_cnt ? +d.insta_cnt : 0;
         d.insta_like = +d.insta_like ? +d.insta_like : 0;
 
+        // Business types recasting
+
+        d.beauty = +d.beauty ? +d.beauty : 0; 
+        d.culture = +d.culture ? +d.culture : 0;
+        d.education = +d.education ? +d.education : 0; 
+        d.entertainment = +d.entertainment ? +d.entertainment : 0; 
+        d.finance = +d.finance ? +d.finance : 0; 
+        d.food = +d.food ? +d.food : 0; 
+        d.health = +d.health ? +d.health : 0;
+        d.nightclub = +d.nightclub ? +d.nightclub : 0;
+        d.office = +d.office ? +d.office : 0; 
+        d.other = +d.other ? +d.other : 0; 
+        d.public_use = +d.public_use ? +d.public_use : 0; 
+        d.recreation = +d.recreation ? +d.recreation : 0; 
+        d.religious = +d.religious ? +d.religious : 0; 
+        d.residential = +d.residential ? +d.residential : 0; 
+        d.restaurant = +d.restaurant ? +d.restaurant : 0; 
+        d.retail = +d.retail ? +d.retail : 0; 
+        d.service = +d.service ? +d.service : 0; 
+        d.transportation = +d.transportation ? +d.transportation : 0;   
         // -------------------------------------------------------------------------- OBI values
         for (var i=0;i<24;i++){
             if  (+d['b_opening_'+i] !== undefined) {
@@ -842,13 +883,39 @@ function charts(data, selectedCharts) {
                 maxPlaces = d.places
             }
         }
+
     })
 
     var chartWidth = 304;
     var chartHeight = 52;
 
+    var chartMargins = {top: 0, left: 50, right: 10, bottom: 20};
+
     var ndx = crossfilter(data);
     var all = ndx.groupAll();
+
+
+    /* Creating an array of objects
+     * containing business types and their sum for each city.
+     * @method initialFormat
+     * @param {Array} Data to be formatted
+     */
+
+    var typeSums = [];
+    busTypes.forEach(function(el){
+        var typeSum = ndx.groupAll().reduceSum(function(d){return d[el];}).value();
+        if (typeSum){
+            typeSums.push({
+                category: el, 
+                count: typeSum
+            });
+        }
+    });
+
+    window.typesData = typeSums;
+    
+    newBusTypesChart.bindData(data);
+    newBusTypesChart.updateBusTypes(typeSums);
     window.count = data.length;
     
     ////////////////////////////////////////////////////////////////////////////////
@@ -859,33 +926,24 @@ function charts(data, selectedCharts) {
 
     var busDivDimension = ndx.dimension(function (d) {
         return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0
-    })
+    });
 
-    var busDivGroup = busDivDimension.group()
+    var busDivGroup = busDivDimension.group();
 
     var populationDimension = ndx.dimension(function (d) { return parseInt(d.population) })
     var pGroup = populationDimension.group()
 
     var latDimension = ndx.dimension(function (d) {
         return d.lat
-    })
+    });
 
-    var incomeDimension = ndx.dimension(function (d) {
-        return parseInt(parseFloat(d.income) / 1000) * 1000
-    })
-
-    var iGroup = incomeDimension.group()
-
-    var ligAveDimension = ndx.dimension(function (d) { return parseInt(d.averlight) })
-    var laGroup = ligAveDimension.group()
-
-    var devIntDimension = ndx.dimension(function (d) { return parseInt(d.dev_intensity) })
-    var devIntGroup = devIntDimension.group()
+    var devIntDimension = ndx.dimension(function (d) { return parseInt(d.dev_intensity) });
+    var devIntGroup = devIntDimension.group();
 
     var placesDimension = ndx.dimension(function (d) { 
         if (d.places>100) return 100; 
-        else return d.places })
-    var placesGroup = placesDimension.group()
+        else return d.places });
+    var placesGroup = placesDimension.group();
 
     if (currentCity_o == "LA"){
 
@@ -899,6 +957,7 @@ function charts(data, selectedCharts) {
             //.elasticY(true)
             .ordinalColors(["#aaaaaa"])
             .gap(0)
+            .margins(chartMargins)
             .centerBar(true)
             .margins({ top: 0, left: 50, right: 10, bottom: 20 })
             .x(d3.scale.linear().domain([1, 51]))
@@ -917,8 +976,11 @@ function charts(data, selectedCharts) {
             //.elasticY(true)
             .ordinalColors(["#aaaaaa"])
             .gap(0)
+            .margins(chartMargins)
+
             .centerBar(true)
             .margins({ top: 0, left: 50, right: 10, bottom: 20 })
+
             .x(d3.scale.linear().domain([1, 1001]))
             .y(d3.scale.linear().domain([0, 20]));
 
@@ -932,7 +994,7 @@ function charts(data, selectedCharts) {
             .group(busPriGroup).dimension(busPriDimension)
             //.elasticY(true)
             .ordinalColors(["#888", "#888", "#888"])
-            .margins({ top: 0, left: 50, right: 10, bottom: 20 })
+            .margins(chartMargins)
             .x(d3.scale.linear().domain([0.5, 4]))
             .xUnits(function(){return 50;})
             .gap(1)
@@ -954,13 +1016,14 @@ function charts(data, selectedCharts) {
             .centerBar(true)
             .xUnits(function(){return 50;})
             .yAxis().ticks(2);
+
     }
 
 
     busDivChart.width(chartWidth).height(chartHeight*2)
         .group(busDivGroup).dimension(busDivDimension)
         .ordinalColors(["#aaaaaa"])
-        .margins({ top: 0, left: 50, right: 10, bottom: 20 })
+        .margins(chartMargins)
         .x(d3.scale.linear().domain([0.5, 4.5]))
         .y(d3.scale.linear().domain([0, 1]))
         //.r(d3.scale.linear().domain([0, window.count*5]))
@@ -999,7 +1062,7 @@ function charts(data, selectedCharts) {
         .elasticY(true)
         .ordinalColors(["#aaaaaa"])
         .gap(0)
-        .margins({ top: 0, left: 50, right: 10, bottom: 20 })
+        .margins(chartMargins)
         .x(d3.scale.linear().domain([1, 101]))
     placesChart.yAxis().ticks(2)
 
@@ -1008,18 +1071,51 @@ function charts(data, selectedCharts) {
         .group(devIntGroup).dimension(devIntDimension)
         .ordinalColors(["#888", "#888", "#888"])
         .x(d3.scale.linear().domain([0, maxDInt]))
-        .margins({ top: 0, left: 50, right: 10, bottom: 20 })
+        .margins(chartMargins)
         .xAxis().ticks(10)
     devIntChart.yAxis().ticks(2);
+
+    /* Average Light Index chart
+     * We are calculating predefined ranges to represent low, medium and high intensities of light.
+    */
+
+    var ligAveDimension = ndx.dimension(function (d) { return parseInt(d.averlight) });
+    var laGroup = ligAveDimension.group();
+    var extent = d3.extent(data, function(el){return parseInt(el.averlight)});
+    var sortedLights = data.map(function(el){return parseInt(el.averlight)}).sort(function(a, b){return a - b});
+
+    var actualChartWidth = 244;
+
+    //var xOfFirstQ = Math.round(actualChartWidth * 0.33);//244 is the current width of each chart
+    //var xOfSecondQ = Math.round(actualChartWidth * 0.66);
+
+    var firstQL = d3.quantile(sortedLights, 0.33);
+    var secondQL= d3.quantile(sortedLights, 0.66);
+
+    var xOfFirstQL = 244*(firstQL/(extent[1]-extent[0]));
+    var xOfSecondQL = 244*(secondQL/(extent[1]-extent[0]));
+
+    var appendable = true;
 
     ligAveChart.width(chartWidth).height(chartHeight)
         .group(laGroup).dimension(ligAveDimension).centerBar(true)
         .elasticY(true)
         .colors(d3.scale.linear().domain([0, 200, 400]).range(["#3182bd", "#fee391", "#fc9272"]))
         .colorAccessor(function (d) { return d.key })
-        .margins({ top: 0, left: 50, right: 10, bottom: 20 })
+        .margins(chartMargins)
+        // Draw range lines
+        .on('renderlet', function(chart){
+            if (appendable){
+                addQuantiles(chart, xOfFirstQL, xOfSecondQL, 3, 2, chartHeight, chartMargins, 2);
+                appendable = false;
+            }
+        })
         .x(d3.scale.linear().domain([0, maxLight]))
-        .yAxis().ticks(3)
+        .yAxis().ticks(3);
+
+    /* Population Chart
+     * We are dividing the distribution into three quantiles: low, medium and high 
+    */
 
     populationChart.width(chartWidth).height(chartHeight).group(pGroup).dimension(populationDimension)
         .round(dc.round.floor)
@@ -1033,6 +1129,23 @@ function charts(data, selectedCharts) {
         .yAxis().ticks(2)
     populationChart.xAxis().ticks(4)
 
+    /* Median Household Income Chart
+     * We are dividing the distribution into three quantiles: low, medium and high 
+    */
+
+    var incomeDimension = ndx.dimension(function (d) {
+        return parseInt(parseFloat(d.income) / 1000) * 1000
+    });
+    var iGroup = incomeDimension.group();
+    var extentI = d3.extent(data, function(el){return parseInt(parseFloat(el.income) / 1000) * 1000});
+    var sortedIncomes = data.map(function(el){return parseInt(parseFloat(el.income) / 1000) * 1000}).sort(function(a, b){return a - b});
+    var firstQI = d3.quantile(sortedIncomes, 0.33);
+    var secondQI = d3.quantile(sortedIncomes, 0.66);
+    var xOfFirstQI = 244*(firstQI/(extentI[1]-extentI[0]));
+    var xOfSecondQI = 244*(secondQI/(extentI[1]-extentI[0]));
+
+    var appendable2 = true;
+
     incomeChart.width(chartWidth).height(chartHeight).group(iGroup).dimension(incomeDimension)
         .round(dc.round.floor)
         .ordinalColors(["#ffffff"])
@@ -1040,19 +1153,28 @@ function charts(data, selectedCharts) {
         //.elasticY(true)
         .elasticX(true)
         .margins({ top: 0, left: 50, right: 10, bottom: 20 })
-        .on('renderlet', function (d) {
-            window.newData = incomeDimension.top(Infinity)
-            d3.select("#map .datalayer").remove()
-            var canvas = __canvas
-
+        .on('renderlet', function (chart) {
+            window.newData = incomeDimension.top(Infinity);
+            d3.select("#map .datalayer").remove();
+            var canvas = __canvas;
             d3.selectAll(".cellgrids").style("display", "none");
-
-
             var mytime = $("#selected_time").text().split(" - ");
             var start = mytime[0];
             var end = mytime[1];
 
             filterhour(window.newData,start,end);
+
+            if (appendable2){
+                addQuantiles(chart, xOfFirstQI, xOfSecondQI, 5, 5, chartHeight, chartMargins, 6);
+                appendable2 = false;
+            }
+
+            var median = d3.median(window.newData, function(el){return parseInt(parseFloat(el.income) / 1000) * 1000;});
+            var correspond = thisQuantile(median, extentI, firstQI, secondQI);
+
+            d3.select("#income_digits").text(correspond);
+            d3.select("#income_digits").attr("sv_val", correspond);
+
 
         })
         .x(d3.scale.linear().domain([1, window.count]))
@@ -1198,7 +1320,85 @@ function filterhour(data,start,end){
     }
 
 }
+}
 
+    /* Calculates which quantile given selections' median fall into.
+     * @method thisQuantile
+     * @param {Array} Data
+     */
+
+     var thisQuantile = function(median, extent, firstQ, secondQ){
+        if (median >= extent[0] && median <= firstQ){
+            return "LOW";
+        } else if (median > firstQ && median <= secondQ){
+            return "MEDIUM";
+        } else {
+            return "HIGH"
+        }
+     }
+
+    /* Utiliy function to move a d3 element back in appearance order.
+     */
+
+    d3.selection.prototype.moveToBack = function() {  
+        return this.each(function() { 
+            var firstChild = this.parentNode.firstChild; 
+            if (firstChild) { 
+                this.parentNode.insertBefore(this, firstChild); 
+            } 
+        });
+    };
+
+    /* Function for drawing Quantile Lines on the selected chart.
+     * @method addQuantiles
+     * @param {Object} chart
+     * @param {Number} firstQ
+     * @param {Number} secondQ
+     * @param {Number} b -Offset parameter
+     * @param {Number} c -Offset parameter
+     * @param {Number} chrtHeight
+     * @param {Object} chrtMargins
+     * @param {Number} fontSize 
+     */
+
+    var addQuantiles = function (chart, firstQ, secondQ, b, c, chrtHeight, chrtMargins, fontSize) {
+            chart.select("svg")
+                 .append("g").attr("transform", "translate(" + chrtMargins.left + "," + chrtMargins.top + ")")
+                 .append("line")
+                 .attr("x1", firstQ)
+                 .attr("y1", 0)
+                 .attr("x2", firstQ)
+                 .attr("y2", chrtHeight - chrtMargins.bottom)
+                 .style("stroke", "lightgrey")
+                 .style("stroke-width", "0.7");
+                 
+
+            chart.select("svg")
+                 .append("g").attr("transform", "translate(" + chrtMargins.left + "," + chrtMargins.top + ")")
+                 .append("line")
+                 .attr("x1", secondQ)
+                 .attr("y1", 0)
+                 .attr("x2", secondQ)
+                 .attr("y2", chrtHeight - chrtMargins.bottom)
+                 .style("stroke", "lightgrey")
+                 .style("stroke-width", "0.7")
+            
+            var textConst = (firstQ/2)-b; // b is 3 and c is 2 for Lighting Average,
+            var texts = [{text:"LOW", x: textConst}, { text:"MEDIUM", x: firstQ + c }, {text:"HIGH",x:secondQ + textConst}];
+
+            var g = chart.select("svg").append("g").attr("transform", "translate(" + chrtMargins.left + "," + chrtMargins.top + ")");
+            var newChart = g.selectAll("text").data(texts);
+            
+            newChart.enter()
+             .append("text")
+             .text(function(el){return el.text;})
+             .attr("y", chrtHeight - chrtMargins.bottom - 25)
+             .attr("x", function(el){return el.x})
+             .style("font-size", fontSize + "px") // 3 for Lighting Average
+             .style("color", "lightgrey")
+             .style("font-family", "Ropa Sans")
+
+    };
 //////////////////////////////////// UPDATE OBI ///////////////////////////////////
 function updateOBI(dataUpdate,start,end){
     console.log("updating OBI")

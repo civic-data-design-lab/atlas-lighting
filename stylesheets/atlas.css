@@ -234,11 +234,26 @@ canvas {
     cursor:pointer;
     font-size:12px;
     letter-spacing:1px;
+    stroke-opacity:0.5;
 }
 .dc-chart:hover {
     fill-opacity: 1;
     cursor:pointer;
+    stroke-opacity:1;
 }
+
+/* dc-chart class extended for Business Types widget*/
+
+.dc-chart.bus-types{
+    fill-opacity: .5;
+    cursor:pointer;
+}
+
+.dc-chart.bus-types:hover{
+    fill-opacity: .5;
+    cursor:pointer;
+}
+
 .dc-chart .selected{
     fill:#fff;
 }
@@ -262,6 +277,7 @@ canvas {
     border:1px solid #fff;
     padding:5px;
     border-radius:5px;
+    pointer-events: none !important;
 }
 #row{
     padding:5px;
@@ -342,10 +358,13 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 #philips{padding:10px;}
 #civic{padding:10px;}
 .x.axis line {
+  /*fill: none;*/
   stroke: #fff;
 }
 .x.axis path {
+    fill: none; 
     stroke: #fff;
+    /*stroke-width: 0;*/
 }
 #bubble-key{
     padding:5px;
@@ -444,9 +463,6 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     bottom: 0;
     left: 0;
     z-index: 11 !important;
-}
-
-.dc-chart {
 }
 
 #selector {
@@ -694,6 +710,13 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     position: absolute;    
 }
 
+.other_digits {
+    color: rgb(32, 192, 226);
+    font-size: 24px;
+    margin-left: 10px;
+    position: absolute; 
+}
+
 #light_digits {
     color: rgb(32, 192, 226);
     font-size: 45px;
@@ -865,6 +888,53 @@ div#streetview_window {
 #business_opening svg {
     margin-left: 0px;
 }
+
+
+/*____________________________*/
+
+/* Business Types */
+
+#business_types svg {
+    margin-left: 0px;  
+}
+
+#business_types .textElements {
+    color: rgb(32, 192, 226);
+    position: absolute;  
+    display: inline-block;
+    *display: inline;
+    margin-left: 5px;
+    margin-top:3px;
+}
+
+.types-text {
+    fill-opacity: 0.5;
+}
+
+.types-text.active {
+    fill-opacity: 1;
+}
+
+/*____________________________*/
+
+/* Grıd lines for quantiles */
+
+
+.grid .tick {
+    stroke: lightgrey;
+    opacity: 0.7;
+}
+
+.grido {
+    stroke: rgb(32, 192, 226);/*lightgrey;*/
+    /*opacity: 0.5;*/
+    stroke-width: 1;
+}
+
+.transparent {
+    fill-opacity: 0.2;
+}
+
 
 /*--------------------------------------------- Kalli additions -------------------*/
 

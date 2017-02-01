@@ -60,7 +60,11 @@
         <br/><br/>
       </div>
 
+
+    <video autoplay id="bgvid" loop> 
+
     <video autoplay id="bgvid" loop>
+
   <!-- WCAG general accessibility recommendation is that media such as background video play through only once. Loop turned on for the purposes of illustration; if removed, the end of the video will fade in the same way created by pressing the "Pause" button  -->
 	<source src="../website_video4_small.mp4" type="video/mp4"></source>
 	</video>
@@ -150,7 +154,7 @@
                 <a href="javascript:incomeChart.filterAll();dc.redrawAll();"  ><span class = "rm_data"> x</span> </a>
               </span>
             </div>
-            <p id="" class = "plc_digits">___</p>
+            <p id="income_digits" class = "other_digits">___</p>
           </div>
 
           <div id="development_intensity">
@@ -220,7 +224,7 @@
             <div class="chart-title">INSTAGRAM DENSITY
               <span class="source">
                 <a class="reset" href="javascript:insChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
-                <a href="javascript:insChart.filterAll();dc.redrawAll();"<span class = "rm_data"> x</span> </a>
+                <a href="javascript:insChart.filterAll();dc.redrawAll();"><span class = "rm_data"> x</span> </a>
                 
               </span>
             </div>
@@ -231,7 +235,7 @@
             <div class="chart-title">INSTAGRAM LIKES
               <span class="source">
                 <a class="reset" href="javascript:insLikesChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
-                <a href="javascript:insLikesChart.filterAll();dc.redrawAll();" 			><span class = "rm_data"> x</span> </a>
+                <a href="javascript:insLikesChart.filterAll();dc.redrawAll();" ><span class = "rm_data"> x</span> </a>
               </span>
             </div>
             <p id="" class = "plc_digits">___</p>
@@ -246,6 +250,14 @@
             </div>
             <p id = "selected_time" class = "plc_digits">0 - 24</p>
             <button class="toggleAnimation"><img src="../icons/play.png" width="8px"></button>
+          </div>
+
+          <div id="business_types" class = "dc-chart bus-types">
+            <div class="chart-title">BUSINESS TYPES
+              <span class="source">
+                <span class = "rm_data">| x</span>
+              </span>
+            </div>
           </div>
 
 
@@ -310,7 +322,7 @@
               <div id="myDropdown" class="dropdown-content">
                 <a href="javascript:window.location.assign('grid.html#Chicago');window.location.reload();">CHICAGO-JOLIET-NAPERVILLE,IL-IN-WI</a> 
                 <a href="javascript:window.location.assign('grid.html#LA');window.location.reload();">LOS ANGELES-LONG BEACH-SANTA ANA, CA</a>
-<!--                <a href="javascript:window.location.assign('grid.html#Pittsburgh');window.location.reload();">PITTSBURGH, PA</a>
+<!--            <a href="javascript:window.location.assign('grid.html#Pittsburgh');window.location.reload();">PITTSBURGH, PA</a>
                 <a href="javascript:window.location.assign('grid.html#Sanjose');window.location.reload();">SAN JOSE-SUNNYVALE-SANTA CLARA, CA</a>
                 <a href="javascript:window.location.assign('grid.html#Denver');window.location.reload();">DENVER-AURORA-BROOMFIELD, CO</a>
 -->              
@@ -380,6 +392,14 @@
           <img src="../icons/dashboard_icons/info.png" class = "data_icon_handle">
           <p class = "data_intro">Household income is a measure of the combined incomes of all people sharing a particular household or place of residence. Source: 2010 - 2014 ACS - 5 Year Estimate</p>
 
+
+        <div class="data_item ui-widget-content tag_bus" id="d_business_types">
+          <p class="data_item_title">BUSINESS TYPES</p>
+          <!-- <img src="../icons/data_icon/business_opening.jpg" class = "data_icon"> -->
+          <p class = "data_intro">Type of businesses open in a grid cell for a given time period. Source: Google Places API</p>
+
+        </div>
+
         </div>        
         <!-- ************************************************************** Social filters **************************************************************-->
         <div class="data_item ui-widget-content tag_soc" id="d_street_view">
@@ -423,11 +443,11 @@
   <script src="../scripts/city_comparisons_data.js"></script>
   <script src="../scripts/city_dropdown.js"></script>
 
+  <script src="../scripts/business_types_chart.js"></script>
   <script src="../scripts/grid_map.js"></script>
   <script src="../scripts/filter_rollovers.js"></script>
 
   <script src="../scripts/underscore.js"></script>
-  <script src="../scripts/front_page_text.js"></script>
   <script src="../scripts/front_page_map_2.js"></script>
 
 
