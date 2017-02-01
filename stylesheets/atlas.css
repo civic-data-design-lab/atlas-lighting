@@ -694,6 +694,13 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     position: absolute;    
 }
 
+.other_digits {
+    color: rgb(32, 192, 226);
+    font-size: 24px;
+    margin-left: 10px;
+    position: absolute; 
+}
+
 #light_digits {
     color: rgb(32, 192, 226);
     font-size: 45px;

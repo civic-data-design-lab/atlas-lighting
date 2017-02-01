@@ -841,12 +841,6 @@ function charts(data, selectedCharts) {
         return d.lat
     });
 
-    var incomeDimension = ndx.dimension(function (d) {
-        return parseInt(parseFloat(d.income) / 1000) * 1000
-    });
-
-    var iGroup = incomeDimension.group();
-
     var devIntDimension = ndx.dimension(function (d) { return parseInt(d.dev_intensity) });
     var devIntGroup = devIntDimension.group();
 
@@ -963,18 +957,24 @@ function charts(data, selectedCharts) {
     devIntChart.yAxis().ticks(2);
 
     /* Average Light Index chart
-     * {Previous considerations}
      * We are calculating predefined ranges to represent low, medium and high intensities of light.
     */
 
     var ligAveDimension = ndx.dimension(function (d) { return parseInt(d.averlight) });
     var laGroup = ligAveDimension.group();
-
+    var extent = d3.extent(data, function(el){return parseInt(el.averlight)});
     var sortedLights = data.map(function(el){return parseInt(el.averlight)}).sort(function(a, b){return a - b});
 
     var actualChartWidth = 244;
-    var xOfFirstQ = Math.round(actualChartWidth * 0.33);//244 is the current width of each chart
-    var xOfSecondQ = Math.round(actualChartWidth * 0.66);
+
+    //var xOfFirstQ = Math.round(actualChartWidth * 0.33);//244 is the current width of each chart
+    //var xOfSecondQ = Math.round(actualChartWidth * 0.66);
+
+    var firstQL = d3.quantile(sortedLights, 0.33);
+    var secondQL= d3.quantile(sortedLights, 0.66);
+
+    var xOfFirstQL = 244*(firstQL/(extent[1]-extent[0]));
+    var xOfSecondQL = 244*(secondQL/(extent[1]-extent[0]));
 
     var appendable = true;
 
@@ -984,54 +984,19 @@ function charts(data, selectedCharts) {
         .colors(d3.scale.linear().domain([0, 200, 400]).range(["#3182bd", "#fee391", "#fc9272"]))
         .colorAccessor(function (d) { return d.key })
         .margins(chartMargins)
-
         // Draw range lines
         .on('renderlet', function(chart){
-
             if (appendable){
-
-            chart.select("svg")
-                 .append("g").attr("transform", "translate(" + chartMargins.left + "," + chartMargins.top + ")")
-                 .append("line")
-                 .attr("x1", xOfFirstQ)
-                 .attr("y1", 0)
-                 .attr("x2", xOfFirstQ)
-                 .attr("y2", chartHeight - chartMargins.bottom)
-                 .style("stroke", "lightgrey")
-                 .style("stroke-width", "0.7");
-                 
-
-            chart.select("svg")
-                 .append("g").attr("transform", "translate(" + chartMargins.left + "," + chartMargins.top + ")")
-                 .append("line")
-                 .attr("x1", xOfSecondQ)
-                 .attr("y1", 0)
-                 .attr("x2", xOfSecondQ)
-                 .attr("y2", chartHeight - chartMargins.bottom)
-                 .style("stroke", "lightgrey")
-                 .style("stroke-width", "0.7")
-            
-            var textConst = (xOfFirstQ/2)-10;
-            var texts = [{text:"LOW", x: textConst}, { text:"MEDIUM", x: xOfFirstQ + textConst/2 + 2 }, {text:"HIGH",x:xOfSecondQ + textConst}];
-
-            var g = chart.select("svg").append("g").attr("transform", "translate(" + chartMargins.left + "," + chartMargins.top + ")");
-            var newChart = g.selectAll("text").data(texts);
-            
-            newChart.enter()
-             .append("text")
-             .text(function(el){return el.text;})
-             .attr("y", chartHeight - chartMargins.bottom - 20)
-             .attr("x", function(el){return el.x})
-             .style("font-size", "10px")
-             .style("color", "lightgrey")
-             .style("font-family", "Ropa Sans")
-
-            appendable = false;
-
+                addQuantiles(chart, xOfFirstQL, xOfSecondQL, 3, 2, chartHeight, chartMargins, 2);
+                appendable = false;
             }
         })
         .x(d3.scale.linear().domain([0, maxLight]))
         .yAxis().ticks(3);
+
+    /* Population Chart
+     * We are dividing the distribution into three quantiles: low, medium and high 
+    */
 
     populationChart.width(chartWidth).height(chartHeight).group(pGroup).dimension(populationDimension)
         .round(dc.round.floor)
@@ -1045,6 +1010,23 @@ function charts(data, selectedCharts) {
         .yAxis().ticks(2)
     populationChart.xAxis().ticks(4)
 
+    /* Median Household Income Chart
+     * We are dividing the distribution into three quantiles: low, medium and high 
+    */
+
+    var incomeDimension = ndx.dimension(function (d) {
+        return parseInt(parseFloat(d.income) / 1000) * 1000
+    });
+    var iGroup = incomeDimension.group();
+    var extentI = d3.extent(data, function(el){return parseInt(parseFloat(el.income) / 1000) * 1000});
+    var sortedIncomes = data.map(function(el){return parseInt(parseFloat(el.income) / 1000) * 1000}).sort(function(a, b){return a - b});
+    var firstQI = d3.quantile(sortedIncomes, 0.33);
+    var secondQI = d3.quantile(sortedIncomes, 0.66);
+    var xOfFirstQI = 244*(firstQI/(extentI[1]-extentI[0]));
+    var xOfSecondQI = 244*(secondQI/(extentI[1]-extentI[0]));
+
+    var appendable2 = true;
+
     incomeChart.width(chartWidth).height(chartHeight).group(iGroup).dimension(incomeDimension)
         .round(dc.round.floor)
         .ordinalColors(["#ffffff"])
@@ -1052,21 +1034,27 @@ function charts(data, selectedCharts) {
         //.elasticY(true)
         .elasticX(true)
         .margins({ top: 0, left: 50, right: 10, bottom: 20 })
-        .on('renderlet', function (d) {
-            window.newData = incomeDimension.top(Infinity)
-            d3.select("#map .datalayer").remove()
-            var canvas = __canvas
-
+        .on('renderlet', function (chart) {
+            window.newData = incomeDimension.top(Infinity);
+            d3.select("#map .datalayer").remove();
+            var canvas = __canvas;
             d3.selectAll(".cellgrids").style("display", "none");
-
-
             var mytime = $("#selected_time").text().split(" - ");
             var start = mytime[0];
             var end = mytime[1];
 
             filterhour(window.newData,start,end);
-            
 
+            if (appendable2){
+                addQuantiles(chart, xOfFirstQI, xOfSecondQI, 5, 5, chartHeight, chartMargins, 6);
+                appendable2 = false;
+            }
+
+            var median = d3.median(window.newData, function(el){return parseInt(parseFloat(el.income) / 1000) * 1000;});
+            var correspond = thisQuantile(median, extentI, firstQI, secondQI);
+
+            d3.select("#income_digits").text(correspond);
+            d3.select("#income_digits").attr("sv_val", correspond);
 
         })
         .x(d3.scale.linear().domain([1, window.count]))
@@ -1212,3 +1200,82 @@ function selectTime(chartWidth,chartHeight){
 
 
     }
+
+
+    /* Calculates which quantile given selections' median fall into.
+     * @method thisQuantile
+     * @param {Array} Data
+     */
+
+     var thisQuantile = function(median, extent, firstQ, secondQ){
+        if (median >= extent[0] && median <= firstQ){
+            return "LOW";
+        } else if (median > firstQ && median <= secondQ){
+            return "MEDIUM";
+        } else {
+            return "HIGH"
+        }
+     }
+
+    /* Utiliy function to move a d3 element back in appearance order.
+     */
+
+    d3.selection.prototype.moveToBack = function() {  
+        return this.each(function() { 
+            var firstChild = this.parentNode.firstChild; 
+            if (firstChild) { 
+                this.parentNode.insertBefore(this, firstChild); 
+            } 
+        });
+    };
+
+    /* Function for drawing Quantile Lines on the selected chart.
+     * @method addQuantiles
+     * @param {Object} chart
+     * @param {Number} firstQ
+     * @param {Number} secondQ
+     * @param {Number} b -Offset parameter
+     * @param {Number} c -Offset parameter
+     * @param {Number} chrtHeight
+     * @param {Object} chrtMargins
+     * @param {Number} fontSize 
+     */
+
+    var addQuantiles = function (chart, firstQ, secondQ, b, c, chrtHeight, chrtMargins, fontSize) {
+            chart.select("svg")
+                 .append("g").attr("transform", "translate(" + chrtMargins.left + "," + chrtMargins.top + ")")
+                 .append("line")
+                 .attr("x1", firstQ)
+                 .attr("y1", 0)
+                 .attr("x2", firstQ)
+                 .attr("y2", chrtHeight - chrtMargins.bottom)
+                 .style("stroke", "lightgrey")
+                 .style("stroke-width", "0.7");
+                 
+
+            chart.select("svg")
+                 .append("g").attr("transform", "translate(" + chrtMargins.left + "," + chrtMargins.top + ")")
+                 .append("line")
+                 .attr("x1", secondQ)
+                 .attr("y1", 0)
+                 .attr("x2", secondQ)
+                 .attr("y2", chrtHeight - chrtMargins.bottom)
+                 .style("stroke", "lightgrey")
+                 .style("stroke-width", "0.7")
+            
+            var textConst = (firstQ/2)-b; // b is 3 and c is 2 for Lighting Average,
+            var texts = [{text:"LOW", x: textConst}, { text:"MEDIUM", x: firstQ + c }, {text:"HIGH",x:secondQ + textConst}];
+
+            var g = chart.select("svg").append("g").attr("transform", "translate(" + chrtMargins.left + "," + chrtMargins.top + ")");
+            var newChart = g.selectAll("text").data(texts);
+            
+            newChart.enter()
+             .append("text")
+             .text(function(el){return el.text;})
+             .attr("y", chrtHeight - chrtMargins.bottom - 25)
+             .attr("x", function(el){return el.x})
+             .style("font-size", fontSize + "px") // 3 for Lighting Average
+             .style("color", "lightgrey")
+             .style("font-family", "Ropa Sans")
+
+    };
