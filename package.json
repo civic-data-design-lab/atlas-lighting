@@ -5,8 +5,8 @@
   "repository": "https://github.com/civic-data-design-lab/atlas_lighting",
   "private": true,
   "scripts": {
-    "start": "node cluster.js",
-    "monitor": "nodemon server.js",
+    "start": "node scripts/cluster.js",
+    "monitor": "nodemon server/server.js",
     "deploy": "gcloud preview app deploy app.yaml"
   },
   "author": "Armin Akhavan armin.akhavan@gmail.com",

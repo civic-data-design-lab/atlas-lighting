@@ -13,7 +13,6 @@
 {
   background: rgba(255, 255, 255, 0.8);
   border-radius: 5px;
-
 }
 
 html {
@@ -67,7 +66,7 @@ a:hover{
 }
 .chart-title{
     border-bottom:1px solid #aaa;
-    font-size:10px;
+    font-size:15px;
     margin:10px;
 }
 
@@ -309,7 +308,7 @@ canvas {
     top: 40px;
     right: 0px;
     overflow: auto;
-    padding-left: 40px;
+    /*overflow-y: hidden;*/
 }
 
 
@@ -413,14 +412,20 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 .dropdown {
     position: relative;
     display: inline-block;
-    width:350px;
+    width:310px;
     margin:10px;
     border:1px solid #fff;
     z-index:9;
     margin-right: 44px;
-    margin-left: 20px;
     height:21px;
     border-radius: 5px;
+}
+
+.dropdown > img {
+    opacity: 0.7;
+    width: 7px;
+    left: 295px;
+    position: relative;
 }
 
 /* Dropdown Content (Hidden by Default) */
@@ -448,13 +453,10 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
 .show {display:block;}
 
-.cellgrids {
-
-}
 
 .cellgrids:hover {
     fill:white;
-    
+    cursor: crosshair;
 }
 
 .mapboxgl-ctrl-bottom-left {
@@ -465,13 +467,17 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 
 #selector {
     position: absolute;
-    width: 416px;
+    width: 335px;
     height: calc(100% - 40px);
     top: 40px;
     overflow-y: auto;
     overflow-x: hidden;
-    direction: rtl;
     left: 0px;
+}
+
+::-webkit-scrollbar {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;  /* optional: just make scrollbar invisible */
 }
 
 .mapboxgl-ctrl-geocoder {
@@ -479,22 +485,27 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 }
 
 .data_item {
-    height: 100px;
+    height: 54px;
+    color: rgba(255,255,255,0.8);
     border-bottom: 1px solid rgba(255,255,255,0.5);
     border-top: 1px solid rgba(255,255,255,0.5);
-    width: 380px;    
+    width: 323px;    
     background-color: rgba(0,0,0,0.5);
     margin-right: 30px;
     margin-left: 6px;
+    z-index: 999;
 }
 
+
 .data_item_title{
-    font-size: 15px;
+    font-size: 13px;
     padding: 10px;
     position: absolute;
     left: 0px;
-    width: 100px;
+    width: 200px;
     text-align: left;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 #todrop {
@@ -503,22 +514,24 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     border: 1px dashed white;
     font-size: 20px;
     width: 410px;
-    height: 100px;
+    height: calc(100% - 150px);
 }
 
 .fold_bar {
     position: fixed;
     top: 0px;
     bottom: 0px;
-    width: 30px;
+    width: 20px;
     background-color: rgb(150,150,150);
     right: 430px;
-    height: 100%;
+    height: 190px;
+    border-bottom-left-radius: 20px;
 }
 
 .left_back {
     position: fixed;
-    width: 416px;
+    border-right: 1px solid rgba(255,255,255,0.5);
+    width: 331px;
     height: calc(100% - 40px);
     background-color: rgba(0,0,0,0.6);
     top: 40px;
@@ -531,16 +544,14 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     left: 50%;
     top: 50%;
     transform: translate(-50%,-50%);
-    font-size: 20px;
 }
-
-
 
 .drop_indi {
     position: absolute;
     left: 50%;
     top:50%;
     transform: translate(-50%,-50%);
+    font-size: 26px;
 }
 
 .city-title-grid {
@@ -549,22 +560,22 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 
 .left_clickbar {
     position: fixed;
-    width: 30px;
-    left: 386px;
-    height: calc(50% - 20px);
-
+    width: 20px;
+    left: 331px;
+    height: calc(20% - 20px);
+    cursor: pointer;
 }
 
 .click_data {
     background-color: rgba(150,150,150,0.4);
-    border-top-right-radius: 15px;
+    border-top-right-radius: 20px;
     top: 40px;
 }
 
 .click_case {
     background-color: rgba(150,150,150,0.4);
-    border-bottom-right-radius: 15px;
-    top: calc(50% + 20px);
+    border-bottom-right-radius: 20px;
+    top: calc(20% + 20px);
 }
 
 .selectedTab {
@@ -577,11 +588,15 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 }
 
 .selector_arrow {
-    width: 20px;
+    width: 10px;
     position: absolute;
     bottom: 10px;
     left: 5px;
     cursor: pointer;
+}
+
+.selector_arrow:hover {
+    width: 11px;
 }
 
 .mapboxgl-ctrl-bottom-left {
@@ -610,19 +625,20 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     display: block;
     width: 350px;
     height: 20px;
-    margin-left: 22px;
+    margin-left: 12px;
     margin-right: 44px;
     position: relative;
 }
 
 .tag_item {
     float: left;
-    padding: 3px;
+    padding-left: 10px;
+    padding-right: 10px;
     border: 1px solid white;
     border-radius: 5px;
     margin-right: 5px;
-    padding-top: 0px;
-    padding-bottom: 0px;
+    padding-top: 1px;
+    padding-bottom: 1px;
     transform: translateX(-2px);    
     opacity: 0.6;
 }
@@ -642,10 +658,10 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     display: block;
     width: 350px;
     height: 20px;
-    margin-left: 22px;
+    margin-left: 12px;
     margin-right: 44px;
     position: relative;
-    margin-top: 10px;
+    margin-top: 15px;
 }
 
 .data_searchbox input {
@@ -656,7 +672,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     left: -1px;
     display: block;
     position: absolute;
-    width: 337px;
+    width: 298px;
     height: 13px;
     direction:ltr;
 }
@@ -834,20 +850,33 @@ div#streetview_window {
 }
 
 .data_icon {
-    width: 270px;
+    width: 40px;
     position: absolute;
-    right: 0px;
+    right: 25%;
     top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.8;
+}
+.data_icon_handle {
+    width: 7px;
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    opacity: 0.7;
     transform: translateY(-50%);
 }
 
+.data_icon_handle:hover {
+    cursor: pointer;
+    width: 8px;
+    opacity: 1;
+}
+
 .data_intro {
-    width: 250px;
+    width: 300px;
     position: absolute;
-    right: 0px;
     display: none;
-    text-align: left;
-    height: 80px;
+    height: 30px;
     background-color: black;
     padding: 10px;
 }
@@ -907,3 +936,79 @@ div#streetview_window {
 }
 
 
+/*--------------------------------------------- Kalli additions -------------------*/
+
+.data_item.ui-widget-content.tag_dem.ui-draggable.ui-draggable-handle:hover {
+    padding-left: 2px;
+    border: 1px solid #fff;
+    background-color: rgba(32, 192, 226, 0.1);
+    cursor: move;
+}
+.data_item.ui-widget-content.tag_bus.ui-draggable.ui-draggable-handle:hover {
+    padding-left: 2px;
+    border: 1px solid #fff;
+    background-color: rgba(32, 192, 226, 0.1);
+    cursor: move;
+}
+.data_item.ui-widget-content.tag_soc.ui-draggable.ui-draggable-handle:hover {
+    padding-left: 2px;
+    border: 1px solid #fff;
+    background-color: rgba(32, 192, 226, 0.1);
+    cursor: move;
+}
+
+
+.gradient_container {
+    position: fixed;
+    display: block;
+    width: 330px;   
+    left: 0px;
+    z-index: 100;
+    height: 30px;
+    top: calc(100% - 30px);
+    background: linear-gradient(to bottom, rgba(0,0,0, 0.1), rgba(32, 192, 226, 0.15));
+}
+
+/*.gradient_container:after {
+    content: "";
+    width:0px;
+    height:0px;
+    border-left:6px solid transparent;
+    border-right:6px solid transparent;
+    border-top:6px solid gray;
+    position:absolute;
+    top:1%; 
+    left: 50%;
+}*/
+
+button.toggleAnimation {
+    font-size: 10px;
+    color: #fff;
+    width: auto;
+    background-color: rgba(0,0,0,0.5);
+    border: 0.5px solid gray;
+    border-radius: 5px;
+    /*margin-top: 30px;*/
+    margin-bottom: 5px;
+    margin-left: 375px;
+    position: absolute;
+}
+
+button.toggleAnimation:hover {
+    background-color: rgba(255,255,255,0.2);
+    /*left: 1px;*/
+}
+
+button.toggleAnimation.isPressed {
+    opacity: 0.5;
+}
+
+button.toggleAnimation.isNotPressed {
+    background-color: rgba(0,0,0,0.5);
+    opacity: 1;
+
+}
+
+a.reset {
+    font-size: 10px;
+}

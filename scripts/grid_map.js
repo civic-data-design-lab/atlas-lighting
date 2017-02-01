@@ -85,7 +85,7 @@ var myinit = function () {
 
 
     d3.queue()
-        .defer(d3.csv, "../data/" + currentCity_o + ".csv"/*"grids/" + currentCity*/)
+        .defer(d3.csv, "../data/" + currentCity_o + "_grid.csv"/*"grids/" + currentCity*/)
         //.defer(d3.json, "data/"+currentCity+"_zipcode.json"/*"zipcode_business_geojson/" + currentCity*/)
         .await(dataDidLoad);
 }
@@ -97,9 +97,6 @@ function dataDidLoad(error, grid) {
 
     window.dataLst = Object.keys(grid[0])
     window.mydata = grid;
-    
-    //console.log(window.dataLst);
-    //console.log(grid[25].other);
 
     charts(grid, selectedCharts);
 
@@ -119,6 +116,16 @@ function getLL(d) {
     return new mapboxgl.LngLat(+d.lng, +d.lat)
 }
 
+
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//  initControl()                                                             //
+//                                                                            //
+//  Initializing the controls                                                 //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+
+
 function initControl() {
 
     var droptop = $("#todrop").offset().top;
@@ -126,16 +133,14 @@ function initControl() {
     var dropleft = $("#todrop").offset().left;
     var dropright = dropleft + $("#todrop").width();
 
-    $('.data_item').mouseenter(function(event){
+    $('.data_icon_handle').mouseenter(function(event){
         event.preventDefault();
-        $(this).children(".data_intro")
-        .fadeIn(300);
+        $(this).siblings(".data_intro").css("display", "block");
     });
 
-    $('.data_item').mouseleave(function(event){
+    $('.data_icon_handle').mouseleave(function(event){
         event.preventDefault();
-        $(this).children(".data_intro")
-        .fadeOut(300);
+        $(this).siblings(".data_intro").css("display", "none");
     });
 
 
@@ -147,9 +152,8 @@ function initControl() {
         },
 
         stop: function (event, ui) {
-            $("#selector").css("width", "416px");
+            $("#selector").css("width", "335px");
             $("#selector").css("overflow-y", "auto");
-            $("#selector").css("direction", "rtl");
 
             if ($(this).attr("style").indexOf("left") > -1) {//get back to original position
                 $(this).attr("style", "position: relative;");
@@ -160,12 +164,13 @@ function initControl() {
 
     $('#todrop').droppable({
         drop: function (event, ui) {
-            $(ui.draggable).attr("style", "position: relative;display:none");
+            $(ui.draggable).attr("style", "position: relative; display: none;");
+            // $(ui.draggable).attr("style", "opacity: 0.5;");
             selectedCharts.push($(ui.draggable).attr("id").split("d_")[1]);
-
             updateChart(selectedCharts);
-
             $(this).css("background-color", "rgba(255,255,255,0)");
+            var currentToDropHeight = $('#todrop').css('height');
+            $('#todrop').css('height', 'calc(100%-300px)');
         },
         over: function (event, ui) {
             $(this).css("background-color", "rgba(255,255,255,0.2)");
@@ -226,9 +231,6 @@ function initControl() {
             }, 300, function () { });
 
         }
-
-
-
     });
 
 
@@ -237,9 +239,8 @@ function initControl() {
         if ($(this).attr("style") && $(this).attr("style").indexOf("180") > -1) {
             //back to selecting mode
             $(".left_clickbar>img").css("transform", "rotate(0deg)");
-            $("#selector").css("width", "416px");
+            $("#selector").css("width", "335px");
             $("#selector").css("overflow-y", "auto");
-            $("#selector").css("direction", "rtl");
             $(".left_back").animate({
                 left: "0px"
             }, 300, function () { });
@@ -247,23 +248,30 @@ function initControl() {
                 left: "0px"
             }, 300, function () { });
             $(".slide_hide").animate({
-                left: "386px"
+                left: "331px"
             }, 300, function () { });
             $("#todrop").show();
+            setTimeout(function(){
+               $('.gradient_container').show(); 
+           }, 300);
         } else {
             //back to folding mode
             $(".left_clickbar>img").css("transform", "rotate(180deg)");
-            $("#selector").css("width", "416px");
+            $("#selector").css("width", "335px");
             $("#todrop").hide();
             $(".left_back").animate({
-                left: "-390px",
+                left: "-335px",
             }, 300, function () { });
             $("#selector").animate({
-                left: "-390px",
+                left: "-335px",
             }, 300, function () { });
             $(".slide_hide").animate({
                 left: "0px"
             }, 300, function () { });
+            setTimeout(function(){
+               $('.gradient_container').hide(); 
+           }, 100);
+
         }
     })
 
@@ -271,9 +279,8 @@ function initControl() {
         if ($(this).attr("style") && $(this).attr("style").indexOf("180") > -1) {
             //back to selecting mode
             $(".left_clickbar>img").css("transform", "rotate(0deg)");
-            $("#selector").css("width", "416px");
+            $("#selector").css("width", "335px");
             $("#selector").css("overflow-y", "auto");
-            $("#selector").css("direction", "rtl");
             $(".left_back").animate({
                 left: "0px"
             }, 300, function () { });
@@ -281,24 +288,30 @@ function initControl() {
                 left: "0px"
             }, 300, function () { });
             $(".slide_hide").animate({
-                left: "386px"
+                left: "331px"
             }, 300, function () { });
             $("#todrop").show();
+            setTimeout(function(){
+               $('.gradient_container').show(); 
+           }, 300);
 
         } else {
             //back to folding mode
             $(".left_clickbar>img").css("transform", "rotate(180deg)");
-            $("#selector").css("width", "416px");
+            $("#selector").css("width", "335px");
             $(".left_back").animate({
-                left: "-390px",
+                left: "-335px",
             }, 300, function () { });
             $("#selector").animate({
-                left: "-390px",
+                left: "-335px",
             }, 300, function () { });
             $(".slide_hide").animate({
                 left: "0px"
             }, 300, function () { });
             $("#todrop").hide();
+            setTimeout(function(){
+               $('.gradient_container').hide(); 
+           }, 100);
         }
     });
 
@@ -331,12 +344,12 @@ function initControl() {
         console.log(myid);
         $("#"+myid).hide();
         $("#d_"+myid).show();
+        // $("#d_"+myid).attr("style", "opacity: 1");
 
         var myindex = selectedCharts.indexOf(myid);
         if (myindex > -1) {
             selectedCharts.splice(myindex, 1);
         }
-
         updateChart(selectedCharts);
 
     })
@@ -358,6 +371,19 @@ function initControl() {
 
     });
 
+    $(".data_searchbox input").val("Enter your search term...").css({
+       'font-size' : '10px',
+       'color' : 'gray'
+    });
+    $(".data_searchbox input").focus(function () { 
+        $(this).val("");
+    });
+    $(".data_searchbox input").focusout(function () { 
+        $(".data_searchbox input").val("Enter your search term..").css({
+       'font-size' : '10px',
+       'color' : 'gray'
+        });
+    });
     $(".data_searchbox input").keyup(function () {
         if (!$(this).val()) {
             $(".data_item").show();
@@ -405,6 +431,13 @@ function initControl() {
     });
 }
 
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//  initCanvas(data)                                                          //
+//                                                                            //
+//  Initializing  and rendering the canvas                                    //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 
 function initCanvas(data) {
     __gridData = data
@@ -435,14 +468,27 @@ function initCanvas(data) {
     d3.select(container).append("div").attr("class", "svg_overlay");
 
     var myg = mapsvg.append("g").attr("opacity", "0.6");
+    // var mygOBI = mapsvg.append("g").attr("opacity", "0.6");
 
     __bounds = map.getBounds();
     window.__DisX = Math.abs(project(__bounds._sw).x - project(__bounds._ne).x);
     window.__Corners = [project(__bounds._sw).x, project(__bounds._ne).y];
 
+    ////////////////////////////////////////////////////////////////////////////////
+    //                                                                            //
+    //  render()                                                                  //
+    //                                                                            //
+    //  Rendering the canvas                                                      //
+    //                                                                            //
+    ////////////////////////////////////////////////////////////////////////////////
+
     function render() {
         var lightScale = d3.scale.linear().domain([0, 200, 400]).range(["#3182bd", "#fee391", "#fc9272"])
         var radius = 6 / 1400 * Math.pow(2, map.getZoom());
+
+        var openBusinessScale = d3.scale.linear().domain([0, 2515]).range([0.2,1]);
+        var openBusinessScaleColor = d3.scale.linear().domain([0, 2515]).range(["#E5DEF7", "#8D6EDE", "#2C1764"]);
+
         if (currentCity_o != "Chicago") {
             radius = 1.8 * radius;
         }
@@ -456,7 +502,6 @@ function initCanvas(data) {
             var light = d.averlight
             var fillColor = lightScale(light)
 
-            //console.log(project(d).x,project(d).y);
             myg.append("rect")
                 .attr("x", project(d).x)
                 .attr("y", project(d).y)
@@ -516,7 +561,6 @@ function initCanvas(data) {
                         var latlng = loc.lat+","+loc.lng
 
                         var myreq = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+latlng+"&key="+mykey
-                        
 
                         d3.json(myreq, function(error, data) {
                             if (error) throw error;
@@ -530,17 +574,40 @@ function initCanvas(data) {
                             infobox.text(address);
 
                         });
-
                     }
-
-
                 })
                 .on("mouseout",function(){
                     d3.selectAll(".toolip_cell").remove();
                 })
         });
+
+        //////////////////////////////////// ANIMATION BEHAVIOR /////////////////////////////////// 
+        var increment=0;
+        var animationIsRunning=false;
+        (function tick() {  
+            $('button.toggleAnimation').off().on('click', function(e) {
+                e.preventDefault();
+                animationIsRunning = !animationIsRunning;
+                if (animationIsRunning) {
+                    $('button.toggleAnimation').addClass('isPressed');
+                }
+                else {
+                    $('button.toggleAnimation').addClass('isNotPressed');
+                }
+                console.log("click", animationIsRunning);
+            })
+            if (animationIsRunning) {  
+                if (increment<23) {  filterhour(data, increment, increment+1); }
+                else { increment = 0; }
+                ++increment; 
+            }
+            setTimeout(tick, 1000);
+        })();
     }
+
     render();
+
+    //////////////////////////////////// ZOOM ///////////////////////////////////
 
     function zoomed() {
         cellDisselect();
@@ -559,7 +626,7 @@ function initCanvas(data) {
     })
 }
 
-
+//////////////////////////////////// CELL SELECT ///////////////////////////////////
 function cellSelect(d) {
     window.cell_selected = true;
     updateZoomedChart(selectedCharts);
@@ -613,12 +680,11 @@ function cellSelect(d) {
                 $("#instagram_plc").show();
             }
         });
-
-
     newBusTypesChart.assignSelect(true);
     newBusTypesChart.updateBusTypes(d);
-
 }
+
+//////////////////////////////////// UNSELECT A CELL ///////////////////////////////////
 
 function cellDisselect() {
     window.cell_selected = false;
@@ -633,6 +699,8 @@ function cellDisselect() {
     newBusTypesChart.updateBusTypes(window.typesData);
 
 }
+
+//////////////////////////////////// UPDATE ZOOMED CHART ///////////////////////////////////
 
 function updateZoomedChart(selectedCharts) {
     selectedCharts.forEach(function (d) {
@@ -669,8 +737,9 @@ function updateZoomedChart(selectedCharts) {
     }else{
         d3.select("#instagram_pics").style("display", "none");
     }
-
 }
+
+//////////////////////////////////// UPDATE CHARTS ///////////////////////////////////
 
 function updateChart(selectedCharts) {
     window.location.href = initurl.split("*")[0] + "*" + selectedCharts.join("|");
@@ -686,9 +755,7 @@ function updateChart(selectedCharts) {
     })
 
     updateZoomedChart(selectedCharts);
-
 }
-
 
 
 
@@ -704,10 +771,18 @@ window.placesChart = dc.barChart("#places")
 if (currentCity_o == "LA"){
     window.insChart = dc.barChart("#ins")
     window.insLikesChart = dc.barChart("#ins_likes")
-    //window.busi_openingChart = dc.barChart("#business_opening")
     window.busPriChart = dc.barChart("#business_price")
-
+    window.OBI = dc.barChart("#business_opening")
 }
+
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//  charts(data, selectedCharts)    --- dc.js ---                             //
+//                                                                            //
+//  Rendering the charts                                                      //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+
 
 function charts(data, selectedCharts) {
     d3.selectAll(".dc-chart").style("display", "none");
@@ -737,7 +812,14 @@ function charts(data, selectedCharts) {
     var maxLight = null;
     var maxPlaces = null;
 
+    ////////////////////////////////////////////////////////////////////////////////
+    //                                                                            //
+    //  Getting the data for each cell                                            //
+    //                                                                            //
+    ////////////////////////////////////////////////////////////////////////////////
+
     data.forEach(function (d) {
+        d.OBI = 0;
         d.lng = +d.lng;
         d.lat = +d.lat;
         d.cell_id = +d.cell_id;
@@ -771,6 +853,12 @@ function charts(data, selectedCharts) {
         d.retail = +d.retail ? +d.retail : 0; 
         d.service = +d.service ? +d.service : 0; 
         d.transportation = +d.transportation ? +d.transportation : 0;   
+        // -------------------------------------------------------------------------- OBI values
+        for (var i=0;i<24;i++){
+            if  (+d['b_opening_'+i] !== undefined) {
+                d.OBI += +d['b_opening_'+i];
+            }
+        }
 
         if (d.b_diversity) {
             if (maxBDiv == null || d.b_diversity > maxBDiv) {
@@ -806,6 +894,7 @@ function charts(data, selectedCharts) {
     var ndx = crossfilter(data);
     var all = ndx.groupAll();
 
+
     /* Creating an array of objects
      * containing business types and their sum for each city.
      * @method initialFormat
@@ -827,6 +916,13 @@ function charts(data, selectedCharts) {
     
     newBusTypesChart.bindData(data);
     newBusTypesChart.updateBusTypes(typeSums);
+    window.count = data.length;
+    
+    ////////////////////////////////////////////////////////////////////////////////
+    //                                                                            //
+    //  Creating the charts for each type                                         //
+    //                                                                            //
+    ////////////////////////////////////////////////////////////////////////////////
 
     var busDivDimension = ndx.dimension(function (d) {
         return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0
@@ -862,12 +958,13 @@ function charts(data, selectedCharts) {
             .ordinalColors(["#aaaaaa"])
             .gap(0)
             .margins(chartMargins)
+            .centerBar(true)
+            .margins({ top: 0, left: 50, right: 10, bottom: 20 })
             .x(d3.scale.linear().domain([1, 51]))
             .y(d3.scale.linear().domain([0, 600]));
 
         window.insChart.yAxis().ticks(2);
 
-        /////////////////////
         var insLikesDimension = ndx.dimension(function (d) { 
             if(d.insta_like > 1000 ) return 1000;
             else return d.insta_like });
@@ -880,10 +977,15 @@ function charts(data, selectedCharts) {
             .ordinalColors(["#aaaaaa"])
             .gap(0)
             .margins(chartMargins)
+
+            .centerBar(true)
+            .margins({ top: 0, left: 50, right: 10, bottom: 20 })
+
             .x(d3.scale.linear().domain([1, 1001]))
             .y(d3.scale.linear().domain([0, 20]));
 
         window.insLikesChart.yAxis().ticks(2);
+
 
         var busPriDimension = ndx.dimension(function (d) { return d.b_price });
         var busPriGroup = busPriDimension.group();
@@ -895,8 +997,25 @@ function charts(data, selectedCharts) {
             .margins(chartMargins)
             .x(d3.scale.linear().domain([0.5, 4]))
             .xUnits(function(){return 50;})
+            .gap(1)
+            .centerBar(true)
             .yAxis().ticks(2);
-            //.y(d3.scale.linear().domain([0, 600]));
+            //.y(d3.scale.linear().domain([0, 600]));        
+
+        // -------------------------------------------------------------------------- OBI graph
+        var OBIDimension = ndx.dimension(function (d) {return d.OBI; });
+        var OBIGroup = OBIDimension.group();
+        window.OBI.width(400).height(chartHeight)
+            .group(OBIGroup).dimension(OBIDimension)
+            //.elasticY(true)
+            .ordinalColors(["#888", "#888", "#888"])
+            .margins({ top: 5, left: 150, right: 10, bottom: 20 })
+            .x(d3.scale.linear().domain([-1, 100]))
+            .y(d3.scale.linear().domain([0, 1000]))
+            .gap(1)
+            .centerBar(true)
+            .xUnits(function(){return 50;})
+            .yAxis().ticks(2);
 
     }
 
@@ -1056,6 +1175,7 @@ function charts(data, selectedCharts) {
             d3.select("#income_digits").text(correspond);
             d3.select("#income_digits").attr("sv_val", correspond);
 
+
         })
         .x(d3.scale.linear().domain([1, window.count]))
         .y(d3.scale.linear().domain([1, 1000]));
@@ -1081,39 +1201,39 @@ function charts(data, selectedCharts) {
     d3.selectAll("#business_diversity path").remove();
     d3.selectAll("#business_diversity line").remove();
 
-    selectTime(chartWidth,chartHeight);
+    //////////////////////////////////// timeSelector   --- d3.js ---- ///////////////////////////////////
+    timeSelector(chartWidth,100);
 
 }
 
-
-function selectTime(chartWidth,chartHeight){
-    var margin = { top: 0, left: 100, right: 10, bottom: 20 },
+function timeSelector(chartWidth,chartHeight){
+    // chartWidth = 304 and chartHeight = 52;
+    var margin = { top: 10, left: 10, right: 0, bottom: 0 },
         width = chartWidth - margin.right,
         height = chartHeight - margin.top - margin.bottom;
 
 	var start = 0;
 	var end = 0;
-
 	var start0 = 0;
 	var end0 = 24;
 
-    var svg = d3.select("#business_opening").append("svg")
+    var svg = d3.select("#time_selector").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 	svg.append("rect")
-	    .attr("width", width)
-	    .attr("height", height)
+	    .attr("width", 240)
+	    .attr("height", 2)
         .attr("fill", "rgb(50,50,50)").attr("stroke","rgba(255,255,255,0.3)");
 
 	var context = svg.append('g')
 		.attr('class', 'context');
 
 	var x = d3.scale.linear()
-		.range([0, width])
-		.domain([start0,end0]);
+        .domain([start0,end0])
+		.range([0, 240]);
 
 	var brush = d3.svg.brush()
 		.x(x).extent([start,end])
@@ -1123,16 +1243,16 @@ function selectTime(chartWidth,chartHeight){
 		.attr('class', 'x brush')
 		.call(brush)
 		.selectAll('rect')
-		.attr('y', 0)
-		.attr('height', height);
+		.attr('y', -10)
+		.attr('height', 20);
 
 	svg.append("g")
 	    .attr("class", "x axis hour myhour")
-	    .call(d3.svg.axis().tickValues([0,3,6,9,12,15,18,21,24]).tickSize(32,0)
+	    .call(d3.svg.axis().tickValues([0,3,6,9,12,15,18,21,24]).tickSize(10,0)
 	      .scale(x)
 	      .orient("bottom"))
 	  .selectAll("text")
-	    .attr("x", -4).attr("y",35)
+	    .attr("x", -4).attr("y",15)
 	    .style("text-anchor", null);
 
 	d3.select(".extent").attr("height", 29);
@@ -1140,12 +1260,7 @@ function selectTime(chartWidth,chartHeight){
 	d3.selectAll(".resize rect").attr("height", 29);
     d3.selectAll(".tick line").style("opacity","0.3");
 
-
-	var featureGroup;
-	var featurelst = [];
-
 	function brushend() {
-
         brush.extent()[0] = Math.round(brush.extent()[0])
         brush.extent()[1] = Math.round(brush.extent()[1])
         var rdstart = Math.round(brush.extent()[0]);
@@ -1155,52 +1270,57 @@ function selectTime(chartWidth,chartHeight){
 
         if (rdend - rdstart == 0){
             d3.select("#selected_time").text(0+" - "+24);
-            //d3.selectAll(".cellgrids").style("display", "block");
-
             filterhour(window.newData,rdstart,rdend);
-        }else{
+            if (selectedCharts.includes("business_opening")) {updateOBI(window.newData, rdstart,rdend);}
+        }
+        else {
             d3.select("#selected_time").text(rdstart+" - "+rdend);
             filterhour(window.newData,rdstart,rdend);
+            if (selectedCharts.includes("business_opening")) {updateOBI(window.newData, rdstart,rdend);}
         }
 	}
 
 }
 
-    function filterhour(data,start,end){
+//////////////////////////////////// FILTER HOUR ///////////////////////////////////
 
-        d3.selectAll(".cellgrids").style("display", "none");
+function filterhour(data,start,end){
+    d3.select("#selected_time").text(start+" - "+end);
+    // d3.selectAll(".cellgrids").style("display", "none");
 
-        var ave_lit = 0;
-        var count_ = 0;
-        data.forEach(function (d) {
-            var count = 0;
+    var ave_lit = 0;
+    var count_ = 0;
 
-            if(start == end || start == 0 && end == 24 || currentCity_o == "Chicago"){
-                d3.select("#c" + d.cell_id).style("display", "block");
-                ave_lit += d.averlight
-                count_ ++;
-            }
+    data.forEach(function (d) {
 
-            for(var i=start;i<end;i++){
-                count += +d['b_opening_'+i];
-            }
+        if (start == end || start == 0 && end == 24 || currentCity_o == "Chicago"){
+            d3.select("#c" + d.cell_id).style("display", "block");
+            ave_lit += d.averlight;
+            count_ ++;
+        }
+        else {
+            d3.select("#c" + d.cell_id).style("display", "none");
+        }
 
-            if(count!=0){
-                d3.select("#c" + d.cell_id).style("display", "block");
-                ave_lit += d.averlight;
-                count_ ++;
+        if (d.OBI!=0){
+            d3.select("#c" + d.cell_id).style("display", "block");
+            ave_lit += d.averlight;
+            count_ ++;
+        }
+        else {
+            d3.select("#c" + d.cell_id).style("display", "none");
+        }
+    })
 
-            }
-        })
-
+    if (count_!==0) {
         ave_lit /= count_;
-        ave_lit = Math.round(ave_lit * 100) / 100
+        ave_lit = Math.round(ave_lit * 100) / 100; 
         d3.select("#light_digits").text(ave_lit);
         d3.select("#light_digits").attr("sv_val", ave_lit);
-
-
     }
 
+}
+}
 
     /* Calculates which quantile given selections' median fall into.
      * @method thisQuantile
@@ -1279,3 +1399,22 @@ function selectTime(chartWidth,chartHeight){
              .style("font-family", "Ropa Sans")
 
     };
+//////////////////////////////////// UPDATE OBI ///////////////////////////////////
+function updateOBI(dataUpdate,start,end){
+    console.log("updating OBI")
+    var cf = crossfilter(dataUpdate);
+    cf.remove();
+    dataUpdate.forEach(function (d) {
+       d.OBI=0;
+       for (var i=start;i<end;i++){
+            if (+d['b_opening_'+i] !== undefined) {
+                 d.OBI += +d['b_opening_'+i];   
+            }
+        }
+    });
+    cf.add(dataUpdate);
+    var OBIDimension_ = cf.dimension(function (d) {return d.OBI; });
+    var OBIGroup_ = OBIDimension_.group();
+    window.OBI.group(OBIGroup_).dimension(OBIDimension_);
+    dc.redrawAll();
+}

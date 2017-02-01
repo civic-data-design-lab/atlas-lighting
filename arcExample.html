@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <style>
+
+    body {
+      background-color: #000;
+    }
+    .labelStart, .labelEnd{
+      font-family: 'Ropa Sans', sans-serif;
+      font-size: 12px;
+      text-anchor: middle;
+    }
+    
+    .arcSelection {
+      fill: #52BDDF;
+    }    
+    .arcBackground {
+      fill: #808080;
+    }
+    text {
+      fill: #52BDDF;
+    }
+    svg { 
+      padding-left: 100px;
+    }
+  </style>
+</head>
+<body>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script>
+
+// ------------------------------------------------------------------------ Constants for SVG
+
+var w = 200,h = w, now = new Date();
+var scale = d3.scale.linear().domain([0,360]).range([0,24]);
+
+// ------------------------------------------------------------------------ Constants for label
+var fields = [{
+  valueStart: 24, valueEnd: 24, size: 24, labelStart: "from ", labelEnd: " to ", updateToDate: function(date) { return date.getHours(); }, 
+   changeStart: function(valueStart) { return Math.floor(scale(valueStart)); },
+   changeEnd: function(valueEnd) { return Math.floor(scale(valueEnd)); }
+   }];
+
+// ------------------------------------------------------------------------ Constants for arcs
+
+var strokeWidth = 2, arcSelectionAngle = 0  , arcInnerRadius = w/2, arcOuterRadius = w/2 - strokeWidth;
+var fullAngle = Math.PI * 2 , maxStep = 24 * 60 , anglePerStep = fullAngle / maxStep , currentStep = 0 , animateDuration = 50;
+
+
+// ------------------------------------------------------------------------ Constants for circle
+
+var circleRadius = 4 , anglePoint = 0;
+var circleStartInitCx = getInitCx((now.getHours() / fields[0].size) * 2 * Math.PI );
+var circleStartInitCy = getInitCy((now.getHours() / fields[0].size) * 2 * Math.PI );
+var circleEndInitCx = getInitCx(((now.getHours()+0.5)/ fields[0].size) * 2 * Math.PI );
+var circleEndInitCy = getInitCy(((now.getHours()+0.5)/ fields[0].size) * 2 * Math.PI );
+
+// create main svg
+var svg = d3.select("body").append("svg")
+  .attr("width", w)
+  .attr("height", h + 10)
+  .attr("id", "clock");
+
+
+// ------------------------------------------------------------------------ Arcs
+// create arc group
+var arcGroup = svg.append("g")
+  .attr(
+    "transform", 
+    "translate(" + w / 2 + "," + h / 2 + ")"
+  );
+
+var arcSelection = d3.svg.arc()
+  .innerRadius( arcInnerRadius )
+  .outerRadius( arcOuterRadius )
+  .startAngle( (now.getHours() / fields[0].size) * 2 * Math.PI  )
+	.endAngle((now.getHours() / fields[0].size) * 2 * Math.PI );
+
+var arcBackground = d3.svg.arc()
+  .innerRadius( arcInnerRadius )
+  .outerRadius( arcOuterRadius )
+  .startAngle( arcSelectionAngle )
+	.endAngle( 2 * Math.PI);
+  
+ var arcBackgroundPath = arcGroup.append("path")
+    .attr("class", "arcBackground")
+    .attr("d", arcBackground); 
+  
+// create arc path
+var arcSelectionPath = arcGroup.append("path")
+  .datum({ endAngle: (now.getHours() / fields[0].size) * 2 * Math.PI })
+  .attr("class", "arcSelection")
+  .attr("d", arcSelection);
+
+// ------------------------------------------------------------------------ Fields
+  // create time field
+var field = svg.selectAll(".field")
+    .data(fields)
+  .enter().append("g")
+    .attr("transform", function() { return "translate(" + w/2 + "," + h / 2 + ")"; })
+    .attr("class", "field");
+
+  // create labelStart
+var labelStart = field.append("text")
+    .attr("class", "labelStart")
+    .attr("dx", "-1em")
+    .attr("dy", ".35em")
+
+var labelEnd = field.append("text")
+    .attr("class", "labelEnd")
+    .attr("dx", "1.4em")
+    .attr("dy", ".35em")
+  
+// ------------------------------------------------------------------------ Circles
+  // create circle
+var circleStart = arcGroup.append("circle")
+  .attr("r", circleRadius)
+  .attr("fill", "#262626")
+  .attr("cx", circleStartInitCx)
+  .attr("cy", circleStartInitCy)
+  .attr("cursor", "move")
+  .call( d3.behavior.drag().on('drag', function(){
+
+    a = findAngle(d3.event.x, d3.event.y); // get drag event coordinates
+    currentStep = angleEndStep(a);
+    setAngleStep(currentStep);
+    
+    moveCircleStart(a); //update circle position
+    movearcSelection(a); //update arcSelection angle
+    updateStartData(a);
+  }) );
+
+var circleEnd = arcGroup.append("circle")
+  .attr("r", circleRadius)
+  .attr("fill", "#262626")
+  .attr("cx", circleEndInitCx)
+  .attr("cy", circleEndInitCy)
+  .attr("cursor", "move")
+  .call( d3.behavior.drag().on('drag', function(){
+    
+    a = findAngle(d3.event.x, d3.event.y); // get drag event coordinates
+    currentStep = angleEndStep(a);
+    setAngleStep(currentStep);
+     
+    moveCircleEnd(a); //update circleEnd position 
+    moveArcEnd(a); //update arcEnd 
+    updateEndData(a);
+  }) );
+  
+
+// ------------------------------------------------------------------------ Init
+setAngleStep(currentStep);
+(function updateToDate() {
+
+  var now = new Date();
+  field.each(function(d) { d.valueStart = d.updateToDate(now); });
+  field.each(function(d) { d.valueEnd = d.updateToDate(now); });
+  // field.each(function(d) { d.valueStart = d.updateToDate(now); });
+  // field.each(function(d) { d.valueEnd = d.updateToDate(now); });
+
+  labelStart.text(function(d) { return d.labelStart + d.valueStart; });  
+  labelEnd.text(function(d) { return d.labelEnd + d.valueEnd; });
+
+//   setTimeout(updateToDate, 1000 - (now % 1000));
+})();
+  
+// ------------------------------------------------------------------------Helper Functions on Drag()
+
+function moveCircleStart(angle) {
+  var r = h/2 - strokeWidth;
+  var x = r * Math.sin(angle * Math.PI / 180);
+  var y = -r * Math.cos(angle * Math.PI / 180);
+  
+  //only move start circle if 
+  var directionCondition = findAngle(circleEndInitCx,circleEndInitCy) > angle && angle > 0 ;
+  if (directionCondition) {
+    circleStart
+      .attr("cx", x)
+      .attr("cy", y)
+  }
+}
+
+function updateStartData(angle) {
+  var directionCondition = findAngle(circleEndInitCx,circleEndInitCy) > angle  &&  angle > 0 ;
+  if (directionCondition) {
+    field.each(function(d) {   //update field
+      d.valueStart = d.changeStart(Math.floor(angle));
+    });  
+    labelStart.text(function(d) { return d.labelStart + d.valueStart});  //update label
+  }
+}
+
+
+function movearcSelection(angle) {
+  var directionCondition = findAngle(circleEndInitCx,circleEndInitCy) > angle &&  angle > 0 ;
+  if (directionCondition) { arcSelection.startAngle(angle * Math.PI / 180) };
+}
+
+function moveCircleEnd(angle) {
+  var r = h/2 - strokeWidth;
+  var x = r * Math.sin(angle * Math.PI / 180);
+  var y = -r * Math.cos(angle * Math.PI / 180);
+  
+  var directionCondition = findAngle(circleStartInitCx,circleStartInitCy) < angle ;
+  if (directionCondition) {
+    circleEnd
+      .attr("cx", x)
+      .attr("cy", y)
+  }
+}
+
+function moveArcEnd(angle) {
+  var directionCondition = findAngle(circleStartInitCx,circleStartInitCy) < angle ;
+  if (directionCondition) {arcSelection.endAngle(angle * Math.PI / 180)};
+}
+
+function updateEndData(angle) {
+  var directionCondition = findAngle(circleStartInitCx,circleStartInitCy) < angle ;
+  if (directionCondition) {
+    field.each(function(d) { //update field
+      d.valueEnd = d.changeEnd(Math.floor(angle));
+    });
+
+    labelEnd.text(function(d) { return d.labelEnd + d.valueEnd});  //update label
+
+  }
+}
+
+function getInitCx(angle) {
+  var r = h/2 - strokeWidth;
+  return r * Math.sin(angle);
+}
+function getInitCy(angle) {
+  var r = h/2 - strokeWidth;
+  return -r * Math.cos(angle);
+}
+
+// ------------------------------------------------------------------------Helper Functions
+
+
+// set animate step
+function setAngleStep(step) {
+  if (step > maxStep || step < 0)
+    return;
+
+  arcSelectionPath.transition()
+    .duration(animateDuration)
+    .ease("linear")
+    .call(
+      arcTween,
+      anglePerStep * step, 
+      arcSelection
+    );
+}
+
+// animate function
+function arcTween(transition, newAngle, arc) {
+  // arc path transition
+  transition.attrTween("d", function(d) {
+    var interpolate = d3.interpolate(d.endAngle, newAngle);
+    return function(t) {
+      d.endAngle = interpolate(t);
+            
+      // translate circle
+      anglePoint = Math.ceil(d.endAngle / anglePerStep) / 4;
+
+      return arc(d);
+    };
+  });
+}
+
+function angleEndStep(angle) {
+  return angle * 4;
+}
+
+function stepEndAngle(step) {
+  return;
+}
+
+function findAngle(x, y) {
+  addAngle = x < 0 ? 270 : 90;
+  return (Math.atan(y/x) * 180 / Math.PI) + addAngle; 
+}
+
+
+
+
+  </script>
+</body>

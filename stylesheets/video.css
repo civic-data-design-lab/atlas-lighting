@@ -133,7 +133,7 @@ a:focus {
   div{width:70%;} 
 }
 @media screen and (max-device-width: 800px) {
-  html { background: url(img/MatatusVideo.jpg) #000 no-repeat center center fixed; }
+  /*html { background: url(img/MatatusVideo.jpg) #000 no-repeat center center fixed; }*/
   #bgvid { display: none; }
 }
 
