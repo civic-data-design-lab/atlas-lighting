@@ -1090,8 +1090,8 @@ function timeSelector(chartWidth,chartHeight){
         width = chartWidth - margin.right,
         height = chartHeight - margin.top - margin.bottom;
 
-	var start = 0;
-	var end = 0;
+	var start = 6;
+	var end = 12;
 	var start0 = 0;
 	var end0 = 24;
 
