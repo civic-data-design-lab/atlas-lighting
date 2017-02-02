@@ -1320,7 +1320,6 @@ function filterhour(data,start,end){
     }
 
 }
-}
 
     /* Calculates which quantile given selections' median fall into.
      * @method thisQuantile

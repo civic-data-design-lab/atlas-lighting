@@ -60,9 +60,6 @@
         <br/><br/>
       </div>
 
-
-    <video autoplay id="bgvid" loop> 
-
     <video autoplay id="bgvid" loop>
 
   <!-- WCAG general accessibility recommendation is that media such as background video play through only once. Loop turned on for the purposes of illustration; if removed, the end of the video will fade in the same way created by pressing the "Pause" button  -->
@@ -255,7 +252,7 @@
           <div id="business_types" class = "dc-chart bus-types">
             <div class="chart-title">BUSINESS TYPES
               <span class="source">
-                <span class = "rm_data">| x</span>
+                <a><span class = "rm_data"> x</span></a>
               </span>
             </div>
           </div>
@@ -360,6 +357,12 @@
           <img src="../icons/dashboard_icons/info.png" class = "data_icon_handle">
           <p class = "data_intro">Total number of places in a grid cell. Source: Google Places API</p>
         </div>
+        <div class="data_item ui-widget-content tag_bus" id="d_business_types">
+          <p class="data_item_title">BUSINESS TYPES</p>
+          <img src="../icons/dashboard_icons/2.png" class = "data_icon">
+          <img src="../icons/dashboard_icons/info.png" class = "data_icon_handle">
+          <p class = "data_intro">Type of businesses open in a grid cell for a given time period. Source: Google Places API</p>
+        </div>
         <div class="data_item ui-widget-content tag_bus" id="d_time_selector">
           <p class="data_item_title">BUSINESS OPENING HOURS</p>
           <img src="../icons/dashboard_icons/5.png" class = "data_icon">
@@ -391,15 +394,6 @@
           <img src="../icons/dashboard_icons/6.png" class = "data_icon">
           <img src="../icons/dashboard_icons/info.png" class = "data_icon_handle">
           <p class = "data_intro">Household income is a measure of the combined incomes of all people sharing a particular household or place of residence. Source: 2010 - 2014 ACS - 5 Year Estimate</p>
-
-
-        <div class="data_item ui-widget-content tag_bus" id="d_business_types">
-          <p class="data_item_title">BUSINESS TYPES</p>
-          <!-- <img src="../icons/data_icon/business_opening.jpg" class = "data_icon"> -->
-          <p class = "data_intro">Type of businesses open in a grid cell for a given time period. Source: Google Places API</p>
-
-        </div>
-
         </div>        
         <!-- ************************************************************** Social filters **************************************************************-->
         <div class="data_item ui-widget-content tag_soc" id="d_street_view">
