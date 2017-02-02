@@ -446,9 +446,6 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     z-index: 11 !important;
 }
 
-.dc-chart {
-}
-
 #selector {
     position: absolute;
     width: 335px;
@@ -805,7 +802,7 @@ div#streetview_window {
     font-size: 24px;
     position: absolute;
     transform: translateY(6px);
-    left: 50px;
+    left: 20px;
     margin-left: 0px;
 }
 
@@ -821,7 +818,7 @@ div#streetview_window {
     left: 0px;
     top: 0px;
     width: 150px;
-    font-size: 8px;
+    font-size: 11px;
     background: black;
     padding: 5px;
 }
@@ -913,10 +910,10 @@ div#streetview_window {
 
 button.toggleAnimation {
     font-size: 10px;
-    color: #fff;
+    background-color: rgba(255,255,255, 0.1);
     width: auto;
-    background-color: rgba(0,0,0,0.5);
-    border: 0.5px solid gray;
+    border: 1px solid rgba(32, 192, 226, 0.15);
+    box-shadow: 1px 1px 2px 0px rgba(255,255,255, 0.3);
     border-radius: 5px;
     /*margin-top: 30px;*/
     margin-bottom: 5px;
@@ -925,18 +922,15 @@ button.toggleAnimation {
 }
 
 button.toggleAnimation:hover {
-    background-color: rgba(255,255,255,0.2);
-    /*left: 1px;*/
+    background-color: rgba(255,255,255, 0.2);
 }
 
 button.toggleAnimation.isPressed {
-    opacity: 0.5;
+    background-color: rgba(255,255,255, 0.05);
 }
 
 button.toggleAnimation.isNotPressed {
-    background-color: rgba(0,0,0,0.5);
-    opacity: 1;
-
+    background-color: rgba(255,255,255, 0.1);
 }
 
 a.reset {

@@ -1039,7 +1039,7 @@ function charts(data, selectedCharts) {
         .alwaysUseRounding(true)
         //.elasticY(true)
         .elasticX(true)
-        .margins({ top: 0, left: 50, right: 10, bottom: 20 })
+        .margins({ top: 10, left: 50, right: 10, bottom: 20 })
         .on('renderlet', function (d) {
             window.newData = incomeDimension.top(Infinity)
             d3.select("#map .datalayer").remove()
