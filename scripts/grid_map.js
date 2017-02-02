@@ -947,7 +947,7 @@ function charts(data, selectedCharts) {
             .group(OBIGroup).dimension(OBIDimension)
             //.elasticY(true)
             .ordinalColors(["#888", "#888", "#888"])
-            .margins({ top: 5, left: 150, right: 10, bottom: 20 })
+            .margins({ top: 5, left: 50, right: 10, bottom: 20 })
             .x(d3.scale.linear().domain([-1, 100]))
             .y(d3.scale.linear().domain([0, 1000]))
             .gap(1)
