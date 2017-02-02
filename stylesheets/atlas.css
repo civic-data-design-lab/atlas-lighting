@@ -341,12 +341,14 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 #moreinfo {position:absolute; top:10px; left:15px;}
 #philips{padding:10px;}
 #civic{padding:10px;}
+
 .x.axis line {
   stroke: #fff;
 }
 .x.axis path {
     stroke: #fff;
 }
+
 #bubble-key{
     padding:5px;
     font-size:16px;
@@ -357,6 +359,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
   fill: none;
   stroke: #fff;
 }
+
 /* bubble control*/
 
 .label{
@@ -936,3 +939,9 @@ button.toggleAnimation.isNotPressed {
 a.reset {
     font-size: 10px;
 }
+
+/* OBI bubble*/
+#business_opening > svg g g.axis.x > path { display: none; }
+#business_opening > svg g g.axis.x > .tick { display: none; }
+#business_opening > svg g g.axis.y { display: none; }
+
