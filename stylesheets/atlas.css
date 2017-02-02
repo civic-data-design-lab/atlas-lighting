@@ -942,6 +942,5 @@ a.reset {
 
 /* OBI bubble*/
 #business_opening > svg g g.axis.x > path { display: none; }
-#business_opening > svg g g.axis.x > .tick { display: none; }
 #business_opening > svg g g.axis.y { display: none; }
 
