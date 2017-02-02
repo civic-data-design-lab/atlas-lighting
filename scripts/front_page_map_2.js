@@ -111,7 +111,7 @@ function caseDataDidLoad(error,data,us,msaOverview) {
     d3.selectAll("#info").style("display","inline")
     var width = 800, height = 600;
     var fill = d3.scale.ordinal().range(['#827d92','#827354','#523536','#72856a','#2a3285','#383435'])
-    var svg = d3.select("#frontpage-map").append("svg")
+    var svg = d3.select("#frontpage-map .svg").append("svg")
         .attr("width", width)
         .attr("height", height);
 
@@ -362,12 +362,12 @@ function generateAxis(list,data,xSelection,ySelection,rLabel){
       }
       
       d3.select("#xAxisData").on("change",function(){
-        xSelection = d3.select(this).property('value')
+        xSelection = d3.select("#xAxisData").property('value')
         update(data,xSelection,ySelection,rLabel)
           d3.select("#chartTitle").html(ySelection.split("_").join(" ")+"/"+xSelection.split("_").join(" "))
       })
       d3.select("#yAxisData").on("change",function(){
-        ySelection = d3.select(this).property('value')
+        ySelection = d3.select("#yAxisData").property('value')
         update(data,xSelection,ySelection,rLabel)
           d3.select("#chartTitle").html(ySelection.split("_").join(" ")+"/"+xSelection.split("_").join(" "))
       })

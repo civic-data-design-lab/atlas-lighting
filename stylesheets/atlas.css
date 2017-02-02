@@ -322,6 +322,7 @@ canvas {
 
 #centered{
     position:fixed;
+    text-align: center;
 }
 #frontpage svg{
     display:block;
@@ -735,7 +736,16 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     background-color: rgba(100,100,100,.7);
 }
 
-#export_btn {
+#case-navigation {
+    position: fixed;
+    width: 400px;    
+    right: 0px;
+    bottom: 0px;
+    height: 40px;
+    background-color: rgba(100,100,100,.7);
+}
+
+.bottom_btn {
     text-align: center;
     color: white;
     font-size: 15px;
