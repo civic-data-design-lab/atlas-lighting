@@ -786,7 +786,9 @@ function charts(data, selectedCharts) {
     }
 
     var maxBDiv = null;
-    var minBDiv = null;
+    var minBDiv = null;    
+    var maxOBI = null;
+    var minOBI = null;
     var maxDInt = null;
     var maxLight = null;
     var maxPlaces = null;
@@ -819,6 +821,15 @@ function charts(data, selectedCharts) {
             }
         }
 
+        if (d.OBI) {
+            if (maxOBI == null || d.OBI > maxOBI) {
+                maxOBI = d.OBI
+            }
+            if (minOBI == null || d.OBI < minOBI) {
+                minOBI = d.OBI
+            }
+        }
+
         if (d.b_diversity) {
             if (maxBDiv == null || d.b_diversity > maxBDiv) {
                 maxBDiv = d.b_diversity
@@ -827,6 +838,7 @@ function charts(data, selectedCharts) {
                 minBDiv = d.b_diversity
             }
         }
+
         if (d.dev_intensity) {
             if (maxDInt == null || d.dev_intensity > maxDInt) {
                 maxDInt = d.dev_intensity
@@ -843,7 +855,7 @@ function charts(data, selectedCharts) {
             }
         }
     })
-
+    console.log(data)
     var chartWidth = 304;
     var chartHeight = 52;
 
@@ -859,9 +871,8 @@ function charts(data, selectedCharts) {
 
     var busDivDimension = ndx.dimension(function (d) {
         return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0
-    })
-
-    var busDivGroup = busDivDimension.group()
+    });
+    var busDivGroup = busDivDimension.group();
 
     var populationDimension = ndx.dimension(function (d) { return parseInt(d.population) })
     var pGroup = populationDimension.group()
@@ -941,8 +952,8 @@ function charts(data, selectedCharts) {
             //.y(d3.scale.linear().domain([0, 600]));        
 
         // -------------------------------------------------------------------------- OBI graph
-        var OBIDimension = ndx.dimension(function (d) {return d.OBI; });
-        var OBIGroup = OBIDimension.group();
+        // var OBIDimension = ndx.dimension(function (d) {return d.OBI; });
+        // var OBIGroup = OBIDimension.group();
         // window.OBI.width(400).height(100)
         //     .group(OBIGroup).dimension(OBIDimension)
         //     //.elasticY(true)
@@ -955,8 +966,12 @@ function charts(data, selectedCharts) {
         //     .xUnits(function(){return 50;})
         //     .yAxis().ticks(2);
 
+        var OBIDimension = ndx.dimension(function (d) {
+            return (Math.round((d.OBI - minOBI) / (maxOBI - minOBI) * 3) + 1) || 0
+        });
+        var OBIGroup = busDivDimension.group();
 
-        OBI.width(chartWidth).height(chartHeight*2)
+        window.OBI.width(chartWidth).height(chartHeight*2)
             .group(OBIGroup).dimension(OBIDimension)
             .ordinalColors(["#aaaaaa"])
             .margins({ top: 0, left: 50, right: 10, bottom: 20 })
@@ -990,8 +1005,8 @@ function charts(data, selectedCharts) {
                     return ""
                 }
             })
-        OBI.xAxis().ticks(4);        
-        OBI.yAxis().ticks(0); 
+    OBI.xAxis().ticks(4);        
+    OBI.yAxis().ticks(0); 
 
     }
 
@@ -1240,7 +1255,6 @@ function filterhour(data,start,end){
 
 //////////////////////////////////// UPDATE OBI ///////////////////////////////////
 function updateOBI(dataUpdate,start,end){
-    console.log("updating OBI")
     var cf = crossfilter(dataUpdate);
     cf.remove();
     dataUpdate.forEach(function (d) {
