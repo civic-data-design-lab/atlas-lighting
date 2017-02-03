@@ -855,7 +855,6 @@ function charts(data, selectedCharts) {
             }
         }
     })
-    console.log(data)
     var chartWidth = 304;
     var chartHeight = 52;
 
@@ -969,12 +968,12 @@ function charts(data, selectedCharts) {
         var OBIDimension = ndx.dimension(function (d) {
             return (Math.round((d.OBI - minOBI) / (maxOBI - minOBI) * 3) + 1) || 0
         });
-        var OBIGroup = busDivDimension.group();
+        var OBIGroup = OBIDimension.group();
 
-        window.OBI.width(chartWidth).height(chartHeight*2)
+        window.OBI.width(chartWidth*1.2).height(chartHeight*2)
             .group(OBIGroup).dimension(OBIDimension)
             .ordinalColors(["#aaaaaa"])
-            .margins({ top: 0, left: 50, right: 10, bottom: 20 })
+            .margins({ top: 0, left: 50, right: 0, bottom: 20 })
             .x(d3.scale.linear().domain([0.5, 4.5]))
             .y(d3.scale.linear().domain([0, 1]))
             //.r(d3.scale.linear().domain([0, window.count*5]))
@@ -986,7 +985,7 @@ function charts(data, selectedCharts) {
                 return 0.5;
             })
             .radiusValueAccessor(function (p) {
-                return p.value/window.count*chartHeight*4/5;
+                return p.value/window.count*chartHeight*2/5;
             })
             .label(function (p) {
                 return p.value
@@ -1142,7 +1141,7 @@ function timeSelector(chartWidth,chartHeight){
     // chartWidth = 304 and chartHeight = 52;
     var margin = { top: 10, left: 100, right: 0, bottom: 0 },
         width = chartWidth - margin.right,
-        height = 52;
+        height = 32;
 
 	var start = 6;
 	var end = 12;
@@ -1175,8 +1174,8 @@ function timeSelector(chartWidth,chartHeight){
 		.attr('class', 'x brush')
 		.call(brush)
 		.selectAll('rect')
-		.attr('y', -10)
-		.attr('height', 20);
+		.attr('y', -12)
+		.attr('height', 24);
 
 	svg.append("g")
 	    .attr("class", "x axis hour myhour")
