@@ -950,26 +950,10 @@ function charts(data, selectedCharts) {
             .yAxis().ticks(2);
             //.y(d3.scale.linear().domain([0, 600]));        
 
-        // -------------------------------------------------------------------------- OBI graph
-        // var OBIDimension = ndx.dimension(function (d) {return d.OBI; });
-        // var OBIGroup = OBIDimension.group();
-        // window.OBI.width(400).height(100)
-        //     .group(OBIGroup).dimension(OBIDimension)
-        //     //.elasticY(true)
-        //     .ordinalColors(["#888", "#888", "#888"])
-        //     .margins({ top: 5, left: 50, right: 10, bottom: 20 })
-        //     .x(d3.scale.linear().domain([-1, 100]))
-        //     .y(d3.scale.linear().domain([0, 1000]))
-        //     .gap(1)
-        //     .centerBar(true)
-        //     .xUnits(function(){return 50;})
-        //     .yAxis().ticks(2);
-
         var OBIDimension = ndx.dimension(function (d) {
             return (Math.round((d.OBI - minOBI) / (maxOBI - minOBI) * 3) + 1) || 0
         });
         var OBIGroup = OBIDimension.group();
-
         window.OBI.width(chartWidth*1.2).height(chartHeight*2)
             .group(OBIGroup).dimension(OBIDimension)
             .ordinalColors(["#aaaaaa"])
@@ -1004,9 +988,8 @@ function charts(data, selectedCharts) {
                     return ""
                 }
             })
-    OBI.xAxis().ticks(4);        
-    OBI.yAxis().ticks(0); 
-
+        OBI.xAxis().ticks(4);        
+        OBI.yAxis().ticks(0); 
     }
 
 
@@ -1143,8 +1126,8 @@ function timeSelector(chartWidth,chartHeight){
         width = chartWidth - margin.right,
         height = 32;
 
-	var start = 6;
-	var end = 12;
+	var start = 0;
+	var end = 24;
 	var start0 = 0;
 	var end0 = 24;
 
@@ -1254,19 +1237,59 @@ function filterhour(data,start,end){
 
 //////////////////////////////////// UPDATE OBI ///////////////////////////////////
 function updateOBI(dataUpdate,start,end){
+    var chartHeight_ = 52;
     var cf = crossfilter(dataUpdate);
     cf.remove();
+    var maxOBI_ = null;
+    var minOBI_ = null;
     dataUpdate.forEach(function (d) {
-       d.OBI=0;
+       d.OBI = 0;
        for (var i=start;i<end;i++){
             if (+d['b_opening_'+i] !== undefined) {
                  d.OBI += +d['b_opening_'+i];   
             }
         }
+        if (d.OBI) {
+            if (maxOBI_ == null || d.OBI > maxOBI_) {
+                maxOBI_ = d.OBI
+            }
+            if (minOBI_ == null || d.OBI < minOBI_) {
+                minOBI_ = d.OBI
+            }
+        }
     });
     cf.add(dataUpdate);
-    var OBIDimension_ = cf.dimension(function (d) {return d.OBI; });
+    var OBIDimension_ = cf.dimension(function (d) {
+        return (Math.round((d.OBI - minOBI_) / (maxOBI_ - minOBI_) * 3) + 1) || 0
+    });
     var OBIGroup_ = OBIDimension_.group();
-    window.OBI.group(OBIGroup_).dimension(OBIDimension_);
+    window.OBI.group(OBIGroup_).dimension(OBIDimension_)
+            .keyAccessor(function (p) {
+                console.log(p)
+                return p.key;
+            })
+            .valueAccessor(function (p) {
+                return 0.5;
+            })
+            .radiusValueAccessor(function (p) {
+                return p.value/window.count*chartHeight_*2/5;
+            })
+            .label(function (p) {
+                return p.value;
+            })
+            .xAxis().tickFormat(function(d, i){
+                switch(i) {
+                case 0:
+                    return "VERY LOW"
+                case 1:
+                    return "LOW"
+                case 2:
+                    return "MEDIUM"
+                case 3:
+                    return "HIGH"
+                default:
+                    return ""
+                }
+            })
     dc.redrawAll();
 }
