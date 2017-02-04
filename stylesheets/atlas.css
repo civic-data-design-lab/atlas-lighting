@@ -469,7 +469,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 }
 
 .data_item {
-    height: 54px;
+    height: 58px;
     color: rgba(255,255,255,0.8);
     border-bottom: 1px solid rgba(255,255,255,0.5);
     border-top: 1px solid rgba(255,255,255,0.5);
@@ -844,13 +844,18 @@ div#streetview_window {
     transform: translateY(-50%);
 }
 
+.data_icon_handle:hover {
+    cursor: text;
+}
+
 .data_intro {
     width: 300px;
     position: absolute;
     display: none;
-    height: 30px;
+    height: 57px;
     background-color: black;
     padding: 10px;
+    line-height: 1.5;
 }
 
 .rightbar {
