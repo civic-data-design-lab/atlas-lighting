@@ -314,29 +314,6 @@ function initControl() {
         }
     });
 
-    $("#case_studies .data_item").click(function () {
-        $("#map").hide();
-        $("#map-info").hide();
-        $("#cases").show();
-        $("#case-info").show();
-    })
-
-    $("#case_studies #case_study_1").click(function () {
-        $("#case-info #case-2").hide()
-        $("#case-info #case-1").show()
-    })
-    $("#case_studies #case_study_2").click(function () {
-        $("#case-info #case-1").hide()
-        $("#case-info #case-2").show()
-    })
-
-    $("#hide_cases").click(function () {
-        $("#cases").hide();
-        $("#case-info").hide();
-        $("#map").show();
-        $("#map-info").show();
-    })
-
     $(".rm_data").click(function(){
         var myid = $(this).parent().parent().parent().parent().attr("id");
         
@@ -352,7 +329,6 @@ function initControl() {
         updateChart(selectedCharts);
 
     })
-
 
     $(".tag_item").click(function () {
 
@@ -392,7 +368,7 @@ function initControl() {
         }
     });
 
-    $("#export_btn").click(function () {
+    $("#export .bottom_btn").click(function () {
         $("#export_add").css("display", "block");
         $("#export_add input").val(window.location.href);
 
