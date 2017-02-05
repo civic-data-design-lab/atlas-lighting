@@ -32,7 +32,6 @@ var __canvas = null
 var __bounds = null
 window.__DisX = null
 window.__Corners = null
-
 var __gridData = null
 
 var originalZoom = 5
