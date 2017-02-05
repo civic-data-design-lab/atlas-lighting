@@ -962,8 +962,6 @@ a.reset {
 #business_opening > svg g g.axis.x > path { display: none; }
 #business_opening > svg g g.axis.y { display: none; }
 
-
-
 #todrop > img {
     position: relative;
     top: 30%;
@@ -974,4 +972,16 @@ a.reset {
 #export_btn > img {
     width: 18px;
     margin-right: 2px;
+    cursor: pointer;
+}
+#tab-name {
+    transform: rotate(180deg);
+    writing-mode: vertical-rl;
+    position: relative;
+    display: block;
+    top: 35%;
+}
+
+.zoom-icons > img:hover {
+    cursor: pointer;
 }

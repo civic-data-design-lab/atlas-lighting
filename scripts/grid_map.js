@@ -120,12 +120,12 @@ function initControl() {
     var dropleft = $("#todrop").offset().left;
     var dropright = dropleft + $("#todrop").width();
 
-    $('.data_icon_handle').mouseenter(function(event){
+    $('.data_icon_handle').mouseover(function(event){
         event.preventDefault();
         $(this).siblings(".data_intro").css("display", "block");
     });
 
-    $('.data_icon_handle').mouseleave(function(event){
+    $('.data_icon_handle').mouseout(function(event){
         event.preventDefault();
         $(this).siblings(".data_intro").css("display", "none");
     });
