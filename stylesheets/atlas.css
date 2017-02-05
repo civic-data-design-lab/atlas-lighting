@@ -840,18 +840,20 @@ div#streetview_window {
 .data_icon_handle {
     width: 15px;
     position: absolute;
-    right: 2%;
-    top: 70%;
+    right: 5%;
+    top: 35%;
     z-index: 1001;
+    opacity: 1;
 }
 
 .data_icon_handle:hover {
     cursor: text;
+    opacity: 0;
 }
 
 .data_intro {
     z-index: 1000;
-    width: 310px;
+    width: 320px;
     position: absolute;
     display: none;
     height: 55px;
