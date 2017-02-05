@@ -358,6 +358,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 #moreinfo {position:absolute; top:10px; left:15px;}
 #philips{padding:10px;}
 #civic{padding:10px;}
+
 .x.axis line {
   /*fill: none;*/
   stroke: #fff;
@@ -367,6 +368,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     stroke: #fff;
     /*stroke-width: 0;*/
 }
+
 #bubble-key{
     padding:5px;
     font-size:16px;
@@ -377,6 +379,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
   fill: none;
   stroke: #fff;
 }
+
 /* bubble control*/
 
 .label{
@@ -391,7 +394,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 .dropbtn {
     background-color: rgba(0,0,0,0);
     color: white;
-    font-size: 13px;
+    font-size: 12px;
     border: none;
     cursor: pointer;
     width: 100%;
@@ -486,10 +489,11 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 }
 
 .data_item {
-    height: 54px;
+    height: 60px;
     color: rgba(255,255,255,0.8);
     border-bottom: 1px solid rgba(255,255,255,0.5);
     border-top: 1px solid rgba(255,255,255,0.5);
+    border-radius: 3px;
     width: 323px;    
     background-color: rgba(0,0,0,0.5);
     margin-right: 30px;
@@ -512,10 +516,11 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 #todrop {
     position: absolute;
     background-color: rgba(255,255,255,0);
-    border: 1px dashed white;
+    border: 1px dashed #ddd;
+    border-radius: 10px;
     font-size: 20px;
     width: 410px;
-    height: calc(100% - 150px);
+    height: 400px;
 }
 
 .fold_bar {
@@ -532,7 +537,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 .left_back {
     position: fixed;
     border-right: 1px solid rgba(255,255,255,0.5);
-    width: 331px;
+    width: 333px;
     height: calc(100% - 40px);
     background-color: rgba(0,0,0,0.6);
     top: 40px;
@@ -550,9 +555,11 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 .drop_indi {
     position: absolute;
     left: 50%;
-    top:50%;
+    top:65%;
     transform: translate(-50%,-50%);
-    font-size: 26px;
+    font-size: 24px;
+    width: 300px;
+    text-align: center;
 }
 
 .city-title-grid {
@@ -562,7 +569,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 .left_clickbar {
     position: fixed;
     width: 20px;
-    left: 331px;
+    left: 333px;
     height: calc(20% - 20px);
     cursor: pointer;
 }
@@ -838,7 +845,7 @@ div#streetview_window {
     font-size: 24px;
     position: absolute;
     transform: translateY(6px);
-    left: 50px;
+    left: 20px;
     margin-left: 0px;
 }
 
@@ -854,7 +861,7 @@ div#streetview_window {
     left: 0px;
     top: 0px;
     width: 150px;
-    font-size: 8px;
+    font-size: 11px;
     background: black;
     padding: 5px;
 }
@@ -881,14 +888,31 @@ div#streetview_window {
     width: 8px;
     opacity: 1;
 }
+.data_icon_handle {
+    width: 15px;
+    position: absolute;
+    right: 5%;
+    top: 35%;
+    z-index: 1001;
+    opacity: 1;
+}
+
+.data_icon_handle:hover {
+    cursor: text;
+    opacity: 0;
+}
 
 .data_intro {
-    width: 300px;
+    z-index: 1000;
+    width: 320px;
     position: absolute;
     display: none;
-    height: 30px;
-    background-color: black;
-    padding: 10px;
+    height: 55px;
+    /*background: linear-gradient(to right, rgba(0,0,0, 1) 60%, rgba(32, 192, 226, 0.1));*/
+    background-color: #000;
+    padding:  5px 0px 0px 5px;
+    line-height: 1.5;
+    border-radius: 5px;
 }
 
 .rightbar {
@@ -945,7 +969,6 @@ div#streetview_window {
     fill-opacity: 0.2;
 }
 
-
 /*--------------------------------------------- Kalli additions -------------------*/
 
 .data_item.ui-widget-content.tag_dem.ui-draggable.ui-draggable-handle:hover {
@@ -993,10 +1016,10 @@ div#streetview_window {
 
 button.toggleAnimation {
     font-size: 10px;
-    color: #fff;
+    background-color: rgba(255,255,255, 0.1);
     width: auto;
-    background-color: rgba(0,0,0,0.5);
-    border: 0.5px solid gray;
+    border: 1px solid rgba(32, 192, 226, 0.15);
+    box-shadow: 1px 1px 2px 0px rgba(255,255,255, 0.3);
     border-radius: 5px;
     /*margin-top: 30px;*/
     margin-bottom: 5px;
@@ -1006,19 +1029,72 @@ button.toggleAnimation {
 
 button.toggleAnimation:hover {
     background-color: rgba(255,255,255,0.2);
-    /*left: 1px;*/
 }
 
 button.toggleAnimation.isPressed {
-    opacity: 0.5;
+    background-color: rgba(255,255,255, 0.05);
 }
 
 button.toggleAnimation.isNotPressed {
-    background-color: rgba(0,0,0,0.5);
-    opacity: 1;
-
+    background-color: rgba(255,255,255, 0.1);
 }
 
 a.reset {
     font-size: 10px;
+}
+
+/* OBI bubble*/
+#business_opening > svg g g.axis.x > path { display: none; }
+#business_opening > svg g g.axis.y { display: none; }
+
+#todrop > img {
+    position: relative;
+    top: 30%;
+    width: 90px;
+    left: 35%;
+}
+
+#export_btn > img {
+    width: 18px;
+    margin-right: 2px;
+    cursor: pointer;
+}
+#tab-name {
+    transform: rotate(180deg);
+    writing-mode: vertical-rl;
+    position: relative;
+    display: block;
+    top: 35%;
+}
+
+
+#zoomIn {
+    position: fixed;
+    display: block;
+    width: 30px;   
+    z-index: 100;
+    left: 350px;
+    top: calc(100% - 60px);   
+}
+
+#zoomOut{
+    position: fixed;
+    display: block;
+    width: 30px;   
+    z-index: 100;
+    left: 380px;
+    top: calc(100% - 60px);   
+}
+
+
+#zoomIn {
+    background: url('../icons/final_icons/zoomIn.png') center no-repeat;
+    border: none;
+    height: 40px;
+}
+
+#zoomOut {
+    background: url('../icons/final_icons/zoomOut.png') center no-repeat;
+    border: none;
+    height: 40px;
 }

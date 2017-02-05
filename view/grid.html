@@ -62,7 +62,6 @@
 
 
     <video autoplay id="bgvid" loop>
-
   <!-- WCAG general accessibility recommendation is that media such as background video play through only once. Loop turned on for the purposes of illustration; if removed, the end of the video will fade in the same way created by pressing the "Pause" button  -->
 	<source src="../website_video4_small.mp4" type="video/mp4"></source>
 	</video>
@@ -178,7 +177,6 @@
             <p id="" class = "plc_digits">___</p>
           </div>          
 
-
           <div id="business_opening">
             <div class="chart-title">OPEN BUSINESS INDEX
               <span class="source">
@@ -186,7 +184,11 @@
                 <a href="javascript:OBI.filterAll();dc.redrawAll();" 			><span class = "rm_data"> x</span> </a>
               </span>
             </div>
-            <p id="" class = "plc_digits">___</p>
+            <p id="" class = "plc_digits" style="display:none">___</p>
+            <div id="time_selector" >
+              <p id = "selected_time" class = "plc_digits">0 - 24</p>
+              <button class="toggleAnimation"><img src="../icons/play.png" width="8px"></button>
+            </div>
           </div>
 
           <div id="places">
@@ -219,17 +221,6 @@
             <p id="" class = "plc_digits">___</p>
           </div>
 
-
-          <div id="time_selector" class = "dc-chart">
-            <div class="chart-title">BUSINESS OPENING HOURS
-              <span class="source">
-                <a><span class = "rm_data"> x</span></a>
-              </span>
-            </div>
-            <p id = "selected_time" class = "plc_digits">0 - 24</p>
-            <button class="toggleAnimation"><img src="../icons/play.png" width="8px"></button>
-          </div>
-
           <div id="business_types" class = "dc-chart bus-types">
             <div class="chart-title">BUSINESS TYPES
               <span class="source">
@@ -237,7 +228,6 @@
               </span>
             </div>
           </div>
-
 
           <div id="street_view" class="extra_data dc-chart">
             <div class="chart-title">GOOGLE STREET VIEW
@@ -265,22 +255,22 @@
           </div>
 
           <div class="data_select_ui" id="todrop">
-            <div class="drop_indi">Drop Selection Here</div>
+            <div class="drop_indi">Drag a dataset to upload</div>
+            <img src="../icons/final_icons/drop.png">
           </div>
-
+          
+          <div id="export">
+            <p id="export_btn" class="mybtn"> <img src="../icons/final_icons/export.png"> EXPORT</p>
+            <div id="export_add">
+              <input type="text">
+              <p class="mybtn" id="cp_btn">COPY</p>
+              <p class="mybtn" id="bk_btn">BACK</p>
+              <a href="" id="exportcsv">Download</a>
+            </div>
+          </div>
         </div>
       </div>
       <!-- end map info -->
-      <div id="export">
-        <p class="bottom_btn" class="mybtn">EXPORT</p>
-        <div id="export_add">
-          <input type="text">
-          <p class="mybtn" id="cp_btn">COPY</p>
-          <p class="mybtn" id="bk_btn">BACK</p>
-
-          <a href="" id="exportcsv">Download</a>
-        </div>
-      </div>
     </div>
 
     <div id="case-navigation" style="display:none">
@@ -291,13 +281,19 @@
 
     <div id="selector" class="data_select_ui">
       <div class="left_back"></div>
-      <div class="left_clickbar datasets click_data slide_hide selectedTab">
+      <div class="left_clickbar datasets click_data slide_hide selectedTab"> 
+        <div id="tab-name">DATASETS </div>
         <img src="../icons/triangle_left.png" class="selector_arrow">
       </div>
-      <div class="left_clickbar case_studies click_case slide_hide">
+      <div class="left_clickbar case_studies click_case slide_hide"> 
+        <div id="tab-name">CASE STUDIES </div>
         <img src="../icons/triangle_left.png" class="selector_arrow">
       </div>
       <div class="gradient_container"></div>
+      <div class="zoom_icons">
+        <button id="zoomIn"></button>
+        <button id="zoomOut"></button>
+      </div>
       <div id="datasets">
         <div class="data_filters">
           <div id="city-title city-title-grid" class="title2 city-title-grid">
@@ -328,83 +324,83 @@
         <!-- ************************************************************** Business filters **************************************************************-->
         <div class="data_item ui-widget-content tag_bus" id="d_business_diversity">
           <p class="data_item_title">BUSINESS DIVERSITY</p>
-          <img src="../icons/dashboard_icons/3.png" class = "data_icon">
-          <img src="../icons/dashboard_icons/info.png" class = "data_icon_handle">
+          <img src="../icons/final_icons/busDiversity.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
           <p class = "data_intro">Diversity of business types in a grid cell. Source: Google Places API</p>
         </div>        
         <div class="data_item ui-widget-content tag_bus" id="d_business_price">
           <p class="data_item_title">BUSINESS PRICE</p>
-          <img src="../icons/dashboard_icons/2.png" class = "data_icon">
-          <img src="../icons/dashboard_icons/info.png" class = "data_icon_handle">
+          <img src="../icons/final_icons/busPrice.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
           <p class = "data_intro">Average price of business in a grid cell. Source: Google Places API</p>
         </div>
         <div class="data_item ui-widget-content tag_bus" id="d_places">
           <p class="data_item_title">BUSINESS DENSITY</p>
-          <img src="../icons/dashboard_icons/4.png" class = "data_icon">
-          <img src="../icons/dashboard_icons/info.png" class = "data_icon_handle">
+          <img src="../icons/final_icons/busDensity.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
           <p class = "data_intro">Total number of places in a grid cell. Source: Google Places API</p>
         </div>
         <div class="data_item ui-widget-content tag_bus" id="d_business_types">
           <p class="data_item_title">BUSINESS TYPES</p>
-          <img src="../icons/dashboard_icons/2.png" class = "data_icon">
-          <img src="../icons/dashboard_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Type of businesses open in a grid cell for a given time period. Source: Google Places API</p>
+          <img src="../icons/final_icons/busTypes.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
+          <p class = "data_intro">Types of businesses in a grid cell. Source: Google Places API</p>
         </div>
-        <div class="data_item ui-widget-content tag_bus" id="d_time_selector">
+<!--     <div class="data_item ui-widget-content tag_bus" id="d_time_selector">
           <p class="data_item_title">BUSINESS OPENING HOURS</p>
-          <img src="../icons/dashboard_icons/5.png" class = "data_icon">
-          <img src="../icons/dashboard_icons/info.png" class = "data_icon_handle">
+          <img src="../icons/final_icons/5.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
           <p class = "data_intro">Time selector</p>
-        </div>
+        </div> -->
         <div class="data_item ui-widget-content tag_bus" id="d_business_opening">
           <p class="data_item_title">OPEN BUSINESS INDEX</p>
-          <img src="../icons/dashboard_icons/2.png" class = "data_icon">
-          <img src="../icons/dashboard_icons/info.png" class = "data_icon_handle">
+          <img src="../icons/final_icons/busOBI.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
           <p class = "data_intro">Places open in a grid cell for a given time period. Source: Google Places API</p>
         </div>
         <!-- ************************************************************** Dem filters **************************************************************-->
 
         <div class="data_item ui-widget-content tag_dem" id="d_development_intensity">
           <p class="data_item_title">DEVELOPMENT INTENSITY</p>
-          <img src="../icons/dashboard_icons/2.png" class = "data_icon">
-          <img src="../icons/dashboard_icons/info.png" class = "data_icon_handle">
+          <img src="../icons/final_icons/devIntensity.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
           <p class = "data_intro">NLCD provides spatial reference and descriptive data for characteristics of the land surface such as low,medium and high intensity development. Source: National Land Cover Database 2011</p>
         </div>
         <div class="data_item ui-widget-content tag_dem" id="d_population">
           <p class="data_item_title">POPULATION</p>
-          <img src="../icons/dashboard_icons/3.png" class = "data_icon">
-          <img src="../icons/dashboard_icons/info.png" class = "data_icon_handle">
+          <img src="../icons/final_icons/popDensity.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
           <p class = "data_intro">Population density is the measure of the number people per unit area, commonly represented as people per square mile. Source: 2010 - 2014 ACS - 5 Year Estimate</p>
         </div>
         <div class="data_item ui-widget-content tag_dem" id="d_income">
           <p class="data_item_title">INCOME</p>
-          <img src="../icons/dashboard_icons/6.png" class = "data_icon">
-          <img src="../icons/dashboard_icons/info.png" class = "data_icon_handle">
+          <img src="../icons/final_icons/medianIncome.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
           <p class = "data_intro">Household income is a measure of the combined incomes of all people sharing a particular household or place of residence. Source: 2010 - 2014 ACS - 5 Year Estimate</p>
         </div>        
         <!-- ************************************************************** Social filters **************************************************************-->
         <div class="data_item ui-widget-content tag_soc" id="d_street_view">
           <p class="data_item_title">GOOGLE STREET VIEW</p>
-          <img src="../icons/dashboard_icons/7.png" class = "data_icon">
-          <img src="../icons/dashboard_icons/info.png" class = "data_icon_handle">
+          <img src="../icons/final_icons/googleStreet.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
           <p class = "data_intro">Source: Google Street View API</p>
         </div>
         <div class="data_item ui-widget-content tag_soc" id="d_ins">
           <p class="data_item_title">INSTAGRAM DENSITY</p>
-          <img src="../icons/dashboard_icons/1.png" class = "data_icon">
-          <img src="../icons/dashboard_icons/info.png" class = "data_icon_handle">
+          <img src="../icons/final_icons/instaDensity.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
           <p class = "data_intro">Total number of Instagram posts in a grid cell. Source: Instagram API</p>
         </div>        
         <div class="data_item ui-widget-content tag_soc" id="d_instagram_pics">
           <p class="data_item_title">INSTAGRAM POST THUMBNAILS</p>
-          <img src="../icons/dashboard_icons/2.png" class = "data_icon">
-          <img src="../icons/dashboard_icons/info.png" class = "data_icon_handle">
+          <img src="../icons/final_icons/instaThumbnails.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
           <p class = "data_intro">Instagram posts in a grid cell. Source: Instagram API</p>
         </div>
         <div class="data_item ui-widget-content tag_soc" id="d_ins_likes">
           <p class="data_item_title">INSTAGRAM LIKES</p>
-          <img src="../icons/dashboard_icons/7.png" class = "data_icon">
-          <img src="../icons/dashboard_icons/info.png" class = "data_icon_handle">
+          <img src="../icons/final_icons/instaLikes.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
           <p class = "data_intro">Instagram likes in a grid cell. Source: Instagram API</p>
         </div>
       </div>
