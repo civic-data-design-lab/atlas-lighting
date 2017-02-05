@@ -838,12 +838,11 @@ div#streetview_window {
     transform: translateY(-50%);
 }
 .data_icon_handle {
-    width: 20px;
+    width: 15px;
     position: absolute;
-    right: 5%;
-    top: 50%;
+    right: 2%;
+    top: 70%;
     z-index: 1001;
-    transform: translateY(-50%);
 }
 
 .data_icon_handle:hover {
@@ -852,7 +851,7 @@ div#streetview_window {
 
 .data_intro {
     z-index: 1000;
-    width: 320px;
+    width: 310px;
     position: absolute;
     display: none;
     height: 55px;
