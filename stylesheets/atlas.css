@@ -899,24 +899,6 @@ div#streetview_window {
     background: linear-gradient(to bottom, rgba(0,0,0, 0.1), rgba(32, 192, 226, 0.15));
 }
 
-#zoomIn {
-    position: fixed;
-    display: block;
-    width: 30px;   
-    z-index: 100;
-    left: 350px;
-    top: calc(100% - 60px);   
-}
-
-#zoomOut{
-    position: fixed;
-    display: block;
-    width: 30px;   
-    z-index: 100;
-    left: 380px;
-    top: calc(100% - 60px);   
-}
-
 /*.gradient_container:after {
     content: "";
     width:0px;
@@ -982,6 +964,34 @@ a.reset {
     top: 35%;
 }
 
-.zoom-icons > img:hover {
-    cursor: pointer;
+
+#zoomIn {
+    position: fixed;
+    display: block;
+    width: 30px;   
+    z-index: 100;
+    left: 350px;
+    top: calc(100% - 60px);   
+}
+
+#zoomOut{
+    position: fixed;
+    display: block;
+    width: 30px;   
+    z-index: 100;
+    left: 380px;
+    top: calc(100% - 60px);   
+}
+
+
+#zoomIn {
+    background: url('../icons/final_icons/zoomIn.png') center no-repeat;
+    border: none;
+    height: 40px;
+}
+
+#zoomOut {
+    background: url('../icons/final_icons/zoomOut.png') center no-repeat;
+    border: none;
+    height: 40px;
 }

@@ -224,7 +224,7 @@ function initControl() {
 
     $(".left_clickbar.datasets>img").click(function () {
         if ($(this).attr("style") && $(this).attr("style").indexOf("180") > -1) {
-            //back to selecting mode
+            //back to selecting mode            
             $(".left_clickbar>img").css("transform", "rotate(0deg)");
             $("#selector").css("width", "335px");
             $("#selector").css("overflow-y", "auto");
@@ -238,6 +238,12 @@ function initControl() {
                 left: "331px"
             }, 300, function () { });
             $("#todrop").show();
+            $("#zoomIn").animate({
+                left: "350px"
+            }, 300, function () { });                
+            $("#zoomOut").animate({
+                left: "380px"
+            }, 300, function () { });    
             setTimeout(function(){
                $('.gradient_container').show(); 
            }, 300);
@@ -246,6 +252,12 @@ function initControl() {
             $(".left_clickbar>img").css("transform", "rotate(180deg)");
             $("#selector").css("width", "335px");
             $("#todrop").hide();
+            $("#zoomIn").animate({
+                left: "50px"
+            }, 300, function () { });                
+            $("#zoomOut").animate({
+                left: "80px"
+            }, 300, function () { });    
             $(".left_back").animate({
                 left: "-335px",
             }, 300, function () { });
@@ -278,6 +290,12 @@ function initControl() {
                 left: "331px"
             }, 300, function () { });
             $("#todrop").show();
+            $("#zoomIn").animate({
+                left: "350px"
+            }, 300, function () { });                
+            $("#zoomOut").animate({
+                left: "380px"
+            }, 300, function () { });    
             setTimeout(function(){
                $('.gradient_container').show(); 
            }, 300);
@@ -295,7 +313,15 @@ function initControl() {
             $(".slide_hide").animate({
                 left: "0px"
             }, 300, function () { });
-            $("#todrop").hide();
+
+            $("#todrop").hide(); 
+            $("#zoomIn").animate({
+                left: "50px"
+            }, 300, function () { });                
+            $("#zoomOut").animate({
+                left: "80px"
+            }, 300, function () { });    
+
             setTimeout(function(){
                $('.gradient_container').hide(); 
            }, 100);
