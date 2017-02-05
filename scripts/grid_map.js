@@ -128,6 +128,7 @@ function initControl() {
     $('.data_icon_handle').mouseout(function(event){
         event.preventDefault();
         $(this).siblings(".data_intro").css("display", "none");
+
     });
 
 

@@ -469,10 +469,11 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 }
 
 .data_item {
-    height: 58px;
+    height: 60px;
     color: rgba(255,255,255,0.8);
     border-bottom: 1px solid rgba(255,255,255,0.5);
     border-top: 1px solid rgba(255,255,255,0.5);
+    border-radius: 3px;
     width: 323px;    
     background-color: rgba(0,0,0,0.5);
     margin-right: 30px;
@@ -516,7 +517,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 .left_back {
     position: fixed;
     border-right: 1px solid rgba(255,255,255,0.5);
-    width: 331px;
+    width: 333px;
     height: calc(100% - 40px);
     background-color: rgba(0,0,0,0.6);
     top: 40px;
@@ -548,7 +549,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 .left_clickbar {
     position: fixed;
     width: 20px;
-    left: 331px;
+    left: 333px;
     height: calc(20% - 20px);
     cursor: pointer;
 }
@@ -841,6 +842,7 @@ div#streetview_window {
     position: absolute;
     right: 5%;
     top: 50%;
+    z-index: 1001;
     transform: translateY(-50%);
 }
 
@@ -849,13 +851,16 @@ div#streetview_window {
 }
 
 .data_intro {
-    width: 300px;
+    z-index: 1000;
+    width: 320px;
     position: absolute;
     display: none;
-    height: 57px;
-    background-color: black;
-    padding: 10px;
+    height: 55px;
+    /*background: linear-gradient(to right, rgba(0,0,0, 1) 60%, rgba(32, 192, 226, 0.1));*/
+    background-color: #000;
+    padding:  5px 0px 0px 5px;
     line-height: 1.5;
+    border-radius: 5px;
 }
 
 .rightbar {
