@@ -1291,6 +1291,8 @@ function charts(data, selectedCharts) {
     timeSelector(chartWidth,100);
     timeSelector(chartWidth,chartHeight);
 
+    //$("#dc-data-count").css({"display":"none"});
+
 }
 
 function timeSelector(chartWidth,chartHeight){
