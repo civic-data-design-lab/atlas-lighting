@@ -629,9 +629,7 @@ function initCanvas(data) {
         })();
     }
 
-    render();
-
-    //////////////////////////////////// ZOOM ///////////////////////////////////
+    //////////////////////////////////// RENDER ///////////////////////////////////
 
     render();
 
@@ -644,6 +642,20 @@ function initCanvas(data) {
         var mytranslate = (Corners[0] - window.__Corners[0]) + "," + (Corners[1] - window.__Corners[1]);
         myg.attr("transform", "translate(" + mytranslate + ")scale(" + myscale + ")");
     }
+
+    //////////////////////////////////// ZOOM BUTTONS ///////////////////////////////////
+    $('#zoomIn').on('click', function(e) {
+        e.preventDefault();
+        var currentZoom = map.getZoom();
+        currentZoom < 20 ? map.setZoom(currentZoom+0.5) : null;
+        // console.log(map.getZoom())
+    })    
+    $('#zoomOut').on('click', function(e) {
+        e.preventDefault();
+        var currentZoom = map.getZoom();
+        currentZoom > 1 ? map.setZoom(currentZoom-0.5) : null;
+        // console.log(map.getZoom())
+    })
 
     map.on("viewreset", function () {
         zoomed();
@@ -795,7 +807,7 @@ window.ligAveChart = dc.barChart("#light_average")
 window.placesChart = dc.barChart("#places")
 
 
-if (currentCity_o == "LA"){
+if (currentCity_o == "LA" || currentCity_o == "Chicago"){
     window.insChart = dc.barChart("#ins")
     window.insLikesChart = dc.barChart("#ins_likes")
     window.busPriChart = dc.barChart("#business_price")
@@ -984,7 +996,7 @@ function charts(data, selectedCharts) {
         else return d.places });
     var placesGroup = placesDimension.group();
 
-    if (currentCity_o == "LA"){
+    if (currentCity_o == "LA" || currentCity_o == "Chicago"){
 
         var insDimension = ndx.dimension(function (d) { 
             if(d.insta_cnt > 50 ) return 50;
@@ -1211,7 +1223,6 @@ function charts(data, selectedCharts) {
     var xOfSecondQI = 244*(secondQI/(extentI[1]-extentI[0]));
 
     var appendable2 = true;
-
     incomeChart.width(chartWidth).height(chartHeight).group(iGroup).dimension(incomeDimension)
         .round(dc.round.floor)
         .ordinalColors(["#ffffff"])
@@ -1233,7 +1244,7 @@ function charts(data, selectedCharts) {
 
             
             if (appendable2){
-                addQuantiles(chart, xOfFirstQI, xOfSecondQI, 5, 5, chartHeight, chartMargins, 6);
+                addQuantiles(incomeChart, xOfFirstQI, xOfSecondQI, 5, 5, chartHeight, chartMargins, 6);
                 appendable2 = false;
             }
 
