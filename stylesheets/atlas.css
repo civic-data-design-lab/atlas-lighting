@@ -761,7 +761,6 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 
 #export_add {
     display: none;
-
     position: absolute;
     z-index: 10;
     top: -3px;
@@ -870,29 +869,16 @@ div#streetview_window {
     width: 40px;
     position: absolute;
     right: 25%;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 35%;
     opacity: 0.8;
 }
-.data_icon_handle {
-    width: 7px;
-    position: absolute;
-    right: 5%;
-    top: 50%;
-    opacity: 0.7;
-    transform: translateY(-50%);
-}
 
-.data_icon_handle:hover {
-    cursor: pointer;
-    width: 8px;
-    opacity: 1;
-}
+
 .data_icon_handle {
     width: 15px;
     position: absolute;
     right: 5%;
-    top: 35%;
+    top: 50%;
     z-index: 1001;
     opacity: 1;
 }
@@ -1054,6 +1040,13 @@ a.reset {
     left: 35%;
 }
 
+p#export_btn.mybtn {
+    display: block;
+    position: relative;
+    left: 45%;
+    top: 25%;
+    font-size: 14px;
+}
 #export_btn > img {
     width: 18px;
     margin-right: 2px;
