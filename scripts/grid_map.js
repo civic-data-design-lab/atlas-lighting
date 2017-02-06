@@ -1203,7 +1203,7 @@ function charts(data, selectedCharts) {
         .ordinalColors(["#ffffff"])
         .x(d3.scale.linear().domain([0, 30]))
         //.y(d3.scale.linear().domain([0, 200]))
-        .margins({ top: 0, left: 50, right: 10, bottom: 20 })
+        .margins(chartMargins)
         .yAxis().ticks(2)
     populationChart.xAxis().ticks(4)
 
