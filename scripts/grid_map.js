@@ -1288,7 +1288,6 @@ function charts(data, selectedCharts) {
     d3.selectAll("#business_diversity line").remove();
 
     //////////////////////////////////// timeSelector   --- d3.js ---- ///////////////////////////////////
-    timeSelector(chartWidth,100);
     timeSelector(chartWidth,chartHeight);
 
 }
