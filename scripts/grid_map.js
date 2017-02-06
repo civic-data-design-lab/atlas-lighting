@@ -643,6 +643,20 @@ function initCanvas(data) {
         myg.attr("transform", "translate(" + mytranslate + ")scale(" + myscale + ")");
     }
 
+    //////////////////////////////////// ZOOM BUTTONS ///////////////////////////////////
+    $('#zoomIn').on('click', function(e) {
+        e.preventDefault();
+        var currentZoom = map.getZoom();
+        currentZoom < 20 ? map.setZoom(currentZoom+0.5) : null;
+        console.log(map.getZoom())
+    })    
+    $('#zoomOut').on('click', function(e) {
+        e.preventDefault();
+        var currentZoom = map.getZoom();
+        currentZoom > 1 ? map.setZoom(currentZoom-0.5) : null;
+        console.log(map.getZoom())
+    })
+
     map.on("viewreset", function () {
         zoomed();
     })
