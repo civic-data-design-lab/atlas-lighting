@@ -111,10 +111,6 @@
         </div>
 
         <div id="text" class="content">
-          <div class="dc-data-count">
-            <span class="filter-count"></span> selected out of <span class="total-count">
-              </span> areas | <a href="javascript:dc.filterAll(); dc.redrawAll();">Reset All</a>
-          </div>
 
           <div id="light_average" class="lock">
             <div class="chart-title">LIGHTING AVERAGE
@@ -242,7 +238,6 @@
           </div>
 
 
-
           <div id="instagram_pics" class="extra_data dc-chart">
             <div class="chart-title">INSTAGRAM POSTS
               <span class="source">
@@ -258,7 +253,12 @@
             <div class="drop_indi">Drag a dataset to upload</div>
             <img src="../icons/final_icons/drop.png">
           </div>
-          
+
+          <div class="dc-data-count">
+            <span id="filter_count" class="filter-count"></span> selected out of <span id="total_count" class="total-count">
+              </span> areas | <a href="javascript:dc.filterAll(); dc.redrawAll();">Reset All</a>
+          </div>
+
           <div id="export">
             <p id="export_btn" class="mybtn"> <img src="../icons/final_icons/export.png"> EXPORT</p>
             <div id="export_add">

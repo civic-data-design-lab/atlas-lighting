@@ -224,9 +224,11 @@ canvas {
     
 }
 .dc-data-count a{
+    display: none;
     color:#fff;
 }
 .dc-data-count{
+    display:none;
     color:#337ab7;
 }
 .dc-chart{
@@ -235,11 +237,24 @@ canvas {
     font-size:12px;
     letter-spacing:1px;
     stroke-opacity:0.5;
+    margin-bottom:10px;
 }
 .dc-chart:hover {
     fill-opacity: 1;
     cursor:pointer;
     stroke-opacity:1;
+}
+
+/*______CUSTOMIZATION FOR SPECIFIC CHARTS_________*/
+
+/* Business Diversity chart */
+
+#business_diversity {
+    margin-bottom:10px;
+}
+
+#light_average {
+    margin-bottom:40px;
 }
 
 /* dc-chart class extended for Business Types widget*/
@@ -708,29 +723,41 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 }
 
 .dc-chart svg {
-    margin-left: 95px;
+    margin-left: 75px; /*95px */
 }
 
 .plc_digits {
     color: rgb(32, 192, 226);
-    font-size: 38px;
+    font-size: 20px; /* 45px */
     margin-left: 10px;
-    position: absolute;    
+    position: absolute;  
 }
 
 .other_digits {
     color: rgb(32, 192, 226);
-    font-size: 24px;
+    font-size: 20px; /* 45px */
     margin-left: 10px;
     position: absolute; 
+    margin-top: 10px;
+}
+
+.avg_val_digit {
+
 }
 
 #light_digits {
     color: rgb(32, 192, 226);
-    font-size: 45px;
+    font-size: 28px; /* 45px */
     position: absolute;
     left: 10px;
     bottom: 30px;
+}
+
+#helper_digits {
+    color: rgb(32, 192, 226);
+    font-size: 20px;
+    position: absolute;
+    left: 10px;
 }
 
 
