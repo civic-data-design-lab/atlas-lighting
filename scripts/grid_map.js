@@ -629,9 +629,7 @@ function initCanvas(data) {
         })();
     }
 
-    render();
-
-    //////////////////////////////////// ZOOM ///////////////////////////////////
+    //////////////////////////////////// RENDER ///////////////////////////////////
 
     render();
 
@@ -1206,7 +1204,6 @@ function charts(data, selectedCharts) {
     var xOfSecondQI = 244*(secondQI/(extentI[1]-extentI[0]));
 
     var appendable2 = true;
-
     incomeChart.width(chartWidth).height(chartHeight).group(iGroup).dimension(incomeDimension)
         .round(dc.round.floor)
         .ordinalColors(["#ffffff"])
@@ -1227,7 +1224,7 @@ function charts(data, selectedCharts) {
             filterhour(window.newData,start,end);
 
             if (appendable2){
-                addQuantiles(chart, xOfFirstQI, xOfSecondQI, 5, 5, chartHeight, chartMargins, 6);
+                addQuantiles(incomeChart, xOfFirstQI, xOfSecondQI, 5, 5, chartHeight, chartMargins, 6);
                 appendable2 = false;
             }
 
