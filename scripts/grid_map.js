@@ -678,7 +678,7 @@ function cellSelect(d) {
                             //console.log(k);
                             d3.select("#instagram_pics").append("img").attr("src", insdata[k]["url"]).attr("class", "ins_thumb")
                                 .on('error', function() {
-                                    console.log('error');
+                                    console.log('error on instagram pics');
                                     d3.select(this).remove();
                                     count--;
                                 })
@@ -923,10 +923,13 @@ function charts(data, selectedCharts) {
             }
         }
     })
-    var chartWidth = 304;
-    var chartHeight = 52;
+    var chartWidth = 320; //304
+    var chartHeight = 100; //52
 
-    var chartMargins = {top: 0, left: 50, right: 10, bottom: 20};
+    var chartWidthBusDiv = 320;
+    var chartHeightBusDiv = 52;
+
+    var chartMargins = {top: 0, left: 30, right: 10, bottom: 20}; //{top: 0, left: 50, right: 10, bottom: 20};
 
     var ndx = crossfilter(data);
     var all = ndx.groupAll();
@@ -1041,6 +1044,7 @@ function charts(data, selectedCharts) {
         var OBIDimension = ndx.dimension(function (d) {
             return (Math.round((d.OBI - minOBI) / (maxOBI - minOBI) * 3) + 1) || 0
         });
+
         var OBIGroup = OBIDimension.group();
         window.OBI.width(chartWidth*1.2).height(chartHeight*2)
             .group(OBIGroup).dimension(OBIDimension)
@@ -1081,10 +1085,10 @@ function charts(data, selectedCharts) {
     }
 
 
-    busDivChart.width(chartWidth).height(chartHeight*2)
+    busDivChart.width(chartWidthBusDiv).height(chartHeightBusDiv*2)
         .group(busDivGroup).dimension(busDivDimension)
         .ordinalColors(["#aaaaaa"])
-        .margins(chartMargins)
+        .margins({top: 0, left: 50, right: 10, bottom: 20})
         .x(d3.scale.linear().domain([0.5, 4.5]))
         .y(d3.scale.linear().domain([0, 1]))
         //.r(d3.scale.linear().domain([0, window.count*5]))
@@ -1128,6 +1132,7 @@ function charts(data, selectedCharts) {
     placesChart.yAxis().ticks(2)
 
     var chartColors = { "1": "#fff7bc", "2": "#fee391", "3": "#fec44f", "4": "#fee0d2", "5": "#fc9272", "6": "#de2d26", "7": "#deebf7", "8": "#9ecae1", "9": "#3182bd" }
+    
     devIntChart.width(chartWidth).height(chartHeight)
         .group(devIntGroup).dimension(devIntDimension)
         .ordinalColors(["#888", "#888", "#888"])
@@ -1213,8 +1218,8 @@ function charts(data, selectedCharts) {
         .alwaysUseRounding(true)
         //.elasticY(true)
         .elasticX(true)
-        .margins({ top: 10, left: 50, right: 10, bottom: 20 })
-        .on('renderlet', function (d) {
+        .margins(chartMargins)
+        .on('renderlet', function (chart) {
             window.newData = incomeDimension.top(Infinity)
             d3.select("#map .datalayer").remove()
             var canvas = __canvas
@@ -1226,6 +1231,7 @@ function charts(data, selectedCharts) {
 
             filterhour(window.newData,start,end);
 
+            
             if (appendable2){
                 addQuantiles(chart, xOfFirstQI, xOfSecondQI, 5, 5, chartHeight, chartMargins, 6);
                 appendable2 = false;
@@ -1254,6 +1260,14 @@ function charts(data, selectedCharts) {
             some: "%filter-count areas out of %total-count fit the selection criteria | <a href='javascript:dc.filterAll(); dc.renderAll();''>Reset All</a>",
             all: "Total %total-count areas."
         })
+        .on('renderlet', function(d){
+            var toParse = d3.select(".dc-data-count").text();
+            var parseArr = toParse.split(" ");
+            var theCount = parseArr.filter(function(el){if (!isNaN(el[0])){return el;}})[0];
+            var $img = $("#export_btn").find('img');
+            $("#export_btn").html("EXPORT"+" "+"("+" "+theCount+" "+ "Cells Selected)");
+            $("#export_btn").prepend($img);
+        });
 
     dc.renderAll();
 
@@ -1384,83 +1398,80 @@ function filterhour(data,start,end){
 
 }
 
-    /* Calculates which quantile given selections' median fall into.
-     * @method thisQuantile
-     * @param {Array} Data
-     */
+/* Calculates which quantile given selections' median fall into.
+ * @method thisQuantile
+ * @param {Array} Data
+ */
 
-     var thisQuantile = function(median, extent, firstQ, secondQ){
-        if (median >= extent[0] && median <= firstQ){
-            return "LOW";
-        } else if (median > firstQ && median <= secondQ){
-            return "MEDIUM";
-        } else {
-            return "HIGH"
-        }
-     }
+ var thisQuantile = function(median, extent, firstQ, secondQ){
+    if (median >= extent[0] && median <= firstQ){
+        return "LOW";
+    } else if (median > firstQ && median <= secondQ){
+        return "MEDIUM";
+    } else {
+        return "HIGH"
+    }
+ }
 
-    /* Utiliy function to move a d3 element back in appearance order.
-     */
+/* Utiliy function to move a d3 element back in appearance order.
+ */
 
-    d3.selection.prototype.moveToBack = function() {  
-        return this.each(function() { 
-            var firstChild = this.parentNode.firstChild; 
-            if (firstChild) { 
-                this.parentNode.insertBefore(this, firstChild); 
-            } 
-        });
-    };
+d3.selection.prototype.moveToBack = function() {  
+    return this.each(function() { 
+        var firstChild = this.parentNode.firstChild; 
+        if (firstChild) { 
+            this.parentNode.insertBefore(this, firstChild); 
+        } 
+    });
+};
 
-    /* Function for drawing Quantile Lines on the selected chart.
-     * @method addQuantiles
-     * @param {Object} chart
-     * @param {Number} firstQ
-     * @param {Number} secondQ
-     * @param {Number} b -Offset parameter
-     * @param {Number} c -Offset parameter
-     * @param {Number} chrtHeight
-     * @param {Object} chrtMargins
-     * @param {Number} fontSize 
-     */
+/* Function for drawing Quantile Lines on the selected chart.
+ * @method addQuantiles
+ * @param {Object} chart
+ * @param {Number} firstQ
+ * @param {Number} secondQ
+ * @param {Number} b -Offset parameter
+ * @param {Number} c -Offset parameter
+ * @param {Number} chrtHeight
+ * @param {Object} chrtMargins
+ * @param {Number} fontSize 
+ */
 
-    var addQuantiles = function (chart, firstQ, secondQ, b, c, chrtHeight, chrtMargins, fontSize) {
-            chart.select("svg")
-                 .append("g").attr("transform", "translate(" + chrtMargins.left + "," + chrtMargins.top + ")")
-                 .append("line")
-                 .attr("x1", firstQ)
-                 .attr("y1", 0)
-                 .attr("x2", firstQ)
-                 .attr("y2", chrtHeight - chrtMargins.bottom)
-                 .style("stroke", "lightgrey")
-                 .style("stroke-width", "0.7");
-                 
-
-            chart.select("svg")
-                 .append("g").attr("transform", "translate(" + chrtMargins.left + "," + chrtMargins.top + ")")
-                 .append("line")
-                 .attr("x1", secondQ)
-                 .attr("y1", 0)
-                 .attr("x2", secondQ)
-                 .attr("y2", chrtHeight - chrtMargins.bottom)
-                 .style("stroke", "lightgrey")
-                 .style("stroke-width", "0.7")
-            
-            var textConst = (firstQ/2)-b; // b is 3 and c is 2 for Lighting Average,
-            var texts = [{text:"LOW", x: textConst}, { text:"MEDIUM", x: firstQ + c }, {text:"HIGH",x:secondQ + textConst}];
-
-            var g = chart.select("svg").append("g").attr("transform", "translate(" + chrtMargins.left + "," + chrtMargins.top + ")");
-            var newChart = g.selectAll("text").data(texts);
-            
-            newChart.enter()
-             .append("text")
-             .text(function(el){return el.text;})
-             .attr("y", chrtHeight - chrtMargins.bottom - 25)
-             .attr("x", function(el){return el.x})
-             .style("font-size", fontSize + "px") // 3 for Lighting Average
-             .style("color", "lightgrey")
-             .style("font-family", "Ropa Sans")
-
-    };
+var addQuantiles = function (chart, firstQ, secondQ, b, c, chrtHeight, chrtMargins, fontSize) {
+        chart.select("svg")
+             .append("g").attr("transform", "translate(" + chrtMargins.left + "," + chrtMargins.top + ")")
+             .append("line")
+             .attr("x1", firstQ)
+             .attr("y1", 0)
+             .attr("x2", firstQ)
+             .attr("y2", chrtHeight - chrtMargins.bottom)
+             .style("stroke", "lightgrey")
+             .style("stroke-width", "1.6");
+             
+        chart.select("svg")
+             .append("g").attr("transform", "translate(" + chrtMargins.left + "," + chrtMargins.top + ")")
+             .append("line")
+             .attr("x1", secondQ)
+             .attr("y1", 0)
+             .attr("x2", secondQ)
+             .attr("y2", chrtHeight - chrtMargins.bottom)
+             .style("stroke", "lightgrey")
+             .style("stroke-width", "1.6")
+        
+        var textConst = (firstQ/2)-b; // b is 3 and c is 2 for Lighting Average,
+        var texts = [{text:"LOW", x: textConst}, { text:"MEDIUM", x: firstQ + c }, {text:"HIGH",x:secondQ + textConst}];
+        var g = chart.select("svg").append("g").attr("transform", "translate(" + chrtMargins.left + "," + chrtMargins.top + ")");
+        var newChart = g.selectAll("text").data(texts);
+        
+        newChart.enter()
+         .append("text")
+         .text(function(el){return el.text;})
+         .attr("y", chrtHeight - chrtMargins.bottom - 25)
+         .attr("x", function(el){return el.x})
+         .style("font-size", fontSize + "px") // 3 for Lighting Average
+         .style("color", "lightgrey")
+         .style("font-family", "Ropa Sans")
+};
 
 //////////////////////////////////// UPDATE OBI ///////////////////////////////////
 function updateOBI(dataUpdate,start,end){
@@ -1492,7 +1503,6 @@ function updateOBI(dataUpdate,start,end){
     var OBIGroup_ = OBIDimension_.group();
     window.OBI.group(OBIGroup_).dimension(OBIDimension_)
             .keyAccessor(function (p) {
-                console.log(p)
                 return p.key;
             })
             .valueAccessor(function (p) {
