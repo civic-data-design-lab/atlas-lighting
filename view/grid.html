@@ -173,18 +173,40 @@
             <p id="" class = "plc_digits">___</p>
           </div>          
 
-          <div id="business_opening">
-            <div class="chart-title">OPEN BUSINESS INDEX
+          <div id="time_selector">
+            <div class="chart-title">TIME SELECTOR
               <span class="source">
-                <a class="reset" href="javascript:OBI.filterAll();dc.redrawAll();" style="display: none;">RESET </a>
-                <a href="javascript:OBI.filterAll();dc.redrawAll();" 			><span class = "rm_data"> x</span> </a>
+                <a class="reset" href="javascript:timeSelector.filterAll();dc.redrawAll();"      style="display: none;">RESET </a>
+                <a href="javascript:timeSelector.filterAll();dc.redrawAll();"      ><span class = "rm_data"> x</span> </a>
               </span>
             </div>
-            <p id="" class = "plc_digits" style="display:none">___</p>
-            <div id="time_selector" >
-              <p id = "selected_time" class = "plc_digits">0 - 24</p>
-              <button class="toggleAnimation"><img src="../icons/play.png" width="8px"></button>
+            <p id="" class = "plc_digits">9 - 12</p>
+          </div>    
+
+          <div id="business_opening_percent">
+            <div class="chart-title">PERCENTAGE BUSINESSES OPEN
+              <span class="source">
+                <a class="reset" href="javascript:OBIpercent.filterAll();dc.redrawAll();" style="display: none;">RESET </a>
+                <a href="javascript:OBIpercent.filterAll();dc.redrawAll();"      ><span class = "rm_data"> x</span> </a>
+              </span>
             </div>
+<!--             <div id="time_selector" >
+                <p id = "selected_time" class = "plc_digits">9 - 12</p>
+                <button class="toggleAnimation"><img src="../icons/play.png" width="8px"></button>
+            </div> -->
+          </div>
+
+          <div id="business_opening_average">
+            <div class="chart-title">AVERAGE NUMBER OF BUSINESSES OPEN
+              <span class="source">
+                <a class="reset" href="javascript:OBIaverage.filterAll();dc.redrawAll();" style="display: none;">RESET </a>
+                <a href="javascript:OBIaverage.filterAll();dc.redrawAll();"      ><span class = "rm_data"> x</span> </a>
+              </span>
+            </div>
+<!--             <div id="time_selector" >
+                <p id = "selected_time" class = "plc_digits">9 - 12</p>
+                <button class="toggleAnimation"><img src="../icons/play.png" width="8px"></button>
+            </div> -->
           </div>
 
           <div id="places">
@@ -346,18 +368,24 @@
           <img src="../icons/final_icons/info.png" class = "data_icon_handle">
           <p class = "data_intro">Types of businesses in a grid cell. Source: Google Places API</p>
         </div>
-<!--     <div class="data_item ui-widget-content tag_bus" id="d_time_selector">
-          <p class="data_item_title">BUSINESS OPENING HOURS</p>
-          <img src="../icons/final_icons/5.png" class = "data_icon">
-          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Time selector</p>
-        </div> -->
-        <div class="data_item ui-widget-content tag_bus" id="d_business_opening">
-          <p class="data_item_title">OPEN BUSINESS INDEX</p>
+        <div class="data_item ui-widget-content tag_bus" id="d_time_selector">
+          <p class="data_item_title">TIME SELECTOR</p>
           <img src="../icons/final_icons/busOBI.png" class = "data_icon">
           <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Places open in a grid cell for a given time period. Source: Google Places API</p>
+          <p class = "data_intro">Time range selector. Source: Google Places API</p>
         </div>
+        <div class="data_item ui-widget-content tag_bus" id="d_business_opening_percent">
+          <p class="data_item_title">PERCENTAGE BUSINESSES OPEN</p>
+          <img src="../icons/final_icons/busOBI.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
+          <p class = "data_intro">Percentage of businesses open for a given time period. Source: Google Places API</p>
+        </div>
+        <div class="data_item ui-widget-content tag_bus" id="d_business_opening_average">
+          <p class="data_item_title">AVERAGE NUMBER OF BUSINESSES OPEN</p>
+          <img src="../icons/final_icons/busOBI.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
+          <p class = "data_intro">Average number of businesses open for a given time period. Source: Google Places API</p>
+        </div>        
         <!-- ************************************************************** Dem filters **************************************************************-->
 
         <div class="data_item ui-widget-content tag_dem" id="d_development_intensity">
