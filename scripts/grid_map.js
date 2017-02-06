@@ -648,13 +648,13 @@ function initCanvas(data) {
         e.preventDefault();
         var currentZoom = map.getZoom();
         currentZoom < 20 ? map.setZoom(currentZoom+0.5) : null;
-        console.log(map.getZoom())
+        // console.log(map.getZoom())
     })    
     $('#zoomOut').on('click', function(e) {
         e.preventDefault();
         var currentZoom = map.getZoom();
         currentZoom > 1 ? map.setZoom(currentZoom-0.5) : null;
-        console.log(map.getZoom())
+        // console.log(map.getZoom())
     })
 
     map.on("viewreset", function () {
@@ -807,7 +807,7 @@ window.ligAveChart = dc.barChart("#light_average")
 window.placesChart = dc.barChart("#places")
 
 
-if (currentCity_o == "LA"){
+if (currentCity_o == "LA" || currentCity_o == "Chicago"){
     window.insChart = dc.barChart("#ins")
     window.insLikesChart = dc.barChart("#ins_likes")
     window.busPriChart = dc.barChart("#business_price")
@@ -993,7 +993,7 @@ function charts(data, selectedCharts) {
         else return d.places });
     var placesGroup = placesDimension.group();
 
-    if (currentCity_o == "LA"){
+    if (currentCity_o == "LA" || currentCity_o == "Chicago"){
 
         var insDimension = ndx.dimension(function (d) { 
             if(d.insta_cnt > 50 ) return 50;
