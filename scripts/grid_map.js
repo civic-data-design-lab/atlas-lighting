@@ -363,6 +363,7 @@ function initControl() {
         }
     });
 
+    //////////////////////////////////// .rm dataset from the right ///////////////////////////////////
     $(".rm_data").click(function(){
         var myid = $(this).parent().parent().parent().parent().attr("id");
         
@@ -1123,9 +1124,11 @@ function charts(data, selectedCharts) {
     var end0 = 24;
     var rdstart = 0;
     var rdend = 0;
-    console.log(selectedCharts.indexOf("business_opening_average"));
-    timeSelector("#time_selector",chartWidth,chartHeight, start, end, start0, end0);
-
+    timeSelector("#time_selector",chartWidth,chartHeight, start, end, start0, end0); //renders the first filter
+    if (selectedCharts.indexOf("business_opening_percent") > -1) {
+        console.log('here')
+        $('#business_opening_average').find('#selected_time').hide();
+    }
 }
 
 
@@ -1257,8 +1260,15 @@ function updateChart(selectedCharts) {
             d3.select("#" + d).style("display", "block");
         }
     })
+    if (selectedCharts.indexOf("business_opening_percent") === -1) {
+        $('#business_opening_average').find('#selected_time').show();
+    }
+    else {
+        $('#business_opening_average').find('#selected_time').hide();
+    }
     updateZoomedChart(selectedCharts);
 }
+
 
 
 
@@ -1277,7 +1287,7 @@ function timeSelector(id, chartWidth,chartHeight, start, end, start0, end0){
         height = 32;
 
     var svg = d3.select(id).append("svg")
-        .attr('id', 'copyMe')
+        .attr('id', 'time_selector')
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
