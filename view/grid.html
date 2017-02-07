@@ -121,16 +121,67 @@
             <p id="light_digits">___</p>
           </div>
 
-          <div id="income">
-            <div class="chart-title">MEDIAN HOUSEHOLD INCOME
+        <!-- ************************************************************** Business filters **************************************************************-->
+          <div id="business_diversity">
+            <div class="chart-title">BUSINESS DIVERSITY
               <span class="source">
-                <a class="reset" href="javascript:incomeChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
-                <a href="javascript:incomeChart.filterAll();dc.redrawAll();"  ><span class = "rm_data"> x</span> </a>
+                <a class="reset" href="javascript:busDivChart.filterAll();dc.redrawAll();"      style="display: none;">RESET </a>
+                <a href="javascript:busDivChart.filterAll();dc.redrawAll();"      ><span class = "rm_data"> x</span> </a>
               </span>
             </div>
-            <p id="income_digits" class = "other_digits">___</p>
+            <p id="" class = "plc_digits">___</p>
+          </div>
+          <div id="business_price">
+            <div class="chart-title">BUSINESS PRICE
+              <span class="source">
+                <a class="reset" href="javascript:busPriChart.filterAll();dc.redrawAll();"      style="display: none;">RESET </a>
+                <a href="javascript:busPriChart.filterAll();dc.redrawAll();"      ><span class = "rm_data"> x</span> </a>
+              </span>
+            </div>
+            <p id="" class = "plc_digits">___</p>
+          </div>      
+          <div id="places">
+            <div class="chart-title">PLACE DENSITY
+              <span class="source">
+                <a class="reset" href="javascript:placesChart.filterAll();dc.redrawAll();"      style="display: none;">RESET </a>
+                <a href="javascript:placesChart.filterAll();dc.redrawAll();"      ><span class = "rm_data"> x</span> </a>
+              </span>
+            </div>
+            <p id="" class = "plc_digits">___</p>
+          </div>
+          <div id="business_types" class = "dc-chart bus-types">
+            <div class="chart-title">BUSINESS TYPES
+              <span class="source">
+                <a><span class = "rm_data"> x</span></a>
+              </span>
+            </div>
+          </div>
+          <div id="business_opening_percent">
+            <div class="chart-title">PERCENTAGE OF OPEN BUSINESSES IN TIME OF DAY
+              <span class="source">
+                <a class="reset" href="javascript:OBIpercent.filterAll();dc.redrawAll();" style="display: none;">RESET </a>
+                <a href="javascript:OBIpercent.filterAll();dc.redrawAll();"      ><span class = "rm_data"> x</span> </a>
+              </span>
+            </div>
+            <div id="time_selector" >
+                <p id = "selected_time" class = "plc_digits">9 - 12</p>
+                <!-- <button class="toggleAnimation"><img src="../icons/play.png" width="8px"></button> -->
+            </div>
+          </div>
+          <div id="business_opening_average">
+            <div class="chart-title">AVERAGE NUMBER OF BUSINESSES OPEN IN TIME OF DAY
+              <span class="source">
+                <a class="reset" href="javascript:OBIaverage.filterAll();dc.redrawAll();" style="display: none;">RESET </a>
+                <a href="javascript:OBIaverage.filterAll();dc.redrawAll();"      ><span class = "rm_data" style="display: none;"> x</span> </a>
+              </span>
+            </div>
+            <div id="time_selector">
+              <p id = "selected_time" class = "plc_digits">0 - 24</p>
+            </div>
           </div>
 
+
+        <!-- ************************************************************** Dem filters **************************************************************-->
           <div id="development_intensity">
             <div class="chart-title">DEVELOPMENT INTENSITY
               <span class="source">
@@ -140,8 +191,6 @@
             </div>
             <p id="" class = "plc_digits">___</p>
           </div>
-
-
           <div id="population">
             <div class="chart-title">POPULATION
               <span class="source">
@@ -151,80 +200,18 @@
             </div>
             <p id="" class = "plc_digits">___</p>
           </div>
-
-
-          <div id="business_diversity">
-            <div class="chart-title">BUSINESS DIVERSITY
+          <div id="income">
+            <div class="chart-title">MEDIAN HOUSEHOLD INCOME
               <span class="source">
-                <a class="reset" href="javascript:busDivChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
-                <a href="javascript:busDivChart.filterAll();dc.redrawAll();" 			><span class = "rm_data"> x</span> </a>
+                <a class="reset" href="javascript:incomeChart.filterAll();dc.redrawAll();"      style="display: none;">RESET </a>
+                <a href="javascript:incomeChart.filterAll();dc.redrawAll();"  ><span class = "rm_data"> x</span> </a>
               </span>
             </div>
-            <p id="" class = "plc_digits">___</p>
+            <p id="income_digits" class = "other_digits">___</p>
           </div>
 
-          <div id="business_price">
-            <div class="chart-title">BUSINESS PRICE
-              <span class="source">
-                <a class="reset" href="javascript:busPriChart.filterAll();dc.redrawAll();"      style="display: none;">RESET </a>
-                <a href="javascript:busPriChart.filterAll();dc.redrawAll();"      ><span class = "rm_data"> x</span> </a>
-              </span>
-            </div>
-            <p id="" class = "plc_digits">___</p>
-          </div>          
 
-          <div id="business_opening">
-            <div class="chart-title">OPEN BUSINESS INDEX
-              <span class="source">
-                <a class="reset" href="javascript:OBI.filterAll();dc.redrawAll();" style="display: none;">RESET </a>
-                <a href="javascript:OBI.filterAll();dc.redrawAll();" 			><span class = "rm_data"> x</span> </a>
-              </span>
-            </div>
-            <p id="" class = "plc_digits" style="display:none">___</p>
-            <div id="time_selector" >
-              <p id = "selected_time" class = "plc_digits">0 - 24</p>
-              <button class="toggleAnimation"><img src="../icons/play.png" width="8px"></button>
-            </div>
-          </div>
-
-          <div id="places">
-            <div class="chart-title">PLACE DENSITY
-              <span class="source">
-                <a class="reset" href="javascript:placesChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
-                <a href="javascript:placesChart.filterAll();dc.redrawAll();" 			><span class = "rm_data"> x</span> </a>
-              </span>
-            </div>
-            <p id="" class = "plc_digits">___</p>
-          </div>
-
-          <div id="ins">
-            <div class="chart-title">INSTAGRAM DENSITY
-              <span class="source">
-                <a class="reset" href="javascript:insChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
-                <a href="javascript:insChart.filterAll();dc.redrawAll();"><span class = "rm_data"> x</span> </a>
-              </span>
-            </div>
-            <p id="" class = "plc_digits">___</p>
-          </div>
-
-          <div id="ins_likes">
-            <div class="chart-title">INSTAGRAM LIKES
-              <span class="source">
-                <a class="reset" href="javascript:insLikesChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
-                <a href="javascript:insLikesChart.filterAll();dc.redrawAll();" ><span class = "rm_data"> x</span> </a>
-              </span>
-            </div>
-            <p id="" class = "plc_digits">___</p>
-          </div>
-
-          <div id="business_types" class = "dc-chart bus-types">
-            <div class="chart-title">BUSINESS TYPES
-              <span class="source">
-                <a><span class = "rm_data"> x</span></a>
-              </span>
-            </div>
-          </div>
-
+        <!-- ************************************************************** Social media filters **************************************************************-->
           <div id="street_view" class="extra_data dc-chart">
             <div class="chart-title">GOOGLE STREET VIEW
               <span class="source">
@@ -236,8 +223,24 @@
 
             <div id="streetview_window"></div>
           </div>
-
-
+          <div id="ins">
+            <div class="chart-title">INSTAGRAM DENSITY
+              <span class="source">
+                <a class="reset" href="javascript:insChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
+                <a href="javascript:insChart.filterAll();dc.redrawAll();"><span class = "rm_data"> x</span> </a>
+              </span>
+            </div>
+            <p id="" class = "plc_digits">___</p>
+          </div>
+          <div id="ins_likes">
+            <div class="chart-title">INSTAGRAM LIKES
+              <span class="source">
+                <a class="reset" href="javascript:insLikesChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
+                <a href="javascript:insLikesChart.filterAll();dc.redrawAll();" ><span class = "rm_data"> x</span> </a>
+              </span>
+            </div>
+            <p id="" class = "plc_digits">___</p>
+          </div>
           <div id="instagram_pics" class="extra_data dc-chart">
             <div class="chart-title">INSTAGRAM POSTS
               <span class="source">
@@ -246,9 +249,9 @@
             </div>
             <img src="../icons/placeholder_instagram2.png" id = "instagram_plc">
             <img src="../icons/select_instagram2 copy.png" id = "instagram_plc0">
-
           </div>
 
+        <!-- ************************************************************** Drop zone **************************************************************-->
           <div class="data_select_ui" id="todrop">
             <div class="drop_indi">Drag a dataset to upload</div>
             <img src="../icons/final_icons/drop.png">
@@ -346,18 +349,18 @@
           <img src="../icons/final_icons/info.png" class = "data_icon_handle">
           <p class = "data_intro">Types of businesses in a grid cell. Source: Google Places API</p>
         </div>
-<!--     <div class="data_item ui-widget-content tag_bus" id="d_time_selector">
-          <p class="data_item_title">BUSINESS OPENING HOURS</p>
-          <img src="../icons/final_icons/5.png" class = "data_icon">
-          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Time selector</p>
-        </div> -->
-        <div class="data_item ui-widget-content tag_bus" id="d_business_opening">
-          <p class="data_item_title">OPEN BUSINESS INDEX</p>
+        <div class="data_item ui-widget-content tag_bus" id="d_business_opening_percent">
+          <p class="data_item_title">OPEN BUSINESSES IN TIME OF DAY</p>
           <img src="../icons/final_icons/busOBI.png" class = "data_icon">
           <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Places open in a grid cell for a given time period. Source: Google Places API</p>
+          <p class = "data_intro">Percentage of businesses open for a given time period. Source: Google Places API</p>
         </div>
+        <div class="data_item ui-widget-content tag_bus" id="d_business_opening_average" style="display: none">
+          <p class="data_item_title">AVERAGE NUMBER OF BUSINESSES OPEN</p>
+          <img src="../icons/final_icons/busOBI.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
+          <p class = "data_intro">Average number of businesses open for a given time period. Source: Google Places API</p>
+        </div>        
         <!-- ************************************************************** Dem filters **************************************************************-->
 
         <div class="data_item ui-widget-content tag_dem" id="d_development_intensity">
