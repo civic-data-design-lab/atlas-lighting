@@ -673,7 +673,6 @@ window.devIntChart = dc.barChart("#development_intensity")
 window.ligAveChart = dc.barChart("#light_average")
 window.placesChart = dc.barChart("#places");
 
-
 window.insChart = dc.barChart("#ins")
 window.insLikesChart = dc.barChart("#ins_likes")
 window.busPriChart = dc.barChart("#business_price")
@@ -1120,10 +1119,10 @@ function charts(data, selectedCharts) {
     d3.selectAll("#business_diversity line").remove();
     
     //////////////////////////////////// timeSelector   --- d3.js ---- ///////////////////////////////////
-
     timeSelector("#time_selector",chartWidth,chartHeight); 
-    timeSelector("#time_selector_clone",chartWidth,chartHeight); 
-    if (selectedCharts.indexOf("business_opening_percent") > -1) { //hide second bar on load
+    if (selectedCharts.indexOf("business_opening_percent") !== -1) { //show second bar on load
+        $('#business_opening_average').show();
+        $('#business_opening_average').find('#time_selector').hide();
         $('#business_opening_average').find('#selected_time').hide();
     }
 }
@@ -1243,7 +1242,6 @@ function updateZoomedChart(selectedCharts) {
 }
 
 //////////////////////////////////// UPDATE CHARTS FUNCTION ///////////////////////////////////
-
 function updateChart(selectedCharts) {
     window.location.href = initurl.split("*")[0] + "*" + selectedCharts.join("|");
     d3.selectAll(".dc-chart").style("display", "none");
@@ -1257,18 +1255,15 @@ function updateChart(selectedCharts) {
         }
     })
 
-    // special behavior of the OBI charts when they are selected together or independently
-    if (selectedCharts.indexOf("business_opening_percent") === -1) { //percentage filter is not selected, the AVERAGE graph should SHOW the time digits
-        $('#business_opening_average').find('#selected_time').show();
-        $('#business_opening_average').find('#time_selector_clone').show();
-    }
-    else { //percentage filter is selected, the AVERAGE graph should NOT SHOW the time digits
+    //////////////////////////////////// SPECIAL BEHAVIOR FOR THE OBI CHARTS ///////////////////////////////////
+    if (selectedCharts.indexOf("business_opening_percent") !== -1) 
+    { //percentage filter is not selected, the AVERAGE graph should not show
+        $('#business_opening_average').show();
+        $('#business_opening_average').find('#time_selector').hide();
         $('#business_opening_average').find('#selected_time').hide();
-        $('#business_opening_average').find('#time_selector_clone').hide();
     }
     updateZoomedChart(selectedCharts);
 }
-
 
 
 
@@ -1280,11 +1275,12 @@ function updateChart(selectedCharts) {
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
+
 function timeSelector(id, chartWidth,chartHeight){
-    var start = 9;
-    var end = 12;
-    var start0 = 0;
-    var end0 = 24;
+    var start = 9; //starting point of brush on chart
+    var end = 12; //ending point of brush on chart
+    var start0 = 0; //starting point for code before anyone interacts with brush
+    var end0 = 24; //ending point for code before anyone interacts with brush
     var margin = { top: 10, left: 10, right: 0, bottom: 0 },
         width = chartWidth - margin.right,
         height = 32;
@@ -1313,7 +1309,7 @@ function timeSelector(id, chartWidth,chartHeight){
 		.on('brushend', brushend);
 
 	context.append('g')
-		.attr('class', 'x brush')
+		.attr('class', 'brushItem')
 		.call(brush)
 		.selectAll('rect')
 		.attr('y', -12)
@@ -1338,41 +1334,33 @@ function timeSelector(id, chartWidth,chartHeight){
         brush.extent()[1] = Math.round(brush.extent()[1])
         var rdstart = Math.round(brush.extent()[0]);
         var rdend = Math.round(brush.extent()[1]);
-
+        
         brush.extent([rdstart,rdend]);
-
+        
         if (rdend - rdstart == 0){
-            d3.select("#selected_time").text(0+" - "+24);
-            $('#business_opening_average').find('#selected_time').text(0+" - "+24);
-            filterhour(window.newData,rdstart,rdend);
-            if (selectedCharts.includes("business_opening_average")) {updateOBI(window.newData, rdstart,rdend);}
-            if (selectedCharts.includes("business_opening_percent")) {updateOBI(window.newData, rdstart,rdend);}
+            $('#business_opening_percent').find('#selected_time').text(0+" - "+24);
+            filterhour(window.newData, rdstart, rdend);
+            if (selectedCharts.includes("business_opening_average") || selectedCharts.includes("business_opening_percent")) {updateOBI(window.newData, rdstart,rdend);}
         }
         else {
-            d3.select("#selected_time").text(rdstart+" - "+rdend);
-            $('#business_opening_average').find('#selected_time').text(rdstart+" - "+rdend);
-            filterhour(window.newData,rdstart,rdend);
-            if (selectedCharts.includes("business_opening_average")) {updateOBI(window.newData, rdstart,rdend);}
-            if (selectedCharts.includes("business_opening_percent")) {updateOBI(window.newData, rdstart,rdend);}
+            $('#business_opening_percent').find('#selected_time').text(rdstart+" - "+rdend);
+            filterhour(window.newData, rdstart, rdend);
+            if (selectedCharts.includes("business_opening_average") || selectedCharts.includes("business_opening_percent")) {updateOBI(window.newData, rdstart,rdend);}
         }
 	}
 
 }
 
+
 //////////////////////////////////// FILTER HOUR ///////////////////////////////////
-
-
-function filterhour(data,start,end){
-    console.log(start, end)
-    d3.select("#selected_time").text(start+" - "+end);
-    // d3.selectAll(".cellgrids").style("display", "none");
-
+function filterhour(data, rdstart, rdend){
+    // d3.select("#selected_time").text(rdstart+" - "+rdend);
     var ave_lit = 0;
     var count_ = 0;
 
     data.forEach(function (d) {
 
-        if (start == end || start == 0 && end == 24){
+        if (rdstart == rdend || rdstart == 0 && rdend == 24){
             d3.select("#c" + d.cell_id).style("display", "block");
             ave_lit += d.averlight;
             count_ ++;
