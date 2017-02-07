@@ -761,7 +761,7 @@ function charts(data, selectedCharts) {
         d.transportation = +d.transportation ? +d.transportation : 0;   
         // -------------------------------------------------------------------------- OBI values
         for (var i=0;i<24;i++){
-            if  (+d['b_opening_'+i] !== undefined) {
+            if  (+d['b_opening_'+i] >0) {
                 d.OBI += +d['b_opening_'+i];
             }
         }
@@ -797,7 +797,7 @@ function charts(data, selectedCharts) {
     var chartWidthBusDiv = 320;
     var chartHeightBusDiv = 52;
 
-    var chartMargins = {top: 0, left: 5, right: 5, bottom: 20}; //{top: 0, left: 50, right: 10, bottom: 20};
+    var chartMargins = {top: 0, left: 10, right: 10, bottom: 20}; //{top: 0, left: 50, right: 10, bottom: 20};
 
     var ndx = crossfilter(data);
     var all = ndx.groupAll();
@@ -910,23 +910,25 @@ function charts(data, selectedCharts) {
     var OBIDimension = ndx.dimension(function (d) { return d.OBI });
     var OBIGroup = OBIDimension.group();
 
-    window.OBIaverage.width(chartWidth).height(chartHeight)
+    window.OBIaverage.width(chartWidth).height(70)
         .group(OBIGroup).dimension(OBIDimension)
         //.elasticY(true)
         .ordinalColors(["#888", "#888", "#888"])
         .margins(chartMargins)
-        .x(d3.scale.linear().domain([0, 100]))
+        .x(d3.scale.linear().domain([0, 1000]))
+        .y(d3.scale.linear().domain([0, 300]))        
         .gap(1)
-        .yAxis().ticks(2);
+        .yAxis().ticks(1)
+
 
     window.OBIpercent.width(chartWidth).height(chartHeight)
         .group(OBIGroup).dimension(OBIDimension)
         //.elasticY(true)
         .ordinalColors(["#888", "#888", "#888"])
         .margins(chartMargins)
-        .x(d3.scale.linear().domain([0, 100]))
+        .x(d3.scale.linear().domain([0, 50]))
         .gap(1)
-        .yAxis().ticks(2);
+        .yAxis().ticks(1);
         //.y(d3.scale.linear().domain([0, 600]));        
 
     busDivChart.width(chartWidthBusDiv).height(chartHeightBusDiv*2)
@@ -1126,7 +1128,6 @@ function charts(data, selectedCharts) {
     var rdend = 0;
     timeSelector("#time_selector",chartWidth,chartHeight, start, end, start0, end0); //renders the first filter
     if (selectedCharts.indexOf("business_opening_percent") > -1) {
-        console.log('here')
         $('#business_opening_average').find('#selected_time').hide();
     }
 }
@@ -1260,10 +1261,10 @@ function updateChart(selectedCharts) {
             d3.select("#" + d).style("display", "block");
         }
     })
-    if (selectedCharts.indexOf("business_opening_percent") === -1) {
+    if (selectedCharts.indexOf("business_opening_percent") === -1) { //percentage filter is not selected, the AVERAGE graph should show the time selector
         $('#business_opening_average').find('#selected_time').show();
     }
-    else {
+    else { //percentage filter is selected, the AVERAGE graph should not show the time selector
         $('#business_opening_average').find('#selected_time').hide();
     }
     updateZoomedChart(selectedCharts);
@@ -1408,7 +1409,7 @@ function updateOBI(dataUpdate,start,end){
     dataUpdate.forEach(function (d) {
        d.OBI = 0;
        for (var i=start;i<end;i++){
-            if (+d['b_opening_'+i] !== undefined) {
+            if (+d['b_opening_'+i] >0) {
                  d.OBI += +d['b_opening_'+i];   
             }
         }
@@ -1417,7 +1418,7 @@ function updateOBI(dataUpdate,start,end){
     cf.add(dataUpdate);
     var OBIDimension_ = cf.dimension(function (d) { return d.OBI });
     var OBIGroup_ = OBIDimension_.group();
-    window.OBIaverage.width(chartWidth_).height(chartHeight_)
+    window.OBIaverage.width(chartWidth_).height(70)
             .group(OBIGroup_).dimension(OBIDimension_);    
     window.OBIpercent.width(chartWidth_).height(chartHeight_)
             .group(OBIGroup_).dimension(OBIDimension_);
@@ -1426,7 +1427,7 @@ function updateOBI(dataUpdate,start,end){
 }
 
 
- var thisQuantile = function(median, extent, firstQ, secondQ){
+var thisQuantile = function(median, extent, firstQ, secondQ){
     if (median >= extent[0] && median <= firstQ){
         return "LOW";
     } else if (median > firstQ && median <= secondQ){
@@ -1435,8 +1436,6 @@ function updateOBI(dataUpdate,start,end){
         return "HIGH"
     }
  }
-
-
 /* Function for drawing Quantile Lines on the selected chart.
  * @method addQuantiles
  * @param {Object} chart
