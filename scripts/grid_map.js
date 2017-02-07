@@ -369,11 +369,15 @@ function initControl() {
         console.log(myid);
         $("#"+myid).hide();
         $("#d_"+myid).show();
-        // $("#d_"+myid).attr("style", "opacity: 1");
 
         var myindex = selectedCharts.indexOf(myid);
         if (myindex > -1) {
             selectedCharts.splice(myindex, 1);
+        }
+        if (myid === "business_opening_average" || myid === "business_opening_percent" ) {
+            selectedCharts.splice(selectedCharts.indexOf("time_selector_percent"), 1);
+            selectedCharts.splice(selectedCharts.indexOf("time_selector_average"), 1);
+            updateChart(selectedCharts);
         }
         updateChart(selectedCharts);
 
@@ -1049,17 +1053,16 @@ function charts(data, selectedCharts) {
             //.elasticY(true)
             .ordinalColors(["#888", "#888", "#888"])
             .margins(chartMargins)
-            .x(d3.scale.linear().domain([0.5, 4]))
+            .x(d3.scale.linear().domain([0, 100]))
             .gap(1)
             .yAxis().ticks(2);
-            //.y(d3.scale.linear().domain([0, 600]));               
 
         window.OBIpercent.width(chartWidth).height(chartHeight)
             .group(OBIGroup).dimension(OBIDimension)
             //.elasticY(true)
             .ordinalColors(["#888", "#888", "#888"])
             .margins(chartMargins)
-            .x(d3.scale.linear().domain([0.5, 4]))
+            .x(d3.scale.linear().domain([0, 100]))
             .gap(1)
             .yAxis().ticks(2);
             //.y(d3.scale.linear().domain([0, 600]));        
@@ -1249,20 +1252,23 @@ function charts(data, selectedCharts) {
             $("#export_btn").html("EXPORT"+" "+"("+" "+theCount+" "+ "Cells Selected)");
             $("#export_btn").prepend($img);
         });
-
+    //////////////////////////////////// renderAll()   --- dc.js ---- ///////////////////////////////////
     dc.renderAll();
+    
+    //////////////////////////////////// timeSelector   --- d3.js ---- ///////////////////////////////////
+    timeSelector("#time_selector_percent",chartWidth,chartHeight);
+    timeSelector("#time_selector_average",chartWidth,chartHeight);
 
     // hide the axes for the bubble charts (must run after render)
     //$("#business_diversity .axis.y").hide();
     d3.selectAll("#business_diversity path").remove();
     d3.selectAll("#business_diversity line").remove();
 
-    //////////////////////////////////// timeSelector   --- d3.js ---- ///////////////////////////////////
-    timeSelector(chartWidth,chartHeight);
+
 
 }
 
-function timeSelector(chartWidth,chartHeight){
+function timeSelector(id, chartWidth,chartHeight){
 
     var margin = { top: 10, left: 10, right: 0, bottom: 0 },
         width = chartWidth - margin.right,
@@ -1272,8 +1278,7 @@ function timeSelector(chartWidth,chartHeight){
 	var end = 12;
 	var start0 = 0;
 	var end0 = 24;
-
-    var svg = d3.select("#time_selector").append("svg")
+    var svg = d3.select(id).append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
@@ -1457,7 +1462,7 @@ var addQuantiles = function (chart, firstQ, secondQ, b, c, chrtHeight, chrtMargi
 
 //////////////////////////////////// UPDATE OBI ///////////////////////////////////
 function updateOBI(dataUpdate,start,end){
-    var chartHeight_ = 52;
+    var chartHeight_ = 100;
     var chartWidth_ = 320;
     var cf = crossfilter(dataUpdate);
     cf.remove();
