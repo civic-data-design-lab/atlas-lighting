@@ -1263,6 +1263,8 @@ function updateChart(selectedCharts) {
         $('#business_opening_average').find('#selected_time').hide();
     }
     updateZoomedChart(selectedCharts);
+  
+    //$("#dc-data-count").css({"display":"none"});
 }
 
 

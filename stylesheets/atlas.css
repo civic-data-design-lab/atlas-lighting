@@ -231,6 +231,7 @@ canvas {
     display:none;
     color:#337ab7;
 }
+
 .dc-chart{
     fill-opacity: .5;
     cursor:pointer;
