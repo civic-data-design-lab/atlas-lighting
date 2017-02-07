@@ -1,18 +1,14 @@
 'use strict';
 
-String.prototype.lowercase = function () {
-    return this.charAt(0).toLowerCase() + this.slice(1);
-}
+////////////////////////////////////////////////////////////////////////////////
+//  Variable initilization                                                    //
+////////////////////////////////////////////////////////////////////////////////
 
 var currentCity_o = document.URL.split("#")[1].split("*")[0];
-var currentCity = document.URL.split("#")[1].split("*")[0].lowercase();
-
+var currentCity = document.URL.split("#")[1].split("*")[0].toLowerCase();
 d3.selectAll("#nowmsa").text(fullName[currentCity_o]);
-
 var center = cityCentroids[currentCity_o];
-
 var initurl = window.location.href;
-
 var selectedCharts = [];
 
 if (!initurl.split("*")[1]) {//if no dataset is specified in the url
@@ -47,16 +43,21 @@ var alpha = 1
 var alphaScale = d3.scale.linear().domain([minZoom, maxZoom]).range([0.6, .03]);
 
 // busTypes is a list of predefined types utilized in the business types chart.
-
 var busTypes = ['beauty','culture','education','entertainment',
         'finance','food','health','nightclub','office','other','public_use',
         'recreation','religious','residential','restaurant','retail','service',
         'transportation'];
 
 // Business Types Widget is initiated here.
-
 var newBusTypesChart = tagCloudChart(390, 100);
 
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//  myinit()                                                                  //
+//                                                                            //
+//  Sets up the grid, loads the data                                          //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 var myinit = function () {
     window.panorama = new google.maps.StreetViewPanorama(
         document.getElementById('streetview_window'),
@@ -90,7 +91,13 @@ var myinit = function () {
 }
 
 
-
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//  dataDidLoad(error, grid)                                                  //
+//                                                                            //
+//  Checks successful data load                                               //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 function dataDidLoad(error, grid) {
     d3.select("#loader").transition().duration(600).style("opacity", 0).remove();
 
@@ -104,7 +111,6 @@ function dataDidLoad(error, grid) {
     initControl();
     
 }
-
 function project(d) {
     return __map.project(getLL(d));
 }
@@ -123,8 +129,6 @@ function getLL(d) {
 //  Initializing the controls                                                 //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
-
-
 function initControl() {
 
     var droptop = $("#todrop").offset().top;
@@ -363,7 +367,7 @@ function initControl() {
         }
     });
 
-    //////////////////////////////////// .rm dataset from the right ///////////////////////////////////
+    //////////////////////////////////// .rm dataset from the right panel
     $(".rm_data").click(function(){
         var myid = $(this).parent().parent().parent().parent().attr("id");
         
@@ -462,7 +466,6 @@ function initControl() {
 //  Initializing  and rendering the canvas                                    //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
-
 function initCanvas(data) {
     __gridData = data
     //draws map tile if map is null
@@ -505,7 +508,6 @@ function initCanvas(data) {
     //  Rendering the canvas                                                      //
     //                                                                            //
     ////////////////////////////////////////////////////////////////////////////////
-
     function render() {
         var lightScale = d3.scale.linear().domain([0, 200, 400]).range(["#3182bd", "#fee391", "#fc9272"])
         var radius = 6 / 1400 * Math.pow(2, map.getZoom());
@@ -630,10 +632,15 @@ function initCanvas(data) {
     }
 
     //////////////////////////////////// CALL TO RENDER ///////////////////////////////////
-
     render();
 
-    //////////////////////////////////// ZOOM FUNCTION ///////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+    //                                                                            //
+    //  zoomed()                                                                  //
+    //                                                                            //
+    //  Zooming into the map                                                      //
+    //                                                                            //
+    ////////////////////////////////////////////////////////////////////////////////
     function zoomed() {
         cellDisselect();
         var disX = Math.abs(project(__bounds._sw).x - project(__bounds._ne).x);
@@ -656,7 +663,6 @@ function initCanvas(data) {
         currentZoom > 1 ? map.setZoom(currentZoom-0.5) : null;
         // console.log(map.getZoom())
     })
-
     map.on("viewreset", function () {
         zoomed();
     })
@@ -686,8 +692,6 @@ window.OBIpercent = dc.barChart("#business_opening_percent");
 //  Rendering the charts                                                      //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
-
-
 function charts(data, selectedCharts) {
     d3.selectAll(".dc-chart").style("display", "none");
     d3.select("#street_view").style("display", "block");
@@ -1128,7 +1132,13 @@ function charts(data, selectedCharts) {
 }
 
 
-//////////////////////////////////// CELL SELECT ///////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//  cellSelect(datum)                                                         //
+//                                                                            //
+//  Behavior when a user selects a cell                                       //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 function cellSelect(d) {
     window.cell_selected = true;
     updateZoomedChart(selectedCharts);
@@ -1185,8 +1195,13 @@ function cellSelect(d) {
 
 }
 
-//////////////////////////////////// UNSELECT A CELL ///////////////////////////////////
-
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//  cellDisselect()                                                           //
+//                                                                            //
+//  Behavior when a user unselects a cell                                     //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 function cellDisselect() {
     window.cell_selected = false;
     d3.select(".overlay_rect").remove();
@@ -1202,8 +1217,13 @@ function cellDisselect() {
 
 }
 
-//////////////////////////////////// UPDATE ZOOMED CHART FUNCTION ///////////////////////////////////
-
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//  updateZoomedChart(selectedCharts)                                         //
+//                                                                            //
+//  Interacting with charts on the right panel                                //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 function updateZoomedChart(selectedCharts) {
     selectedCharts.forEach(function (d) {
         d3.select("#" + d).style("display", "none");
@@ -1241,7 +1261,13 @@ function updateZoomedChart(selectedCharts) {
     }
 }
 
-//////////////////////////////////// UPDATE CHARTS FUNCTION ///////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//  updateZoomedChart(selectedCharts)                                         //
+//                                                                            //
+//  Selecting which charts show on the right panel                            //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 function updateChart(selectedCharts) {
     window.location.href = initurl.split("*")[0] + "*" + selectedCharts.join("|");
     d3.selectAll(".dc-chart").style("display", "none");
@@ -1255,7 +1281,7 @@ function updateChart(selectedCharts) {
         }
     })
 
-    //////////////////////////////////// SPECIAL BEHAVIOR FOR THE OBI CHARTS ///////////////////////////////////
+    //////////////////////////////////// SPECIAL BEHAVIOR FOR THE OBI CHARTS 
     if (selectedCharts.indexOf("business_opening_percent") !== -1) 
     { //percentage filter is not selected, the AVERAGE graph should not show
         $('#business_opening_average').show();
@@ -1271,14 +1297,12 @@ function updateChart(selectedCharts) {
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
-//  timeSelector   --- d3.js ---                                              //
+//  timeSelector(id, chartWidth,chartHeight)  --- d3.js ---                   //
 //                                                                            //
-//  Time range  SVG                                                           //
+//  Renders the time selector slider                                          //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
-
-
-function timeSelector(id, chartWidth,chartHeight){
+function timeSelector(id, chartWidth,chartHeight) {
     var start = 9; //starting point of brush on chart
     var end = 12; //ending point of brush on chart
     var start0 = 0; //starting point for code before anyone interacts with brush
@@ -1354,7 +1378,13 @@ function timeSelector(id, chartWidth,chartHeight){
 }
 
 
-//////////////////////////////////// FILTER HOUR ///////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//  filterhour(data, rdstart, rdend)  --- d3.js ---                           //
+//                                                                            //
+//  Syncs the map with the selected values after using the time slider        //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 function filterhour(data, rdstart, rdend){
     // d3.select("#selected_time").text(rdstart+" - "+rdend);
     var ave_lit = 0;
@@ -1390,12 +1420,14 @@ function filterhour(data, rdstart, rdend){
 
 }
 
-/* Calculates which quantile given selections' median fall into.
- * @method thisQuantile
- * @param {Array} Data
- */
 
-//////////////////////////////////// UPDATE OBI ///////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//  updateOBI(dataUpdate, start, end)  --- dc.js ---                          //
+//                                                                            //
+//  Updates the two dc.js charts for the open business values                 //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 function updateOBI(dataUpdate,start,end){
     var chartHeight_ = 100;
     var chartWidth_ = 320;
@@ -1422,7 +1454,13 @@ function updateOBI(dataUpdate,start,end){
 }
 
 
-var thisQuantile = function(median, extent, firstQ, secondQ){
+////////////////////////////////////////////////////////////////////////////////
+/* Calculates which quantile given selections' median fall into.
+ * @method thisQuantile
+ * @param {Array} Data
+ */
+////////////////////////////////////////////////////////////////////////////////
+function thisQuantile(median, extent, firstQ, secondQ){
     if (median >= extent[0] && median <= firstQ){
         return "LOW";
     } else if (median > firstQ && median <= secondQ){
@@ -1431,6 +1469,7 @@ var thisQuantile = function(median, extent, firstQ, secondQ){
         return "HIGH"
     }
  }
+////////////////////////////////////////////////////////////////////////////////
 /* Function for drawing Quantile Lines on the selected chart.
  * @method addQuantiles
  * @param {Object} chart
@@ -1442,7 +1481,8 @@ var thisQuantile = function(median, extent, firstQ, secondQ){
  * @param {Object} chrtMargins
  * @param {Number} fontSize 
  */
-var addQuantiles = function (chart, firstQ, secondQ, b, c, chrtHeight, chrtMargins, fontSize) {
+////////////////////////////////////////////////////////////////////////////////
+function addQuantiles(chart, firstQ, secondQ, b, c, chrtHeight, chrtMargins, fontSize) {
         chart.select("svg")
              .append("g").attr("transform", "translate(" + chrtMargins.left + "," + chrtMargins.top + ")")
              .append("line")
@@ -1480,9 +1520,11 @@ var addQuantiles = function (chart, firstQ, secondQ, b, c, chrtHeight, chrtMargi
 
 
 
-
-/* Utiliy function to move a d3 element back in appearance order.
- */
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//  Utility functions                                                         //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 d3.selection.prototype.moveToBack = function() {  
     return this.each(function() { 
         var firstChild = this.parentNode.firstChild; 
