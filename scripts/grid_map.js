@@ -609,28 +609,28 @@ function initCanvas(data) {
                 })
         });
 
-        //////////////////////////////////// ANIMATION BEHAVIOR /////////////////////////////////// 
-        var increment=0;
-        var animationIsRunning=false;
-        (function tick() {  
-            $('button.toggleAnimation').off().on('click', function(e) {
-                e.preventDefault();
-                animationIsRunning = !animationIsRunning;
-                if (animationIsRunning) {
-                    $('button.toggleAnimation').addClass('isPressed');
-                }
-                else {
-                    $('button.toggleAnimation').addClass('isNotPressed');
-                }
-                console.log("click", animationIsRunning);
-            })
-            if (animationIsRunning) {  
-                if (increment<23) {  filterhour(data, increment, increment+1); }
-                else { increment = 0; }
-                ++increment; 
-            }
-            setTimeout(tick, 1000);
-        })();
+        // //////////////////////////////////// ANIMATION BEHAVIOR /////////////////////////////////// 
+        // var increment=0;
+        // var animationIsRunning=false;
+        // (function tick() {  
+        //     $('button.toggleAnimation').off().on('click', function(e) {
+        //         e.preventDefault();
+        //         animationIsRunning = !animationIsRunning;
+        //         if (animationIsRunning) {
+        //             $('button.toggleAnimation').addClass('isPressed');
+        //         }
+        //         else {
+        //             $('button.toggleAnimation').addClass('isNotPressed');
+        //         }
+        //         console.log("click", animationIsRunning);
+        //     })
+        //     if (animationIsRunning) {  
+        //         if (increment<23) {  filterhour(data, increment, increment+1); }
+        //         else { increment = 0; }
+        //         ++increment; 
+        //     }
+        //     setTimeout(tick, 1000);
+        // })();
     }
 
     //////////////////////////////////// RENDER ///////////////////////////////////
