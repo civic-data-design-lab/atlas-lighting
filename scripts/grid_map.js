@@ -1285,8 +1285,6 @@ function timeSelector(id, chartWidth,chartHeight){
     var end = 12;
     var start0 = 0;
     var end0 = 24;
-    var rdstart = 0;
-    var rdend = 0;
     var margin = { top: 10, left: 10, right: 0, bottom: 0 },
         width = chartWidth - margin.right,
         height = 32;
@@ -1345,12 +1343,14 @@ function timeSelector(id, chartWidth,chartHeight){
 
         if (rdend - rdstart == 0){
             d3.select("#selected_time").text(0+" - "+24);
+            $('#business_opening_average').find('#selected_time').text(0+" - "+24);
             filterhour(window.newData,rdstart,rdend);
             if (selectedCharts.includes("business_opening_average")) {updateOBI(window.newData, rdstart,rdend);}
             if (selectedCharts.includes("business_opening_percent")) {updateOBI(window.newData, rdstart,rdend);}
         }
         else {
             d3.select("#selected_time").text(rdstart+" - "+rdend);
+            $('#business_opening_average').find('#selected_time').text(rdstart+" - "+rdend);
             filterhour(window.newData,rdstart,rdend);
             if (selectedCharts.includes("business_opening_average")) {updateOBI(window.newData, rdstart,rdend);}
             if (selectedCharts.includes("business_opening_percent")) {updateOBI(window.newData, rdstart,rdend);}
