@@ -374,11 +374,6 @@ function initControl() {
         if (myindex > -1) {
             selectedCharts.splice(myindex, 1);
         }
-        if (myid === "business_opening_average" || myid === "business_opening_percent" ) {
-            selectedCharts.splice(selectedCharts.indexOf("time_selector_percent"), 1);
-            selectedCharts.splice(selectedCharts.indexOf("time_selector_average"), 1);
-            updateChart(selectedCharts);
-        }
         updateChart(selectedCharts);
 
     })
@@ -633,11 +628,11 @@ function initCanvas(data) {
         // })();
     }
 
-    //////////////////////////////////// RENDER ///////////////////////////////////
+    //////////////////////////////////// CALL TO RENDER ///////////////////////////////////
 
     render();
 
-    //////////////////////////////////// ZOOM ///////////////////////////////////
+    //////////////////////////////////// ZOOM FUNCTION ///////////////////////////////////
     function zoomed() {
         cellDisselect();
         var disX = Math.abs(project(__bounds._sw).x - project(__bounds._ne).x);
@@ -668,139 +663,6 @@ function initCanvas(data) {
         zoomed();
     })
 }
-
-//////////////////////////////////// CELL SELECT ///////////////////////////////////
-function cellSelect(d) {
-    window.cell_selected = true;
-    updateZoomedChart(selectedCharts);
-    d3.select("#light_digits").text(d.averlight);
-    $("#instagram_plc").hide();
-    $("#instagram_plc0").hide();
-
-    var cell_id = d.cell_id;
-
-    var ref = firebase.database().ref(cell_id);
-    ref.once("value")
-        .then(function (snapshot) {
-            d3.selectAll(".ins_thumb").remove();
-            var insdata = snapshot.val();
-
-            if (insdata) {
-                var limit = 48;
-                var count = 0;
-                for (var k in insdata) {
-                    (function(k){
-                        if (count < limit) {
-                            //console.log(k);
-                            d3.select("#instagram_pics").append("img").attr("src", insdata[k]["url"]).attr("class", "ins_thumb")
-                                .on('error', function() {
-                                    console.log('error on instagram pics');
-                                    d3.select(this).remove();
-                                    count--;
-                                })
-                                .on("mousemove",function(){
-                                    var myx = d3.event.clientX;
-                                    var myy = d3.event.clientY;
-                                    d3.select(".toolip_img").remove();
-                                    d3.select("body").append("img").attr("src", insdata[k]["url"]).attr("class", "toolip_img")
-                                        .style("left",(myx-5-150)+"px")
-                                        .style("top",(myy+5)+"px");
-                                })
-                                .on("mouseout",function(){
-                                    d3.select(".toolip_img").remove();
-                                })
-                        }
-                        count++;
-
-
-                    })(k)
-
-                }
-            }
-            else{
-                $("#instagram_plc").show();
-            }
-        });
-    newBusTypesChart.assignSelect(true);
-    newBusTypesChart.updateBusTypes(d);
-
-}
-
-//////////////////////////////////// UNSELECT A CELL ///////////////////////////////////
-
-function cellDisselect() {
-    window.cell_selected = false;
-    d3.select(".overlay_rect").remove();
-    d3.select("#light_digits").text(d3.select("#light_digits").attr("sv_val"));
-    updateZoomedChart(selectedCharts);
-    /*
-    d3.select("#street_view").style("opacity", "1");
-    d3.select("#street_view").style("position", "relative");
-    d3.select("#street_view").style("display", "none"); */
-
-    newBusTypesChart.assignSelect(false);
-    newBusTypesChart.updateBusTypes(window.typesData);
-
-}
-
-//////////////////////////////////// UPDATE ZOOMED CHART ///////////////////////////////////
-
-function updateZoomedChart(selectedCharts) {
-    selectedCharts.forEach(function (d) {
-        d3.select("#" + d).style("display", "none");
-    })
-
-    selectedCharts.forEach(function (d) {
-        if (window.zoomedData.indexOf(d) == -1 || window.cell_selected == true)//certain data is shown only if cell is selected
-            d3.select("#" + d).style("display", "block");
-    })
-
-    d3.select("#street_view").style("opacity", "1");
-    d3.select("#street_view").style("position", "relative");
-    d3.select("#street_view").style("display", "none");
-
-    if(selectedCharts.indexOf("street_view")>-1){
-        d3.select("#street_view").style("display", "block");
-        d3.select("#streetview_window").style("opacity", "1");
-        d3.select("#street_view_plc0").style("display", "block");
-        d3.select("#street_view_plc").style("display", "none");
-
-    }else{
-        d3.select("#street_view").style("display", "none");
-    }
-    d3.select("#streetview_window").style("opacity", "1");
-    d3.select("#streetview_window").style("position", "relative");
-    d3.select("#streetview_window").style("display", "none");
-
-    if(selectedCharts.indexOf("instagram_pics")>-1){
-        d3.select("#instagram_pics").style("display", "block");
-        $("#instagram_plc0").show();
-        $("#instagram_plc").hide();
-        d3.selectAll(".ins_thumb").remove();
-    }else{
-        d3.select("#instagram_pics").style("display", "none");
-    }
-}
-
-//////////////////////////////////// UPDATE CHARTS ///////////////////////////////////
-
-function updateChart(selectedCharts) {
-    window.location.href = initurl.split("*")[0] + "*" + selectedCharts.join("|");
-    d3.selectAll(".dc-chart").style("display", "none");
-    d3.select(".dc-data-count").style("display", "block");
-    d3.select(".lock").style("display", "block");
-
-
-    selectedCharts.forEach(function (d) {
-        d3.select("#d_" + d).style("display", "none");
-        if (window.zoomedData.indexOf(d) == -1 || window.cell_selected == true)//certain data is shown only if cell is selected
-            d3.select("#" + d).style("display", "block");
-    })
-
-    updateZoomedChart(selectedCharts);
-}
-
-
 
 window.populationChart = dc.barChart("#population")
 window.incomeChart = dc.barChart("#income")
@@ -989,86 +851,82 @@ function charts(data, selectedCharts) {
         else return d.places });
     var placesGroup = placesDimension.group();
 
-    if (currentCity_o == "LA" || currentCity_o == "Chicago"){
 
-        var insDimension = ndx.dimension(function (d) { 
-            if(d.insta_cnt > 50 ) return 50;
-            else return d.insta_cnt });
-        var insGroup = insDimension.group();
+    var insDimension = ndx.dimension(function (d) { 
+        if(d.insta_cnt > 50 ) return 50;
+        else return d.insta_cnt });
+    var insGroup = insDimension.group();
 
-        window.insChart.width(chartWidth).height(chartHeight)
-            .group(insGroup).dimension(insDimension)
-            //.elasticY(true)
-            .ordinalColors(["#aaaaaa"])
-            .gap(0)
-            .margins(chartMargins)
-            .centerBar(true)
-            .margins({ top: 0, left: 50, right: 10, bottom: 20 })
-            .x(d3.scale.linear().domain([1, 51]))
-            .y(d3.scale.linear().domain([0, 600]));
+    window.insChart.width(chartWidth).height(chartHeight)
+        .group(insGroup).dimension(insDimension)
+        //.elasticY(true)
+        .ordinalColors(["#aaaaaa"])
+        .gap(0)
+        .margins(chartMargins)
+        .centerBar(true)
+        .margins({ top: 0, left: 50, right: 10, bottom: 20 })
+        .x(d3.scale.linear().domain([1, 51]))
+        .y(d3.scale.linear().domain([0, 600]));
 
-        window.insChart.yAxis().ticks(2);
+    window.insChart.yAxis().ticks(2);
 
-        var insLikesDimension = ndx.dimension(function (d) { 
-            if(d.insta_like > 1000 ) return 1000;
-            else return d.insta_like });
+    var insLikesDimension = ndx.dimension(function (d) { 
+        if(d.insta_like > 1000 ) return 1000;
+        else return d.insta_like });
 
-        var insLikesGroup = insLikesDimension.group();
+    var insLikesGroup = insLikesDimension.group();
 
-        window.insLikesChart.width(chartWidth).height(chartHeight)
-            .group(insLikesGroup).dimension(insLikesDimension)
-            //.elasticY(true)
-            .ordinalColors(["#aaaaaa"])
-            .gap(0)
-            .margins(chartMargins)
-            .centerBar(true)
-            .margins({ top: 0, left: 50, right: 10, bottom: 20 })
+    window.insLikesChart.width(chartWidth).height(chartHeight)
+        .group(insLikesGroup).dimension(insLikesDimension)
+        //.elasticY(true)
+        .ordinalColors(["#aaaaaa"])
+        .gap(0)
+        .margins(chartMargins)
+        .centerBar(true)
+        .margins({ top: 0, left: 50, right: 10, bottom: 20 })
 
-            .x(d3.scale.linear().domain([1, 1001]))
-            .y(d3.scale.linear().domain([0, 20]));
+        .x(d3.scale.linear().domain([1, 1001]))
+        .y(d3.scale.linear().domain([0, 20]));
 
-        window.insLikesChart.yAxis().ticks(2);
+    window.insLikesChart.yAxis().ticks(2);
 
 
-        var busPriDimension = ndx.dimension(function (d) { return d.b_price });
-        var busPriGroup = busPriDimension.group();
+    var busPriDimension = ndx.dimension(function (d) { return d.b_price });
+    var busPriGroup = busPriDimension.group();
 
-        window.busPriChart.width(chartWidth).height(chartHeight)
-            .group(busPriGroup).dimension(busPriDimension)
-            //.elasticY(true)
-            .ordinalColors(["#888", "#888", "#888"])
-            .margins(chartMargins)
-            .x(d3.scale.linear().domain([0.5, 4]))
-            .xUnits(function(){return 50;})
-            .gap(1)
-            .centerBar(true)
-            .yAxis().ticks(2);
-            //.y(d3.scale.linear().domain([0, 600]));            
+    window.busPriChart.width(chartWidth).height(chartHeight)
+        .group(busPriGroup).dimension(busPriDimension)
+        //.elasticY(true)
+        .ordinalColors(["#888", "#888", "#888"])
+        .margins(chartMargins)
+        .x(d3.scale.linear().domain([0.5, 4]))
+        .xUnits(function(){return 50;})
+        .gap(1)
+        .centerBar(true)
+        .yAxis().ticks(2);
+        //.y(d3.scale.linear().domain([0, 600]));            
 
-        var OBIDimension = ndx.dimension(function (d) { return d.OBI });
-        var OBIGroup = OBIDimension.group();
+    var OBIDimension = ndx.dimension(function (d) { return d.OBI });
+    var OBIGroup = OBIDimension.group();
 
-        window.OBIaverage.width(chartWidth).height(chartHeight)
-            .group(OBIGroup).dimension(OBIDimension)
-            //.elasticY(true)
-            .ordinalColors(["#888", "#888", "#888"])
-            .margins(chartMargins)
-            .x(d3.scale.linear().domain([0, 100]))
-            .gap(1)
-            .yAxis().ticks(2);
+    window.OBIaverage.width(chartWidth).height(chartHeight)
+        .group(OBIGroup).dimension(OBIDimension)
+        //.elasticY(true)
+        .ordinalColors(["#888", "#888", "#888"])
+        .margins(chartMargins)
+        .x(d3.scale.linear().domain([0, 100]))
+        .gap(1)
+        .yAxis().ticks(2);
 
-        window.OBIpercent.width(chartWidth).height(chartHeight)
-            .group(OBIGroup).dimension(OBIDimension)
-            //.elasticY(true)
-            .ordinalColors(["#888", "#888", "#888"])
-            .margins(chartMargins)
-            .x(d3.scale.linear().domain([0, 100]))
-            .gap(1)
-            .yAxis().ticks(2);
-            //.y(d3.scale.linear().domain([0, 600]));        
-
-    }
-
+    window.OBIpercent.width(chartWidth).height(chartHeight)
+        .group(OBIGroup).dimension(OBIDimension)
+        //.elasticY(true)
+        .ordinalColors(["#888", "#888", "#888"])
+        .margins(chartMargins)
+        .x(d3.scale.linear().domain([0, 100]))
+        .gap(1)
+        .yAxis().ticks(2);
+        //.y(d3.scale.linear().domain([0, 600]));        
 
     busDivChart.width(chartWidthBusDiv).height(chartHeightBusDiv*2)
         .group(busDivGroup).dimension(busDivDimension)
@@ -1252,40 +1110,181 @@ function charts(data, selectedCharts) {
             $("#export_btn").html("EXPORT"+" "+"("+" "+theCount+" "+ "Cells Selected)");
             $("#export_btn").prepend($img);
         });
+
     //////////////////////////////////// renderAll()   --- dc.js ---- ///////////////////////////////////
     dc.renderAll();
-    
-    //////////////////////////////////// timeSelector   --- d3.js ---- ///////////////////////////////////
-    timeSelector("#time_selector_percent",chartWidth,chartHeight);
-    timeSelector("#time_selector_average",chartWidth,chartHeight);
-
-    // hide the axes for the bubble charts (must run after render)
-    //$("#business_diversity .axis.y").hide();
     d3.selectAll("#business_diversity path").remove();
     d3.selectAll("#business_diversity line").remove();
-
-
+    
+    //////////////////////////////////// timeSelector   --- d3.js ---- ///////////////////////////////////
+    var start = 9;
+    var end = 12;
+    var start0 = 0;
+    var end0 = 24;
+    var rdstart = 0;
+    var rdend = 0;
+    console.log(selectedCharts.indexOf("business_opening_average"));
+    timeSelector("#time_selector",chartWidth,chartHeight, start, end, start0, end0);
 
 }
 
-function timeSelector(id, chartWidth,chartHeight){
+
+//////////////////////////////////// CELL SELECT ///////////////////////////////////
+function cellSelect(d) {
+    window.cell_selected = true;
+    updateZoomedChart(selectedCharts);
+    d3.select("#light_digits").text(d.averlight);
+    $("#instagram_plc").hide();
+    $("#instagram_plc0").hide();
+
+    var cell_id = d.cell_id;
+
+    var ref = firebase.database().ref(cell_id);
+    ref.once("value")
+        .then(function (snapshot) {
+            d3.selectAll(".ins_thumb").remove();
+            var insdata = snapshot.val();
+
+            if (insdata) {
+                var limit = 48;
+                var count = 0;
+                for (var k in insdata) {
+                    (function(k){
+                        if (count < limit) {
+                            //console.log(k);
+                            d3.select("#instagram_pics").append("img").attr("src", insdata[k]["url"]).attr("class", "ins_thumb")
+                                .on('error', function() {
+                                    console.log('error on instagram pics');
+                                    d3.select(this).remove();
+                                    count--;
+                                })
+                                .on("mousemove",function(){
+                                    var myx = d3.event.clientX;
+                                    var myy = d3.event.clientY;
+                                    d3.select(".toolip_img").remove();
+                                    d3.select("body").append("img").attr("src", insdata[k]["url"]).attr("class", "toolip_img")
+                                        .style("left",(myx-5-150)+"px")
+                                        .style("top",(myy+5)+"px");
+                                })
+                                .on("mouseout",function(){
+                                    d3.select(".toolip_img").remove();
+                                })
+                        }
+                        count++;
+
+
+                    })(k)
+
+                }
+            }
+            else{
+                $("#instagram_plc").show();
+            }
+        });
+    newBusTypesChart.assignSelect(true);
+    newBusTypesChart.updateBusTypes(d);
+
+}
+
+//////////////////////////////////// UNSELECT A CELL ///////////////////////////////////
+
+function cellDisselect() {
+    window.cell_selected = false;
+    d3.select(".overlay_rect").remove();
+    d3.select("#light_digits").text(d3.select("#light_digits").attr("sv_val"));
+    updateZoomedChart(selectedCharts);
+    /*
+    d3.select("#street_view").style("opacity", "1");
+    d3.select("#street_view").style("position", "relative");
+    d3.select("#street_view").style("display", "none"); */
+
+    newBusTypesChart.assignSelect(false);
+    newBusTypesChart.updateBusTypes(window.typesData);
+
+}
+
+//////////////////////////////////// UPDATE ZOOMED CHART FUNCTION ///////////////////////////////////
+
+function updateZoomedChart(selectedCharts) {
+    selectedCharts.forEach(function (d) {
+        d3.select("#" + d).style("display", "none");
+    })
+
+    selectedCharts.forEach(function (d) {
+        if (window.zoomedData.indexOf(d) == -1 || window.cell_selected == true)//certain data is shown only if cell is selected
+            d3.select("#" + d).style("display", "block");
+    })
+
+    d3.select("#street_view").style("opacity", "1");
+    d3.select("#street_view").style("position", "relative");
+    d3.select("#street_view").style("display", "none");
+
+    if(selectedCharts.indexOf("street_view")>-1){
+        d3.select("#street_view").style("display", "block");
+        d3.select("#streetview_window").style("opacity", "1");
+        d3.select("#street_view_plc0").style("display", "block");
+        d3.select("#street_view_plc").style("display", "none");
+
+    }else{
+        d3.select("#street_view").style("display", "none");
+    }
+    d3.select("#streetview_window").style("opacity", "1");
+    d3.select("#streetview_window").style("position", "relative");
+    d3.select("#streetview_window").style("display", "none");
+
+    if(selectedCharts.indexOf("instagram_pics")>-1){
+        d3.select("#instagram_pics").style("display", "block");
+        $("#instagram_plc0").show();
+        $("#instagram_plc").hide();
+        d3.selectAll(".ins_thumb").remove();
+    }else{
+        d3.select("#instagram_pics").style("display", "none");
+    }
+}
+
+//////////////////////////////////// UPDATE CHARTS FUNCTION ///////////////////////////////////
+
+function updateChart(selectedCharts) {
+    window.location.href = initurl.split("*")[0] + "*" + selectedCharts.join("|");
+    d3.selectAll(".dc-chart").style("display", "none");
+    d3.select(".dc-data-count").style("display", "block");
+    d3.select(".lock").style("display", "block");
+
+
+    selectedCharts.forEach(function (d) {
+        d3.select("#d_" + d).style("display", "none");
+        if (window.zoomedData.indexOf(d) == -1 || window.cell_selected == true) {
+            d3.select("#" + d).style("display", "block");
+        }
+    })
+    updateZoomedChart(selectedCharts);
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//  timeSelector   --- d3.js ---                                              //
+//                                                                            //
+//  Time range  SVG                                                           //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+
+function timeSelector(id, chartWidth,chartHeight, start, end, start0, end0){
 
     var margin = { top: 10, left: 10, right: 0, bottom: 0 },
         width = chartWidth - margin.right,
         height = 32;
 
-	var start = 9;
-	var end = 12;
-	var start0 = 0;
-	var end0 = 24;
     var svg = d3.select(id).append("svg")
+        .attr('id', 'copyMe')
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 	svg.append("rect")
-	    .attr("width", 240)
+	    .attr("width", 300)
 	    .attr("height", 2)
         .attr("fill", "rgb(50,50,50)").attr("stroke","rgba(255,255,255,0.3)");
 
@@ -1294,7 +1293,7 @@ function timeSelector(id, chartWidth,chartHeight){
 
 	var x = d3.scale.linear()
         .domain([start0,end0])
-		.range([0, 240]);
+		.range([0, 300]);
 
 	var brush = d3.svg.brush()
 		.x(x).extent([start,end])
@@ -1390,6 +1389,33 @@ function filterhour(data,start,end){
  * @param {Array} Data
  */
 
+//////////////////////////////////// UPDATE OBI ///////////////////////////////////
+function updateOBI(dataUpdate,start,end){
+    var chartHeight_ = 100;
+    var chartWidth_ = 320;
+    var cf = crossfilter(dataUpdate);
+    cf.remove();
+    dataUpdate.forEach(function (d) {
+       d.OBI = 0;
+       for (var i=start;i<end;i++){
+            if (+d['b_opening_'+i] !== undefined) {
+                 d.OBI += +d['b_opening_'+i];   
+            }
+        }
+
+    });
+    cf.add(dataUpdate);
+    var OBIDimension_ = cf.dimension(function (d) { return d.OBI });
+    var OBIGroup_ = OBIDimension_.group();
+    window.OBIaverage.width(chartWidth_).height(chartHeight_)
+            .group(OBIGroup_).dimension(OBIDimension_);    
+    window.OBIpercent.width(chartWidth_).height(chartHeight_)
+            .group(OBIGroup_).dimension(OBIDimension_);
+
+    dc.redrawAll();
+}
+
+
  var thisQuantile = function(median, extent, firstQ, secondQ){
     if (median >= extent[0] && median <= firstQ){
         return "LOW";
@@ -1400,17 +1426,6 @@ function filterhour(data,start,end){
     }
  }
 
-/* Utiliy function to move a d3 element back in appearance order.
- */
-
-d3.selection.prototype.moveToBack = function() {  
-    return this.each(function() { 
-        var firstChild = this.parentNode.firstChild; 
-        if (firstChild) { 
-            this.parentNode.insertBefore(this, firstChild); 
-        } 
-    });
-};
 
 /* Function for drawing Quantile Lines on the selected chart.
  * @method addQuantiles
@@ -1423,7 +1438,6 @@ d3.selection.prototype.moveToBack = function() {
  * @param {Object} chrtMargins
  * @param {Number} fontSize 
  */
-
 var addQuantiles = function (chart, firstQ, secondQ, b, c, chrtHeight, chrtMargins, fontSize) {
         chart.select("svg")
              .append("g").attr("transform", "translate(" + chrtMargins.left + "," + chrtMargins.top + ")")
@@ -1460,28 +1474,16 @@ var addQuantiles = function (chart, firstQ, secondQ, b, c, chrtHeight, chrtMargi
          .style("font-family", "Ropa Sans")
 };
 
-//////////////////////////////////// UPDATE OBI ///////////////////////////////////
-function updateOBI(dataUpdate,start,end){
-    var chartHeight_ = 100;
-    var chartWidth_ = 320;
-    var cf = crossfilter(dataUpdate);
-    cf.remove();
-    dataUpdate.forEach(function (d) {
-       d.OBI = 0;
-       for (var i=start;i<end;i++){
-            if (+d['b_opening_'+i] !== undefined) {
-                 d.OBI += +d['b_opening_'+i];   
-            }
-        }
 
+
+
+/* Utiliy function to move a d3 element back in appearance order.
+ */
+d3.selection.prototype.moveToBack = function() {  
+    return this.each(function() { 
+        var firstChild = this.parentNode.firstChild; 
+        if (firstChild) { 
+            this.parentNode.insertBefore(this, firstChild); 
+        } 
     });
-    cf.add(dataUpdate);
-    var OBIDimension_ = cf.dimension(function (d) { return d.OBI });
-    var OBIGroup_ = OBIDimension_.group();
-    window.OBIaverage.width(chartWidth_).height(chartHeight_)
-            .group(OBIGroup_).dimension(OBIDimension_);    
-    window.OBIpercent.width(chartWidth_).height(chartHeight_)
-            .group(OBIGroup_).dimension(OBIDimension_);
-
-    dc.redrawAll();
-}
+};
