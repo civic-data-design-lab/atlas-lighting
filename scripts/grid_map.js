@@ -1120,14 +1120,10 @@ function charts(data, selectedCharts) {
     d3.selectAll("#business_diversity line").remove();
     
     //////////////////////////////////// timeSelector   --- d3.js ---- ///////////////////////////////////
-    var start = 9;
-    var end = 12;
-    var start0 = 0;
-    var end0 = 24;
-    var rdstart = 0;
-    var rdend = 0;
-    timeSelector("#time_selector",chartWidth,chartHeight, start, end, start0, end0); //renders the first filter
-    if (selectedCharts.indexOf("business_opening_percent") > -1) {
+
+    timeSelector("#time_selector",chartWidth,chartHeight); 
+    timeSelector("#time_selector_clone",chartWidth,chartHeight); 
+    if (selectedCharts.indexOf("business_opening_percent") > -1) { //hide second bar on load
         $('#business_opening_average').find('#selected_time').hide();
     }
 }
@@ -1254,18 +1250,21 @@ function updateChart(selectedCharts) {
     d3.select(".dc-data-count").style("display", "block");
     d3.select(".lock").style("display", "block");
 
-
     selectedCharts.forEach(function (d) {
         d3.select("#d_" + d).style("display", "none");
         if (window.zoomedData.indexOf(d) == -1 || window.cell_selected == true) {
             d3.select("#" + d).style("display", "block");
         }
     })
-    if (selectedCharts.indexOf("business_opening_percent") === -1) { //percentage filter is not selected, the AVERAGE graph should show the time selector
+
+    // special behavior of the OBI charts when they are selected together or independently
+    if (selectedCharts.indexOf("business_opening_percent") === -1) { //percentage filter is not selected, the AVERAGE graph should SHOW the time digits
         $('#business_opening_average').find('#selected_time').show();
+        $('#business_opening_average').find('#time_selector_clone').show();
     }
-    else { //percentage filter is selected, the AVERAGE graph should not show the time selector
+    else { //percentage filter is selected, the AVERAGE graph should NOT SHOW the time digits
         $('#business_opening_average').find('#selected_time').hide();
+        $('#business_opening_average').find('#time_selector_clone').hide();
     }
     updateZoomedChart(selectedCharts);
 }
@@ -1281,8 +1280,13 @@ function updateChart(selectedCharts) {
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-function timeSelector(id, chartWidth,chartHeight, start, end, start0, end0){
-
+function timeSelector(id, chartWidth,chartHeight){
+    var start = 9;
+    var end = 12;
+    var start0 = 0;
+    var end0 = 24;
+    var rdstart = 0;
+    var rdend = 0;
     var margin = { top: 10, left: 10, right: 0, bottom: 0 },
         width = chartWidth - margin.right,
         height = 32;
@@ -1359,6 +1363,7 @@ function timeSelector(id, chartWidth,chartHeight, start, end, start0, end0){
 
 
 function filterhour(data,start,end){
+    console.log(start, end)
     d3.select("#selected_time").text(start+" - "+end);
     // d3.selectAll(".cellgrids").style("display", "none");
 
