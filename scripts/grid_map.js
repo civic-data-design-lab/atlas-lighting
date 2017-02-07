@@ -812,7 +812,6 @@ window.insLikesChart = dc.barChart("#ins_likes")
 window.busPriChart = dc.barChart("#business_price")
 window.OBIaverage = dc.barChart("#business_opening_average");
 window.OBIpercent = dc.barChart("#business_opening_percent");
-window.timeSelector = dc.barChart("#time_selector");
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
@@ -859,6 +858,7 @@ function charts(data, selectedCharts) {
 
     data.forEach(function (d) {
         d.OBI = 0;
+        d.timeRange = Array.apply(null, Array(24)).map(function (_, i) {return i;});
         d.lng = +d.lng;
         d.lat = +d.lat;
         d.cell_id = +d.cell_id;
@@ -930,7 +930,7 @@ function charts(data, selectedCharts) {
     var chartWidthBusDiv = 320;
     var chartHeightBusDiv = 52;
 
-    var chartMargins = {top: 0, left: 30, right: 10, bottom: 20}; //{top: 0, left: 50, right: 10, bottom: 20};
+    var chartMargins = {top: 0, left: 5, right: 5, bottom: 20}; //{top: 0, left: 50, right: 10, bottom: 20};
 
     var ndx = crossfilter(data);
     var all = ndx.groupAll();
@@ -1040,20 +1040,6 @@ function charts(data, selectedCharts) {
             .centerBar(true)
             .yAxis().ticks(2);
             //.y(d3.scale.linear().domain([0, 600]));            
-
-        var timeSelectorDimension = ndx.dimension(function (d) { return d.b_price });
-        var timeSelectorGroup = timeSelectorDimension.group();
-
-        window.timeSelector.width(chartWidth).height(chartHeight)
-            .group(timeSelectorGroup).dimension(timeSelectorDimension)
-            //.elasticY(true)
-            .ordinalColors(["#888", "#888", "#888"])
-            .margins(chartMargins)
-            .x(d3.scale.linear().domain([0.5, 4]))
-            .gap(1)
-            .centerBar(true)
-            .yAxis().ticks(2);
-            //.y(d3.scale.linear().domain([0, 600]));    
 
         var OBIDimension = ndx.dimension(function (d) { return d.OBI });
         var OBIGroup = OBIDimension.group();
@@ -1272,7 +1258,7 @@ function charts(data, selectedCharts) {
     d3.selectAll("#business_diversity line").remove();
 
     //////////////////////////////////// timeSelector   --- d3.js ---- ///////////////////////////////////
-    // timeSelector(chartWidth,chartHeight);
+    timeSelector(chartWidth,chartHeight);
 
 }
 
@@ -1347,8 +1333,8 @@ function timeSelector(chartWidth,chartHeight){
         else {
             d3.select("#selected_time").text(rdstart+" - "+rdend);
             filterhour(window.newData,rdstart,rdend);
-            if (selectedCharts.includes("business_opening")) {updateOBI(window.newData, rdstart,rdend);}
-            if (selectedCharts.includes("business_percent")) {updateOBI(window.newData, rdstart,rdend);}
+            if (selectedCharts.includes("business_opening_average")) {updateOBI(window.newData, rdstart,rdend);}
+            if (selectedCharts.includes("business_opening_percent")) {updateOBI(window.newData, rdstart,rdend);}
         }
 	}
 
@@ -1366,7 +1352,7 @@ function filterhour(data,start,end){
 
     data.forEach(function (d) {
 
-        if (start == end || start == 0 && end == 24 || currentCity_o == "Chicago"){
+        if (start == end || start == 0 && end == 24){
             d3.select("#c" + d.cell_id).style("display", "block");
             ave_lit += d.averlight;
             count_ ++;
@@ -1472,6 +1458,7 @@ var addQuantiles = function (chart, firstQ, secondQ, b, c, chrtHeight, chrtMargi
 //////////////////////////////////// UPDATE OBI ///////////////////////////////////
 function updateOBI(dataUpdate,start,end){
     var chartHeight_ = 52;
+    var chartWidth_ = 320;
     var cf = crossfilter(dataUpdate);
     cf.remove();
     dataUpdate.forEach(function (d) {
@@ -1484,12 +1471,12 @@ function updateOBI(dataUpdate,start,end){
 
     });
     cf.add(dataUpdate);
-    var OBIDimension = cf.dimension(function (d) { return d.OBI });
-    var OBIGroup = OBIDimension.group();
-    window.OBIaverage.width(chartWidth).height(chartHeight)
-            .group(OBIGroup).dimension(OBIDimension);    
-    window.OBIpercent.width(chartWidth).height(chartHeight)
-            .group(OBIGroup).dimension(OBIDimension);
+    var OBIDimension_ = cf.dimension(function (d) { return d.OBI });
+    var OBIGroup_ = OBIDimension_.group();
+    window.OBIaverage.width(chartWidth_).height(chartHeight_)
+            .group(OBIGroup_).dimension(OBIDimension_);    
+    window.OBIpercent.width(chartWidth_).height(chartHeight_)
+            .group(OBIGroup_).dimension(OBIDimension_);
 
     dc.redrawAll();
 }
