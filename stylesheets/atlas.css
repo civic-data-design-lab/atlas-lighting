@@ -516,7 +516,6 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     z-index: 999;
 }
 
-
 .data_item_title{
     font-size: 13px;
     padding: 10px;
@@ -525,7 +524,8 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     width: 200px;
     text-align: left;
     top: 50%;
-    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
 }
 
 #todrop {
@@ -564,14 +564,16 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%,-50%);
+    -webkit-transform: translate(-50%,-50%);
+            transform: translate(-50%,-50%);
 }
 
 .drop_indi {
     position: absolute;
     left: 50%;
     top:65%;
-    transform: translate(-50%,-50%);
+    -webkit-transform: translate(-50%,-50%);
+            transform: translate(-50%,-50%);
     font-size: 24px;
     width: 300px;
     text-align: center;
@@ -629,7 +631,8 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 .mapboxgl-ctrl-bottom-right {
     bottom: 0;
     left: 50% !important;
-    transform: translateX(-50%) !important;
+    -webkit-transform: translateX(-50%) !important;
+            transform: translateX(-50%) !important;
     width: 300px;
 }
 
@@ -662,8 +665,10 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     margin-right: 5px;
     padding-top: 1px;
     padding-bottom: 1px;
-    transform: translateX(-2px);    
-    opacity: 0.6;
+    -webkit-transform: translateX(-2px);
+            transform: translateX(-2px);    
+    opacity: 0.6;    
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";
 }
 
 .tag_item:hover {
@@ -870,7 +875,8 @@ div#streetview_window {
 #selected_time {
     font-size: 24px;
     position: absolute;
-    transform: translateY(6px);
+    -webkit-transform: translateY(6px);
+            transform: translateY(6px);
     left: 20px;
     margin-left: 0px;
 }
@@ -929,7 +935,8 @@ div#streetview_window {
 }
 
 .rightbar {
-    transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
 }
 
 #business_opening svg {
@@ -949,7 +956,7 @@ div#streetview_window {
     color: rgb(32, 192, 226);
     position: absolute;  
     display: inline-block;
-    *display: inline;
+    display: inline;
     margin-left: 5px;
     margin-top:3px;
 }
@@ -965,7 +972,6 @@ div#streetview_window {
 /*____________________________*/
 
 /* Grıd lines for quantiles */
-
 
 .grid .tick {
     stroke: lightgrey;
@@ -1003,7 +1009,6 @@ div#streetview_window {
     cursor: move;
 }
 
-
 .gradient_container {
     position: fixed;
     display: block;
@@ -1014,18 +1019,6 @@ div#streetview_window {
     top: calc(100% - 30px);
     background: linear-gradient(to bottom, rgba(0,0,0, 0.1), rgba(32, 192, 226, 0.15));
 }
-
-/*.gradient_container:after {
-    content: "";
-    width:0px;
-    height:0px;
-    border-left:6px solid transparent;
-    border-right:6px solid transparent;
-    border-top:6px solid gray;
-    position:absolute;
-    top:1%; 
-    left: 50%;
-}*/
 
 button.toggleAnimation {
     font-size: 10px;
@@ -1079,9 +1072,13 @@ p#export_btn.mybtn {
     margin-right: 2px;
     cursor: pointer;
 }
+
 #tab-name {
-    transform: rotate(180deg);
-    writing-mode: vertical-rl;
+    -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
+    -webkit-writing-mode: vertical-rl;
+        -ms-writing-mode: tb-rl;
+            writing-mode: vertical-rl;
     position: relative;
     display: block;
     top: 35%;
