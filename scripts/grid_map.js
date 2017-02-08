@@ -719,8 +719,6 @@ function charts(data, selectedCharts) {
     var maxDInt = null;
     var maxLight = null;
     var maxPlaces = null;
-    var maxPop = null;
-    var maxInc = null;
 
     ////////////////////////////////////////////////////////////////////////////////
     //                                                                            //
@@ -891,7 +889,7 @@ function charts(data, selectedCharts) {
         .gap(0)
         .margins(chartMargins)
         .centerBar(true)
-        .margins({ top: 0, left: 50, right: 10, bottom: 20 }
+        .margins({ top: 0, left: 50, right: 10, bottom: 20 })
         .x(d3.scale.linear().domain([1, 1001]))
         .y(d3.scale.linear().domain([0, 20]))
     window.insLikesChart.yAxis().ticks(2)
@@ -910,10 +908,6 @@ function charts(data, selectedCharts) {
         .centerBar(true)
         //.yAxisLabel('# OF CELLS')
         .yAxis().ticks(2);
-
-    var OBIDimension = ndx.dimension(function (d) {
-        return (Math.round((d.OBI - minOBI) / (maxOBI - minOBI) * 3) + 1) || 0
-    });
 
     var insDimension = ndx.dimension(function (d) { 
         if(d.insta_cnt > 50 ) return 50;
