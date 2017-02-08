@@ -1335,7 +1335,7 @@ function timeSelector(chartWidth,chartHeight) {
     var end = 24; //ending point of brush on chart
     var start0 = 0; //starting point for code before anyone interacts with brush
     var end0 = 24; //ending point for code before anyone interacts with brush
-    var margin = { top: 10, left: 10, right: 0, bottom: 0 },
+    var margin = { top: 10, left: 20, right: 0, bottom: 0 },
         width = chartWidth - margin.right,
         height = 32;
 
@@ -1347,7 +1347,7 @@ function timeSelector(chartWidth,chartHeight) {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 	svg.append("rect")
-	    .attr("width", 300)
+	    .attr("width", 280)
 	    .attr("height", 2)
         .attr("fill", "rgb(50,50,50)").attr("stroke","rgba(255,255,255,0.3)");
 
@@ -1356,7 +1356,7 @@ function timeSelector(chartWidth,chartHeight) {
 
 	var x = d3.scale.linear()
         .domain([start0,end0])
-		.range([0, 300]);
+		.range([0, 280]);
 
 	var brush = d3.svg.brush()
 		.x(x).extent([start,end])
@@ -1375,7 +1375,7 @@ function timeSelector(chartWidth,chartHeight) {
 	      .scale(x)
 	      .orient("bottom"))
 	  .selectAll("text")
-	    .attr("x", -4).attr("y",15)
+	    .attr("x", -4).attr("y",20)
 	    .style("text-anchor", null);
 
 	d3.select(".extent").attr("height", 29);
