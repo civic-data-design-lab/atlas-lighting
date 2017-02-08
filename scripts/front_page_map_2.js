@@ -111,7 +111,7 @@ function caseDataDidLoad(error,data,us,msaOverview) {
     d3.selectAll("#info").style("display","inline")
     var width = 800, height = 600;
     var fill = d3.scale.ordinal().range(['#827d92','#827354','#523536','#72856a','#2a3285','#383435'])
-    var svg = d3.select("#frontpage-map .svg").append("svg")
+    var svg = d3.select("#frontpage-map").append("svg")
         .attr("width", width)
         .attr("height", height);
 
