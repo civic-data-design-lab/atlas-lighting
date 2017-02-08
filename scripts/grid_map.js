@@ -916,10 +916,13 @@ function charts(data, selectedCharts) {
         .group(OBIpercentGroup).dimension(OBIpercentDimension)
         .ordinalColors(["#888", "#888", "#888"])
         .margins(chartMargins)
-        .x(d3.scale.ordinal().domain([0,10,20,30,40,50,60,70,80,90,100]))
-        .xUnits(dc.units.ordinal)
-        .y(d3.scale.linear().domain([0, 1000]))        
-        // .centerBar(true)
+        // .x(d3.scale.ordinal().domain([0,10,20,30,40,50,60,70,80,90,100]))
+        // .xUnits(dc.units.ordinal)
+        // .y(d3.scale.linear().domain([0, 1000]))     
+        .x(d3.scale.linear().domain([0, 100]))
+        .y(d3.scale.linear().domain([0, 800]))              
+        .centerBar(true)
+        .xUnits(function(){return 20;})
         .brushOn(false)
         .gap(10)
         .yAxis().ticks(1);
@@ -1341,8 +1344,8 @@ function timeSelector(chartWidth,chartHeight) {
 		.attr('class', 'brushItem')
 		.call(brush)
 		.selectAll('rect')
-		.attr('y', -12)
-		.attr('height', 24);
+		.attr('y', -15)
+		.attr('height', 30);
 
 	svg.append("g")
 	    .attr("class", "x axis hour myhour")
@@ -1459,15 +1462,15 @@ function updateOBI(dataUpdate,start,end){
     .height(chartHeight_)
     .group(OBIpercentGroup_)
     .dimension(OBIpercentDimension_)        
-    .x(d3.scale.linear().domain([1, 102]))
-    // .xUnits(function(){return 10;})
-    .y(d3.scale.linear().domain([0, 1000]))    
+    // .x(d3.scale.linear().domain([0, 100]))
+    // .y(d3.scale.linear().domain([0, 800]))              
 
     var OBIaverageDimension_ = cf.dimension(function (d) { return d.OBIaverage });
     var OBIaverageGroup_ = OBIaverageDimension_.group();              
     window.OBIaverage
     .width(chartWidth_)
     .height(70)
+    .brushOn(false)
     .group(OBIaverageGroup_)
     .dimension(OBIaverageDimension_);    
 
