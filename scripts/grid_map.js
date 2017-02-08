@@ -768,12 +768,11 @@ function charts(data, selectedCharts) {
             }
         }
         if (d.OBIcount > 0) {
-            d.OBIpercent = d.OBIaverage / d.OBIcount * 100;
+            d.OBIpercentage = Math.floor((d.OBIaverage/ 24) / d.OBIcount * 100);
         }
         else {
-            d.OBIpercent = 0;
+            d.OBIpercentage = 0;
         }
-
         if (d.b_diversity) {
             if (maxBDiv == null || d.b_diversity > maxBDiv) {
                 maxBDiv = d.b_diversity
@@ -910,16 +909,19 @@ function charts(data, selectedCharts) {
         .centerBar(true)
         .yAxis().ticks(2);
 
-    var OBIpercentDimension = ndx.dimension(function (d) { return d.OBIpercent });
+    var OBIpercentDimension = ndx.dimension(function (d) { return d.OBIpercentage });
     var OBIpercentGroup = OBIpercentDimension.group();
 
     window.OBIpercent.width(chartWidth).height(chartHeight)
         .group(OBIpercentGroup).dimension(OBIpercentDimension)
         .ordinalColors(["#888", "#888", "#888"])
         .margins(chartMargins)
-        .x(d3.scale.linear().domain([0, 100]))
-        .y(d3.scale.linear().domain([0, 300]))        
-        .gap(1)
+        .x(d3.scale.ordinal().domain([0,10,20,30,40,50,60,70,80,90,100]))
+        .xUnits(dc.units.ordinal)
+        .y(d3.scale.linear().domain([0, 1000]))        
+        // .centerBar(true)
+        .brushOn(false)
+        .gap(10)
         .yAxis().ticks(1);
 
     var OBIaverageDimension = ndx.dimension(function (d) { return d.OBIaverage });
@@ -929,9 +931,11 @@ function charts(data, selectedCharts) {
         .group(OBIaverageGroup).dimension(OBIaverageDimension)
         .ordinalColors(["#888", "#888", "#888"])
         .margins(chartMargins)
-        .x(d3.scale.linear().domain([0, 1000]))
-        .y(d3.scale.linear().domain([0, 300]))        
+        .x(d3.scale.linear().domain([0, 100]))
+        .y(d3.scale.linear().domain([0, 800]))        
+        .centerBar(true)
         .gap(1)
+        .brushOn(false)
         .yAxis().ticks(1)
 
     busDivChart.width(chartWidthBusDiv).height(chartHeightBusDiv*2)
@@ -1302,8 +1306,8 @@ function updateChart(selectedCharts) {
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 function timeSelector(chartWidth,chartHeight) {
-    var start = 9; //starting point of brush on chart
-    var end = 12; //ending point of brush on chart
+    var start = 0; //starting point of brush on chart
+    var end = 24; //ending point of brush on chart
     var start0 = 0; //starting point for code before anyone interacts with brush
     var end0 = 24; //ending point for code before anyone interacts with brush
     var margin = { top: 10, left: 10, right: 0, bottom: 0 },
@@ -1432,28 +1436,41 @@ function updateOBI(dataUpdate,start,end){
     cf.remove();
     dataUpdate.forEach(function (d) {
         d.OBIaverage = 0;
+        d.count = +d.business_opening_count;
         for (var i=start;i<end;i++){
             if (+d['b_opening_'+i] >0) {
                  d.OBIaverage += +d['b_opening_'+i];   
             }
         }
         if (d.OBIcount > 0) {
-            d.OBIpercent = d.OBIaverage / d.OBIcount * 100;
+            d.OBIpercentage = Math.floor((d.OBIaverage/ (end-start)) / d.OBIcount * 100);
         }
         else {
-            d.OBIpercent = 0;
+            d.OBIpercentage = 0;
         }
     });
     cf.add(dataUpdate);
-    var OBIaverageDimension_ = cf.dimension(function (d) { return d.OBIaverage });
-    var OBIaverageGroup_ = OBIaverageDimension_.group();    
-    var OBIpercentDimension_ = cf.dimension(function (d) { return d.OBIpercent });
+
+    var OBIpercentDimension_ = cf.dimension(function (d) { return d.OBIpercentage });
     var OBIpercentGroup_ = OBIpercentDimension_.group();
 
-    window.OBIaverage.width(chartWidth_).height(70)
-            .group(OBIaverageGroup_).dimension(OBIaverageDimension_);    
-    window.OBIpercent.width(chartWidth_).height(chartHeight_)
-            .group(OBIpercentGroup_).dimension(OBIpercentDimension_);
+    window.OBIpercent
+    .width(chartWidth_)
+    .height(chartHeight_)
+    .group(OBIpercentGroup_)
+    .dimension(OBIpercentDimension_)        
+    .x(d3.scale.linear().domain([1, 102]))
+    // .xUnits(function(){return 10;})
+    .y(d3.scale.linear().domain([0, 1000]))    
+
+    var OBIaverageDimension_ = cf.dimension(function (d) { return d.OBIaverage });
+    var OBIaverageGroup_ = OBIaverageDimension_.group();              
+    window.OBIaverage
+    .width(chartWidth_)
+    .height(70)
+    .group(OBIaverageGroup_)
+    .dimension(OBIaverageDimension_);    
+
 
     dc.redrawAll();
 }
