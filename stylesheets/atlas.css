@@ -1161,3 +1161,10 @@ p#export_btn.mybtn {
     border: none;
     height: 40px;
 }
+
+#business_opening_percent.dc-chart > svg > g{
+    fill-opacity: 1;
+}
+#business_opening_average.dc-chart > svg > g{
+    fill-opacity: 1;
+}

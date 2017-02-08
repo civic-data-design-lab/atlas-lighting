@@ -34,9 +34,10 @@ select {
   margin-top:595px;
   z-index:999;
   padding-left:20px;
+  cursor: pointer;
 }
 #yAxisData{
-    z-index:999;
+  z-index:999;
   width:430px;
   position:absolute;
   top:330px;
@@ -45,6 +46,7 @@ select {
   -webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
   transform: rotate(-90deg);
   padding-left:20px;
+  cursor: pointer;
   
 }
 #chartTitle{
@@ -66,4 +68,11 @@ position:absolute;
 top:540px;
 left:31px;
     z-index:9999;
+}
+
+#mapB {
+  cursor: pointer;
+}
+#msaB {
+  cursor: pointer;
 }
