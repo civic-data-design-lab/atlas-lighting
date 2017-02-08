@@ -906,37 +906,42 @@ function charts(data, selectedCharts) {
         .centerBar(true)
         .yAxis().ticks(2);
 
-    var OBIpercentDimension = ndx.dimension(function (d) { return d.OBIpercentage });
-    var OBIpercentGroup = OBIpercentDimension.group();
+    var OBIpercentDimension = ndx.dimension(function (d) { return d.OBIpercentage; });
+    var OBIpercentGroup = OBIpercentDimension.group().reduceSum(function(d){return d.OBIpercentage>0;});
 
-    window.OBIpercent.width(chartWidth).height(chartHeight)
+    window.OBIpercent.width(chartWidth).height(100)
         .group(OBIpercentGroup).dimension(OBIpercentDimension)
-        .ordinalColors(["#888", "#888", "#888"])
         .margins(chartMargins)
-        // .x(d3.scale.ordinal().domain([0,10,20,30,40,50,60,70,80,90,100]))
-        // .xUnits(dc.units.ordinal)
-        // .y(d3.scale.linear().domain([0, 1000]))     
-        .x(d3.scale.linear().domain([0, 100]))
-        .y(d3.scale.linear().domain([0, 800]))              
-        .centerBar(true)
-        .xUnits(function(){return 20;})
+        .ordinalColors(["#888", "#888", "#888"])
+        .x(d3.scale.ordinal().domain(["0","10","20","30","40","50","60","70","80","90","100"]))
+        .xUnits(dc.units.ordinal)
+        // .x(d3.scale.linear().domain([0, 100]))
+        // .xUnits(function(){return 20;})
+        // .centerBar(true)
+        .elasticY(true)
+        // .y(d3.scale.linear().domain([0, 1000]))              
         .brushOn(false)
-        .gap(10)
-        .yAxis().ticks(1);
+        .gap(2)
+        // .yAxisLabel("Cells", 10)
+        .yAxis().ticks(2);
+
 
     var OBIaverageDimension = ndx.dimension(function (d) { return d.OBIaverage });
     var OBIaverageGroup = OBIaverageDimension.group();
 
-    window.OBIaverage.width(chartWidth).height(70)
+    window.OBIaverage.width(chartWidth).height(100)
         .group(OBIaverageGroup).dimension(OBIaverageDimension)
         .ordinalColors(["#888", "#888", "#888"])
         .margins(chartMargins)
         .x(d3.scale.linear().domain([0, 100]))
         .y(d3.scale.linear().domain([0, 800]))        
         .centerBar(true)
+        // .elasticY(true)
         .gap(1)
         .brushOn(false)
-        .yAxis().ticks(1)
+        .yAxis().ticks(2)
+
+
 
     busDivChart.width(chartWidthBusDiv).height(chartHeightBusDiv*2)
         .group(busDivGroup).dimension(busDivDimension)
@@ -1476,22 +1481,20 @@ function updateOBI(dataUpdate,start,end){
     cf.add(dataUpdate);
 
     var OBIpercentDimension_ = cf.dimension(function (d) { return d.OBIpercentage });
-    var OBIpercentGroup_ = OBIpercentDimension_.group();
+    var OBIpercentGroup_ = OBIpercentDimension_.group().reduceSum(function(d){return d.OBIpercentage>0;});
 
     window.OBIpercent
     .width(chartWidth_)
     .height(chartHeight_)
     .group(OBIpercentGroup_)
-    .dimension(OBIpercentDimension_)        
-    // .x(d3.scale.linear().domain([0, 100]))
-    // .y(d3.scale.linear().domain([0, 800]))              
+    .dimension(OBIpercentDimension_);   
+
 
     var OBIaverageDimension_ = cf.dimension(function (d) { return d.OBIaverage });
     var OBIaverageGroup_ = OBIaverageDimension_.group();              
     window.OBIaverage
     .width(chartWidth_)
-    .height(70)
-    .brushOn(false)
+    .height(chartHeight_)
     .group(OBIaverageGroup_)
     .dimension(OBIaverageDimension_);    
 
