@@ -795,7 +795,7 @@ function charts(data, selectedCharts) {
         }
 
     })
-    var chartWidth = 320; //304
+    var chartWidth = 320; //304 //320
     var chartHeight = 125; //52
 
     var actChrtWidth = 264;
@@ -803,7 +803,7 @@ function charts(data, selectedCharts) {
     var chartWidthBusDiv = 320;
     var chartHeightBusDiv = 52;
 
-    var chartMargins = {top: 8, left: 30, right: 10, bottom: 20}; //{top: 0, left: 50, right: 10, bottom: 20};
+    var chartMargins = {top: 8, left: 40, right: 10, bottom: 20}; //{top: 0, left: 50, right: 10, bottom: 20};
 
     var ndx = crossfilter(data);
     var all = ndx.groupAll();
@@ -1018,7 +1018,13 @@ function charts(data, selectedCharts) {
             }
         })
         .x(d3.scale.linear().domain([0, maxLight]))
-        //.yAxisLabel('# OF CELLS')
+        .on('postRender', function(chart) {
+            chart.svg().append('text').attr('class', 'y-label').attr('text-anchor', 'middle')
+                .attr('x', -60).attr('y', 35).attr('dy', '-25').attr('transform', 'rotate(-90)')
+                .text('# OF CELLS').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
+                .style("font-size", "8px")
+            //different for x-axis label
+        })
         .yAxis().ticks(3);
         
 
@@ -1155,7 +1161,7 @@ function charts(data, selectedCharts) {
 function cellSelect(d) {
     window.cell_selected = true;
     updateZoomedChart(selectedCharts);
-    d3.select("#light_digits").text(d.averlight);
+    d3.select("#light_digits_o").text(d.averlight);
     $("#instagram_plc").hide();
     $("#instagram_plc0").hide();
 
@@ -1218,7 +1224,7 @@ function cellSelect(d) {
 function cellDisselect() {
     window.cell_selected = false;
     d3.select(".overlay_rect").remove();
-    d3.select("#light_digits").text(d3.select("#light_digits").attr("sv_val"));
+    d3.select("#light_digits_o").text(d3.select("#light_digits_o").attr("sv_val"));
     updateZoomedChart(selectedCharts);
     /*
     d3.select("#street_view").style("opacity", "1");
@@ -1525,8 +1531,6 @@ var bindText = function(quanText, median, selection_1, selection_2){
     $(selection_1).html(quanText);
     $(selection_1).attr("sv_val", quanText);
     var newText =`${kFormatter(median)}`;
-    console.log(newText);
-    console.log(selection_2);
     $(selection_2).html(newText);
     $(selection_2).attr("sv_val", newText);
 }
@@ -1565,7 +1569,8 @@ function addQuantiles(chart, firstQ, secondQ, b, c, chrtHeight, chrtMargins, fon
              .attr("x2", firstQ)
              .attr("y2", chrtHeight - chrtMargins.bottom - chrtMargins.top)
              .style("stroke", "lightgrey")
-             .style("stroke-width", "1.6");
+             .style("stroke-width", "1.6")
+             .style("stroke-dasharray", "4");
              
         chart.select("svg")
              .append("g").attr("transform", "translate(" + chrtMargins.left + "," + chrtMargins.top + ")")
@@ -1576,6 +1581,7 @@ function addQuantiles(chart, firstQ, secondQ, b, c, chrtHeight, chrtMargins, fon
              .attr("y2", chrtHeight - chrtMargins.bottom - chrtMargins.top)
              .style("stroke", "lightgrey")
              .style("stroke-width", "1.6")
+             .style("stroke-dasharray", "4");
         
         if ((secondQ - firstQ) > 30) {
             var textConst = (firstQ/2)-b; // b is 3 and c is 2 for Lighting Average,
@@ -1588,9 +1594,9 @@ function addQuantiles(chart, firstQ, secondQ, b, c, chrtHeight, chrtMargins, fon
              .text(function(el){return el.text;})
              .attr("y", chrtMargins.top ) //chrtHeight -chrtMargins.bottom -2
              .attr("x", function(el){return el.x})
+             .style("font-family", "Dosis")
              .style("font-size", fontSize + "px") // 3 for Lighting Average
-             .style("color", "lightgrey")
-             .style("font-family", "Ropa Sans")
+             .style("fill", "#20C0E2"); //#20C0E2
 
      };
 };

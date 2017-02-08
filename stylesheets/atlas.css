@@ -731,7 +731,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 }
 
 .dc-chart svg {
-    margin-left: 65px; /*95px */
+    margin-left: 85px; /*95px */
 }
 
 .digits {
@@ -1023,11 +1023,14 @@ div#streetview_window {
     fill-opacity: 0.2;
 }
 
-.y-axis-label {
-    font-family: Ropa Sans;
+/*
+.y-axis-label y-label{
+    font-family: Dosis;
     font-weight: 300;
-    font-size:8px
-}
+    font-size:2px;
+    left:5px;
+    color:white;
+}*/
 
 /*--------------------------------------------- Kalli additions -------------------*/
 
