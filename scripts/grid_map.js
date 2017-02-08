@@ -933,7 +933,7 @@ function charts(data, selectedCharts) {
         .group(OBIaverageGroup).dimension(OBIaverageDimension)
         .ordinalColors(["#888", "#888", "#888"])
         .margins(chartMargins)
-        .x(d3.scale.linear().domain([0, 100]))
+        .x(d3.scale.linear().domain([0, 150]))
         .y(d3.scale.linear().domain([0, 800]))        
         .centerBar(true)
         // .elasticY(true)
