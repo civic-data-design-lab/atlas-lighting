@@ -623,7 +623,7 @@ function initCanvas(data) {
         //         console.log("click", animationIsRunning);
         //     })
         //     if (animationIsRunning) {  
-        //         if (increment<23) {  filterhour(data, increment, increment+1); }
+        //         if (increment<23) {  filterhour(window.newData, increment, increment+1); }
         //         else { increment = 0; }
         //         ++increment; 
         //     }
@@ -727,8 +727,8 @@ function charts(data, selectedCharts) {
     ////////////////////////////////////////////////////////////////////////////////
 
     data.forEach(function (d) {
-        d.OBI = 0;
-        d.timeRange = Array.apply(null, Array(24)).map(function (_, i) {return i;});
+        d.OBIaverage = 0;
+        d.OBIpercent = 0;
         d.lng = +d.lng;
         d.lat = +d.lat;
         d.cell_id = +d.cell_id;
@@ -743,7 +743,6 @@ function charts(data, selectedCharts) {
         d.insta_like = +d.insta_like ? +d.insta_like : 0;
 
         // Business types recasting
-
         d.beauty = +d.beauty ? +d.beauty : 0; 
         d.culture = +d.culture ? +d.culture : 0;
         d.education = +d.education ? +d.education : 0; 
@@ -765,7 +764,8 @@ function charts(data, selectedCharts) {
         // -------------------------------------------------------------------------- OBI values
         for (var i=0;i<24;i++){
             if  (+d['b_opening_'+i] >0) {
-                d.OBI += +d['b_opening_'+i];
+                d.OBIaverage += +d['b_opening_'+i];
+                d.OBIpercent += +d['b_opening_'+i];
             }
         }
 
@@ -877,7 +877,6 @@ function charts(data, selectedCharts) {
     var insLikesDimension = ndx.dimension(function (d) { 
         if(d.insta_like > 1000 ) return 1000;
         else return d.insta_like });
-
     var insLikesGroup = insLikesDimension.group();
 
     window.insLikesChart.width(chartWidth).height(chartHeight)
@@ -894,13 +893,11 @@ function charts(data, selectedCharts) {
 
     window.insLikesChart.yAxis().ticks(2);
 
-
     var busPriDimension = ndx.dimension(function (d) { return d.b_price });
     var busPriGroup = busPriDimension.group();
 
     window.busPriChart.width(chartWidth).height(chartHeight)
         .group(busPriGroup).dimension(busPriDimension)
-        //.elasticY(true)
         .ordinalColors(["#888", "#888", "#888"])
         .margins(chartMargins)
         .x(d3.scale.linear().domain([0.5, 4]))
@@ -908,31 +905,29 @@ function charts(data, selectedCharts) {
         .gap(1)
         .centerBar(true)
         .yAxis().ticks(2);
-        //.y(d3.scale.linear().domain([0, 600]));            
 
-    var OBIDimension = ndx.dimension(function (d) { return d.OBI });
-    var OBIGroup = OBIDimension.group();
+    var OBIpercentDimension = ndx.dimension(function (d) { return d.OBIpercent });
+    var OBIpercentGroup = OBIpercentDimension.group();
+
+    window.OBIpercent.width(chartWidth).height(chartHeight)
+        .group(OBIpercentGroup).dimension(OBIpercentDimension)
+        .ordinalColors(["#888", "#888", "#888"])
+        .margins(chartMargins)
+        .x(d3.scale.linear().domain([0, 50]))
+        .gap(1)
+        .yAxis().ticks(1);
+
+    var OBIaverageDimension = ndx.dimension(function (d) { return d.OBIaverage });
+    var OBIaverageGroup = OBIaverageDimension.group();
 
     window.OBIaverage.width(chartWidth).height(70)
-        .group(OBIGroup).dimension(OBIDimension)
-        //.elasticY(true)
+        .group(OBIaverageGroup).dimension(OBIaverageDimension)
         .ordinalColors(["#888", "#888", "#888"])
         .margins(chartMargins)
         .x(d3.scale.linear().domain([0, 1000]))
         .y(d3.scale.linear().domain([0, 300]))        
         .gap(1)
         .yAxis().ticks(1)
-
-
-    window.OBIpercent.width(chartWidth).height(chartHeight)
-        .group(OBIGroup).dimension(OBIDimension)
-        //.elasticY(true)
-        .ordinalColors(["#888", "#888", "#888"])
-        .margins(chartMargins)
-        .x(d3.scale.linear().domain([0, 50]))
-        .gap(1)
-        .yAxis().ticks(1);
-        //.y(d3.scale.linear().domain([0, 600]));        
 
     busDivChart.width(chartWidthBusDiv).height(chartHeightBusDiv*2)
         .group(busDivGroup).dimension(busDivDimension)
@@ -1078,7 +1073,6 @@ function charts(data, selectedCharts) {
             var end = mytime[1];
 
             filterhour(window.newData,start,end);
-
             
             if (appendable2){
                 addQuantiles(incomeChart, xOfFirstQI, xOfSecondQI, 5, 5, chartHeight, chartMargins, 6);
@@ -1123,7 +1117,7 @@ function charts(data, selectedCharts) {
     d3.selectAll("#business_diversity line").remove();
     
     //////////////////////////////////// timeSelector   --- d3.js ---- ///////////////////////////////////
-    timeSelector("#time_selector",chartWidth,chartHeight); 
+    timeSelector(chartWidth,chartHeight); 
     if (selectedCharts.indexOf("business_opening_percent") !== -1) { //show second bar on load
         $('#business_opening_average').show();
         $('#business_opening_average').find('#time_selector').hide();
@@ -1302,7 +1296,7 @@ function updateChart(selectedCharts) {
 //  Renders the time selector slider                                          //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
-function timeSelector(id, chartWidth,chartHeight) {
+function timeSelector(chartWidth,chartHeight) {
     var start = 9; //starting point of brush on chart
     var end = 12; //ending point of brush on chart
     var start0 = 0; //starting point for code before anyone interacts with brush
@@ -1311,7 +1305,7 @@ function timeSelector(id, chartWidth,chartHeight) {
         width = chartWidth - margin.right,
         height = 32;
 
-    var svg = d3.select(id).append("svg")
+    var svg = d3.select("#time_selector").append("svg")
         .attr('id', 'time_selector')
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -1386,22 +1380,20 @@ function timeSelector(id, chartWidth,chartHeight) {
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 function filterhour(data, rdstart, rdend){
-    // d3.select("#selected_time").text(rdstart+" - "+rdend);
     var ave_lit = 0;
     var count_ = 0;
-
+    $('#business_opening_percent').find('#selected_time').text(rdstart+" - "+rdend);
     data.forEach(function (d) {
+        // if (rdstart == rdend || (rdstart == 0 && rdend == 24)){
+        //     d3.select("#c" + d.cell_id).style("display", "block");
+        //     ave_lit += d.averlight;
+        //     count_ ++;
+        // }
+        // else {
+        //     d3.select("#c" + d.cell_id).style("display", "none");
+        // }
 
-        if (rdstart == rdend || rdstart == 0 && rdend == 24){
-            d3.select("#c" + d.cell_id).style("display", "block");
-            ave_lit += d.averlight;
-            count_ ++;
-        }
-        else {
-            d3.select("#c" + d.cell_id).style("display", "none");
-        }
-
-        if (d.OBI!=0){
+        if (d.OBIaverage!=0){
             d3.select("#c" + d.cell_id).style("display", "block");
             ave_lit += d.averlight;
             count_ ++;
@@ -1434,21 +1426,26 @@ function updateOBI(dataUpdate,start,end){
     var cf = crossfilter(dataUpdate);
     cf.remove();
     dataUpdate.forEach(function (d) {
-       d.OBI = 0;
+       d.OBIaverage = 0;
+       d.OBIpercent = 0;
        for (var i=start;i<end;i++){
             if (+d['b_opening_'+i] >0) {
-                 d.OBI += +d['b_opening_'+i];   
+                 d.OBIaverage += +d['b_opening_'+i];   
+                 d.OBIpercent += +d['b_opening_'+i];   
             }
         }
 
     });
     cf.add(dataUpdate);
-    var OBIDimension_ = cf.dimension(function (d) { return d.OBI });
-    var OBIGroup_ = OBIDimension_.group();
+    var OBIaverageDimension_ = cf.dimension(function (d) { return d.OBIaverage });
+    var OBIaverageGroup_ = OBIaverageDimension_.group();    
+    var OBIpercentDimension_ = cf.dimension(function (d) { return d.OBIpercent });
+    var OBIpercentGroup_ = OBIpercentDimension_.group();
+
     window.OBIaverage.width(chartWidth_).height(70)
-            .group(OBIGroup_).dimension(OBIDimension_);    
+            .group(OBIaverageGroup_).dimension(OBIaverageDimension_);    
     window.OBIpercent.width(chartWidth_).height(chartHeight_)
-            .group(OBIGroup_).dimension(OBIDimension_);
+            .group(OBIpercentGroup_).dimension(OBIpercentDimension_);
 
     dc.redrawAll();
 }
