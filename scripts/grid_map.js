@@ -728,7 +728,7 @@ function charts(data, selectedCharts) {
 
     data.forEach(function (d) {
         d.OBIaverage = 0;
-        d.OBIpercent = 0;
+        d.OBIcount = +d.b_opening_count;
         d.lng = +d.lng;
         d.lat = +d.lat;
         d.cell_id = +d.cell_id;
@@ -765,8 +765,13 @@ function charts(data, selectedCharts) {
         for (var i=0;i<24;i++){
             if  (+d['b_opening_'+i] >0) {
                 d.OBIaverage += +d['b_opening_'+i];
-                d.OBIpercent += +d['b_opening_'+i];
             }
+        }
+        if (d.OBIcount > 0) {
+            d.OBIpercent = d.OBIaverage / d.OBIcount * 100;
+        }
+        else {
+            d.OBIpercent = 0;
         }
 
         if (d.b_diversity) {
@@ -887,7 +892,6 @@ function charts(data, selectedCharts) {
         .margins(chartMargins)
         .centerBar(true)
         .margins({ top: 0, left: 50, right: 10, bottom: 20 })
-
         .x(d3.scale.linear().domain([1, 1001]))
         .y(d3.scale.linear().domain([0, 20]));
 
@@ -913,7 +917,8 @@ function charts(data, selectedCharts) {
         .group(OBIpercentGroup).dimension(OBIpercentDimension)
         .ordinalColors(["#888", "#888", "#888"])
         .margins(chartMargins)
-        .x(d3.scale.linear().domain([0, 50]))
+        .x(d3.scale.linear().domain([0, 100]))
+        .y(d3.scale.linear().domain([0, 300]))        
         .gap(1)
         .yAxis().ticks(1);
 
@@ -1426,15 +1431,18 @@ function updateOBI(dataUpdate,start,end){
     var cf = crossfilter(dataUpdate);
     cf.remove();
     dataUpdate.forEach(function (d) {
-       d.OBIaverage = 0;
-       d.OBIpercent = 0;
-       for (var i=start;i<end;i++){
+        d.OBIaverage = 0;
+        for (var i=start;i<end;i++){
             if (+d['b_opening_'+i] >0) {
                  d.OBIaverage += +d['b_opening_'+i];   
-                 d.OBIpercent += +d['b_opening_'+i];   
             }
         }
-
+        if (d.OBIcount > 0) {
+            d.OBIpercent = d.OBIaverage / d.OBIcount * 100;
+        }
+        else {
+            d.OBIpercent = 0;
+        }
     });
     cf.add(dataUpdate);
     var OBIaverageDimension_ = cf.dimension(function (d) { return d.OBIaverage });
