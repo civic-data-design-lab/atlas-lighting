@@ -83,7 +83,6 @@ var myinit = function () {
     firebase.initializeApp(config);
     var rootRef = firebase.database().ref();
 
-
     d3.queue()
         .defer(d3.csv, "../data/" + currentCity_o + "_grid.csv"/*"grids/" + currentCity*/)
         //.defer(d3.json, "data/"+currentCity+"_zipcode.json"/*"zipcode_business_geojson/" + currentCity*/)
@@ -111,6 +110,7 @@ function dataDidLoad(error, grid) {
     initControl();
     
 }
+
 function project(d) {
     return __map.project(getLL(d));
 }
@@ -797,18 +797,20 @@ function charts(data, selectedCharts) {
                 maxPlaces = d.places
             }
         }
+
     })
     var chartWidth = 320; //304
-    var chartHeight = 100; //52
+    var chartHeight = 125; //52
+
+    var actChrtWidth = 264;
 
     var chartWidthBusDiv = 320;
     var chartHeightBusDiv = 52;
 
-    var chartMargins = {top: 0, left: 10, right: 10, bottom: 20}; //{top: 0, left: 50, right: 10, bottom: 20};
+    var chartMargins = {top: 8, left: 30, right: 10, bottom: 20}; //{top: 0, left: 50, right: 10, bottom: 20};
 
     var ndx = crossfilter(data);
     var all = ndx.groupAll();
-
 
     /* Creating an array of objects
      * containing business types and their sum for each city.
@@ -844,9 +846,6 @@ function charts(data, selectedCharts) {
     });
     var busDivGroup = busDivDimension.group();
 
-    var populationDimension = ndx.dimension(function (d) { return parseInt(d.population) })
-    var pGroup = populationDimension.group()
-
     var latDimension = ndx.dimension(function (d) {
         return d.lat
     });
@@ -857,13 +856,12 @@ function charts(data, selectedCharts) {
     var placesDimension = ndx.dimension(function (d) { 
         if (d.places>100) return 100; 
         else return d.places });
-    var placesGroup = placesDimension.group();
-
+    var placesGroup = placesDimension.group()
 
     var insDimension = ndx.dimension(function (d) { 
         if(d.insta_cnt > 50 ) return 50;
         else return d.insta_cnt });
-    var insGroup = insDimension.group();
+    var insGroup = insDimension.group()
 
     window.insChart.width(chartWidth).height(chartHeight)
         .group(insGroup).dimension(insDimension)
@@ -872,16 +870,15 @@ function charts(data, selectedCharts) {
         .gap(0)
         .margins(chartMargins)
         .centerBar(true)
-        .margins({ top: 0, left: 50, right: 10, bottom: 20 })
         .x(d3.scale.linear().domain([1, 51]))
-        .y(d3.scale.linear().domain([0, 600]));
-
-    window.insChart.yAxis().ticks(2);
+        .y(d3.scale.linear().domain([0, 600]))
+    window.insChart.yAxis().ticks(2)
 
     var insLikesDimension = ndx.dimension(function (d) { 
         if(d.insta_like > 1000 ) return 1000;
-        else return d.insta_like });
-    var insLikesGroup = insLikesDimension.group();
+        else return d.insta_like })
+
+    var insLikesGroup = insLikesDimension.group()
 
     window.insLikesChart.width(chartWidth).height(chartHeight)
         .group(insLikesGroup).dimension(insLikesDimension)
@@ -891,13 +888,13 @@ function charts(data, selectedCharts) {
         .margins(chartMargins)
         .centerBar(true)
         .margins({ top: 0, left: 50, right: 10, bottom: 20 })
-        .x(d3.scale.linear().domain([1, 1001]))
-        .y(d3.scale.linear().domain([0, 20]));
 
-    window.insLikesChart.yAxis().ticks(2);
+        .x(d3.scale.linear().domain([1, 1001]))
+        .y(d3.scale.linear().domain([0, 20]))
+    window.insLikesChart.yAxis().ticks(2)
 
     var busPriDimension = ndx.dimension(function (d) { return d.b_price });
-    var busPriGroup = busPriDimension.group();
+    var busPriGroup = busPriDimension.group()
 
     window.busPriChart.width(chartWidth).height(chartHeight)
         .group(busPriGroup).dimension(busPriDimension)
@@ -985,17 +982,23 @@ function charts(data, selectedCharts) {
         .gap(0)
         .margins(chartMargins)
         .x(d3.scale.linear().domain([1, 101]))
+        //.yAxisLabel('# OF CELLS')
     placesChart.yAxis().ticks(2)
 
     var chartColors = { "1": "#fff7bc", "2": "#fee391", "3": "#fec44f", "4": "#fee0d2", "5": "#fc9272", "6": "#de2d26", "7": "#deebf7", "8": "#9ecae1", "9": "#3182bd" }
-    
+    var appendableDev = true;
+
     devIntChart.width(chartWidth).height(chartHeight)
         .group(devIntGroup).dimension(devIntDimension)
         .ordinalColors(["#888", "#888", "#888"])
         .x(d3.scale.linear().domain([0, maxDInt]))
         .margins(chartMargins)
+        .on('renderlet', function(chart){
+
+        })
+        //.yAxisLabel('# OF CELLS')
         .xAxis().ticks(10)
-    devIntChart.yAxis().ticks(2);
+    devIntChart.yAxis().ticks(2)
 
     /* Average Light Index chart
      * We are calculating predefined ranges to represent low, medium and high intensities of light.
@@ -1006,18 +1009,15 @@ function charts(data, selectedCharts) {
     var extent = d3.extent(data, function(el){return parseInt(el.averlight)});
     var sortedLights = data.map(function(el){return parseInt(el.averlight)}).sort(function(a, b){return a - b});
 
-    var actualChartWidth = 244;
-
-    //var xOfFirstQ = Math.round(actualChartWidth * 0.33);//244 is the current width of each chart
-    //var xOfSecondQ = Math.round(actualChartWidth * 0.66);
+    
 
     var firstQL = d3.quantile(sortedLights, 0.33);
     var secondQL= d3.quantile(sortedLights, 0.66);
 
-    var xOfFirstQL = 244*(firstQL/(extent[1]-extent[0]));
-    var xOfSecondQL = 244*(secondQL/(extent[1]-extent[0]));
+    var xOfFirstQL = actChrtWidth*(firstQL/(extent[1]-extent[0]));
+    var xOfSecondQL = actChrtWidth*(secondQL/(extent[1]-extent[0]));
 
-    var appendable = true;
+    var appendableLig = true;
 
     ligAveChart.width(chartWidth).height(chartHeight)
         .group(laGroup).dimension(ligAveDimension).centerBar(true)
@@ -1027,28 +1027,45 @@ function charts(data, selectedCharts) {
         .margins(chartMargins)
         // Draw range lines
         .on('renderlet', function(chart){
-            if (appendable){
+            if (appendableLig){
                 addQuantiles(chart, xOfFirstQL, xOfSecondQL, 3, 2, chartHeight, chartMargins, 2);
-                appendable = false;
+                appendableLig = false;
             }
         })
         .x(d3.scale.linear().domain([0, maxLight]))
+        //.yAxisLabel('# OF CELLS')
         .yAxis().ticks(3);
+        
 
     /* Population Chart
      * We are dividing the distribution into three quantiles: low, medium and high 
     */
 
-    populationChart.width(chartWidth).height(chartHeight).group(pGroup).dimension(populationDimension)
+    var popDimension = ndx.dimension(function (d) { return parseInt(d.population) })
+    var pGroup = popDimension.group();
+    var topPop = pGroup.top(2);
+    var maxPopY = topPop[1].value;
+    var extentI = d3.extent(data, function(el){return parseInt(parseFloat(el.population) / 1000) * 1000});
+    var sortedIncomes = data.map(function(el){return parseInt(parseFloat(el.population) / 1000) * 1000}).sort(function(a, b){return a - b});
+    var quants = quantileCalc(extentI, sortedIncomes, actChrtWidth);
+    var appendablePop = true;
+
+    populationChart.width(chartWidth).height(chartHeight).dimension(popDimension).group(pGroup)
         .round(dc.round.floor)
         .alwaysUseRounding(true)
-        //.elasticY(true)
         .elasticX(true)
-        .ordinalColors(["#ffffff"])
+        .ordinalColors(["#aaaaaa"])
         .x(d3.scale.linear().domain([0, 30]))
-        //.y(d3.scale.linear().domain([0, 200]))
+        .y(d3.scale.linear().domain([0, maxPopY])) //Take the max
         .margins(chartMargins)
+        .on('renderlet', function(chart){
+            if (appendablePop){
+                addQuantiles(chart, quants.firstX, quants.secondX, 3, 2, chartHeight, chartMargins, 2);
+                appendablePop = false;
+            }
+        })
         .yAxis().ticks(2)
+        
     populationChart.xAxis().ticks(4)
 
     /* Median Household Income Chart
@@ -1056,23 +1073,26 @@ function charts(data, selectedCharts) {
     */
 
     var incomeDimension = ndx.dimension(function (d) {
-        return parseInt(parseFloat(d.income) / 1000) * 1000
+        return parseInt(parseFloat(d.income) / 1000) * 1000;
     });
     var iGroup = incomeDimension.group();
+    //var iGroupEmpty = remove_empty_bins(iGroup);
+    //console.log(maxIncY);
     var extentI = d3.extent(data, function(el){return parseInt(parseFloat(el.income) / 1000) * 1000});
     var sortedIncomes = data.map(function(el){return parseInt(parseFloat(el.income) / 1000) * 1000}).sort(function(a, b){return a - b});
-    var firstQI = d3.quantile(sortedIncomes, 0.33);
-    var secondQI = d3.quantile(sortedIncomes, 0.66);
-    var xOfFirstQI = 244*(firstQI/(extentI[1]-extentI[0]));
-    var xOfSecondQI = 244*(secondQI/(extentI[1]-extentI[0]));
+    //var firstQI = d3.quantile(sortedIncomes, 0.33);
+    //var secondQI = d3.quantile(sortedIncomes, 0.66);
+    //var xOfFirstQI = actChrtWidth*(firstQI/(extentI[1]-extentI[0]));
+    //var xOfSecondQI = actChrtWidth*(secondQI/(extentI[1]-extentI[0]));
+    var quants = quantileCalc(extentI, sortedIncomes, actChrtWidth);
 
-    var appendable2 = true;
-    incomeChart.width(chartWidth).height(chartHeight).group(iGroup).dimension(incomeDimension)
+    var appendableInc = true;
+    incomeChart.width(chartWidth).height(chartHeight).dimension(incomeDimension).group(iGroup)
         .round(dc.round.floor)
         .ordinalColors(["#ffffff"])
         .alwaysUseRounding(true)
-        //.elasticY(true)
         .elasticX(true)
+        .elasticY(true)
         .margins(chartMargins)
         .on('renderlet', function (chart) {
             window.newData = incomeDimension.top(Infinity)
@@ -1085,21 +1105,23 @@ function charts(data, selectedCharts) {
             var end = mytime[1];
 
             filterhour(window.newData,start,end);
-            
-            if (appendable2){
-                addQuantiles(incomeChart, xOfFirstQI, xOfSecondQI, 5, 5, chartHeight, chartMargins, 6);
-                appendable2 = false;
+
+            if (appendableInc){
+                addQuantiles(chart, quants.firstX, quants.secondX, 5, 5, chartHeight, chartMargins, 6);
+                appendableInc = false;
             }
 
             var median = d3.median(window.newData, function(el){return parseInt(parseFloat(el.income) / 1000) * 1000;});
-            var correspond = thisQuantile(median, extentI, firstQI, secondQI);
+            var correspond = thisQuantile(median, extentI, quants.first, quants.second);
 
-            d3.select("#income_digits").text(correspond);
-            d3.select("#income_digits").attr("sv_val", correspond);
+            bindText(correspond, median, "#income_digits", "#income_digits_o");
+            //d3.select("#income_digits").text(correspond);
+            //d3.select("#income_digits").attr("sv_val", correspond);
 
         })
         .x(d3.scale.linear().domain([1, window.count]))
-        .y(d3.scale.linear().domain([1, 1000]));
+        //.yAxisLabel('# OF CELLS')
+        //.y(d3.scale.linear().domain([1, maxIncY])); //max was 1000
 
     incomeChart.yAxis().ticks(2)
     incomeChart.xAxis().ticks(4)
@@ -1119,7 +1141,7 @@ function charts(data, selectedCharts) {
             var parseArr = toParse.split(" ");
             var theCount = parseArr.filter(function(el){if (!isNaN(el[0])){return el;}})[0];
             var $img = $("#export_btn").find('img');
-            $("#export_btn").html("EXPORT"+" "+"("+" "+theCount+" "+ "Cells Selected)");
+            $("#export_btn").html("EXPORT"+" "+"("+" "+theCount+" "+ "Cells Selected"+" "+")");
             $("#export_btn").prepend($img);
         });
 
@@ -1418,12 +1440,11 @@ function filterhour(data, rdstart, rdend){
     if (count_!==0) {
         ave_lit /= count_;
         ave_lit = Math.round(ave_lit * 100) / 100; 
-        d3.select("#light_digits").text(ave_lit);
-        d3.select("#light_digits").attr("sv_val", ave_lit);
+        d3.select("#light_digits_o").text(ave_lit);
+        d3.select("#light_digits_o").attr("sv_val", ave_lit);
     }
 
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
@@ -1480,21 +1501,80 @@ function updateOBI(dataUpdate,start,end){
 
 
 ////////////////////////////////////////////////////////////////////////////////
-/* Calculates which quantile given selections' median fall into.
- * @method thisQuantile
- * @param {Array} Data
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//  Utility functions                                                         //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+
+
+/* Convert Thousands to K format. @Jake Feasel
  */
-////////////////////////////////////////////////////////////////////////////////
-function thisQuantile(median, extent, firstQ, secondQ){
-    if (median >= extent[0] && median <= firstQ){
-        return "LOW";
-    } else if (median > firstQ && median <= secondQ){
-        return "MEDIUM";
+
+function kFormatter(num) {
+    return num > 999 ? (num/1000).toFixed(1) + 'k' : num
+}
+
+/* Utility function to remove empty bins.
+ */
+
+function remove_empty_bins(source_group) {
+    return {
+        all:function () {
+            return source_group.all().filter(function(d) {
+                return d.value != 0;
+            });
+        }
+    };
+}
+
+/* Utility function to remove selected bins.
+ */
+
+function remove_small_bins(source_group) {
+    return {
+        all:function () {
+            return source_group.all().filter(function(d) {
+                return d.value > 1;
+            });
+        }
+    };
+}
+
+/* Utility function to bind text to a DOM element.
+ */
+
+var bindText = function(quanText, median, selection_1, selection_2){
+    if (quanText === "MEDIUM"){
+        $(selection_1).css("font-size", "14px");
     } else {
-        return "HIGH"
+        $(selection_1).css("font-size", "24px");
     }
- }
-////////////////////////////////////////////////////////////////////////////////
+    $(selection_1).html(quanText);
+    $(selection_1).attr("sv_val", quanText);
+    var newText =`${kFormatter(median)}`;
+    console.log(newText);
+    console.log(selection_2);
+    $(selection_2).html(newText);
+    $(selection_2).attr("sv_val", newText);
+}
+
+/* Utility function to move a d3 element back in appearance order.
+ */
+
+d3.selection.prototype.moveToBack = function() {  
+    return this.each(function() { 
+        var firstChild = this.parentNode.firstChild; 
+        if (firstChild) { 
+            this.parentNode.insertBefore(this, firstChild); 
+        } 
+    });
+};
+
+
 /* Function for drawing Quantile Lines on the selected chart.
  * @method addQuantiles
  * @param {Object} chart
@@ -1506,7 +1586,7 @@ function thisQuantile(median, extent, firstQ, secondQ){
  * @param {Object} chrtMargins
  * @param {Number} fontSize 
  */
-////////////////////////////////////////////////////////////////////////////////
+
 function addQuantiles(chart, firstQ, secondQ, b, c, chrtHeight, chrtMargins, fontSize) {
         chart.select("svg")
              .append("g").attr("transform", "translate(" + chrtMargins.left + "," + chrtMargins.top + ")")
@@ -1514,7 +1594,7 @@ function addQuantiles(chart, firstQ, secondQ, b, c, chrtHeight, chrtMargins, fon
              .attr("x1", firstQ)
              .attr("y1", 0)
              .attr("x2", firstQ)
-             .attr("y2", chrtHeight - chrtMargins.bottom)
+             .attr("y2", chrtHeight - chrtMargins.bottom - chrtMargins.top)
              .style("stroke", "lightgrey")
              .style("stroke-width", "1.6");
              
@@ -1524,37 +1604,59 @@ function addQuantiles(chart, firstQ, secondQ, b, c, chrtHeight, chrtMargins, fon
              .attr("x1", secondQ)
              .attr("y1", 0)
              .attr("x2", secondQ)
-             .attr("y2", chrtHeight - chrtMargins.bottom)
+             .attr("y2", chrtHeight - chrtMargins.bottom - chrtMargins.top)
              .style("stroke", "lightgrey")
              .style("stroke-width", "1.6")
         
-        var textConst = (firstQ/2)-b; // b is 3 and c is 2 for Lighting Average,
-        var texts = [{text:"LOW", x: textConst}, { text:"MEDIUM", x: firstQ + c }, {text:"HIGH",x:secondQ + textConst}];
-        var g = chart.select("svg").append("g").attr("transform", "translate(" + chrtMargins.left + "," + chrtMargins.top + ")");
-        var newChart = g.selectAll("text").data(texts);
-        
-        newChart.enter()
-         .append("text")
-         .text(function(el){return el.text;})
-         .attr("y", chrtHeight - chrtMargins.bottom - 25)
-         .attr("x", function(el){return el.x})
-         .style("font-size", fontSize + "px") // 3 for Lighting Average
-         .style("color", "lightgrey")
-         .style("font-family", "Ropa Sans")
+        if ((secondQ - firstQ) > 30) {
+            var textConst = (firstQ/2)-b; // b is 3 and c is 2 for Lighting Average,
+            var texts = [{text:"LOW", x: textConst}, { text:"MEDIUM", x: firstQ + c }, {text:"HIGH",x:secondQ + textConst}];
+            var g = chart.select("svg").append("g").attr("transform", "translate(" + chrtMargins.left + "," + chrtMargins.top + ")");
+            var newChart = g.selectAll("text").data(texts);
+            
+            newChart.enter()
+             .append("text")
+             .text(function(el){return el.text;})
+             .attr("y", chrtMargins.top ) //chrtHeight -chrtMargins.bottom -2
+             .attr("x", function(el){return el.x})
+             .style("font-size", fontSize + "px") // 3 for Lighting Average
+             .style("color", "lightgrey")
+             .style("font-family", "Ropa Sans")
+
+     };
 };
 
+/* Calculates which quantile given selections' median fall into.
+ * @method thisQuantile
+ * @param {Array} Data
+ */
+
+var thisQuantile = function(median, extent, firstQ, secondQ){
+   if (median >= extent[0] && median <= firstQ){
+       return "LOW";
+   } else if (median > firstQ && median <= secondQ){
+       return "MEDIUM";
+   } else {
+       return "HIGH"
+   }
+}
+
+/* Calculates quantiles
+ * @method quantileCalc
+ * @param {Array}
+ * @param {Array}
+ */
+
+var quantileCalc = function(extent, sorted, width){
+    var firstQ = d3.quantile(sorted, 0.33);
+    var secondQ = d3.quantile(sorted, 0.66);
+    var xOfFirstQ = width*(firstQ/(extent[1]-extent[0]));
+    var xOfSecondQ = width*(secondQ/(extent[1]-extent[0]));
+    return {firstX: xOfFirstQ, secondX: xOfSecondQ, first:firstQ, second:secondQ}
+}
 
 
-////////////////////////////////////////////////////////////////////////////////
-//                                                                            //
-//  Utility functions                                                         //
-//                                                                            //
-////////////////////////////////////////////////////////////////////////////////
-d3.selection.prototype.moveToBack = function() {  
-    return this.each(function() { 
-        var firstChild = this.parentNode.firstChild; 
-        if (firstChild) { 
-            this.parentNode.insertBefore(this, firstChild); 
-        } 
-    });
-};
+
+
+
+

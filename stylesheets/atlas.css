@@ -238,7 +238,8 @@ canvas {
     font-size:12px;
     letter-spacing:1px;
     stroke-opacity:0.5;
-    margin-bottom:10px;
+    margin-bottom:-10px;
+    margin-top:0px;
 }
 .dc-chart:hover {
     fill-opacity: 1;
@@ -255,7 +256,7 @@ canvas {
 }
 
 #light_average {
-    margin-bottom:40px;
+    margin-bottom:60px;
 }
 
 /* dc-chart class extended for Business Types widget*/
@@ -532,8 +533,9 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 #todrop {
     position: absolute;
     background-color: rgba(255,255,255,0);
+    margin-top:10px;
     border: 1px dashed #ddd;
-    border-radius: 10px;
+    border-radius: 5px;
     font-size: 20px;
     width: 410px;
     height: 400px;
@@ -729,7 +731,14 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 }
 
 .dc-chart svg {
-    margin-left: 75px; /*95px */
+    margin-left: 65px; /*95px */
+}
+
+.digits {
+    color: rgb(32, 192, 226);
+    position: relative;
+    left: 10px;
+    bottom: 30px;
 }
 
 .plc_digits {
@@ -741,22 +750,41 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 
 .other_digits {
     color: rgb(32, 192, 226);
-    font-size: 20px; /* 45px */
+    font-size: 16px; /* 45px */
     margin-left: 10px;
     position: absolute; 
     margin-top: 10px;
 }
 
-.avg_val_digit {
+.explain_digits {
+    position: absolute; 
+    color: white;
+    font-size: 6px;
+    margin-top: 30px;
+    margin-left:10px;
+}
+
+.first_digits {
+    position: absolute;
+    margin-top:45px;
+    margin-left:10px;
+    font-size: 24px;
 
 }
 
-#light_digits {
-    color: rgb(32, 192, 226);
-    font-size: 28px; /* 45px */
+.second_digits {
     position: absolute;
-    left: 10px;
-    bottom: 30px;
+    font-family:Dosis;
+    font-weight:300;
+    font-size: 18px; /* 45px */
+    top:18px;
+}
+
+.third_digits {
+    font-size: 6px;
+    font-family:Dosis;
+    font-weight:300;
+    top:14px;
 }
 
 #helper_digits {
@@ -979,6 +1007,12 @@ div#streetview_window {
     opacity: 0.7;
 }
 
+.tick {
+    font-family: Dosis;
+    font-weight: 300;
+    font-size:8px
+}
+
 .grido {
     stroke: rgb(32, 192, 226);/*lightgrey;*/
     /*opacity: 0.5;*/
@@ -987,6 +1021,12 @@ div#streetview_window {
 
 .transparent {
     fill-opacity: 0.2;
+}
+
+.y-axis-label {
+    font-family: Ropa Sans;
+    font-weight: 300;
+    font-size:8px
 }
 
 /*--------------------------------------------- Kalli additions -------------------*/
@@ -1064,13 +1104,15 @@ a.reset {
 p#export_btn.mybtn {
     display: block;
     position: relative;
-    left: 45%;
+    width: 50%;
+    /*left: 45%;*/
     top: 25%;
+    margin: 0 auto;
     font-size: 14px;
 }
 #export_btn > img {
     width: 18px;
-    margin-right: 2px;
+    margin-right: 6px;
     cursor: pointer;
 }
 
