@@ -913,15 +913,17 @@ function charts(data, selectedCharts) {
         .group(OBIpercentGroup).dimension(OBIpercentDimension)
         .margins(chartMargins)
         .ordinalColors(["#888", "#888", "#888"])
-        .x(d3.scale.ordinal().domain(["0","10","20","30","40","50","60","70","80","90","100"]))
-        .xUnits(dc.units.ordinal)
-        // .x(d3.scale.linear().domain([0, 100]))
-        // .xUnits(function(){return 20;})
-        // .centerBar(true)
+        // .x(d3.scale.ordinal().domain(["0","10","20","30","40","50","60","70","80","90","100"]))
+        // .xUnits(dc.units.ordinal)
+        .x(d3.scale.linear().domain([0, 100]))
+        .xUnits(function(){return 10;})
+        .centerBar(true)
         .elasticY(true)
         // .y(d3.scale.linear().domain([0, 1000]))              
-        .brushOn(false)
-        .gap(2)
+        // .on('renderlet', function(_chart){
+        //   _chart.selectAll("rect.bar").on("click", _chart.onClick);
+        // })
+        .gap(10)
         // .yAxisLabel("Cells", 10)
         .yAxis().ticks(2);
 
@@ -938,7 +940,7 @@ function charts(data, selectedCharts) {
         .centerBar(true)
         // .elasticY(true)
         .gap(1)
-        .brushOn(false)
+        .brushOn(true)
         .yAxis().ticks(2)
 
 
@@ -999,7 +1001,6 @@ function charts(data, selectedCharts) {
         .x(d3.scale.linear().domain([0, maxDInt]))
         .margins(chartMargins)
         .on('renderlet', function(chart){
-
         })
         //.yAxisLabel('# OF CELLS')
         .xAxis().ticks(10)
