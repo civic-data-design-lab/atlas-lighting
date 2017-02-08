@@ -118,7 +118,13 @@
                 <a class="reset" href="javascript:ligAveChart.filterAll();dc.redrawAll();" style="display: none;">RESET </a>
               </span>
             </div>
-            <p id="light_digits">___</p>
+            <div class="digits">
+              <p class="explain_digits">AVERAGE VALUE</p>
+              <div class="first_digits"><p id="light_digits">LOW
+                <div class="second_digits"> <p id="light_digits_2">100</p></div>
+                <div class="third_digits">NanoWatts/cm<sup>2</sup>/sr</div>
+              </div>
+            </div>
           </div>
 
           <div id="income">
@@ -128,7 +134,13 @@
                 <a href="javascript:incomeChart.filterAll();dc.redrawAll();"  ><span class = "rm_data"> x</span> </a>
               </span>
             </div>
-            <p id="income_digits" class = "other_digits">___</p>
+            <div class="digits">
+              <p class="explain_digits">AVERAGE VALUE</p>
+              <div class="first_digits"><p id="income_digits">LOW
+                <div class="second_digits"><p><span id="income_digits_2">100</span>&#36;</p></div>
+                <div class="third_digits"></div>
+              </div>
+            </div>
           </div>
 
           <div id="development_intensity">
@@ -138,18 +150,25 @@
                 <a href="javascript:devIntChart.filterAll();dc.redrawAll();" 			><span class = "rm_data"> x</span> </a>
               </span>
             </div>
-            <p id="" class = "plc_digits">___</p>
+            <div class="digits">
+              <p class="explain_digits">AVERAGE VALUE</p>
+              <div class="first_digits"><p id="income_digits">LOW
+                <div class="second_digits"> <p id="income_digits_2">100</p></div>
+                <div class="third_digits">&#36;'s per cell</div>
+              </div>
+            </div>
           </div>
 
 
           <div id="population">
             <div class="chart-title">POPULATION
               <span class="source">
-                <a class="reset" href="javascript:populationChart.filterAll();dc.redrawAll();" 			style="display: none;">RESET </a>
+                <a class="reset" href="javascript:populationChart.filterAll();dc.redrawAll();" 		style="display: none;">RESET </a>
                 <a href="javascript:populationChart.filterAll();dc.redrawAll();" 			><span class = "rm_data"> x</span> </a>
               </span>
             </div>
-            <p id="" class = "plc_digits">___</p>
+            <p id="pop_digits" class = "plc_digits">___</p>
+            <p id="pop_digits_2">__</p>
           </div>
 
 
@@ -160,7 +179,8 @@
                 <a href="javascript:busDivChart.filterAll();dc.redrawAll();" 			><span class = "rm_data"> x</span> </a>
               </span>
             </div>
-            <p id="" class = "plc_digits">___</p>
+            <p id="busDiv_digits" class = "plc_digits">___</p>
+            <p id="busDiv_digits_2">__</p>
           </div>
 
           <div id="business_price">
@@ -170,7 +190,8 @@
                 <a href="javascript:busPriChart.filterAll();dc.redrawAll();"      ><span class = "rm_data"> x</span> </a>
               </span>
             </div>
-            <p id="" class = "plc_digits">___</p>
+            <p id="busPri_digits" class = "plc_digits">___</p>
+            <p id="busPri_digits_2">__</p>
           </div>          
 
           <div id="business_opening">
@@ -194,7 +215,13 @@
                 <a href="javascript:placesChart.filterAll();dc.redrawAll();" 			><span class = "rm_data"> x</span> </a>
               </span>
             </div>
-            <p id="" class = "plc_digits">___</p>
+            <div class="digits">
+              <p class="explain_digits">AVERAGE VALUE</p>
+              <div class="first_digits"><p id="places_digits">MEDIUM
+                <div class="second_digits"> <p id="places_digits_2">100</p></div>
+                <div class="third_digits">Places per cell</div>
+              </div>
+            </div>
           </div>
 
           <div id="ins">
@@ -204,7 +231,8 @@
                 <a href="javascript:insChart.filterAll();dc.redrawAll();"><span class = "rm_data"> x</span> </a>
               </span>
             </div>
-            <p id="" class = "plc_digits">___</p>
+            <p id="instaDens_digits" class = "plc_digits">___</p>
+            <p id="instaDens_digits_2">__</p>
           </div>
 
           <div id="ins_likes">
@@ -214,7 +242,8 @@
                 <a href="javascript:insLikesChart.filterAll();dc.redrawAll();" ><span class = "rm_data"> x</span> </a>
               </span>
             </div>
-            <p id="" class = "plc_digits">___</p>
+            <p id="instaLikes_digits" class = "plc_digits">___</p>
+            <p id="instaLikes_digits_2">__</p>
           </div>
 
           <div id="business_types" class = "dc-chart bus-types">
@@ -260,7 +289,7 @@
           </div>
 
           <div id="export">
-            <p id="export_btn" class="mybtn"> <img src="../icons/final_icons/export.png"> EXPORT</p>
+            <p id="export_btn" class="mybtn"> <img src="../icons/final_icons/export.png">EXPORT</p>
             <div id="export_add">
               <input type="text">
               <p class="mybtn" id="cp_btn">COPY</p>
@@ -302,10 +331,10 @@
               <div id="myDropdown" class="dropdown-content">
                 <a href="javascript:window.location.assign('grid.html#Chicago');window.location.reload();">CHICAGO-JOLIET-NAPERVILLE,IL-IN-WI</a> 
                 <a href="javascript:window.location.assign('grid.html#LA');window.location.reload();">LOS ANGELES-LONG BEACH-SANTA ANA, CA</a>
-<!--            <a href="javascript:window.location.assign('grid.html#Pittsburgh');window.location.reload();">PITTSBURGH, PA</a>
+                <a href="javascript:window.location.assign('grid.html#Pittsburgh');window.location.reload();">PITTSBURGH, PA</a>
                 <a href="javascript:window.location.assign('grid.html#Sanjose');window.location.reload();">SAN JOSE-SUNNYVALE-SANTA CLARA, CA</a>
                 <a href="javascript:window.location.assign('grid.html#Denver');window.location.reload();">DENVER-AURORA-BROOMFIELD, CO</a>
--->              
+             
               </div>
               <img src="../icons/arrow_down.png" style="width:7px; position: relative; left: 298px; opacity: 0.8;">
             </div>

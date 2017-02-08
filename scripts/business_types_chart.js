@@ -205,6 +205,7 @@ var tagCloudChart = function(chartWidth,chartHeight) {
              }, 0);
 
              if (total == selectedTypes.length){
+                 console.log($("#c" + el.cell_id).css("display"))
                  d3.select("#c" + el.cell_id).style("display", "block");
                  avg_light += el.averlight;
                  count ++;
