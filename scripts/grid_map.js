@@ -421,7 +421,7 @@ function initControl() {
         }
     });
 
-    $("#export .bottom_btn").click(function () {
+    $("#export_btn").click(function () { //$("#export .bottom_btn")
         $("#export_add").css("display", "block");
         $("#export_add input").val(window.location.href);
 
@@ -679,9 +679,9 @@ window.devIntChart = dc.barChart("#development_intensity")
 window.ligAveChart = dc.barChart("#light_average")
 window.placesChart = dc.barChart("#places");
 
-window.insChart = dc.barChart("#ins")
-window.insLikesChart = dc.barChart("#ins_likes")
-window.busPriChart = dc.barChart("#business_price")
+window.insChart = dc.barChart("#ins");
+window.insLikesChart = dc.barChart("#ins_likes");
+window.busPriChart = dc.barChart("#business_price");
 window.OBIaverage = dc.barChart("#business_opening_average");
 window.OBIpercent = dc.barChart("#business_opening_percent");
 
@@ -853,11 +853,6 @@ function charts(data, selectedCharts) {
     var devIntDimension = ndx.dimension(function (d) { return parseInt(d.dev_intensity) });
     var devIntGroup = devIntDimension.group();
 
-    var placesDimension = ndx.dimension(function (d) { 
-        if (d.places>100) return 100; 
-        else return d.places });
-    var placesGroup = placesDimension.group()
-
     var insDimension = ndx.dimension(function (d) { 
         if(d.insta_cnt > 50 ) return 50;
         else return d.insta_cnt });
@@ -875,7 +870,7 @@ function charts(data, selectedCharts) {
     window.insChart.yAxis().ticks(2)
 
     var insLikesDimension = ndx.dimension(function (d) { 
-        if(d.insta_like > 1000 ) return 1000;
+        if(d.insta_like > 500 ) return 500; //1000
         else return d.insta_like })
 
     var insLikesGroup = insLikesDimension.group()
@@ -887,8 +882,6 @@ function charts(data, selectedCharts) {
         .gap(0)
         .margins(chartMargins)
         .centerBar(true)
-        .margins({ top: 0, left: 50, right: 10, bottom: 20 })
-
         .x(d3.scale.linear().domain([1, 1001]))
         .y(d3.scale.linear().domain([0, 20]))
     window.insLikesChart.yAxis().ticks(2)
@@ -995,6 +988,15 @@ function charts(data, selectedCharts) {
         })
     busDivChart.xAxis().ticks(4);        
     busDivChart.yAxis().ticks(0); 
+
+    /* Places chart
+     * 
+    */
+
+    var placesDimension = ndx.dimension(function (d) { 
+        if (d.places>100) return 100; 
+        else return d.places });
+    var placesGroup = placesDimension.group()
 
     placesChart.width(chartWidth).height(chartHeight)
         .group(placesGroup).dimension(placesDimension)
@@ -1174,8 +1176,7 @@ function charts(data, selectedCharts) {
                 .attr('x', 170).attr('y', 138).attr('dy', '0')
                 .text('DOLLARS').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
                 .style("font-size", "8px")
-        })        
-        //.yAxisLabel('# OF CELLS')
+        })
         //.y(d3.scale.linear().domain([1, maxIncY])); //max was 1000
 
     incomeChart.yAxis().ticks(2)
