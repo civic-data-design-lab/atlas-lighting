@@ -8,7 +8,6 @@ var currentCity_o = document.URL.split("#")[1].split("*")[0];
 var currentCity = document.URL.split("#")[1].split("*")[0].toLowerCase();
 d3.selectAll("#nowmsa").text(fullName[currentCity_o]);
 var center = cityCentroids[currentCity_o];
-console.log(center);
 var initurl = window.location.href;
 var selectedCharts = [];
 
