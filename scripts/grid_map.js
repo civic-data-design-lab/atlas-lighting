@@ -938,6 +938,12 @@ function charts(data, selectedCharts) {
         // })
         .gap(10)
         // .yAxisLabel("Cells", 10)
+        .on('postRender', function(chart) {
+            chart.svg().append('text').attr('class', 'y-label').attr('text-anchor', 'middle')
+                .attr('x', -60).attr('y', 35).attr('dy', '-25').attr('transform', 'rotate(-90)')
+                .text('# OF CELLS').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
+                .style("font-size", "8px")
+        }) 
         .yAxis().ticks(2);
 
 
@@ -954,6 +960,12 @@ function charts(data, selectedCharts) {
         // .elasticY(true)
         .gap(1)
         .brushOn(true)
+        .on('postRender', function(chart) {
+            chart.svg().append('text').attr('class', 'y-label').attr('text-anchor', 'middle')
+                .attr('x', -60).attr('y', 35).attr('dy', '-25').attr('transform', 'rotate(-90)')
+                .text('# OF BUSINESSES').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
+                .style("font-size", "8px")
+        }) 
         .yAxis().ticks(2)
 
 

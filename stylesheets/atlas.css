@@ -949,8 +949,7 @@ div#streetview_window {
     position: absolute;
     -webkit-transform: translateY(6px);
             transform: translateY(6px);
-    left: 20px;
-    margin-left: 0px;
+    left: 21px;
 }
 
 .toolip_img {
@@ -974,8 +973,8 @@ div#streetview_window {
     width: 40px;
     position: absolute;
     right: 25%;
-    top: 30%;
-    opacity: 0.8;
+    top: 20%;
+    opacity: 1;
 }
 
 
@@ -983,7 +982,7 @@ div#streetview_window {
     width: 15px;
     position: absolute;
     right: 5%;
-    top: 50%;
+    top: 35%;
     z-index: 1001;
     opacity: 1;
 }
