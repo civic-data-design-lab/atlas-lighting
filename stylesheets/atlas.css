@@ -348,6 +348,7 @@ canvas {
     top: 40px;
     right: 0px;
     overflow: auto;
+    overflow-x: hidden;
     /*overflow-y: hidden;*/
 }
 
@@ -1209,4 +1210,16 @@ p#export_btn.mybtn {
 }
 #business_opening_average.dc-chart > svg > g{
     fill-opacity: 1;
+}
+
+#time_selector  {
+   margin-left: 25px;
+}
+
+#time_selector > a.reset {
+    width: 50px;
+    display: inline-block;
+    position: relative;
+    left: 350px;
+    line-height: 1.5;
 }
