@@ -183,16 +183,15 @@
 
 
           <div id="business_opening_percent">
-            <span class="source">
+            <div class="chart-title">PERCENTAGE OF OPEN BUSINESSES IN A TIME PERIOD
+              <span class="source">
                 <a class="reset" href="javascript:OBIpercent.filterAll();dc.redrawAll();" style="display: none;">RESET </a>
                 <a href="javascript:OBIpercent.filterAll();dc.redrawAll();"      ><span class = "rm_data"> x</span> </a>
               </span>
-            <div class="chart-title">PERCENTAGE OF OPEN BUSINESSES IN A TIME PERIOD
-
             </div>
             <div id="time_selector" >
                 <p id = "selected_time" class = "plc_digits">0 - 24</p>
-                <a class="reset" href="javascript:timeSelectorReset();">RESET TIME RANGE</a>
+                <!-- <a id="timeSelectorReset" class="reset" href="javascript:timeSelectorReset();" style="opacity: 0;">RESET TIME RANGE</a> -->
             </div>
             <div class="digits">
               <!-- <p class="explain_digits">AVERAGE VALUE</p> -->
@@ -202,11 +201,10 @@
             </div>
           </div>
           <div id="business_opening_average">
-            <div class="chart-title">AVERAGE NUMBER OF OPEN BUSINESSES IN A TIME PERIOD
+            <div class="chart-title">AVERAGE NUMBER OF OPEN BUSINESSES IN A TIME PERIOD 
               <span class="source">
                 <a class="reset" href="javascript:OBIaverage.filterAll();dc.redrawAll();" style="display: none;">RESET </a>
-                <a href="javascript:OBIaverage.filterAll();dc.redrawAll();"      ><span class = "rm_data" style="display: none;"> x</span> </a>
-              </span>
+               </span>
             </div>
             <div class="digits">
               <!-- <p class="explain_digits">AVERAGE VALUE</p> -->

@@ -1213,13 +1213,14 @@ p#export_btn.mybtn {
 }
 
 #time_selector  {
-   margin-left: 25px;
+   /*margin-left: 25px;*/
 }
 
 #time_selector > a.reset {
     width: 50px;
-    display: inline-block;
+    float: right;
     position: relative;
     left: 350px;
     line-height: 1.5;
+    top: 30px;
 }

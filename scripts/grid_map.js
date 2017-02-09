@@ -937,8 +937,9 @@ function charts(data, selectedCharts) {
         //   _chart.selectAll("rect.bar").on("click", _chart.onClick);
         // })
         .on('renderlet', function(chart){
-            var mean = d3.mean(window.newData, function(el){return el.OBIpercentage>0;});
-            bindSmallText(Math.round(mean*100/24), "#OBIpercent_digits");
+            var OBIaverage_digits = d3.mean(window.newData, function(el){return el.OBIpercentage>0;});
+            bindSmallText((OBIaverage_digits/(24)*100).toFixed(2), "#OBIpercent_digits");
+
         })
         .gap(10)
         .on('postRender', function(chart) {
@@ -969,8 +970,9 @@ function charts(data, selectedCharts) {
         .gap(1)
         .brushOn(true)
         .on('renderlet', function(chart){
-            var mean = d3.mean(window.newData, function(el){return el.OBIaverage>0;});
-            bindSmallText(Math.round(mean/24), "#OBIaverage_digits");
+            var OBIaverage_digits = d3.mean(window.newData, function(el){return el.OBIaverage>0;});
+            bindSmallText((OBIaverage_digits/(24)).toFixed(2), "#OBIaverage_digits");
+
         })
         .on('postRender', function(chart) {
             chart.svg().append('text').attr('class', 'y-label').attr('text-anchor', 'middle')
@@ -1425,6 +1427,8 @@ function updateChart(selectedCharts) {
         $('#business_opening_average').show();
         $('#business_opening_average').find('#time_selector').hide();
         $('#business_opening_average').find('#selected_time').hide();
+        timeSelectorReset(); //reset the time selector
+        $('#timeSelectorReset').css('opacity', 0); // hide the specific button
     }
     updateZoomedChart(selectedCharts);
   
@@ -1445,8 +1449,8 @@ function timeSelector(chartWidth,chartHeight) {
     var end = 24; //ending point of brush on chart
     var start0 = 0; //starting point for code before anyone interacts with brush
     var end0 = 24; //ending point for code before anyone interacts with brush
-    var margin = { top: 10, left: 10, right: 0, bottom: 0 },
-        width = 280,
+    var margin = { top: 20, left: 30, right: 0, bottom: 0 },
+        width = 300,
         height = 32;
 
     var svg = d3.select("#time_selector").append("svg")
@@ -1524,6 +1528,7 @@ function timeSelector(chartWidth,chartHeight) {
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 function filterhour(data, rdstart, rdend){
+    $('#timeSelectorReset').css('opacity', 1);
     var ave_lit = 0;
     var count_ = 0;
     $('#business_opening_percent').find('#selected_time').text(rdstart+" - "+rdend);
@@ -1536,7 +1541,6 @@ function filterhour(data, rdstart, rdend){
         // else {
         //     d3.select("#c" + d.cell_id).style("display", "none");
         // }
-
         if (d.OBIaverage!=0){
             d3.select("#c" + d.cell_id).style("display", "block");
             ave_lit += d.averlight;
@@ -1557,7 +1561,7 @@ function filterhour(data, rdstart, rdend){
 }
 
 function timeSelectorReset() {
-    console.log('should reset')
+    filterhour(window.newData, 0, 24);
 };
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
@@ -1598,8 +1602,9 @@ function updateOBI(dataUpdate,start,end){
     .dimension(OBIpercentDimension_)
     .elasticY(true)
     .on('renderlet', function(chart){
-        var mean = d3.mean(dataUpdate, function(el){return el.OBIpercentage>0;});
-        bindSmallText(Math.round(mean/(end-start)), "#OBIpercent_digits");
+        var OBIpercent_digits = d3.mean(dataUpdate, function(el){return el.OBIpercentage>0;});
+        bindSmallText((OBIpercent_digits/(end-start)*100).toFixed(2), "#OBIpercent_digits");
+
     })
 
 
@@ -1613,10 +1618,9 @@ function updateOBI(dataUpdate,start,end){
     .dimension(OBIaverageDimension_)
     .elasticY(true)
     .on('renderlet', function(chart){
-        var mean = d3.mean(dataUpdate, function(el){return el.OBIaverage>0;});
-        bindSmallText(Math.round(mean/(end-start)), "#OBIaverage_digits");
+        var OBIaverage_digits = d3.mean(dataUpdate, function(el){return el.OBIaverage>0;});
+        bindSmallText((OBIaverage_digits/(end-start)).toFixed(2), "#OBIaverage_digits");
     })
-
 
     dc.redrawAll();
 }
