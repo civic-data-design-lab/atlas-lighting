@@ -255,6 +255,10 @@ canvas {
     margin-bottom:10px;
 }
 
+#business_types{
+    margin-bottom:10px;
+}
+
 #light_average {
     margin-bottom:70px;
 }
@@ -280,7 +284,7 @@ canvas {
 
 .dc-chart svg {
     margin-left: 85px;
-    margin-bottom:10px; /*95px */
+    margin-bottom:0px; /*95px */
 }
 
 .loader-text{
@@ -797,6 +801,17 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     left: 10px;
 }
 
+#busPri_digits{
+    font-size:24px;
+    font-family:Dosis;
+    font-weight:300;
+    margin-top:2px
+}
+
+#busPri_digits_o {
+    font-size:6px;
+}
+
 
 #export {
     position: fixed;
@@ -1013,7 +1028,7 @@ div#streetview_window {
 .tick {
     font-family: Dosis;
     font-weight: 300;
-    font-size:8px
+    font-size:8px;
 }
 
 .grido {

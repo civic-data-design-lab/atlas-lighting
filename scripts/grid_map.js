@@ -893,7 +893,7 @@ function charts(data, selectedCharts) {
         .y(d3.scale.linear().domain([0, 20]))
     window.insLikesChart.yAxis().ticks(2)
 
-    var busPriDimension = ndx.dimension(function (d) { return d.b_price });
+    var busPriDimension = ndx.dimension(function (d) {return d.b_price;});
     var busPriGroup = busPriDimension.group()
 
     window.busPriChart.width(chartWidth).height(chartHeight)
@@ -903,6 +903,20 @@ function charts(data, selectedCharts) {
         .x(d3.scale.linear().domain([0.5, 4]))
         .xUnits(function(){return 50;})
         .gap(1)
+        .on('renderlet', function(chart){
+            var median = d3.median(window.newData, function(el){return el.b_price;});
+            bindSmallText(median, "#busPri_digits");
+        })
+        .on('postRender', function(chart) {
+            chart.svg().append('text').attr('class', 'y-label').attr('text-anchor', 'middle')
+                .attr('x', -60).attr('y', 35).attr('dy', '-25').attr('transform', 'rotate(-90)')
+                .text('# OF CELLS').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
+                .style("font-size", "8px")
+            chart.svg().append('text').attr('class', 'x-label').attr('text-anchor', 'middle')
+                .attr('x', 170).attr('y', 138).attr('dy', '0')
+                .text('DOLLARS (THOUSANDS)').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
+                .style("font-size", "8px")
+        })
         .centerBar(true)
         .yAxis().ticks(2);
 
@@ -1015,8 +1029,6 @@ function charts(data, selectedCharts) {
     var extent = d3.extent(data, function(el){return parseInt(el.averlight)});
     var sortedLights = data.map(function(el){return parseInt(el.averlight)}).sort(function(a, b){return a - b});
 
-    
-
     var firstQL = d3.quantile(sortedLights, 0.33);
     var secondQL= d3.quantile(sortedLights, 0.66);
 
@@ -1060,9 +1072,6 @@ function charts(data, selectedCharts) {
     var pGroup = popDimension.group();
     var topPop = pGroup.top(2);
     var maxPopY = topPop[1].value;
-    var extentI = d3.extent(data, function(el){return parseInt(parseFloat(el.population) / 1000) * 1000});
-    var sortedIncomes = data.map(function(el){return parseInt(parseFloat(el.population) / 1000) * 1000}).sort(function(a, b){return a - b});
-    var quants = quantileCalc(extentI, sortedIncomes, actChrtWidth);
     var appendablePop = true;
 
     populationChart.width(chartWidth).height(chartHeight).dimension(popDimension).group(pGroup)
@@ -1074,11 +1083,33 @@ function charts(data, selectedCharts) {
         .y(d3.scale.linear().domain([0, maxPopY])) //Take the max
         .margins(chartMargins)
         .on('renderlet', function(chart){
+            window.newData = popDimension.top(Infinity);
+            var extent = d3.extent(data, function(el){return parseInt(el.population)});
+            var sorted = data.map(function(el){return parseInt(el.population)}).sort(function(a, b){return a - b});
+            var quants = quantileCalc(extent, sorted, actChrtWidth);
+
             if (appendablePop){
                 addQuantiles(chart, quants.firstX, quants.secondX, 3, 2, chartHeight, chartMargins, 2);
                 appendablePop = false;
             }
+            
+            var median = d3.median(window.newData, function(el){return parseInt(el.population)} );
+            var correspond = thisQuantile(median, extent, quants.first, quants.second);
+
+            bindText(correspond, median, "#pop_digits", "#pop_digits_o");
+            
         })
+        .on('postRender', function(chart) {
+            chart.svg().append('text').attr('class', 'y-label').attr('text-anchor', 'middle')
+                .attr('x', -60).attr('y', 35).attr('dy', '-25').attr('transform', 'rotate(-90)')
+                .text('# OF CELLS').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
+                .style("font-size", "8px")
+            //different for x-axis label
+            chart.svg().append('text').attr('class', 'x-label').attr('text-anchor', 'middle')
+                .attr('x', 170).attr('y', 138).attr('dy', '0')
+                .text('PEOPLE').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
+                .style("font-size", "8px")
+        }) 
         .yAxis().ticks(2)
         
     populationChart.xAxis().ticks(4)
@@ -1093,13 +1124,7 @@ function charts(data, selectedCharts) {
     var iGroup = incomeDimension.group();
     //var iGroupEmpty = remove_empty_bins(iGroup);
     //console.log(maxIncY);
-    var extentI = d3.extent(data, function(el){return parseInt(parseFloat(el.income) / 1000) * 1000});
-    var sortedIncomes = data.map(function(el){return parseInt(parseFloat(el.income) / 1000) * 1000}).sort(function(a, b){return a - b});
-    //var firstQI = d3.quantile(sortedIncomes, 0.33);
-    //var secondQI = d3.quantile(sortedIncomes, 0.66);
-    //var xOfFirstQI = actChrtWidth*(firstQI/(extentI[1]-extentI[0]));
-    //var xOfSecondQI = actChrtWidth*(secondQI/(extentI[1]-extentI[0]));
-    var quants = quantileCalc(extentI, sortedIncomes, actChrtWidth);
+
 
     var appendableInc = true;
     incomeChart.width(chartWidth).height(chartHeight).dimension(incomeDimension).group(iGroup)
@@ -1110,6 +1135,7 @@ function charts(data, selectedCharts) {
         .elasticY(true)
         .margins(chartMargins)
         .on('renderlet', function (chart) {
+            
             window.newData = incomeDimension.top(Infinity)
             d3.select("#map .datalayer").remove()
             var canvas = __canvas
@@ -1121,14 +1147,17 @@ function charts(data, selectedCharts) {
 
             filterhour(window.newData,start,end);
 
+            var extent = d3.extent(data, function(el){return parseInt(parseFloat(el.income) / 1000) * 1000});
+            var sorted = data.map(function(el){return parseInt(parseFloat(el.income) / 1000) * 1000}).sort(function(a, b){return a - b});
+            var quants = quantileCalc(extent, sorted, actChrtWidth);
+
             if (appendableInc){
                 addQuantiles(chart, quants.firstX, quants.secondX, 5, 5, chartHeight, chartMargins, 6);
                 appendableInc = false;
             }
 
             var median = d3.median(window.newData, function(el){return parseInt(parseFloat(el.income) / 1000) * 1000;});
-            var correspond = thisQuantile(median, extentI, quants.first, quants.second);
-
+            var correspond = thisQuantile(median, extent, quants.first, quants.second);
             bindText(correspond, median, "#income_digits", "#income_digits_o");
             //d3.select("#income_digits").text(correspond);
             //d3.select("#income_digits").attr("sv_val", correspond);
@@ -1582,6 +1611,15 @@ var bindText = function(quanText, median, selection_1, selection_2){
     var newText =`${kFormatter(median)}`;
     $(selection_2).html(newText);
     $(selection_2).attr("sv_val", newText);
+}
+
+/* Utility function to bind text to a DOM element.
+ */
+
+var bindSmallText = function(median, selection_1){
+    var newText =`${median}K`;
+    $(selection_1).html(newText);
+    $(selection_1).attr("sv_val", newText);
 }
 
 /* Utility function to move a d3 element back in appearance order.
