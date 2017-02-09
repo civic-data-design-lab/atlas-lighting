@@ -1176,32 +1176,37 @@ p#export_btn.mybtn {
 #zoomIn {
     position: fixed;
     display: block;
-    width: 30px;   
+    width: 35px;   
+    height: 35px;   
     z-index: 100;
-    left: 350px;
-    top: calc(100% - 60px);   
+    left: 345px;
+    top: calc(100% - 60px); 
+    background: url('../icons/final_icons/zoomIn.png') center no-repeat;
+    border: none;
+}
+
+#zoomIn:hover {
+    opacity: 0.7;
+    cursor: pointer;
+    left: 346px;
 }
 
 #zoomOut{
     position: fixed;
     display: block;
-    width: 30px;   
+    width: 35px;   
+    height: 35px;   
     z-index: 100;
-    left: 380px;
+    left: 390px;
     top: calc(100% - 60px);   
-}
-
-
-#zoomIn {
-    background: url('../icons/final_icons/zoomIn.png') center no-repeat;
-    border: none;
-    height: 40px;
-}
-
-#zoomOut {
     background: url('../icons/final_icons/zoomOut.png') center no-repeat;
     border: none;
-    height: 40px;
+}
+
+#zoomOut:hover {
+    opacity: 0.7;
+    cursor: pointer;
+    left: 391px;
 }
 
 #business_opening_percent.dc-chart > svg > g{
