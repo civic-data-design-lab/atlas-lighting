@@ -1571,7 +1571,7 @@ function filterhour(data, rdstart, rdend){
 }
 
 function timeSelectorReset() {
-    d3.selectAll('.brushItem').select('rect.extent').attr('width', 270)
+    d3.selectAll('.brushItem').select('rect.extent').attr('width', 270).attr('x', 0);
     filterhour(window.newData, 0, 24);
 };
 ////////////////////////////////////////////////////////////////////////////////
