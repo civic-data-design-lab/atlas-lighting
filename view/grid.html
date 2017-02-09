@@ -179,6 +179,9 @@
               </span>
             </div>
           </div>
+
+
+
           <div id="business_opening_percent">
             <div class="chart-title">PERCENTAGE OF OPEN BUSINESSES IN A TIME PERIOD
               <span class="source">
@@ -188,30 +191,25 @@
             </div>
             <div id="time_selector" >
                 <p id = "selected_time" class = "plc_digits">0 - 24</p>
-                <!-- <button class="toggleAnimation"><img src="../icons/play.png" width="8px"></button> -->
+                <!-- <a id="timeSelectorReset" class="reset" href="javascript:timeSelectorReset();" style="opacity: 0;">RESET TIME RANGE</a> -->
             </div>
             <div class="digits">
-              <p class="explain_digits">AVERAGE VALUE</p>
-              <div class="first_digits"><p id="OBIpercent_digits">LOW</p>
-              <div class="second_digits"> <p id="OBIpercent_digits_o">100</p></div>
-                <div class="third_digits">CELLS</div>
-
+              <!-- <p class="explain_digits">AVERAGE VALUE</p> -->
+              <div class="first_digits"><p id="OBIpercent_digits"></p>
+              <div class="third_digits"> <p id="OBIpercent_digits_o">CELLS</p></div>
               </div>
             </div>
           </div>
           <div id="business_opening_average">
-            <div class="chart-title">AVERAGE NUMBER OF OPEN BUSINESSES IN A TIME PERIOD
+            <div class="chart-title">AVERAGE NUMBER OF OPEN BUSINESSES IN A TIME PERIOD 
               <span class="source">
                 <a class="reset" href="javascript:OBIaverage.filterAll();dc.redrawAll();" style="display: none;">RESET </a>
-                <a href="javascript:OBIaverage.filterAll();dc.redrawAll();"      ><span class = "rm_data" style="display: none;"> x</span> </a>
-              </span>
+               </span>
             </div>
             <div class="digits">
-              <p class="explain_digits">AVERAGE VALUE</p>
-              <div class="first_digits"><p id="OBIaverage_digits">LOW</p>
-              <div class="second_digits"> <p id="OBIaverage_digits">5000</p></div>
-                <div class="third_digits">BUSINESSES</div>
-
+              <!-- <p class="explain_digits">AVERAGE VALUE</p> -->
+              <div class="first_digits"><p id="OBIaverage_digits"></p>
+              <div class="third_digits"> <p id="OBIaverage_digits_o">CELLS</p></div>
               </div>
             </div>
           </div>
