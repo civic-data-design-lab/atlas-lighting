@@ -256,7 +256,7 @@ canvas {
 }
 
 #light_average {
-    margin-bottom:60px;
+    margin-bottom:70px;
 }
 
 /* dc-chart class extended for Business Types widget*/
@@ -277,6 +277,12 @@ canvas {
 .dc-chart .deselected{
     fill:#888;
 }
+
+.dc-chart svg {
+    margin-left: 85px;
+    margin-bottom:10px; /*95px */
+}
+
 .loader-text{
     position:absolute;left:0px;
     font-size:16px;
@@ -730,9 +736,6 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     position: relative;
 }
 
-.dc-chart svg {
-    margin-left: 85px; /*95px */
-}
 
 .digits {
     color: rgb(32, 192, 226);

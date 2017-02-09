@@ -800,14 +800,14 @@ function charts(data, selectedCharts) {
 
     })
     var chartWidth = 320; //304 //320
-    var chartHeight = 125; //52
+    var chartHeight = 140; //52
 
     var actChrtWidth = 264;
 
     var chartWidthBusDiv = 320;
     var chartHeightBusDiv = 52;
 
-    var chartMargins = {top: 8, left: 40, right: 10, bottom: 20}; //{top: 0, left: 50, right: 10, bottom: 20};
+    var chartMargins = {top: 8, left: 40, right: 10, bottom: 30};//20 //{top: 0, left: 50, right: 10, bottom: 20};
 
     var ndx = crossfilter(data);
     var all = ndx.groupAll();
@@ -1044,7 +1044,10 @@ function charts(data, selectedCharts) {
                 .attr('x', -60).attr('y', 35).attr('dy', '-25').attr('transform', 'rotate(-90)')
                 .text('# OF CELLS').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
                 .style("font-size", "8px")
-            //different for x-axis label
+            chart.svg().append('text').attr('class', 'x-label').attr('text-anchor', 'middle')
+                .attr('x', 170).attr('y', 138).attr('dy', '0')
+                .text('NANOWATTS/CM²/SR').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
+                .style("font-size", "8px")
         })
         .yAxis().ticks(3);
         
@@ -1132,6 +1135,17 @@ function charts(data, selectedCharts) {
 
         })
         .x(d3.scale.linear().domain([1, window.count]))
+        .on('postRender', function(chart) {
+            chart.svg().append('text').attr('class', 'y-label').attr('text-anchor', 'middle')
+                .attr('x', -60).attr('y', 35).attr('dy', '-25').attr('transform', 'rotate(-90)')
+                .text('# OF CELLS').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
+                .style("font-size", "8px")
+            //different for x-axis label
+            chart.svg().append('text').attr('class', 'x-label').attr('text-anchor', 'middle')
+                .attr('x', 170).attr('y', 138).attr('dy', '0')
+                .text('DOLLARS').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
+                .style("font-size", "8px")
+        })        
         //.yAxisLabel('# OF CELLS')
         //.y(d3.scale.linear().domain([1, maxIncY])); //max was 1000
 
@@ -1311,7 +1325,7 @@ function updateZoomedChart(selectedCharts) {
 function updateChart(selectedCharts) {
     window.location.href = initurl.split("*")[0] + "*" + selectedCharts.join("|");
     d3.selectAll(".dc-chart").style("display", "none");
-    d3.select(".dc-data-count").style("display", "block");
+    d3.select(".dc-data-count").style("display", "none");
     d3.select(".lock").style("display", "block");
 
     selectedCharts.forEach(function (d) {
