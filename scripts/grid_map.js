@@ -1502,7 +1502,7 @@ function timeSelector(chartWidth,chartHeight) {
 	    .attr("x", -4).attr("y",20)
 	    .style("text-anchor", null);
 
-	d3.select(".extent").attr("height", 29);
+    d3.select(".extent").attr("height", 29).attr("class", "brushItemRect");
 	d3.select(".background").attr("height", 50);
 	d3.selectAll(".resize rect").attr("height", 29);
     d3.selectAll(".tick line").style("opacity","0.3");
@@ -1571,6 +1571,7 @@ function filterhour(data, rdstart, rdend){
 }
 
 function timeSelectorReset() {
+    d3.selectAll('.brushItem').select('rect.extent').attr('width', 270)
     filterhour(window.newData, 0, 24);
 };
 ////////////////////////////////////////////////////////////////////////////////
