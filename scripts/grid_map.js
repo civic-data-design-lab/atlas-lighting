@@ -923,7 +923,7 @@ function charts(data, selectedCharts) {
         .gap(1)
         .on('renderlet', function(chart){
             var median = d3.median(window.newData, function(el){return el.b_price;});
-            bindSmallText(median, "#busPri_digits");
+            bindDollarText(median, "#busPri_digits");
         })
         .on('postRender', function(chart) {
             drawLabels(chart, "DOLLARS (THOUSANDS)", "# OF CELLS");
@@ -951,7 +951,7 @@ function charts(data, selectedCharts) {
         // .yAxisLabel("Cells", 10)
        .on('renderlet', function(chart){
             var OBIpercent_digits = d3.mean(window.newData, function(el){return el.OBIpercentage>0;});
-            bindSmallText((OBIaverage_digits/(24)*100).toFixed(2), "#OBIpercent_digits");
+            bindSmallText((OBIpercent_digits/(24)*100).toFixed(2), "#OBIpercent_digits");
 
         })
         .on('postRender', function(chart) {
@@ -1699,7 +1699,7 @@ var bindText = function(quanText, median, selection_1, selection_2){
 /* Utility function to bind text to a DOM element.
  */
 
-var bindSmallText = function(median, selection_1){
+var bindDollarText = function(median, selection_1){
     var newText =`${median}K`;
     $(selection_1).html(newText);
     $(selection_1).attr("sv_val", newText);
@@ -1708,13 +1708,13 @@ var bindSmallText = function(median, selection_1){
 /* Utility function to bind text to a DOM element.
  */
 
-/*
+
 var bindSmallText = function(median, selection_1){
-    var newText =`${median}`;
+    var newText =`${median}K`;
     $(selection_1).html(newText);
     $(selection_1).attr("sv_val", newText);
 }
-*/
+
 
 
 /* Utility function to bind text to a DOM element.
