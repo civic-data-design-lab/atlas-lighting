@@ -8,6 +8,7 @@ var currentCity_o = document.URL.split("#")[1].split("*")[0];
 var currentCity = document.URL.split("#")[1].split("*")[0].toLowerCase();
 d3.selectAll("#nowmsa").text(fullName[currentCity_o]);
 var center = cityCentroids[currentCity_o];
+console.log(center);
 var initurl = window.location.href;
 var selectedCharts = [];
 
@@ -515,8 +516,15 @@ function initCanvas(data) {
         var openBusinessScale = d3.scale.linear().domain([0, 2515]).range([0.2,1]);
         var openBusinessScaleColor = d3.scale.linear().domain([0, 2515]).range(["#E5DEF7", "#8D6EDE", "#2C1764"]);
 
-        if (currentCity_o != "Chicago") {
-            radius = 1.8 * radius;
+        //Switch pattern might be better here
+        if (currentCity_o == "LA") {
+            radius = 1.82 * radius;
+        } else if (currentCity_o == "Sanjose"){
+            radius = 1.88 * radius;
+        } else if (currentCity_o == "Pittsburgh"){
+            radius = 1.97 * radius;
+        } else  {
+            radius = 2 * radius;
         }
 
         var zoomAlphaScale = d3.scale.linear().domain([8, 16]).range([.8, .2])
@@ -546,23 +554,28 @@ function initCanvas(data) {
                             {location: unproject([mypos.left+(thisradius - 10)/2, mypos.top+(thisradius - 10)/2])},
                             function(result, status) {
                                 if (status === 'OK') {
-                                    console.log("ok");
+                                    //console.log("ok");
                                     window.panorama.setPosition(unproject([mypos.left+(thisradius - 10)/2, mypos.top+(thisradius - 10)/2]));
                                     d3.select("#street_view_plc").style("display", "none");
                                     d3.select("#street_view_plc0").style("display", "none");
                                     d3.select("#streetview_window").style("display", "block");
 
                                 }else{
-                                    console.log("not ok");
+                                    //console.log("not ok");
                                     d3.select("#streetview_window").style("display", "none");
                                     d3.select("#street_view_plc").style("display", "block");
                                     d3.select("#street_view_plc0").style("display", "none");
 
                                 }
-                            });
+                        });
 
-                        if (currentCity_o != "Chicago") {
-                            thisradius = 1.8 * thisradius;
+                        //Switch pattern might be better here
+                        if (currentCity_o == "LA") {
+                            thisradius = 1.82 * thisradius;
+                        } else if (currentCity_o == "Sanjose"){
+                            thisradius = 1.92 * thisradius; 
+                        } else  {
+                            thisradius = 2 * thisradius;
                         }
 
                         d3.select(".overlay_rect").remove();
@@ -938,12 +951,6 @@ function charts(data, selectedCharts) {
         // })
         .gap(10)
         // .yAxisLabel("Cells", 10)
-        .on('postRender', function(chart) {
-            chart.svg().append('text').attr('class', 'y-label').attr('text-anchor', 'middle')
-                .attr('x', -60).attr('y', 35).attr('dy', '-25').attr('transform', 'rotate(-90)')
-                .text('# OF CELLS').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
-                .style("font-size", "8px")
-        }) 
         .yAxis().ticks(2);
 
 
@@ -960,12 +967,6 @@ function charts(data, selectedCharts) {
         // .elasticY(true)
         .gap(1)
         .brushOn(true)
-        .on('postRender', function(chart) {
-            chart.svg().append('text').attr('class', 'y-label').attr('text-anchor', 'middle')
-                .attr('x', -60).attr('y', 35).attr('dy', '-25').attr('transform', 'rotate(-90)')
-                .text('# OF BUSINESSES').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
-                .style("font-size", "8px")
-        }) 
         .yAxis().ticks(2)
 
 
