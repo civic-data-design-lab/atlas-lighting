@@ -1654,7 +1654,10 @@ var bindSmallText = function(median, selection_1){
 var bindInstaText = function(median, selection_1){
     if (median == 0){
         var newText = `>${median}`
+    } else {
+        var newText = `${median}`
     }
+
     $(selection_1).html(newText);
     $(selection_1).attr("sv_val", newText);
 }
