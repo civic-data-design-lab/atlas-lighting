@@ -850,13 +850,15 @@ function charts(data, selectedCharts) {
         return d.lat
     });
 
-    var devIntDimension = ndx.dimension(function (d) { return parseInt(d.dev_intensity) });
-    var devIntGroup = devIntDimension.group();
+    /* Instagram density chart
+     * 
+    */
 
     var insDimension = ndx.dimension(function (d) { 
         if(d.insta_cnt > 50 ) return 50;
         else return d.insta_cnt });
     var insGroup = insDimension.group()
+    var appendableIns = true
 
     window.insChart.width(chartWidth).height(chartHeight)
         .group(insGroup).dimension(insDimension)
@@ -865,6 +867,14 @@ function charts(data, selectedCharts) {
         .gap(0)
         .margins(chartMargins)
         .centerBar(true)
+        .on('renderlet', function(chart){
+            window.newData = insDimension.top(Infinity);
+            var median = d3.median(window.newData, function(el){return el.insta_cnt>50 ? 50 : el.insta_cnt});
+            bindInstaText(median, "#instaDen_digits");
+        })
+        .on('postRender', function(chart){
+            drawLabels(chart, "# OF POSTS", "# OF CELLS");
+        })
         .x(d3.scale.linear().domain([1, 51]))
         .y(d3.scale.linear().domain([0, 600]))
     window.insChart.yAxis().ticks(2)
@@ -882,6 +892,9 @@ function charts(data, selectedCharts) {
         .gap(0)
         .margins(chartMargins)
         .centerBar(true)
+        .on('postRender', function(chart){
+            drawLabels(chart, "LIKES", "# OF CELLS");
+        })
         .x(d3.scale.linear().domain([1, 1001]))
         .y(d3.scale.linear().domain([0, 20]))
     window.insLikesChart.yAxis().ticks(2)
@@ -901,14 +914,7 @@ function charts(data, selectedCharts) {
             bindSmallText(median, "#busPri_digits");
         })
         .on('postRender', function(chart) {
-            chart.svg().append('text').attr('class', 'y-label').attr('text-anchor', 'middle')
-                .attr('x', -60).attr('y', 35).attr('dy', '-25').attr('transform', 'rotate(-90)')
-                .text('# OF CELLS').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
-                .style("font-size", "8px")
-            chart.svg().append('text').attr('class', 'x-label').attr('text-anchor', 'middle')
-                .attr('x', 170).attr('y', 138).attr('dy', '0')
-                .text('DOLLARS (THOUSANDS)').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
-                .style("font-size", "8px")
+            drawLabels(chart, "DOLLARS (THOUSANDS)", "# OF CELLS");
         })
         .centerBar(true)
         .yAxis().ticks(2);
@@ -997,6 +1003,7 @@ function charts(data, selectedCharts) {
         if (d.places>100) return 100; 
         else return d.places });
     var placesGroup = placesDimension.group()
+    var appendableP = true;
 
     placesChart.width(chartWidth).height(chartHeight)
         .group(placesGroup).dimension(placesDimension)
@@ -1005,10 +1012,31 @@ function charts(data, selectedCharts) {
         .gap(0)
         .margins(chartMargins)
         .x(d3.scale.linear().domain([1, 101]))
-        //.yAxisLabel('# OF CELLS')
+        .on('renderlet', function(chart){
+            window.newData = placesDimension.top(Infinity);
+            var extent = d3.extent(data, function (el) { return el.places>100 ? 100 : el.places});
+            var sorted = data.map(function (el) { return el.places>100 ? 100 : el.places}).sort(function(a, b){return a - b});
+            var quants = quantileCalc(extent, sorted, actChrtWidth);
+            if (appendableP){
+                addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6);
+                appendableP = false;
+            }
+            
+            var median = d3.median(window.newData, function (el) { return el.places>100 ? 100 : el.places});
+            var correspond = thisQuantile(median, extent, quants.first, quants.second);
+
+            bindText(correspond, median, "#places_digits", "#places_digits_o");
+        })
+        .on('postRender', function(chart) {
+            drawLabels(chart, "PLACES", "# OF CELLS");
+        })
     placesChart.yAxis().ticks(2)
 
+
     var chartColors = { "1": "#fff7bc", "2": "#fee391", "3": "#fec44f", "4": "#fee0d2", "5": "#fc9272", "6": "#de2d26", "7": "#deebf7", "8": "#9ecae1", "9": "#3182bd" }
+    
+    var devIntDimension = ndx.dimension(function (d) { return parseInt(d.dev_intensity) });
+    var devIntGroup = devIntDimension.group();
     var appendableDev = true;
 
     devIntChart.width(chartWidth).height(chartHeight)
@@ -1017,8 +1045,24 @@ function charts(data, selectedCharts) {
         .x(d3.scale.linear().domain([0, maxDInt]))
         .margins(chartMargins)
         .on('renderlet', function(chart){
+            window.newData = devIntDimension.top(Infinity);
+            var extent = d3.extent(data, function (el) {return parseInt(el.dev_intensity)});
+            var sorted = data.map(function (el) {return parseInt(el.dev_intensity)}).sort(function(a, b){return a - b});
+            var quants = quantileCalc(extent, sorted, actChrtWidth);
+            if (appendableDev){
+                addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6); //5 25 for devInt
+                appendableDev = false;
+            }
+            var median = d3.median(window.newData, function (el) {return parseInt(el.dev_intensity)});
+            var correspond = thisQuantile(median, extent, quants.first, quants.second);
+
+            bindText(correspond, median, "#devInt_digits", "#devInt_digits_o");
+
         })
         //.yAxisLabel('# OF CELLS')
+        .on('postRender', function(chart) {
+            drawLabels(chart, "INDEX", "# OF CELLS");
+        })
         .xAxis().ticks(10)
     devIntChart.yAxis().ticks(2)
 
@@ -1028,14 +1072,13 @@ function charts(data, selectedCharts) {
 
     var ligAveDimension = ndx.dimension(function (d) { return parseInt(d.averlight) });
     var laGroup = ligAveDimension.group();
-    var extent = d3.extent(data, function(el){return parseInt(el.averlight)});
-    var sortedLights = data.map(function(el){return parseInt(el.averlight)}).sort(function(a, b){return a - b});
-
+    
+    /*
     var firstQL = d3.quantile(sortedLights, 0.33);
     var secondQL= d3.quantile(sortedLights, 0.66);
-
     var xOfFirstQL = actChrtWidth*(firstQL/(extent[1]-extent[0]));
     var xOfSecondQL = actChrtWidth*(secondQL/(extent[1]-extent[0]));
+    */
 
     var appendableLig = true;
 
@@ -1047,21 +1090,19 @@ function charts(data, selectedCharts) {
         .margins(chartMargins)
         // Draw range lines
         .on('renderlet', function(chart){
+
+            var extent = d3.extent(data, function(el){return parseInt(el.averlight)});
+            var sorted = data.map(function(el){return parseInt(el.averlight)}).sort(function(a, b){return a - b});
+            var quants = quantileCalc(extent, sorted, actChrtWidth);
+
             if (appendableLig){
-                addQuantiles(chart, xOfFirstQL, xOfSecondQL, 3, 2, chartHeight, chartMargins, 2);
+                addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6);
                 appendableLig = false;
             }
         })
         .x(d3.scale.linear().domain([0, maxLight]))
         .on('postRender', function(chart) {
-            chart.svg().append('text').attr('class', 'y-label').attr('text-anchor', 'middle')
-                .attr('x', -60).attr('y', 35).attr('dy', '-25').attr('transform', 'rotate(-90)')
-                .text('# OF CELLS').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
-                .style("font-size", "8px")
-            chart.svg().append('text').attr('class', 'x-label').attr('text-anchor', 'middle')
-                .attr('x', 170).attr('y', 138).attr('dy', '0')
-                .text('NANOWATTS/CM²/SR').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
-                .style("font-size", "8px")
+            drawLabels(chart, "NANOWATTS/CM²/SR", "# OF CELLS");
         })
         .yAxis().ticks(3);
         
@@ -1091,7 +1132,7 @@ function charts(data, selectedCharts) {
             var quants = quantileCalc(extent, sorted, actChrtWidth);
 
             if (appendablePop){
-                addQuantiles(chart, quants.firstX, quants.secondX, 3, 2, chartHeight, chartMargins, 2);
+                addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6);
                 appendablePop = false;
             }
             
@@ -1102,15 +1143,7 @@ function charts(data, selectedCharts) {
             
         })
         .on('postRender', function(chart) {
-            chart.svg().append('text').attr('class', 'y-label').attr('text-anchor', 'middle')
-                .attr('x', -60).attr('y', 35).attr('dy', '-25').attr('transform', 'rotate(-90)')
-                .text('# OF CELLS').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
-                .style("font-size", "8px")
-            //different for x-axis label
-            chart.svg().append('text').attr('class', 'x-label').attr('text-anchor', 'middle')
-                .attr('x', 170).attr('y', 138).attr('dy', '0')
-                .text('PEOPLE').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
-                .style("font-size", "8px")
+            drawLabels(chart, "PEOPLE", "# OF CELLS");
         }) 
         .yAxis().ticks(2)
         
@@ -1154,7 +1187,7 @@ function charts(data, selectedCharts) {
             var quants = quantileCalc(extent, sorted, actChrtWidth);
 
             if (appendableInc){
-                addQuantiles(chart, quants.firstX, quants.secondX, 5, 5, chartHeight, chartMargins, 6);
+                addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6); // 5, 5
                 appendableInc = false;
             }
 
@@ -1167,15 +1200,7 @@ function charts(data, selectedCharts) {
         })
         .x(d3.scale.linear().domain([1, window.count]))
         .on('postRender', function(chart) {
-            chart.svg().append('text').attr('class', 'y-label').attr('text-anchor', 'middle')
-                .attr('x', -60).attr('y', 35).attr('dy', '-25').attr('transform', 'rotate(-90)')
-                .text('# OF CELLS').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
-                .style("font-size", "8px")
-            //different for x-axis label
-            chart.svg().append('text').attr('class', 'x-label').attr('text-anchor', 'middle')
-                .attr('x', 170).attr('y', 138).attr('dy', '0')
-                .text('DOLLARS').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
-                .style("font-size", "8px")
+            drawLabels(chart, "DOLLARS", "# OF CELLS");
         })
         //.y(d3.scale.linear().domain([1, maxIncY])); //max was 1000
 
@@ -1623,6 +1648,17 @@ var bindSmallText = function(median, selection_1){
     $(selection_1).attr("sv_val", newText);
 }
 
+/* Utility function to bind text to a DOM element.
+ */
+
+var bindInstaText = function(median, selection_1){
+    if (median == 0){
+        var newText = `>${median}`
+    }
+    $(selection_1).html(newText);
+    $(selection_1).attr("sv_val", newText);
+}
+
 /* Utility function to move a d3 element back in appearance order.
  */
 
@@ -1634,6 +1670,24 @@ d3.selection.prototype.moveToBack = function() {
         } 
     });
 };
+
+/* Draws x and y axis labels to a dc chart.
+ * @method drawLabels
+ * @param {Object} chart
+ * @param {String} x_text
+ * @param {String} y_text
+ */
+
+var drawLabels = function(chart, x_text, y_text){ 
+    chart.svg().append('text').attr('class', 'y-label').attr('text-anchor', 'middle')
+        .attr('x', -60).attr('y', 35).attr('dy', '-25').attr('transform', 'rotate(-90)')
+        .text(y_text).style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
+        .style("font-size", "8px")
+    chart.svg().append('text').attr('class', 'x-label').attr('text-anchor', 'middle')
+        .attr('x', 170).attr('y', 138).attr('dy', '0')
+        .text(x_text).style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
+        .style("font-size", "8px")
+}
 
 
 /* Function for drawing Quantile Lines on the selected chart.
@@ -1648,7 +1702,7 @@ d3.selection.prototype.moveToBack = function() {
  * @param {Number} fontSize 
  */
 
-function addQuantiles(chart, firstQ, secondQ, b, c, chrtHeight, chrtMargins, fontSize) {
+function addQuantiles(chart, firstQ, secondQ, chrtHeight, chrtMargins, fontSize) {
         chart.select("svg")
              .append("g").attr("transform", "translate(" + chrtMargins.left + "," + chrtMargins.top + ")")
              .append("line")
@@ -1672,8 +1726,10 @@ function addQuantiles(chart, firstQ, secondQ, b, c, chrtHeight, chrtMargins, fon
              .style("stroke-dasharray", "4");
         
         if ((secondQ - firstQ) > 30) {
-            var textConst = (firstQ/2)-b; // b is 3 and c is 2 for Lighting Average,
-            var texts = [{text:"LOW", x: textConst}, { text:"MEDIUM", x: firstQ + c }, {text:"HIGH",x:secondQ + textConst}];
+            var tConst = (firstQ/2)-6;
+            var tConst2 = (secondQ - firstQ)/2;
+            var tConst3 = (270 - secondQ)/2;
+            var texts = [{text:"LOW", x: tConst}, { text:"MEDIUM", x: firstQ + tConst2 - 12}, {text:"HIGH",x:secondQ + tConst3 - 7}];
             var g = chart.select("svg").append("g").attr("transform", "translate(" + chrtMargins.left + "," + chrtMargins.top + ")");
             var newChart = g.selectAll("text").data(texts);
             

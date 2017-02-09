@@ -814,6 +814,18 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     left: 10px;
 }
 
+#instaDen_digits {
+    font-size:24px;
+    font-family:Dosis;
+    font-weight:300;
+    margin-top:2px
+
+}
+
+#instaDen_digits_o {
+    font-size:6px;
+}
+
 #busPri_digits{
     font-size:24px;
     font-family:Dosis;
