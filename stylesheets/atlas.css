@@ -16,7 +16,7 @@
 }
 
 html {
-    overflow: hidden;
+    overflow: scroll;
 }
 
 .container- {
@@ -33,7 +33,7 @@ body{
 }
 a {
     text-decoration:none;
-    color:rgb(32, 192, 226);;
+    color:rgb(32, 192, 226);
 }
 a:hover{
     text-decoration:none;
@@ -89,11 +89,21 @@ a:hover{
 .largeContent{
     font-size:36px;
 }
+.section-title-no-indent{
+    font-size:20px;
+    letter-spacing:1px;
+    color:#fff;
+}
 .section-title{
     font-size:20px;
     letter-spacing:1px;
     color:#fff;
     margin-left:-20px;
+}
+.subsection-title-no-indent{
+    font-size:14px;
+    letter-spacing:2px;
+    color:#fff;    
 }
 .subsection-title{
     font-size:14px;
@@ -115,15 +125,17 @@ a:hover{
     padding-top:10px;
 }
 #about-1{
-    letter-spacing:1px;
-    font-size:12px;
+    font-family: Dosis;
+    line-height: 30px;
+    letter-spacing: 2px;
+    font-size:21px;
     position:absolute;
-    width:30%;
+    width:50%;
     left:5%;
     padding:30px;
     padding-top:60px;
 }
-#about-2{
+/*#about-2{
     letter-spacing:1px;
     font-size:12px;
     position:absolute;
@@ -131,13 +143,14 @@ a:hover{
     left:35%;
     padding:30px;
     padding-top:60px;
-}
+}*/
 #about-3{
+    line-height: 15px;
     letter-spacing:1px;
     font-size:12px;
     position:absolute;
     width:30%;
-    left:70%;
+    left:65%;
     padding:30px;
     padding-top:60px;
 }
