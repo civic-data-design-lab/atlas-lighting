@@ -978,32 +978,25 @@ function charts(data, selectedCharts) {
         .x(d3.scale.linear().domain([1, 150]))
         //.y(d3.scale.linear().domain([0, 800]))        
         .centerBar(true)
-         .elasticY(true)
-        .on('renderlet', function(chart){
-            /*
-            window.newData = OBIaverageDimension.top(Infinity);
-            var extent = d3.extent(data, function(d){return d.OBIaverage});
-            var sorted = data.map(function(d){return d.OBIaverage}).sort(function(a, b){return a - b});
-            var quants = quantileCalc(extent, sorted, actChrtWidth);
-            if (appendableObiAvg ){
-                addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6);
-                appendableObiAvg  = false;
-            }
-            */
-            var extent = d3.extent(data, function(d){return d.OBIaverage});
-            console.log(extent);
-            window.newData = insDimension.top(Infinity);
-            var median = d3.median(window.newData, function(el){return parseInt(el.population)} );
-            //var correspond = thisQuantile(median, extent, quants.first, quants.second);
-
-            bindSmallText(median, "#OBIaverage_digits", "#OBIaverage_digits_o");
-            
-        })
-        .on('postRender', function(chart) {
-            drawLabels(chart, "# OF BUSINESSES", "# OF CELLS");
-        })
+        .elasticY(true)
         .gap(1)
         .brushOn(true)
+        .on('renderlet', function(chart){
+            var OBIaverage_digits = d3.mean(window.newData, function(el){return el.OBIaverage>0;});
+            bindSmallText((OBIaverage_digits/(24)).toFixed(2), "#OBIaverage_digits");
+
+        })
+        .on('postRender', function(chart) {
+            chart.svg().append('text').attr('class', 'y-label').attr('text-anchor', 'middle')
+                .attr('x', -60).attr('y', 35).attr('dy', '-25').attr('transform', 'rotate(-90)')
+                .text('# OF CELLS').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
+                .style("font-size", "8px");
+
+            chart.svg().append('text').attr('class', 'x-label').attr('text-anchor', 'middle')
+                .attr('x', 170).attr('y', 120).attr('dy', '-25')
+                .text('AVERAGE # OF OPEN BUSINESSES').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
+                .style("font-size", "8px");
+        }) 
         .yAxis().ticks(2)
 
 
@@ -1478,8 +1471,8 @@ function timeSelector(chartWidth,chartHeight) {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 	svg.append("rect")
-	    .attr("width", 280)
-	    .attr("height", width-30)
+	    .attr("width", width-30)
+	    .attr("height", 2)
         .attr("fill", "rgb(50,50,50)").attr("stroke","rgba(255,255,255,0.3)");
 
 	var context = svg.append('g')
@@ -1578,9 +1571,8 @@ function filterhour(data, rdstart, rdend){
 }
 
 function timeSelectorReset() {
-   filterhour(window.newData, 0, 24);
+    filterhour(window.newData, 0, 24);
 };
-
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 //  updateOBI(dataUpdate, start, end)  --- dc.js ---                          //
@@ -1617,7 +1609,14 @@ function updateOBI(dataUpdate,start,end){
     .width(chartWidth_)
     .height(chartHeight_)
     .group(OBIpercentGroup_)
-    .dimension(OBIpercentDimension_);   
+    .dimension(OBIpercentDimension_)
+    .elasticY(true)
+    .on('renderlet', function(chart){
+        var OBIpercent_digits = d3.mean(dataUpdate, function(el){return el.OBIpercentage>0;});
+        bindSmallText((OBIpercent_digits/(end-start)*100).toFixed(2), "#OBIpercent_digits");
+
+    })
+
 
 
     var OBIaverageDimension_ = cf.dimension(function (d) { return d.OBIaverage });
@@ -1626,8 +1625,12 @@ function updateOBI(dataUpdate,start,end){
     .width(chartWidth_)
     .height(chartHeight_)
     .group(OBIaverageGroup_)
-    .dimension(OBIaverageDimension_);    
-
+    .dimension(OBIaverageDimension_)
+    .elasticY(true)
+    .on('renderlet', function(chart){
+        var OBIaverage_digits = d3.mean(dataUpdate, function(el){return el.OBIaverage>0;});
+        bindSmallText((OBIaverage_digits/(end-start)).toFixed(2), "#OBIaverage_digits");
+    })
 
     dc.redrawAll();
 }
