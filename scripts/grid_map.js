@@ -821,8 +821,8 @@ function charts(data, selectedCharts) {
 
     var chartMargins = {top: 8, left: 40, right: 10, bottom: 30};//20 //{top: 0, left: 50, right: 10, bottom: 20};
 
-    window.ndx = crossfilter(data);
-    var all = window.ndx.groupAll();
+    var ndx = crossfilter(data);
+    var all = ndx.groupAll();
 
     /* Creating an array of objects
      * containing business types and their sum for each city.
@@ -832,7 +832,7 @@ function charts(data, selectedCharts) {
 
     var typeSums = [];
     busTypes.forEach(function(el){
-        var typeSum = window.ndx.groupAll().reduceSum(function(d){return d[el];}).value();
+        var typeSum = ndx.groupAll().reduceSum(function(d){return d[el];}).value();
         if (typeSum){
             typeSums.push({
                 category: el, 
@@ -853,12 +853,12 @@ function charts(data, selectedCharts) {
     //                                                                            //
     ////////////////////////////////////////////////////////////////////////////////
 
-    var busDivDimension = window.ndx.dimension(function (d) {
+    var busDivDimension = ndx.dimension(function (d) {
         return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0
     });
     var busDivGroup = busDivDimension.group();
 
-    var latDimension = window.ndx.dimension(function (d) {
+    var latDimension = ndx.dimension(function (d) {
         return d.lat
     });
 
@@ -866,7 +866,7 @@ function charts(data, selectedCharts) {
      * 
     */
 
-    var insDimension = window.ndx.dimension(function (d) { 
+    var insDimension = ndx.dimension(function (d) { 
         if(d.insta_cnt > 50 ) return 50;
         else return d.insta_cnt });
     var insGroup = insDimension.group()
@@ -891,7 +891,7 @@ function charts(data, selectedCharts) {
         .y(d3.scale.linear().domain([0, 600]))
     window.insChart.yAxis().ticks(2)
 
-    var insLikesDimension = window.ndx.dimension(function (d) { 
+    var insLikesDimension = ndx.dimension(function (d) { 
         if(d.insta_like > 500 ) return 500; //1000
         else return d.insta_like })
 
@@ -911,7 +911,7 @@ function charts(data, selectedCharts) {
         .y(d3.scale.linear().domain([0, 20]))
     window.insLikesChart.yAxis().ticks(2)
 
-    var busPriDimension = window.ndx.dimension(function (d) {return d.b_price;});
+    var busPriDimension = ndx.dimension(function (d) {return d.b_price;});
     var busPriGroup = busPriDimension.group()
 
     window.busPriChart.width(chartWidth).height(chartHeight)
@@ -931,7 +931,7 @@ function charts(data, selectedCharts) {
         .centerBar(true)
         .yAxis().ticks(2);
 
-    var OBIpercentDimension = window.ndx.dimension(function (d) { return d.OBIpercentage; });
+    var OBIpercentDimension = ndx.dimension(function (d) { return d.OBIpercentage; });
     var OBIpercentGroup = OBIpercentDimension.group().reduceSum(function(d){return d.OBIpercentage>0;});
 
     window.OBIpercent.width(chartWidth).height(100)
@@ -968,7 +968,7 @@ function charts(data, selectedCharts) {
         .yAxis().ticks(2);
 
 
-    var OBIaverageDimension = window.ndx.dimension(function (d) { return d.OBIaverage });
+    var OBIaverageDimension = ndx.dimension(function (d) { return d.OBIaverage });
     var OBIaverageGroup = OBIaverageDimension.group();
     var appendableObiAvg = true;
     window.OBIaverage.width(chartWidth).height(100)
@@ -1042,7 +1042,7 @@ function charts(data, selectedCharts) {
      * 
     */
 
-    var placesDimension = window.ndx.dimension(function (d) { 
+    var placesDimension = ndx.dimension(function (d) { 
         if (d.places>100) return 100; 
         else return d.places });
     var placesGroup = placesDimension.group()
@@ -1078,7 +1078,7 @@ function charts(data, selectedCharts) {
 
     var chartColors = { "1": "#fff7bc", "2": "#fee391", "3": "#fec44f", "4": "#fee0d2", "5": "#fc9272", "6": "#de2d26", "7": "#deebf7", "8": "#9ecae1", "9": "#3182bd" }
     
-    var devIntDimension = window.ndx.dimension(function (d) { return parseInt(d.dev_intensity) });
+    var devIntDimension = ndx.dimension(function (d) { return parseInt(d.dev_intensity) });
     var devIntGroup = devIntDimension.group();
     var appendableDev = true;
 
@@ -1113,7 +1113,7 @@ function charts(data, selectedCharts) {
      * We are calculating predefined ranges to represent low, medium and high intensities of light.
     */
 
-    var ligAveDimension = window.ndx.dimension(function (d) { return parseInt(d.averlight) });
+    var ligAveDimension = ndx.dimension(function (d) { return parseInt(d.averlight) });
     var laGroup = ligAveDimension.group();
     
     /*
@@ -1154,7 +1154,7 @@ function charts(data, selectedCharts) {
      * We are dividing the distribution into three quantiles: low, medium and high 
     */
 
-    var popDimension = window.ndx.dimension(function (d) { return parseInt(d.population) })
+    var popDimension = ndx.dimension(function (d) { return parseInt(d.population) })
     var pGroup = popDimension.group();
     var topPop = pGroup.top(2);
     var maxPopY = topPop[1].value;
@@ -1196,7 +1196,7 @@ function charts(data, selectedCharts) {
      * We are dividing the distribution into three quantiles: low, medium and high 
     */
 
-    var incomeDimension = window.ndx.dimension(function (d) {
+    var incomeDimension = ndx.dimension(function (d) {
         return parseInt(parseFloat(d.income) / 1000) * 1000;
     });
     var iGroup = incomeDimension.group();
@@ -1249,7 +1249,7 @@ function charts(data, selectedCharts) {
     incomeChart.xAxis().ticks(4)
 
     dc.dataCount(".dc-data-count")
-        .dimension(window.ndx)
+        .dimension(ndx)
         .group(all)
         // (optional) html, for setting different html for some records and all records.
         // .html replaces everything in the anchor with the html given using the following function.
@@ -1502,7 +1502,7 @@ function timeSelector(chartWidth,chartHeight) {
 	    .attr("x", -4).attr("y",20)
 	    .style("text-anchor", null);
 
-    d3.select(".extent").attr("height", 29).attr("class", "brushItemRect");
+	d3.select(".extent").attr("height", 29);
 	d3.select(".background").attr("height", 50);
 	d3.selectAll(".resize rect").attr("height", 29);
     d3.selectAll(".tick line").style("opacity","0.3");
@@ -1571,7 +1571,6 @@ function filterhour(data, rdstart, rdend){
 }
 
 function timeSelectorReset() {
-    d3.selectAll('.brushItem').select('rect.extent').attr('width', 270).attr('x', 0);
     filterhour(window.newData, 0, 24);
 };
 ////////////////////////////////////////////////////////////////////////////////
@@ -1584,8 +1583,8 @@ function timeSelectorReset() {
 function updateOBI(dataUpdate,start,end){
     var chartHeight_ = 100;
     var chartWidth_ = 320;
-    // var cf = crossfilter(dataUpdate);
-    window.ndx.remove();
+    var cf = crossfilter(dataUpdate);
+    cf.remove();
     dataUpdate.forEach(function (d) {
         d.OBIaverage = 0;
         d.count = +d.business_opening_count;
@@ -1601,9 +1600,9 @@ function updateOBI(dataUpdate,start,end){
             d.OBIpercentage = 0;
         }
     });
-    window.ndx.add(dataUpdate);
+    cf.add(dataUpdate);
 
-    var OBIpercentDimension_ = window.ndx.dimension(function (d) { return d.OBIpercentage });
+    var OBIpercentDimension_ = cf.dimension(function (d) { return d.OBIpercentage });
     var OBIpercentGroup_ = OBIpercentDimension_.group().reduceSum(function(d){return d.OBIpercentage>0;});
 
     window.OBIpercent
@@ -1620,7 +1619,7 @@ function updateOBI(dataUpdate,start,end){
 
 
 
-    var OBIaverageDimension_ = window.ndx.dimension(function (d) { return d.OBIaverage });
+    var OBIaverageDimension_ = cf.dimension(function (d) { return d.OBIaverage });
     var OBIaverageGroup_ = OBIaverageDimension_.group();              
     window.OBIaverage
     .width(chartWidth_)
@@ -1844,7 +1843,7 @@ var quantileCalc = function(extent, sorted, width){
     var secondQ = d3.quantile(sorted, 0.66);
     var xOfFirstQ = width*(firstQ/(extent[1]-extent[0]));
     var xOfSecondQ = width*(secondQ/(extent[1]-extent[0]));
-    return {firstX: xOfFirstQ, second: xOfSecondQ, first:firstQ, second:secondQ}
+    return {firstX: xOfFirstQ, secondX: xOfSecondQ, first:firstQ, second:secondQ}
 }
 
 
