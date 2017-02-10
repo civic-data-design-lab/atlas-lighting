@@ -277,10 +277,10 @@ function initControl() {
             }, 300, function () { });
             $("#todrop").show();
             $("#zoomIn").animate({
-                left: "350px"
+                left: "345px"
             }, 300, function () { });                
             $("#zoomOut").animate({
-                left: "380px"
+                left: "390px"
             }, 300, function () { });
             setTimeout(function(){
                $('.gradient_container').show(); 
@@ -294,7 +294,7 @@ function initControl() {
                 left: "50px"
             }, 300, function () { });                
             $("#zoomOut").animate({
-                left: "80px"
+                left: "95px"
             }, 300, function () { });    
             $(".left_back").animate({
                 left: "-335px",
@@ -329,10 +329,10 @@ function initControl() {
             }, 300, function () { });
             $("#todrop").show();
             $("#zoomIn").animate({
-                left: "350px"
+                left: "345px"
             }, 300, function () { });                
             $("#zoomOut").animate({
-                left: "380px"
+                left: "390px"
             }, 300, function () { });   
             setTimeout(function(){
                $('.gradient_container').show(); 
@@ -358,7 +358,7 @@ function initControl() {
                 left: "50px"
             }, 300, function () { });                
             $("#zoomOut").animate({
-                left: "80px"
+                left: "95px"
             }, 300, function () { });    
 
             setTimeout(function(){
@@ -913,7 +913,7 @@ function charts(data, selectedCharts) {
         .x(d3.scale.ordinal().domain(["0", "100","200","300","400","500","600", "700", "800", "900", "1000"]))
         .xUnits(dc.units.ordinal)
         // .y(d3.scale.linear().domain([0, 20]))
-    window.insLikesChart.yAxis().ticks(2)
+    window.insLikesChart.yAxis().ticks(2);
 
     var busPriDimension = ndx.dimension(function (d) {return d.b_price;});
     var busPriGroup = busPriDimension.group()
