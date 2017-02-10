@@ -160,6 +160,7 @@ function showCase(caseNum, pageNum){
 
 $("#hide_cases").click(function () {
 	dataDidLoad(null, window.old_data)
+	window.old_data = undefined
 	__map.setZoom(window.old_zoom)
 	__map.setCenter(window.old_center)
 	__map.fire("move")
@@ -189,11 +190,15 @@ $("#case_studies #case_study_1").click(function () {
     $("#case-info #case-1").show()
     showCase(1, 1)
 })
+
 $("#case_studies #case_study_2").click(function () {
-	window.old_data = window.mydata
-	window.old_zoom = __map.getZoom()
-	window.old_center = __map.getCenter()
-	dataDidLoad(null, window.chicago_data)
+	if (window.old_data == undefined){
+		window.old_data = window.mydata
+		window.old_zoom = __map.getZoom()
+		window.old_center = __map.getCenter()
+		dataDidLoad(null, window.chicago_data)
+	}
+
     $("#case-info #case-1").hide()
     $("#case-info #case-2").show()
     showCase(2, 1)
