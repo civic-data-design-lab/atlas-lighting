@@ -630,6 +630,10 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     top: calc(20% + 20px);
 }
 
+#case-text {
+    font-size: 15px;
+}
+
 .selectedTab {
     background-color: rgba(150,150,150,1) !important;
 }

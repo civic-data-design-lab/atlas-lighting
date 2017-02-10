@@ -7,6 +7,10 @@ jQuery.fn.d3Click = function () {
   });
 };
 
+function updateAndSelectCharts(charts){
+	selectedCharts = charts
+	updateZoomedChart(selectedCharts);
+}
 
 // 2d array of functions to be run ([i][j] = case i, page j)
 var currCase = -1
@@ -38,7 +42,7 @@ function showCase(caseNum, pageNum){
 			$("#yAxisData").val("GMP_2013")
 			d3.select("#xAxisData").on("change")()
 			d3.select("#yAxisData").on("change")()
-			updateZoomedChart([])
+			updateAndSelectCharts([])
 			break;
 		case 2:
 			$("#case-text").html(
@@ -66,7 +70,7 @@ function showCase(caseNum, pageNum){
 			$("#cases").hide()
 			$("#map").show()
 			$("#map-info").show()
-			updateZoomedChart(["income"])
+			updateAndSelectCharts(["income"])
 			break;
 		}
 		break;
@@ -86,39 +90,43 @@ function showCase(caseNum, pageNum){
 			__map.setZoom(8);
 			__map.setCenter(new mapboxgl.LngLat(-87.39999999999993,41.84692829282653));
 			__map.fire("move");
-			updateZoomedChart([])
+			updateAndSelectCharts([])
 			break;
 		case 2:
 			$("#case-text").html(
 				'<p>This is Case 2, Page 2. Analysis of low income. The method is simple. First, we define our range from $0 to $45,000 per year in order to select the cells that belong to lower income tier. This gives us an average lighting intensity for the low income cells. We repeat the same procedure for the middle and upper income tiers. Finally, we aggregate all three intensities together to relate them to each other. The values show us that lighting intensity of lighting is inversely proportional to household median income. As income increases, the lighting intensity decreases. This relationship has several implications. </p>')
 
 			$("#map-info").show()
-			incomeChart.focus([0,45000])
-			updateZoomedChart(["income"])
+			incomeChart.filter([0, 58000])
+			incomeChart._doRedraw()
+			updateAndSelectCharts(["income"])
 			break;
 		case 3:
 			$("#case-text").html(
 				'<p>This is Case 2, Page 3. Medium income. The method is simple. First, we define our range from $0 to $45,000 per year in order to select the cells that belong to lower income tier. This gives us an average lighting intensity for the low income cells. We repeat the same procedure for the middle and upper income tiers. Finally, we aggregate all three intensities together to relate them to each other. The values show us that lighting intensity of lighting is inversely proportional to household median income. As income increases, the lighting intensity decreases. This relationship has several implications. </p>')
 
-			incomeChart.focus([45000,57000])
+			incomeChart.filter([58000,84000])
+			incomeChart._doRedraw()
 			break;
 		case 4:
 			$("#case-text").html(
 				'<p>This is Case 2, Page 4. High Income. The method is simple. First, we define our range from $0 to $45,000 per year in order to select the cells that belong to lower income tier. This gives us an average lighting intensity for the low income cells. We repeat the same procedure for the middle and upper income tiers. Finally, we aggregate all three intensities together to relate them to each other. The values show us that lighting intensity of lighting is inversely proportional to household median income. As income increases, the lighting intensity decreases. This relationship has several implications. </p>')
 
-			incomeChart.focus([57000,250000])
-			updateZoomedChart(["income"])
+			incomeChart.filter([84000, 250000])
+			incomeChart._doRedraw()
+			updateAndSelectCharts(["income"])
 			break;
 		case 5:
 			$("#case-text").html(
 				'<p>This is Case 2, Page 5. Chicago urban high population density with streetview. In Chicago Metropolitan Statistical Area , we see that a large proportion of the high intensity lightings occur within the Cook county, whereas low lighting areas occur in suburban and rural areas.  Cook county has higher population density than outer suburbs, with more of the population living inside multi-floored townhouses and apartment buildings. The urban fabric is dense and street lighting network is tightly connected.</p>')
-			incomeChart.focus([0,250000])
+			incomeChart.filter([0, 250000])
+			dc.redrawAll()
 
 			__map.setZoom(13);
 			__map.setCenter(new mapboxgl.LngLat(-87.60073880988456,41.80349170325138));
 			__map.fire("move");
 			$("rect#c259733").d3Click()
-			updateZoomedChart(["income", "street_view"])
+			updateAndSelectCharts(["income", "street_view"])
 			break;
 		case 6:
 			$("#case-text").html(
@@ -128,7 +136,7 @@ function showCase(caseNum, pageNum){
 			__map.setCenter(new mapboxgl.LngLat(-87.825248146057,41.829015128986356));
 			__map.fire("move");
 			$("rect#c252893").d3Click()
-			updateZoomedChart(["income", "street_view"])
+			updateAndSelectCharts(["income", "street_view"])
 			break;
 		case 7:
 			$("#case-text").html(
@@ -138,7 +146,7 @@ function showCase(caseNum, pageNum){
 			__map.setZoom(8);
 			__map.setCenter(new mapboxgl.LngLat(-87.39999999999993,41.84692829282653));
 			__map.fire("move");
-			updateZoomedChart([])
+			updateAndSelectCharts([])
 			break;
 		}
 		break;
