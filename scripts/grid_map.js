@@ -897,11 +897,18 @@ function charts(data, selectedCharts) {
         .y(d3.scale.linear().domain([0, 600]))
     window.insChart.yAxis().ticks(2)
 
+    var insLikesDimension = window.ndx.dimension(function(d) { 
+       if (d.insta_like > 1) {return d.insta_like}
+       else {return 0};
+    });
+
+
     var insLikesDimension = window.ndx.dimension(function (d) { 
         if(d.insta_like > 500 ) return 500; //1000
         else return d.insta_like })
 
-    var insLikesGroup = insLikesDimension.group()
+
+    var insLikesGroup = insLikesDimension.group().reduceSum(function(d){return d.insta_like>0;});
 
     window.insLikesChart.width(chartWidth).height(chartHeight)
         .dimension(insLikesDimension).group(insLikesGroup)
@@ -914,10 +921,11 @@ function charts(data, selectedCharts) {
         })
         // .centerBar(true)
         .on('postRender', function(chart){
-            drawLabels(chart, "LIKES", "# OF CELLS");
+            drawLabels(chart, "# OF LIKES", "# OF CELLS");
+            // chart.selectAll("rect.bar").on("click", chart.onClick);
         })
         // .x(d3.scale.linear().domain([1, 1001]))
-        .x(d3.scale.ordinal().domain(["0", "100","200","300","400","500","600", "700", "800", "900", "1000"]))
+        .x(d3.scale.ordinal().domain(["0", "10","20","30","40","50","60", "70", "80", "90", "100+"]))
         .xUnits(dc.units.ordinal)
         // .y(d3.scale.linear().domain([0, 20]))
     window.insLikesChart.yAxis().ticks(2);
