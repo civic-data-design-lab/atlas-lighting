@@ -1844,7 +1844,7 @@ var quantileCalc = function(extent, sorted, width){
     var secondQ = d3.quantile(sorted, 0.66);
     var xOfFirstQ = width*(firstQ/(extent[1]-extent[0]));
     var xOfSecondQ = width*(secondQ/(extent[1]-extent[0]));
-    return {firstX: xOfFirstQ, second: xOfSecondQ, first:firstQ, second:secondQ}
+    return {firstX: xOfFirstQ, secondX: xOfSecondQ, first:firstQ, second:secondQ}
 }
 
 
