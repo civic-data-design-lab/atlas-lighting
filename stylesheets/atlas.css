@@ -814,6 +814,13 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     top:14px;
 }
 
+.cell_digits {
+    font-size: 6px;
+    font-family:Dosis;
+    font-weight:300;
+    top:30px;
+}
+
 #helper_digits {
     color: rgb(32, 192, 226);
     font-size: 20px;
@@ -876,6 +883,10 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 
 #light_third {
     margin-top:25px;
+}
+
+#cell_first {
+    margin-top:0px;
 }
 
 

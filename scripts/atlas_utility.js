@@ -6,7 +6,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-/* Convert Thousands to K format. @Jake Feasel
+/* Convert Thousands to K format. Code by @Jake Feasel.
  */
 
 function kFormatter(num) {
@@ -74,7 +74,7 @@ var bindSmallText = function(median, selection_1){
     $(selection_1).attr("sv_val", newText);
 }
 
-/* Utility function to bind text to a DOM element.
+/* Utility function to bind text to the businessPrice chart.
  */
 
 

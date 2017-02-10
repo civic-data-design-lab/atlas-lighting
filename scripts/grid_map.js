@@ -551,7 +551,7 @@ function initCanvas(data) {
                 .attr("class", "cellgrids")
                 .on("click", function () {
 
-                    if (map.getZoom() >= 12) {
+                    if (map.getZoom() >= 0) { //12
                         var mypos = $(this).position();
                         var thisradius = 6 / 1400 * Math.pow(2, map.getZoom());
 
@@ -1206,7 +1206,7 @@ function charts(data, selectedCharts) {
             
         })
         .on('postRender', function(chart) {
-            drawLabels(chart, "PEOPLE", "# OF CELLS");
+            drawLabels(chart, "PEOPLE PER ACRE", "# OF CELLS");
         }) 
         .yAxis().ticks(2)
         
@@ -1433,7 +1433,7 @@ function updateZoomedChart(selectedCharts) {
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
-//  updateZoomedChart(selectedCharts)                                         //
+//  updateChart(selectedCharts)                                               //
 //                                                                            //
 //  Selecting which charts show on the right panel                            //
 //                                                                            //
