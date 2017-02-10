@@ -83,10 +83,12 @@ var myinit = function () {
     firebase.initializeApp(config);
     var rootRef = firebase.database().ref();
 
-    d3.queue()
-        .defer(d3.csv, "../data/" + currentCity_o + "_grid.csv"/*"grids/" + currentCity*/)
-        //.defer(d3.json, "data/"+currentCity+"_zipcode.json"/*"zipcode_business_geojson/" + currentCity*/)
-        .await(dataDidLoad);
+    var q = d3.queue().defer(d3.csv, "../data/" + currentCity_o + "_grid.csv"/*"grids/" + currentCity*/)
+    if (currentCity_o != "Chicago"){
+        q.defer(d3.csv, "../data/" + "Chicago" + "_grid.csv"/*"grids/" + currentCity*/)
+    }
+    //.defer(d3.json, "data/"+currentCity+"_zipcode.json"/*"zipcode_business_geojson/" + currentCity*/)
+    q.await(dataDidLoad);
 }
 
 
@@ -97,7 +99,11 @@ var myinit = function () {
 //  Checks successful data load                                               //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
-function dataDidLoad(error, grid) {
+
+function dataDidLoad(error, grid, chicago_data) {
+    if (chicago_data) {
+        window.chicago_data = chicago_data
+    }
     d3.select("#loader").transition().duration(600).style("opacity", 0).remove();
 
     window.dataLst = Object.keys(grid[0])

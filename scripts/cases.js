@@ -105,8 +105,11 @@ function showCase(caseNum, pageNum){
 			$("#case-text").html(
 				'<p>This is Case 2, Page 3. Medium income. The method is simple. First, we define our range from $0 to $45,000 per year in order to select the cells that belong to lower income tier. This gives us an average lighting intensity for the low income cells. We repeat the same procedure for the middle and upper income tiers. Finally, we aggregate all three intensities together to relate them to each other. The values show us that lighting intensity of lighting is inversely proportional to household median income. As income increases, the lighting intensity decreases. This relationship has several implications. </p>')
 
+			$("#map-info").show()
+
 			incomeChart.filter([58000,84000])
 			incomeChart._doRedraw()
+			updateAndSelectCharts(["income"])
 			break;
 		case 4:
 			$("#case-text").html(
@@ -156,12 +159,18 @@ function showCase(caseNum, pageNum){
 }
 
 $("#hide_cases").click(function () {
+	dataDidLoad(null, window.old_data)
+	__map.setZoom(window.old_zoom)
+	__map.setCenter(window.old_center)
+	__map.fire("move")
     $("#cases").hide();
     $("#case-info").hide();
     $("#case-navigation").hide()
     $("#export").show()
     $("#map").show();
     $("#map-info").show();
+    __map.setZoom(8);
+    $(".dc-chart").hide();
 })
 
 $("#case_studies .data_item").click(function () {
@@ -172,6 +181,7 @@ $("#case_studies .data_item").click(function () {
     $("#case-navigation").show()
     $("#cases").show();
     $("#case-info").show();
+    $(".dc-chart").hide();
 })
 
 $("#case_studies #case_study_1").click(function () {
@@ -180,14 +190,20 @@ $("#case_studies #case_study_1").click(function () {
     showCase(1, 1)
 })
 $("#case_studies #case_study_2").click(function () {
+	window.old_data = window.mydata
+	window.old_zoom = __map.getZoom()
+	window.old_center = __map.getCenter()
+	dataDidLoad(null, window.chicago_data)
     $("#case-info #case-1").hide()
     $("#case-info #case-2").show()
     showCase(2, 1)
 })
 
 $("#case-navigation .nav-next").click(function(){
+	$(".dc-chart").hide();
 	showCase(currCase, currPage + 1)
 })
 $("#case-navigation .nav-prev").click(function(){
+	$(".dc-chart").hide();
 	showCase(currCase, currPage - 1)
 })
