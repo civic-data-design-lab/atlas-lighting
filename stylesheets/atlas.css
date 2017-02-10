@@ -869,6 +869,15 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     font-size:6px;
 }
 
+#light_digits_o {
+    font-size: 36px;
+    margin-top:7px;
+}
+
+#light_third {
+    margin-top:25px;
+}
+
 
 
 #export {
