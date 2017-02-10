@@ -1582,7 +1582,8 @@ function filterhour(data, rdstart, rdend){
 
     if (count_!==0) {
         ave_lit /= count_;
-        ave_lit = Math.round(ave_lit * 100) / 100; 
+        ave_lit = Math.round(ave_lit); 
+        console.log(ave_lit);
         d3.select("#light_digits_o").text(ave_lit);
         d3.select("#light_digits_o").attr("sv_val", ave_lit);
     }
