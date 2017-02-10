@@ -1238,6 +1238,8 @@ p#export_btn.mybtn {
     left: 391px;
 }
 
+button:focus {outline:0;}
+
 #business_opening_percent.dc-chart > svg > g{
     fill-opacity: 1;
 }
