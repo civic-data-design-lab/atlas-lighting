@@ -1028,6 +1028,7 @@ function charts(data, selectedCharts) {
         .y(d3.scale.linear().domain([0, 1]))
         //.r(d3.scale.linear().domain([0, window.count*5]))
         .colors(["#808080"])
+        //.elasticRadius([true])
         .keyAccessor(function (p) {
             return p.key;
         })
@@ -1035,7 +1036,7 @@ function charts(data, selectedCharts) {
             return 0.5;
         })
         .radiusValueAccessor(function (p) {
-            return p.value/window.count*chartHeight*4/5;
+            return p.value/window.count*chartHeightBusDiv*4/5;
         })
         .label(function (p) {
             return p.value
@@ -1582,8 +1583,7 @@ function filterhour(data, rdstart, rdend){
 
     if (count_!==0) {
         ave_lit /= count_;
-        ave_lit = Math.round(ave_lit); 
-        console.log(ave_lit);
+        ave_lit = Math.round(ave_lit);
         d3.select("#light_digits_o").text(ave_lit);
         d3.select("#light_digits_o").attr("sv_val", ave_lit);
     }
