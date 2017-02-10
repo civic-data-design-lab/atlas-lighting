@@ -879,7 +879,6 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 }
 
 
-
 #export {
     position: fixed;
     width: 430px;    
