@@ -942,10 +942,10 @@ function charts(data, selectedCharts) {
         .gap(1)
         .on('renderlet', function(chart){
             var median = d3.median(window.newData, function(el){return el.b_price;});
-            bindDollarText(median, "#busPri_digits");
+            bindPriceText(median, "#busPri_digits");
         })
         .on('postRender', function(chart) {
-            drawLabels(chart, "DOLLARS (THOUSANDS)", "# OF CELLS");
+            drawLabels(chart, "PRICE LEVEL", "# OF CELLS");
         })
         .centerBar(true)
         .yAxis().ticks(2);
@@ -1475,10 +1475,10 @@ function updateChart(selectedCharts) {
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 function timeSelector(chartWidth,chartHeight) {
-    var start = 0; //starting point of brush on chart
-    var end = 24; //ending point of brush on chart
-    var start0 = 0; //starting point for code before anyone interacts with brush
-    var end0 = 24; //ending point for code before anyone interacts with brush
+    var start = 0; //starting point of brush on chart  // 0
+    var end = 24; //ending point of brush on chart  // 24
+    var start0 = 0; //starting point for code before anyone interacts with brush  // 0
+    var end0 = 24; //ending point for code before anyone interacts with brush // 24
     var margin = { top: 20, left: 30, right: 0, bottom: 0 },
         width = 300,
         height = 32;
@@ -1536,7 +1536,7 @@ function timeSelector(chartWidth,chartHeight) {
         brush.extent([rdstart,rdend]);
         
         if (rdend - rdstart == 0){
-            $('#business_opening_percent').find('#selected_time').text(0+" - "+24);
+            $('#business_opening_percent').find('#selected_time').text(0+" - "+24); // 0 - 24
             filterhour(window.newData, rdstart, rdend);
             if (selectedCharts.includes("business_opening_average") || selectedCharts.includes("business_opening_percent")) {updateOBI(window.newData, rdstart,rdend);}
         }

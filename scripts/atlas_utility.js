@@ -74,6 +74,16 @@ var bindSmallText = function(median, selection_1){
     $(selection_1).attr("sv_val", newText);
 }
 
+/* Utility function to bind text to a DOM element.
+ */
+
+
+var bindPriceText = function(median, selection_1){
+    var newText =`${median}x$`;
+    $(selection_1).html(newText);
+    $(selection_1).attr("sv_val", newText);
+}
+
 
 
 /* Utility function to bind text to a DOM element.
