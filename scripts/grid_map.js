@@ -892,23 +892,27 @@ function charts(data, selectedCharts) {
     window.insChart.yAxis().ticks(2)
 
     var insLikesDimension = ndx.dimension(function (d) { 
-        if(d.insta_like > 500 ) return 500; //1000
-        else return d.insta_like })
+       return d.insta_like;
+    });
 
-    var insLikesGroup = insLikesDimension.group()
+
+    var insLikesGroup = insLikesDimension.group().reduceSum(function(d){return d.insta_like>0;});
 
     window.insLikesChart.width(chartWidth).height(chartHeight)
         .group(insLikesGroup).dimension(insLikesDimension)
-        //.elasticY(true)
-        .ordinalColors(["#aaaaaa"])
-        .gap(0)
         .margins(chartMargins)
-        .centerBar(true)
+        .elasticY(true)
+        .ordinalColors(["#aaaaaa"])
+        .gap(5)
+        // .centerBar(true)
         .on('postRender', function(chart){
             drawLabels(chart, "LIKES", "# OF CELLS");
+            chart.selectAll("rect.bar").on("click", chart.onClick);
         })
-        .x(d3.scale.linear().domain([1, 1001]))
-        .y(d3.scale.linear().domain([0, 20]))
+        // .x(d3.scale.linear().domain([1, 1001]))
+        .x(d3.scale.ordinal().domain(["0", "100","200","300","400","500","600", "700", "800", "900", "1000"]))
+        .xUnits(dc.units.ordinal)
+        // .y(d3.scale.linear().domain([0, 20]))
     window.insLikesChart.yAxis().ticks(2)
 
     var busPriDimension = ndx.dimension(function (d) {return d.b_price;});
@@ -948,7 +952,6 @@ function charts(data, selectedCharts) {
         // .on('renderlet', function(_chart){
         //   _chart.selectAll("rect.bar").on("click", _chart.onClick);
         // })
-        // .yAxisLabel("Cells", 10)
        .on('renderlet', function(chart){
             var OBIpercent_digits = d3.mean(window.newData, function(el){return el.OBIpercentage>0;});
             bindSmallText((OBIpercent_digits/(24)*100).toFixed(2), "#OBIpercent_digits");

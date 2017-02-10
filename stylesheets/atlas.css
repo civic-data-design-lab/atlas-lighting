@@ -966,8 +966,7 @@ div#streetview_window {
 #street_view_plc {
     display: none;
 }
-#street_view_plc0 {
-}
+
 #streetview_window {
     opacity: 0;
     position: absolute;
