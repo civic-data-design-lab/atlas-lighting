@@ -892,22 +892,27 @@ function charts(data, selectedCharts) {
     window.insChart.yAxis().ticks(2)
 
     var insLikesDimension = window.ndx.dimension(function (d) { 
-        if(d.insta_like > 500 ) return 500; //1000
-        else return d.insta_like })
+        if (d.insta_like > 500 ) return 500; //1000
+        else return d.insta_like ;
+    });
 
-    var insLikesGroup = insLikesDimension.group()
+    var insLikesGroup = insLikesDimension.group();
 
     window.insLikesChart.width(chartWidth).height(chartHeight)
         .group(insLikesGroup).dimension(insLikesDimension)
+        .margins(chartMargins)
         //.elasticY(true)
         .ordinalColors(["#aaaaaa"])
-        .gap(0)
-        .margins(chartMargins)
+        .gap(1)
         .centerBar(true)
         .on('postRender', function(chart){
             drawLabels(chart, "LIKES", "# OF CELLS");
+            chart.selectAll("rect.bar").on("click", chart.onClick);
         })
-        .x(d3.scale.linear().domain([1, 1001]))
+        // .x(d3.scale.linear().domain([1, 1001]))
+        .x(d3.scale.ordinal().domain(["0","10","20","30","40","50","60","70","80","90","100"]))
+        // .x(d3.scale.ordinal().domain(["100","200","300","400","500","600"]))
+        .xUnits(dc.units.ordinal)
         .y(d3.scale.linear().domain([0, 20]))
     window.insLikesChart.yAxis().ticks(2)
 
@@ -948,7 +953,6 @@ function charts(data, selectedCharts) {
         // .on('renderlet', function(_chart){
         //   _chart.selectAll("rect.bar").on("click", _chart.onClick);
         // })
-        // .yAxisLabel("Cells", 10)
        .on('renderlet', function(chart){
             var OBIpercent_digits = d3.mean(window.newData, function(el){return el.OBIpercentage>0;});
             bindSmallText((OBIpercent_digits/(24)*100).toFixed(2), "#OBIpercent_digits");
