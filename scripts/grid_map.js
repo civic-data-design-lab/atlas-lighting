@@ -821,8 +821,8 @@ function charts(data, selectedCharts) {
 
     var chartMargins = {top: 8, left: 40, right: 10, bottom: 30};//20 //{top: 0, left: 50, right: 10, bottom: 20};
 
-    var ndx = crossfilter(data);
-    var all = ndx.groupAll();
+    window.ndx = crossfilter(data);
+    var all = window.ndx.groupAll();
 
     /* Creating an array of objects
      * containing business types and their sum for each city.
@@ -832,7 +832,7 @@ function charts(data, selectedCharts) {
 
     var typeSums = [];
     busTypes.forEach(function(el){
-        var typeSum = ndx.groupAll().reduceSum(function(d){return d[el];}).value();
+        var typeSum = window.ndx.groupAll().reduceSum(function(d){return d[el];}).value();
         if (typeSum){
             typeSums.push({
                 category: el, 
@@ -853,12 +853,12 @@ function charts(data, selectedCharts) {
     //                                                                            //
     ////////////////////////////////////////////////////////////////////////////////
 
-    var busDivDimension = ndx.dimension(function (d) {
+    var busDivDimension = window.ndx.dimension(function (d) {
         return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0
     });
     var busDivGroup = busDivDimension.group();
 
-    var latDimension = ndx.dimension(function (d) {
+    var latDimension = window.ndx.dimension(function (d) {
         return d.lat
     });
 
@@ -866,7 +866,7 @@ function charts(data, selectedCharts) {
      * 
     */
 
-    var insDimension = ndx.dimension(function (d) { 
+    var insDimension = window.ndx.dimension(function (d) { 
         if(d.insta_cnt > 50 ) return 50;
         else return d.insta_cnt });
     var insGroup = insDimension.group()
@@ -891,12 +891,13 @@ function charts(data, selectedCharts) {
         .y(d3.scale.linear().domain([0, 600]))
     window.insChart.yAxis().ticks(2)
 
-    var insLikesDimension = ndx.dimension(function (d) { 
-       return d.insta_like;
+    var insLikesDimension = window.ndx.dimension(function(d) { 
+       if (d.insta_like > 1) {return d.insta_like}
+       else {return 0};
     });
 
 
-    var insLikesGroup = insLikesDimension.group().reduceSum(function(d){return d.insta_like>0;});
+    var insLikesGroup = insLikesDimension.group().reduceSum(function(d){return d.insta_like>10;});
 
     window.insLikesChart.width(chartWidth).height(chartHeight)
         .group(insLikesGroup).dimension(insLikesDimension)
@@ -906,16 +907,16 @@ function charts(data, selectedCharts) {
         .gap(5)
         // .centerBar(true)
         .on('postRender', function(chart){
-            drawLabels(chart, "LIKES", "# OF CELLS");
+            drawLabels(chart, "# OF LIKES", "# OF CELLS");
             chart.selectAll("rect.bar").on("click", chart.onClick);
         })
         // .x(d3.scale.linear().domain([1, 1001]))
-        .x(d3.scale.ordinal().domain(["0", "100","200","300","400","500","600", "700", "800", "900", "1000"]))
+        .x(d3.scale.ordinal().domain(["0", "10","20","30","40","50","60", "70", "80", "90", "100+"]))
         .xUnits(dc.units.ordinal)
         // .y(d3.scale.linear().domain([0, 20]))
     window.insLikesChart.yAxis().ticks(2);
 
-    var busPriDimension = ndx.dimension(function (d) {return d.b_price;});
+    var busPriDimension = window.ndx.dimension(function (d) {return d.b_price;});
     var busPriGroup = busPriDimension.group()
 
     window.busPriChart.width(chartWidth).height(chartHeight)
@@ -935,7 +936,7 @@ function charts(data, selectedCharts) {
         .centerBar(true)
         .yAxis().ticks(2);
 
-    var OBIpercentDimension = ndx.dimension(function (d) { return d.OBIpercentage; });
+    var OBIpercentDimension = window.ndx.dimension(function (d) { return d.OBIpercentage; });
     var OBIpercentGroup = OBIpercentDimension.group().reduceSum(function(d){return d.OBIpercentage>0;});
 
     window.OBIpercent.width(chartWidth).height(100)
@@ -971,7 +972,7 @@ function charts(data, selectedCharts) {
         .yAxis().ticks(2);
 
 
-    var OBIaverageDimension = ndx.dimension(function (d) { return d.OBIaverage });
+    var OBIaverageDimension = window.ndx.dimension(function (d) { return d.OBIaverage });
     var OBIaverageGroup = OBIaverageDimension.group();
     var appendableObiAvg = true;
     window.OBIaverage.width(chartWidth).height(100)
@@ -1045,7 +1046,7 @@ function charts(data, selectedCharts) {
      * 
     */
 
-    var placesDimension = ndx.dimension(function (d) { 
+    var placesDimension = window.ndx.dimension(function (d) { 
         if (d.places>100) return 100; 
         else return d.places });
     var placesGroup = placesDimension.group()
@@ -1081,7 +1082,7 @@ function charts(data, selectedCharts) {
 
     var chartColors = { "1": "#fff7bc", "2": "#fee391", "3": "#fec44f", "4": "#fee0d2", "5": "#fc9272", "6": "#de2d26", "7": "#deebf7", "8": "#9ecae1", "9": "#3182bd" }
     
-    var devIntDimension = ndx.dimension(function (d) { return parseInt(d.dev_intensity) });
+    var devIntDimension = window.ndx.dimension(function (d) { return parseInt(d.dev_intensity) });
     var devIntGroup = devIntDimension.group();
     var appendableDev = true;
 
@@ -1116,7 +1117,7 @@ function charts(data, selectedCharts) {
      * We are calculating predefined ranges to represent low, medium and high intensities of light.
     */
 
-    var ligAveDimension = ndx.dimension(function (d) { return parseInt(d.averlight) });
+    var ligAveDimension = window.ndx.dimension(function (d) { return parseInt(d.averlight) });
     var laGroup = ligAveDimension.group();
     var extentL = d3.extent(data, function(el){return parseInt(el.averlight)});
     var appendableL = true;
@@ -1160,7 +1161,7 @@ function charts(data, selectedCharts) {
      * We are dividing the distribution into three quantiles: low, medium and high 
     */
 
-    var popDimension = ndx.dimension(function (d) { return parseInt(d.population) })
+    var popDimension = window.ndx.dimension(function (d) { return parseInt(d.population) })
     var pGroup = popDimension.group();
     var topPop = pGroup.top(2);
     var maxPopY = topPop[1].value;
@@ -1202,7 +1203,7 @@ function charts(data, selectedCharts) {
      * We are dividing the distribution into three quantiles: low, medium and high 
     */
 
-    var incomeDimension = ndx.dimension(function (d) {
+    var incomeDimension = window.ndx.dimension(function (d) {
         return parseInt(parseFloat(d.income) / 1000) * 1000;
     });
     var iGroup = incomeDimension.group();
