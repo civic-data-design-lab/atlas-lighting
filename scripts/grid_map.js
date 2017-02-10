@@ -908,7 +908,7 @@ function charts(data, selectedCharts) {
         // .centerBar(true)
         .on('postRender', function(chart){
             drawLabels(chart, "# OF LIKES", "# OF CELLS");
-            chart.selectAll("rect.bar").on("click", chart.onClick);
+            // chart.selectAll("rect.bar").on("click", chart.onClick);
         })
         // .x(d3.scale.linear().domain([1, 1001]))
         .x(d3.scale.ordinal().domain(["0", "10","20","30","40","50","60", "70", "80", "90", "100+"]))
