@@ -83,10 +83,12 @@ var myinit = function () {
     firebase.initializeApp(config);
     var rootRef = firebase.database().ref();
 
-    d3.queue()
-        .defer(d3.csv, "../data/" + currentCity_o + "_grid.csv"/*"grids/" + currentCity*/)
-        //.defer(d3.json, "data/"+currentCity+"_zipcode.json"/*"zipcode_business_geojson/" + currentCity*/)
-        .await(dataDidLoad);
+    var q = d3.queue().defer(d3.csv, "../data/" + currentCity_o + "_grid.csv"/*"grids/" + currentCity*/)
+    if (currentCity_o != "Chicago"){
+        q.defer(d3.csv, "../data/" + "Chicago" + "_grid.csv"/*"grids/" + currentCity*/)
+    }
+    //.defer(d3.json, "data/"+currentCity+"_zipcode.json"/*"zipcode_business_geojson/" + currentCity*/)
+    q.await(dataDidLoad);
 }
 
 
@@ -97,7 +99,11 @@ var myinit = function () {
 //  Checks successful data load                                               //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
-function dataDidLoad(error, grid) {
+
+function dataDidLoad(error, grid, chicago_data) {
+    if (chicago_data) {
+        window.chicago_data = chicago_data
+    }
     d3.select("#loader").transition().duration(600).style("opacity", 0).remove();
 
     window.dataLst = Object.keys(grid[0])
@@ -897,14 +903,22 @@ function charts(data, selectedCharts) {
     });
 
 
-    var insLikesGroup = insLikesDimension.group().reduceSum(function(d){return d.insta_like>10;});
+    var insLikesDimension = window.ndx.dimension(function (d) { 
+        if(d.insta_like > 500 ) return 500; //1000
+        else return d.insta_like })
+
+
+    var insLikesGroup = insLikesDimension.group().reduceSum(function(d){return d.insta_like>0;});
 
     window.insLikesChart.width(chartWidth).height(chartHeight)
-        .group(insLikesGroup).dimension(insLikesDimension)
+        .dimension(insLikesDimension).group(insLikesGroup)
         .margins(chartMargins)
         .elasticY(true)
         .ordinalColors(["#aaaaaa"])
         .gap(5)
+        .on('renderlet', function(chart){
+            var filteredFunctionAmountGroup = { all: function () { return functionAmountGroup.top(Infinity).filter( function (d) { return d.value !== 0; } ); } }
+        })
         // .centerBar(true)
         .on('postRender', function(chart){
             drawLabels(chart, "# OF LIKES", "# OF CELLS");
@@ -953,6 +967,7 @@ function charts(data, selectedCharts) {
         // .on('renderlet', function(_chart){
         //   _chart.selectAll("rect.bar").on("click", _chart.onClick);
         // })
+        // .yAxisLabel("Cells", 10)
        .on('renderlet', function(chart){
             var OBIpercent_digits = d3.mean(window.newData, function(el){return el.OBIpercentage>0;});
             bindSmallText((OBIpercent_digits/(24)*100).toFixed(2), "#OBIpercent_digits");
@@ -1119,16 +1134,15 @@ function charts(data, selectedCharts) {
 
     var ligAveDimension = window.ndx.dimension(function (d) { return parseInt(d.averlight) });
     var laGroup = ligAveDimension.group();
-    var extentL = d3.extent(data, function(el){return parseInt(el.averlight)});
-    var appendableL = true;
-    var sortedL = data.map(function(el){return parseInt(el.averlight)}).sort(function(a, b){return a - b});
-    var quantsL = quantileCalc(extentL, sortedL, actChrtWidth);
+    
     /*
     var firstQL = d3.quantile(sortedLights, 0.33);
     var secondQL= d3.quantile(sortedLights, 0.66);
     var xOfFirstQL = actChrtWidth*(firstQL/(extent[1]-extent[0]));
     var xOfSecondQL = actChrtWidth*(secondQL/(extent[1]-extent[0]));
     */
+
+    var appendableLig = true;
 
     ligAveChart.width(chartWidth).height(chartHeight)
         .group(laGroup).dimension(ligAveDimension).centerBar(true)
@@ -1138,21 +1152,19 @@ function charts(data, selectedCharts) {
         .margins(chartMargins)
         // Draw range lines
         .on('renderlet', function(chart){
-            window.newData = ligAveDimension.top(Infinity);
 
-            var median = d3.median(window.newData, function(el){return parseInt(el.averlight)} );
-            var correspond = thisQuantile(median, extentL, quantsL.first, quantsL.second);
+            var extent = d3.extent(data, function(el){return parseInt(el.averlight)});
+            var sorted = data.map(function(el){return parseInt(el.averlight)}).sort(function(a, b){return a - b});
+            var quants = quantileCalc(extent, sorted, actChrtWidth);
 
-            bindText(correspond, median, "#light_digits", "#light_digits_o");
-
+            if (appendableLig){
+                addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6);
+                appendableLig = false;
+            }
         })
         .x(d3.scale.linear().domain([0, maxLight]))
         .on('postRender', function(chart) {
             drawLabels(chart, "NANOWATTS/CM²/SR", "# OF CELLS");
-            if (appendableL){
-                addQuantiles(chart, quantsL.firstX, quantsL.secondX, chartHeight, chartMargins, 6);
-                appendableL= false;
-            }
         })
         .yAxis().ticks(3);
         
@@ -1256,7 +1268,7 @@ function charts(data, selectedCharts) {
     incomeChart.xAxis().ticks(4)
 
     dc.dataCount(".dc-data-count")
-        .dimension(ndx)
+        .dimension(window.ndx)
         .group(all)
         // (optional) html, for setting different html for some records and all records.
         // .html replaces everything in the anchor with the html given using the following function.
@@ -1509,7 +1521,7 @@ function timeSelector(chartWidth,chartHeight) {
 	    .attr("x", -4).attr("y",20)
 	    .style("text-anchor", null);
 
-	d3.select(".extent").attr("height", 29);
+    d3.select(".extent").attr("height", 29).attr("class", "brushItemRect");
 	d3.select(".background").attr("height", 50);
 	d3.selectAll(".resize rect").attr("height", 29);
     d3.selectAll(".tick line").style("opacity","0.3");
@@ -1568,17 +1580,17 @@ function filterhour(data, rdstart, rdend){
         }
     })
 
-    /*
     if (count_!==0) {
         ave_lit /= count_;
         ave_lit = Math.round(ave_lit * 100) / 100; 
         d3.select("#light_digits_o").text(ave_lit);
         d3.select("#light_digits_o").attr("sv_val", ave_lit);
-    } */
+    }
 
 }
 
 function timeSelectorReset() {
+    d3.selectAll('.brushItem').select('rect.extent').attr('width', 270).attr('x', 0);
     filterhour(window.newData, 0, 24);
 };
 ////////////////////////////////////////////////////////////////////////////////
@@ -1591,8 +1603,8 @@ function timeSelectorReset() {
 function updateOBI(dataUpdate,start,end){
     var chartHeight_ = 100;
     var chartWidth_ = 320;
-    var cf = crossfilter(dataUpdate);
-    cf.remove();
+    // var cf = crossfilter(dataUpdate);
+    window.ndx.remove();
     dataUpdate.forEach(function (d) {
         d.OBIaverage = 0;
         d.count = +d.business_opening_count;
@@ -1608,9 +1620,9 @@ function updateOBI(dataUpdate,start,end){
             d.OBIpercentage = 0;
         }
     });
-    cf.add(dataUpdate);
+    window.ndx.add(dataUpdate);
 
-    var OBIpercentDimension_ = cf.dimension(function (d) { return d.OBIpercentage });
+    var OBIpercentDimension_ = window.ndx.dimension(function (d) { return d.OBIpercentage });
     var OBIpercentGroup_ = OBIpercentDimension_.group().reduceSum(function(d){return d.OBIpercentage>0;});
 
     window.OBIpercent
@@ -1627,7 +1639,7 @@ function updateOBI(dataUpdate,start,end){
 
 
 
-    var OBIaverageDimension_ = cf.dimension(function (d) { return d.OBIaverage });
+    var OBIaverageDimension_ = window.ndx.dimension(function (d) { return d.OBIaverage });
     var OBIaverageGroup_ = OBIaverageDimension_.group();              
     window.OBIaverage
     .width(chartWidth_)
@@ -1645,217 +1657,5 @@ function updateOBI(dataUpdate,start,end){
 
 
 ////////////////////////////////////////////////////////////////////////////////
-
-
-
-////////////////////////////////////////////////////////////////////////////////
-//                                                                            //
-//  Utility functions                                                         //
-//                                                                            //
-////////////////////////////////////////////////////////////////////////////////
-
-
-/* Convert Thousands to K format. @Jake Feasel
- */
-
-function kFormatter(num) {
-    return num > 999 ? (num/1000).toFixed(1) + 'k' : num
-}
-
-/* Utility function to remove empty bins.
- */
-
-function remove_empty_bins(source_group) {
-    return {
-        all:function () {
-            return source_group.all().filter(function(d) {
-                return d.value != 0;
-            });
-        }
-    };
-}
-
-/* Utility function to remove selected bins.
- */
-
-function remove_small_bins(source_group) {
-    return {
-        all:function () {
-            return source_group.all().filter(function(d) {
-                return d.value > 1;
-            });
-        }
-    };
-}
-
-/* Utility function to bind text to a DOM element.
- */
-
-var bindText = function(quanText, median, selection_1, selection_2){
-    if (quanText === "MEDIUM"){
-        $(selection_1).css("font-size", "14px");
-    } else {
-        $(selection_1).css("font-size", "24px");
-    }
-    $(selection_1).html(quanText);
-    $(selection_1).attr("sv_val", quanText);
-    var newText =`${kFormatter(median)}`;
-    $(selection_2).html(newText);
-    $(selection_2).attr("sv_val", newText);
-}
-
-/* Utility function to bind text to a DOM element.
- */
-
-var bindDollarText = function(median, selection_1){
-    var newText =`${median}K`;
-    $(selection_1).html(newText);
-    $(selection_1).attr("sv_val", newText);
-}
-
-/* Utility function to bind text to a DOM element.
- */
-
-
-var bindSmallText = function(median, selection_1){
-    var newText =`${median}K`;
-    $(selection_1).html(newText);
-    $(selection_1).attr("sv_val", newText);
-}
-
-
-
-/* Utility function to bind text to a DOM element.
- */
-
-var bindInstaText = function(median, selection_1){
-    if (median == 0){
-        var newText = `>${median}`
-    } else {
-        var newText = `${median}`
-    }
-
-    $(selection_1).html(newText);
-    $(selection_1).attr("sv_val", newText);
-}
-
-/* Utility function to move a d3 element back in appearance order.
- */
-
-d3.selection.prototype.moveToBack = function() {  
-    return this.each(function() { 
-        var firstChild = this.parentNode.firstChild; 
-        if (firstChild) { 
-            this.parentNode.insertBefore(this, firstChild); 
-        } 
-    });
-};
-
-/* Draws x and y axis labels to a dc chart.
- * @method drawLabels
- * @param {Object} chart
- * @param {String} x_text
- * @param {String} y_text
- */
-
-var drawLabels = function(chart, x_text, y_text){ 
-    chart.svg().append('text').attr('class', 'y-label').attr('text-anchor', 'middle')
-        .attr('x', -60).attr('y', 35).attr('dy', '-25').attr('transform', 'rotate(-90)')
-        .text(y_text).style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
-        .style("font-size", "8px")
-    chart.svg().append('text').attr('class', 'x-label').attr('text-anchor', 'middle')
-        .attr('x', 170).attr('y', 138).attr('dy', '0')
-        .text(x_text).style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
-        .style("font-size", "8px")
-}
-
-
-/* Function for drawing Quantile Lines on the selected chart.
- * @method addQuantiles
- * @param {Object} chart
- * @param {Number} firstQ
- * @param {Number} secondQ
- * @param {Number} b -Offset parameter
- * @param {Number} c -Offset parameter
- * @param {Number} chrtHeight
- * @param {Object} chrtMargins
- * @param {Number} fontSize 
- */
-
-function addQuantiles(chart, firstQ, secondQ, chrtHeight, chrtMargins, fontSize) {
-        chart.select("svg")
-             .append("g").attr("transform", "translate(" + chrtMargins.left + "," + chrtMargins.top + ")")
-             .append("line")
-             .attr("x1", firstQ)
-             .attr("y1", 0)
-             .attr("x2", firstQ)
-             .attr("y2", chrtHeight - chrtMargins.bottom - chrtMargins.top)
-             .style("stroke", "lightgrey")
-             .style("stroke-width", "1.6")
-             .style("stroke-dasharray", "4");
-             
-        chart.select("svg")
-             .append("g").attr("transform", "translate(" + chrtMargins.left + "," + chrtMargins.top + ")")
-             .append("line")
-             .attr("x1", secondQ)
-             .attr("y1", 0)
-             .attr("x2", secondQ)
-             .attr("y2", chrtHeight - chrtMargins.bottom - chrtMargins.top)
-             .style("stroke", "lightgrey")
-             .style("stroke-width", "1.6")
-             .style("stroke-dasharray", "4");
-        
-        if ((secondQ - firstQ) > 30) {
-            var tConst = (firstQ/2)-6;
-            var tConst2 = (secondQ - firstQ)/2;
-            var tConst3 = (270 - secondQ)/2;
-            var texts = [{text:"LOW", x: tConst}, { text:"MEDIUM", x: firstQ + tConst2 - 12}, {text:"HIGH",x:secondQ + tConst3 - 7}];
-            var g = chart.select("svg").append("g").attr("transform", "translate(" + chrtMargins.left + "," + chrtMargins.top + ")");
-            var newChart = g.selectAll("text").data(texts);
-            
-            newChart.enter()
-             .append("text")
-             .text(function(el){return el.text;})
-             .attr("y", chrtMargins.top ) //chrtHeight -chrtMargins.bottom -2
-             .attr("x", function(el){return el.x})
-             .style("font-family", "Dosis")
-             .style("font-size", fontSize + "px") // 3 for Lighting Average
-             .style("fill", "#20C0E2"); //#20C0E2
-
-     };
-};
-
-/* Calculates which quantile given selections' median fall into.
- * @method thisQuantile
- * @param {Array} Data
- */
-
-var thisQuantile = function(median, extent, firstQ, secondQ){
-   if (median >= extent[0] && median <= firstQ){
-       return "LOW";
-   } else if (median > firstQ && median <= secondQ){
-       return "MEDIUM";
-   } else {
-       return "HIGH"
-   }
-}
-
-/* Calculates quantiles
- * @method quantileCalc
- * @param {Array}
- * @param {Array}
- */
-
-var quantileCalc = function(extent, sorted, width){
-    var firstQ = d3.quantile(sorted, 0.33);
-    var secondQ = d3.quantile(sorted, 0.66);
-    var xOfFirstQ = width*(firstQ/(extent[1]-extent[0]));
-    var xOfSecondQ = width*(secondQ/(extent[1]-extent[0]));
-    return {firstX: xOfFirstQ, secondX: xOfSecondQ, first:firstQ, second:secondQ}
-}
-
-
-
-
 
 

@@ -205,7 +205,6 @@ var tagCloudChart = function(chartWidth,chartHeight) {
              }, 0);
 
              if (total == selectedTypes.length){
-                 console.log($("#c" + el.cell_id).css("display"))
                  d3.select("#c" + el.cell_id).style("display", "block");
                  avg_light += el.averlight;
                  count ++;
@@ -214,8 +213,8 @@ var tagCloudChart = function(chartWidth,chartHeight) {
 
          avg_light /= count;
          avg_light = Math.round(avg_light * 100) / 100
-         d3.select("#light_digits").text(avg_light);
-         d3.select("#light_digits").attr("sv_val", avg_light);
+         d3.select("#light_digits_o").text(avg_light);
+         d3.select("#light_digits_o").attr("sv_val", avg_light);
 
     }
 
