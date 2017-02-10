@@ -764,9 +764,11 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 
 .plc_digits {
     color: rgb(32, 192, 226);
+    font-family:Dosis;
+    font-weight:300;
     font-size: 20px; /* 45px */
     margin-left: 10px;
-    position: absolute;  
+    position: absolute;
 }
 
 .other_digits {

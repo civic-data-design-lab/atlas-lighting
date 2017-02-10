@@ -1115,15 +1115,16 @@ function charts(data, selectedCharts) {
 
     var ligAveDimension = ndx.dimension(function (d) { return parseInt(d.averlight) });
     var laGroup = ligAveDimension.group();
-    
+    var extentL = d3.extent(data, function(el){return parseInt(el.averlight)});
+    var appendableL = true;
+    var sortedL = data.map(function(el){return parseInt(el.averlight)}).sort(function(a, b){return a - b});
+    var quantsL = quantileCalc(extentL, sortedL, actChrtWidth);
     /*
     var firstQL = d3.quantile(sortedLights, 0.33);
     var secondQL= d3.quantile(sortedLights, 0.66);
     var xOfFirstQL = actChrtWidth*(firstQL/(extent[1]-extent[0]));
     var xOfSecondQL = actChrtWidth*(secondQL/(extent[1]-extent[0]));
     */
-
-    var appendableLig = true;
 
     ligAveChart.width(chartWidth).height(chartHeight)
         .group(laGroup).dimension(ligAveDimension).centerBar(true)
@@ -1133,19 +1134,21 @@ function charts(data, selectedCharts) {
         .margins(chartMargins)
         // Draw range lines
         .on('renderlet', function(chart){
+            window.newData = ligAveDimension.top(Infinity);
 
-            var extent = d3.extent(data, function(el){return parseInt(el.averlight)});
-            var sorted = data.map(function(el){return parseInt(el.averlight)}).sort(function(a, b){return a - b});
-            var quants = quantileCalc(extent, sorted, actChrtWidth);
+            var median = d3.median(window.newData, function(el){return parseInt(el.averlight)} );
+            var correspond = thisQuantile(median, extentL, quantsL.first, quantsL.second);
 
-            if (appendableLig){
-                addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6);
-                appendableLig = false;
-            }
+            bindText(correspond, median, "#light_digits", "#light_digits_o");
+
         })
         .x(d3.scale.linear().domain([0, maxLight]))
         .on('postRender', function(chart) {
             drawLabels(chart, "NANOWATTS/CM²/SR", "# OF CELLS");
+            if (appendableL){
+                addQuantiles(chart, quantsL.firstX, quantsL.secondX, chartHeight, chartMargins, 6);
+                appendableL= false;
+            }
         })
         .yAxis().ticks(3);
         
@@ -1561,12 +1564,13 @@ function filterhour(data, rdstart, rdend){
         }
     })
 
+    /*
     if (count_!==0) {
         ave_lit /= count_;
         ave_lit = Math.round(ave_lit * 100) / 100; 
         d3.select("#light_digits_o").text(ave_lit);
         d3.select("#light_digits_o").attr("sv_val", ave_lit);
-    }
+    } */
 
 }
 
