@@ -1537,12 +1537,12 @@ function timeSelector(chartWidth,chartHeight) {
         if (rdend - rdstart == 0){
             $('#business_opening_percent').find('#selected_time').text(0+" - "+24);
             filterhour(window.newData, rdstart, rdend);
-            if (selectedCharts.includes("business_opening_average") || selectedCharts.includes("business_opening_percent")) {updateOBI(window.newData, rdstart,rdend);}
+            if (selectedCharts.includes("business_opening_average") || selectedCharts.includes("business_opening_percent")) { updateOBI(rdstart,rdend);}
         }
         else {
             $('#business_opening_percent').find('#selected_time').text(rdstart+" - "+rdend);
             filterhour(window.newData, rdstart, rdend);
-            if (selectedCharts.includes("business_opening_average") || selectedCharts.includes("business_opening_percent")) {updateOBI(window.newData, rdstart,rdend);}
+            if (selectedCharts.includes("business_opening_average") || selectedCharts.includes("business_opening_percent")) { updateOBI(rdstart,rdend);}
         }
 	}
 
@@ -1600,12 +1600,9 @@ function timeSelectorReset() {
 //  Updates the two dc.js charts for the open business values                 //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
-function updateOBI(dataUpdate,start,end){
-    var chartHeight_ = 100;
-    var chartWidth_ = 320;
-    // var cf = crossfilter(dataUpdate);
+function updateOBI(start,end){
     window.ndx.remove();
-    dataUpdate.forEach(function (d) {
+    window.newData.forEach(function (d) {
         d.OBIaverage = 0;
         d.count = +d.business_opening_count;
         for (var i=start;i<end;i++){
@@ -1620,38 +1617,7 @@ function updateOBI(dataUpdate,start,end){
             d.OBIpercentage = 0;
         }
     });
-    window.ndx.add(dataUpdate);
-
-    var OBIpercentDimension_ = window.ndx.dimension(function (d) { return d.OBIpercentage });
-    var OBIpercentGroup_ = OBIpercentDimension_.group().reduceSum(function(d){return d.OBIpercentage>0;});
-
-    window.OBIpercent
-    .width(chartWidth_)
-    .height(chartHeight_)
-    .group(OBIpercentGroup_)
-    .dimension(OBIpercentDimension_)
-    .elasticY(true)
-    .on('renderlet', function(chart){
-        var OBIpercent_digits = d3.mean(dataUpdate, function(el){return el.OBIpercentage>0;});
-        bindSmallText((OBIpercent_digits/(end-start)*100).toFixed(2), "#OBIpercent_digits");
-
-    })
-
-
-
-    var OBIaverageDimension_ = window.ndx.dimension(function (d) { return d.OBIaverage });
-    var OBIaverageGroup_ = OBIaverageDimension_.group();              
-    window.OBIaverage
-    .width(chartWidth_)
-    .height(chartHeight_)
-    .group(OBIaverageGroup_)
-    .dimension(OBIaverageDimension_)
-    .elasticY(true)
-    .on('renderlet', function(chart){
-        var OBIaverage_digits = d3.mean(dataUpdate, function(el){return el.OBIaverage>0;});
-        bindSmallText((OBIaverage_digits/(end-start)).toFixed(2), "#OBIaverage_digits");
-    })
-
+    window.ndx.add(window.newData);
     dc.redrawAll();
 }
 
