@@ -814,7 +814,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     position: absolute;
     font-family:Dosis;
     font-weight:300;
-    font-size: 18px; /* 45px */
+    font-size: 24px; /* 45px */
     top:18px;
 }
 
@@ -822,7 +822,8 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     font-size: 6px;
     font-family:Dosis;
     font-weight:300;
-    top:14px;
+    margin-top:14px;
+    /*top:14px;*/
 }
 
 .cell_digits  {
@@ -895,6 +896,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 #busPri_digits_o, #instaLikes_digits_o {
     font-size:6px;
 }
+
 
 #light_digits_o {
     font-size: 36px;

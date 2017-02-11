@@ -1158,7 +1158,7 @@ function charts(data, selectedCharts) {
         .margins(chartMargins)
         // Draw range lines
         .on('renderlet', function(chart){
-
+            window.newData = ligAveDimension.top(Infinity);
             var extent = d3.extent(data, function(el){return parseInt(el.averlight)});
             var sorted = data.map(function(el){return parseInt(el.averlight)}).sort(function(a, b){return a - b});
             var quants = quantileCalc(extent, sorted, actChrtWidth);
@@ -1167,6 +1167,9 @@ function charts(data, selectedCharts) {
                 addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6);
                 appendableLig = false;
             }
+            var median = d3.median(window.newData, function(el){return parseInt(el.averlight)} );
+            var correspond = thisQuantile(median, extent, quants.first, quants.second);
+            bindText2(correspond, "#light_digits");
         })
         .x(d3.scale.linear().domain([0, maxLight]))
         .on('postRender', function(chart) {

@@ -58,6 +58,19 @@ var bindText = function(quanText, median, selection_1, selection_2){
 /* Utility function to bind text to a DOM element.
  */
 
+var bindText2 = function(quanText, selection){
+    if (quanText === "MEDIUM"){
+        $(selection).css("font-size", "14px");
+    } else {
+        $(selection).css("font-size", "24px");
+    }
+    $(selection).html(quanText);
+    $(selection).attr("sv_val", quanText);
+}
+
+/* Utility function to bind text to a DOM element.
+ */
+
 var bindDollarText = function(median, selection){
     var newText =`${median}K`;
     $(selection).html(newText);
@@ -88,14 +101,11 @@ var bindSmallText2 = function(text, selection){
 /* Utility function to bind text to the businessPrice chart.
  */
 
-
 var bindPriceText = function(median, selection){
     var newText =`${median}x$`;
     $(selection).html(newText);
     $(selection).attr("sv_val", newText);
 }
-
-
 
 /* Utility function to bind text to a DOM element.
  */
