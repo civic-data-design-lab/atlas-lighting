@@ -288,6 +288,17 @@ canvas {
     cursor:pointer;
 }
 
+.dc-chart.insta-types{
+    fill-opacity: .5;
+    cursor:pointer;
+}
+
+.dc-chart.insta-types:hover{
+    fill-opacity: .5;
+    cursor:pointer;
+}
+
+
 .dc-chart .selected{
     fill:#fff;
 }
@@ -1068,9 +1079,22 @@ div#streetview_window {
 
 /*____________________________*/
 
-/* Business Types */
+/* Business Types - Instagram Topics*/
 
-#business_types svg {
+#business_types  svg {
+    margin-left: 0px;  
+}
+
+#business_types .textElements {
+    color: rgb(32, 192, 226);
+    position: absolute;  
+    display: inline-block;
+    display: inline;
+    margin-left: 5px;
+    margin-top:3px;
+}
+
+#business_types  svg {
     margin-left: 0px;  
 }
 

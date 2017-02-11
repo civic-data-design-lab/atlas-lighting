@@ -5,7 +5,7 @@
  * @params chartWidth, chartHeight
 */
 
-var tagCloudChart = function(chartWidth,chartHeight) {
+var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_types"
 
     var that = {};
     var that = Object.create(tagCloudChart.prototype);
@@ -27,7 +27,7 @@ var tagCloudChart = function(chartWidth,chartHeight) {
     var maxTextSize = 32,
         minTextSize = 14;
 
-    var svg = d3.select("#business_types").append("svg")
+    var svg = d3.select(selection).append("svg")
         .attr("width", width + margin.right + margin.left)
         .attr("height", height + margin.top + margin.bottom);
 

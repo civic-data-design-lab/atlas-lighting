@@ -48,9 +48,14 @@ var busTypes = ['beauty','culture','education','entertainment',
         'recreation','religious','residential','restaurant','retail','service',
         'transportation'];
 
-// Business Types Widget is initiated here.
-var newBusTypesChart = tagCloudChart(390, 100);
+// busTypes is a list of predefined types utilized in the business types chart.
+var instaTopics = ['advertising','beverage','car','entertainment',
+        'family','fashion','food','interiors','landscape','monochrome','nature',
+        'portrait','sky','sports'];
 
+// Business Types Widget is initiated here.
+var newBusTypesChart = tagCloudChart(390, 100, "#business_types");
+var instaTopicsChart = tagCloudChart(370, 100, "#instagram_topics" ); //390
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 //  myinit()                                                                  //
