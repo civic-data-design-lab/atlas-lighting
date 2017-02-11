@@ -909,7 +909,7 @@ function charts(data, selectedCharts) {
     });
 
 
-    var insLikesGroup = insLikesDimension.group().reduceSum(function(d){return d.insta_like>=0;});
+    var insLikesGroup = insLikesDimension.group().reduceSum(function(d){return d.insta_like>=100;});
 
     window.insLikesChart.width(chartWidth).height(chartHeight)
         .dimension(insLikesDimension).group(insLikesGroup)
@@ -918,12 +918,19 @@ function charts(data, selectedCharts) {
         .ordinalColors(["#aaaaaa"])
         .gap(5)
         // .centerBar(true)
+        .on('renderlet', function(chart){
+            var selected = window.newData.map(function(el){return el.insta_like}).filter(function(d){return d >=100})
+            var median = d3.median(selected);
+            bindSmallText2(median, "#instaLikes_digits");
+        })
         .on('postRender', function(chart){
             drawLabels(chart, "# OF LIKES", "# OF CELLS");
+            var text = "CELLS THAT HAS LESS THAN 100 LIKES HAS NOT BEEN SELECTED"
+            bindSmallText2(text, "#insta_explain");
             // chart.selectAll("rect.bar").on("click", chart.onClick);
         })
         // .x(d3.scale.ordinal().domain(["0", "10","20","30","40","50","60", "70", "80", "90", "100+"]))
-        .x(d3.scale.ordinal().domain([0, 100,200,300,400,500,600,700,800,900,1000]))
+        .x(d3.scale.ordinal().domain([100,200,300,400,500,600,700,800,900,1000]))
         .xUnits(dc.units.ordinal);
 
     window.insLikesChart.yAxis().ticks(2);

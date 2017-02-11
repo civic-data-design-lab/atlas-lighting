@@ -825,11 +825,20 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     top:14px;
 }
 
-.cell_digits {
+.cell_digits  {
     font-size: 6px;
     font-family:Dosis;
     font-weight:300;
     top:30px;
+}
+
+.fourth_digits {
+    width:60px;
+    font-size: 6px;
+    font-family:Dosis;
+    font-weight:300;
+    margin-top:20px;
+    line-height:130%;
 }
 
 #helper_digits {
@@ -876,14 +885,14 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 }
 
 
-#busPri_digits{
+#busPri_digits, #instaLikes_digits{
     font-size:24px;
     font-family:Dosis;
     font-weight:300;
     margin-top:2px
 }
 
-#busPri_digits_o {
+#busPri_digits_o, #instaLikes_digits_o {
     font-size:6px;
 }
 
