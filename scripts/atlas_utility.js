@@ -237,6 +237,16 @@ var quantileCalc = function(extent, sorted, width){
     return {firstX: xOfFirstQ, secondX: xOfSecondQ, first:firstQ, second:secondQ}
 }
 
+/* Calculates quantiles for Development Intensity chart
+ * @method quantileCalc
+ * @param {Array}
+ * @param {Array}
+ */
+
+var quantileCalcDev = function(width){
+    return {firstX: width*(1/2), secondX: width*(4/5), first:49, second:79}
+}
+
 
 
 

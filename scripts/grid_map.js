@@ -1120,15 +1120,13 @@ function charts(data, selectedCharts) {
         .margins(chartMargins)
         .on('renderlet', function(chart){
             window.newData = devIntDimension.top(Infinity);
-            var extent = d3.extent(data, function (el) {return parseInt(el.dev_intensity)});
-            var sorted = data.map(function (el) {return parseInt(el.dev_intensity)}).sort(function(a, b){return a - b});
-            var quants = quantileCalc(extent, sorted, actChrtWidth);
+            var quants = quantileCalcDev(actChrtWidth);
             if (appendableDev){
                 addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6); //5 25 for devInt
                 appendableDev = false;
             }
             var median = d3.median(window.newData, function (el) {return parseInt(el.dev_intensity)});
-            var correspond = thisQuantile(median, extent, quants.first, quants.second);
+            var correspond = thisQuantile(median, [0, 100], quants.first, quants.second);
 
             bindText(correspond, median+"%", "#devInt_digits", "#devInt_digits_o");
 
