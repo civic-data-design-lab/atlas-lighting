@@ -1102,7 +1102,7 @@ function charts(data, selectedCharts) {
             bindText(correspond, median, "#places_digits", "#places_digits_o");
         })
         .on('postRender', function(chart) {
-            drawLabels(chart, "PLACES", "# OF CELLS");
+            drawLabels(chart, "BUSINESSES", "# OF CELLS");
         })
     placesChart.yAxis().ticks(2)
 

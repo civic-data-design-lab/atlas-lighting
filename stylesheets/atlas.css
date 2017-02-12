@@ -833,7 +833,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     font-size: 6px;
     font-family:Dosis;
     font-weight:300;
-    margin-top:14px;
+    margin-top:16px; /* 14px */
     /*top:14px;*/
 }
 
