@@ -718,9 +718,9 @@ window.OBIpercent = dc.barChart("#business_opening_percent");
 function charts(data, selectedCharts) {
     d3.selectAll(".dc-chart").style("display", "none");
     d3.select("#street_view").style("display", "block");
-
-
     d3.selectAll(".lock").style("display", "block");
+    d3.select("#street_view").style("display", "none");
+    d3.select("#streetview_window").style("display", "none");
 
     selectedCharts.forEach(function (d) {
         d3.select("#d_" + d).style("display", "none");
@@ -729,10 +729,14 @@ function charts(data, selectedCharts) {
         }
     })
 
-    if(selectedCharts.indexOf("street_view")>-1){
+    
+
+    if(selectedCharts.indexOf("street_view") !==- 1){
         d3.select("#street_view").style("opacity", "1");
         d3.select("#street_view").style("position", "relative");
     }
+
+
     if(selectedCharts.indexOf("instagram_pics")>-1){
         d3.select("#instagram_pics").style("display", "block");
     }
@@ -1126,12 +1130,12 @@ function charts(data, selectedCharts) {
             var median = d3.median(window.newData, function (el) {return parseInt(el.dev_intensity)});
             var correspond = thisQuantile(median, extent, quants.first, quants.second);
 
-            bindText(correspond, median, "#devInt_digits", "#devInt_digits_o");
+            bindText(correspond, median+"%", "#devInt_digits", "#devInt_digits_o");
 
         })
         //.yAxisLabel('# OF CELLS')
         .on('postRender', function(chart) {
-            drawLabels(chart, "INDEX", "# OF CELLS");
+            drawLabels(chart, "IMPERVIOUS SURFACES / TOTAL COVER", "# OF CELLS");
         })
         .xAxis().ticks(10)
     devIntChart.yAxis().ticks(2)
@@ -1418,7 +1422,7 @@ function updateZoomedChart(selectedCharts) {
             d3.select("#" + d).style("display", "block");
     })
 
-    d3.select("#street_view").style("opacity", "1");
+    //d3.select("#street_view").style("opacity", "1");
     d3.select("#street_view").style("position", "relative");
     d3.select("#street_view").style("display", "none");
 
@@ -1431,7 +1435,7 @@ function updateZoomedChart(selectedCharts) {
     }else{
         d3.select("#street_view").style("display", "none");
     }
-    d3.select("#streetview_window").style("opacity", "1");
+    //d3.select("#streetview_window").style("opacity", "1");
     d3.select("#streetview_window").style("position", "relative");
     d3.select("#streetview_window").style("display", "none");
 

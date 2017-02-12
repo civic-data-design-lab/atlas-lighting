@@ -55,6 +55,7 @@ var bindText = function(quanText, median, selection_1, selection_2){
     $(selection_2).attr("sv_val", newText);
 }
 
+
 /* Utility function to bind text to a DOM element.
  */
 

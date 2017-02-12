@@ -826,7 +826,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     font-family:Dosis;
     font-weight:300;
     font-size: 24px; /* 45px */
-    top:18px;
+    top:20px;
 }
 
 .third_digits {
@@ -858,6 +858,12 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     font-size: 20px;
     position: absolute;
     left: 10px;
+}
+
+#devInt_fourth {
+    margin-top:20px;
+    width:60px;
+    line-height:130%;
 }
 
 #instaDen_digits {
