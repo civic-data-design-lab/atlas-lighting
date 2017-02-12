@@ -973,7 +973,7 @@ function charts(data, selectedCharts) {
         //   _chart.selectAll("rect.bar").on("click", _chart.onClick);
         // })
         // .yAxisLabel("Cells", 10)
-       .on('renderlet', function(chart){
+        .on('renderlet', function(chart){
             var OBIpercent_digits = d3.mean(window.newData, function(el){return el.OBIpercentage>0;});
             bindSmallText((OBIpercent_digits/(24)*100).toFixed(2), "#OBIpercent_digits");
 
@@ -988,6 +988,8 @@ function charts(data, selectedCharts) {
                 .attr('x', 170).attr('y', 120).attr('dy', '-25')
                 .text('PERCENTAGE OF OPEN BUSINESSES').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
                 .style("font-size", "8px")
+
+            updateOBI(6,18);
         }) 
         .yAxis().ticks(2);
 
@@ -1307,6 +1309,8 @@ function charts(data, selectedCharts) {
         $('#business_opening_average').find('#time_selector').hide();
         $('#business_opening_average').find('#selected_time').hide();
     }
+         
+
 }
 
 
@@ -1368,6 +1372,8 @@ function cellSelect(d) {
                 $("#instagram_plc").show();
             }
         });
+
+
     newBusTypesChart.assignSelect(true);
     newBusTypesChart.updateBusTypes(d);
 
@@ -1483,8 +1489,8 @@ function updateChart(selectedCharts) {
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 function timeSelector(chartWidth,chartHeight) {
-    var start = 0; //starting point of brush on chart  // 0
-    var end = 24; //ending point of brush on chart  // 24
+    var start = 6; //starting point of brush on chart  // 0
+    var end = 18; //ending point of brush on chart  // 24
     var start0 = 0; //starting point for code before anyone interacts with brush  // 0
     var end0 = 24; //ending point for code before anyone interacts with brush // 24
     var margin = { top: 20, left: 30, right: 0, bottom: 0 },
@@ -1540,13 +1546,21 @@ function timeSelector(chartWidth,chartHeight) {
         brush.extent()[1] = Math.round(brush.extent()[1])
         var rdstart = Math.round(brush.extent()[0]);
         var rdend = Math.round(brush.extent()[1]);
+        console.log(rdstart);
         
         brush.extent([rdstart,rdend]);
         
-        if (rdend - rdstart == 0){
-            $('#business_opening_percent').find('#selected_time').text(0+" - "+24); // 0 - 24
-            filterhour(window.newData, rdstart, rdend);
-            if (selectedCharts.includes("business_opening_average") || selectedCharts.includes("business_opening_percent")) { updateOBI(rdstart,rdend);}
+        if (rdend - rdstart <= 1){
+            //$('#business_opening_percent').find('#selected_time').text(0+" - "+24); // 0 - 24
+            //d3.selectAll('.brushItem').select('rect.extent').attr('width', 135).attr('x', 67.5);
+            //d3.selectAll('.brushItem').select('g.resize.e').attr("transform", "translate(202.5,0)");
+            //d3.selectAll('.brushItem').select('g.resize.w').attr("transform", "translate(67.5,0)");
+            //use mbstock example here:
+            console.log(brush.empty());
+            filterhour(window.newData, start, end);
+            brush.extent([6, 18]); //rdstart, rdend
+            brush(d3.select(".brushItem").transition().duration(500));
+            if (selectedCharts.includes("business_opening_average") || selectedCharts.includes("business_opening_percent")) { updateOBI(start,end);} //rdstart, rdend
         }
         else {
             $('#business_opening_percent').find('#selected_time').text(rdstart+" - "+rdend);
@@ -1599,8 +1613,7 @@ function filterhour(data, rdstart, rdend){
 }
 
 function timeSelectorReset() {
-    d3.selectAll('.brushItem').select('rect.extent').attr('width', 270).attr('x', 0);
-    filterhour(window.newData, 0, 24);
+    filterhour(window.newData, 6, 18); //0 - 24
 };
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //

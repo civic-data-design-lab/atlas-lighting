@@ -174,6 +174,17 @@ a:hover{
     top: 30%;
     left: 20%;
 }
+
+#loader_small{
+    position:absolute;
+    z-index:-1;
+    background-blend-mode:multiply;
+    width:125px;
+    height:125px;
+    margin-top:-40px;
+    margin-left:-45px;
+
+}
 #map{
     position:absolute; 
     top:0px;
