@@ -940,6 +940,15 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     margin-top:0px;
 }
 
+#export_outer {
+    position: fixed;
+    width: 430px;
+    right: 0px;
+    bottom: 0px;
+    height: 40px;
+    background-color: rgba(0,0,0,.8);
+}
+
 
 #export {
     position: fixed;
@@ -950,7 +959,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     margin-left:0px;
     margin-right:12px;
     border: 2px solid white;
-    /*background-color: rgba(100,100,100,.7);*/
+    /*background-color: rgba(0,0,0,.8);*/
 }
 
 #case-navigation {
