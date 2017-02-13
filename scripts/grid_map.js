@@ -1287,7 +1287,6 @@ function charts(data, selectedCharts) {
             var extent = d3.extent(data, function(el){return parseInt(parseFloat(el.income) / 1000) * 1000});
             var sorted = data.map(function(el){return parseInt(parseFloat(el.income) / 1000) * 1000}).sort(function(a, b){return a - b});
             var quants = quantileCalc(extent, sorted, actChrtWidth);
-            console.log(extent)
 
             if (appendableInc){
                 addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6); // 5, 5
@@ -1323,7 +1322,7 @@ function charts(data, selectedCharts) {
             var parseArr = toParse.split(" ");
             var theCount = parseArr.filter(function(el){if (!isNaN(el[0])){return el;}})[0];
             var $img = $("#export_btn").find('img');
-            $("#export_btn").html("EXPORT"+" "+"("+" "+theCount+" "+ "Cells Selected"+" "+")");
+            $("#export_btn").html("EXPORT"+" "+"("+" "+theCount+" "+ "Cells"+" "+")");
             $("#export_btn").prepend($img);
         });
 

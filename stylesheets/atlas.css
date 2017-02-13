@@ -1299,7 +1299,7 @@ a.reset {
 p#export_btn.mybtn {
     display: block;
     position: relative;
-    width: 50%;
+    width: 40%;
     /*left: 45%;*/
     top: 25%;
     margin: 0 auto;
