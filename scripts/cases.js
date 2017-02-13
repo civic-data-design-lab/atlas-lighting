@@ -27,7 +27,8 @@ function showCase(caseNum, pageNum){
 	switch (caseNum) {
 	case 1:
 		if (pageNum == 4){
-			$("#case-navigation .nav-next").hide()
+			$("#case-navigation .nav-next").hide();
+			$("#back_to_map").show();
 		} else {
 			$("#case-navigation .nav-next").show()
 		}
@@ -70,6 +71,7 @@ function showCase(caseNum, pageNum){
 			$("#cases").hide()
 			$("#map").show()
 			$("#map-info").show()
+			$("#all_charts").css("border-bottom", "0px solid white");
 			updateAndSelectCharts(["income"])
 			break;
 		}

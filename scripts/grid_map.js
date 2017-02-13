@@ -128,7 +128,7 @@ function dataDidLoad2(error, grid, chicago_data){
     }
     d3.select("#loader").transition().duration(600).style("opacity", 0).remove();
 
-    window.dataLst = Object.keys(grid[0])
+    window.dataLst = Object.keys(chi[0])
     window.mydata = grid;
 
     charts(grid, selectedCharts);
