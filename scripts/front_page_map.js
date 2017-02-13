@@ -3,14 +3,14 @@ $(function() {
 		.defer(d3.json, "/us_json")
         .defer(d3.json, "/city_comparisons_all")
         .defer(d3.json, "/groups_data")
-    .await(dataDidLoad);
+    .await(dataDidLoad3);
 })
 
 var projection = d3.geo.mercator().scale(660).center([-83,39])
 var densityScale = d3.scale.linear().domain([3000,31684]).range([5,50])
 var map = true
 
-function dataDidLoad(error,states,cities,groups) {
+function dataDidLoad3(error,states,cities,groups) {
     var mapSvg = d3.select("#map").append("svg").attr("width",800).attr("height",800)
     drawPolygons(states)
     var formatedData = formatCitiesData(cities)

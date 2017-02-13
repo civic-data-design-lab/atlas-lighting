@@ -186,8 +186,78 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
      } 
 
 
+    /*
+     * Simple iteration abstraction for populating an array with a custom function
+     * @method arrayFromTo
+     * @param {Integer} start index
+     * @param {Integer} end index
+     * @param {Array} array to be filled.
+     * @param {method} Function for specifying the value of an array element
+     * @return {Array} New array
+     */ 
+    
+    var arrayFromTo = function (from, to, array, f) {
+        if (from > to) return array;
+        f(array); arrayFromTo(from+1, to, array, f);
+    };
+    
+     /*
+      * Function that adds clean elements to an array.
+      * @param {Array} Array to be appended.
+      */ 
+     var initiate = function(a) {
+        a.push(0);
+     }
+    
+    /* 
+     * Initiate the cells with random values(1 or 0).
+     * @method initial
+     * @return {Void}
+     */
+    
+    that.initial = function(size) {
+        var empty = [];
+        arrayFromTo(0, size-1, empty, initiate);
+        return empty;
+    };
+    
+    
+    that.clean = function(){
+        cells = cells.map(function(e){ return e && 0});
+    };
+
+
+    that.difference = function(a, b){
+        exist = _.isEqual(a, b) ? false : true;
+        return exist
+    };
+
+    that.differenceArray = function(a, b){
+        return true;
+    }
+
+    that.merge= function(a, b){
+        var merged = a.map(function(e, i){
+            return e || b[i];
+        });
+        return merged;
+    };
+
+    /* Display our binary array as cells.
+     * @method displayByBinary
+     * @param {Array} initial or merged array
+     */
+
+    that.displayByBinary = function(merged){
+        merged.forEach(function(el){
+            d3.select("#c" + el.cell_id).style("display", "block");
+        })
+    }
+
+    //This should be rewritten
+
     /* Filter grid cells by checking whether they contain at least one business  
-     * from selected types.
+     * from selected types. 
      * @method filterTypes
      * @param {Array} Data array
      */

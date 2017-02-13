@@ -88,10 +88,12 @@ var myinit = function () {
     firebase.initializeApp(config);
     var rootRef = firebase.database().ref();
 
-    var q = d3.queue().defer(d3.csv, "../data/" + currentCity_o + "_grid.csv"/*"grids/" + currentCity*/)
+    var q = d3.queue(2).defer(d3.csv, "../data/" + currentCity_o + "_grid.csv")
+                       .defer(d3.csv, "../data/denver_instagram_topics.csv")
+    /*
     if (currentCity_o != "Chicago"){
-        q.defer(d3.csv, "../data/" + "Chicago" + "_grid.csv"/*"grids/" + currentCity*/)
-    }
+        q.defer(d3.csv, "../data/" + "Chicago" + "_grid.csv"/*"grids/" + currentCity)
+    } */
     //.defer(d3.json, "data/"+currentCity+"_zipcode.json"/*"zipcode_business_geojson/" + currentCity*/)
     q.await(dataDidLoad);
 }
@@ -105,14 +107,12 @@ var myinit = function () {
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-function dataDidLoad(error, grid, chicago_data) {
-    if (chicago_data) {
-        window.chicago_data = chicago_data
-    }
+function dataDidLoad(error, grid, topics) {
     d3.select("#loader").transition().duration(600).style("opacity", 0).remove();
 
     window.dataLst = Object.keys(grid[0])
     window.mydata = grid;
+    window.topics = topics;
 
     charts(grid, selectedCharts);
 
@@ -150,352 +150,6 @@ function getLL(d) {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//                                                                            //
-//  initControl()                                                             //
-//                                                                            //
-//  Initializing the controls                                                 //
-//                                                                            //
-////////////////////////////////////////////////////////////////////////////////
-function initControl() {
-
-    var droptop = $("#todrop").offset().top;
-    var dropbot = droptop + $("#todrop").height();
-    var dropleft = $("#todrop").offset().left;
-    var dropright = dropleft + $("#todrop").width();
-
-    $('.data_icon_handle').mouseover(function(event){
-        event.preventDefault();
-        $(this).siblings(".data_intro").css("display", "block");
-    });
-
-    $('.data_icon_handle').mouseout(function(event){
-        event.preventDefault();
-        $(this).siblings(".data_intro").css("display", "none");
-
-    });
-
-    /*
-    $('.data_icon_handle').mouseenter(function(event){
-        event.preventDefault();
-        $(this).siblings(".data_intro").css("display", "block");
-    });
-
-    $('.data_icon_handle').mouseover(function(event){
-        event.preventDefault();
-        $(this).siblings(".data_intro").css("display", "block");
-    });
-
-    $('.data_icon_handle').mouseleave(function(event){
-        event.preventDefault();
-        $(this).siblings(".data_intro").css("display", "none");
-
-    $('.data_icon_handle').mouseout(function(event){
-        event.preventDefault();
-        $(this).siblings(".data_intro").css("display", "none");
-
-    }); */
-
-
-    $('.data_item').draggable({
-        drag: function (event, ui) {
-            $("#selector").css("width", "100%");
-            $("#selector").css("overflow-y", "hidden");
-            $("#selector").css("direction", "ltr");
-        },
-
-        stop: function (event, ui) {
-            $("#selector").css("width", "335px");
-            $("#selector").css("overflow-y", "auto");
-
-            if ($(this).attr("style").indexOf("left") > -1) {//get back to original position
-                $(this).attr("style", "position: relative;");
-            }
-        }
-
-    });
-
-    $('#todrop').droppable({
-        drop: function (event, ui) {
-            $(ui.draggable).attr("style", "position: relative; display: none;");
-            // $(ui.draggable).attr("style", "opacity: 0.5;");
-            selectedCharts.push($(ui.draggable).attr("id").split("d_")[1]);
-            updateChart(selectedCharts);
-            $(this).css("background-color", "rgba(255,255,255,0)");
-            var currentToDropHeight = $('#todrop').css('height');
-            $('#todrop').css('height', 'calc(100%-300px)');
-            $(this).css("background-color", "rgba(0,0,0,0)");
-            $(this).css("border-width", "1px");
-            $('.drop_indi').css("color", "rgba(255,255,255,1)");
-            $('#todrop > img').removeClass("invert");
-        },
-        over: function (event, ui) {
-            $(this).css("background-color", "rgba(255,255,255,0.6)");
-            $(this).css("border-width", "0px");
-            $('.drop_indi').css("color", "rgba(0,0,0,1)");
-            $('#todrop > img').attr("class", "invert");
-        },
-        out: function (event, ui) {
-            $(this).css("background-color", "rgba(0,0,0,0)");
-            $(this).css("border-width", "1px");
-            $('.drop_indi').css("color", "rgba(255,255,255,1)");
-            $('#todrop > img').removeClass("invert");
-        }
-
-
-    });
-
-    $(".click_data").click(function () {
-        $("#datasets").show()
-        $("#case_studies").hide()
-        $(this).addClass("selectedTab");
-        $(".click_case").removeClass("selectedTab");
-
-    });
-
-    $(".click_case").click(function () {
-        $("#datasets").hide()
-        $("#case_studies").show();
-        $(this).addClass("selectedTab");
-        $(".click_data").removeClass("selectedTab");
-    });
-
-    $(".rightbar").click(function(){
-        if(!$(this).attr("style") || ($(this).attr("style") && $(this).attr("style").indexOf("180") > -1)){
-            $(this).css("transform", "rotate(0deg)");
-
-            $("#info").animate({
-                right: "-430px"
-            }, 300, function () { });
-
-            $(".fold_bar").animate({
-                right: "0px"
-            }, 300, function () { });
-
-
-            $("#export").animate({
-                right: "-430px"
-            }, 300, function () { });
-
-        }
-        else{
-            $(this).css("transform", "rotate(180deg)");
-
-            $("#info").animate({
-                right: "0px"
-            }, 300, function () { });
-
-            $(".fold_bar").animate({
-                right: "430px"
-            }, 300, function () { });
-
-            $("#export").animate({
-                right: "0px"
-            }, 300, function () { });
-
-        }
-    });
-
-
-
-    $(".left_clickbar.datasets>img").click(function () {
-        if ($(this).attr("style") && $(this).attr("style").indexOf("180") > -1) {
-            //back to selecting mode            
-            $(".left_clickbar>img").css("transform", "rotate(0deg)");
-            $("#selector").css("width", "335px");
-            $("#selector").css("overflow-y", "auto");
-            $(".left_back").animate({
-                left: "0px"
-            }, 300, function () { });
-            $("#selector").animate({
-                left: "0px"
-            }, 300, function () { });
-            $(".slide_hide").animate({
-                left: "331px"
-            }, 300, function () { });
-            $("#todrop").show();
-            $("#zoomIn").animate({
-                left: "345px"
-            }, 300, function () { });                
-            $("#zoomOut").animate({
-                left: "390px"
-            }, 300, function () { });
-            setTimeout(function(){
-               $('.gradient_container').show(); 
-           }, 300);
-        } else {
-            //back to folding mode
-            $(".left_clickbar>img").css("transform", "rotate(180deg)");
-            $("#selector").css("width", "335px");
-            $("#todrop").hide();
-            $("#zoomIn").animate({
-                left: "50px"
-            }, 300, function () { });                
-            $("#zoomOut").animate({
-                left: "95px"
-            }, 300, function () { });    
-            $(".left_back").animate({
-                left: "-335px",
-            }, 300, function () { });
-            $("#selector").animate({
-                left: "-335px",
-            }, 300, function () { });
-            $(".slide_hide").animate({
-                left: "0px"
-            }, 300, function () { });
-            setTimeout(function(){
-               $('.gradient_container').hide(); 
-           }, 100);
-
-        }
-    })
-
-    $(".left_clickbar.case_studies>img").click(function () {
-        if ($(this).attr("style") && $(this).attr("style").indexOf("180") > -1) {
-            //back to selecting mode
-            $(".left_clickbar>img").css("transform", "rotate(0deg)");
-            $("#selector").css("width", "335px");
-            $("#selector").css("overflow-y", "auto");
-            $(".left_back").animate({
-                left: "0px"
-            }, 300, function () { });
-            $("#selector").animate({
-                left: "0px"
-            }, 300, function () { });
-            $(".slide_hide").animate({
-                left: "331px"
-            }, 300, function () { });
-            $("#todrop").show();
-            $("#zoomIn").animate({
-                left: "345px"
-            }, 300, function () { });                
-            $("#zoomOut").animate({
-                left: "390px"
-            }, 300, function () { });   
-            setTimeout(function(){
-               $('.gradient_container').show(); 
-           }, 300);
-
-        } else {
-            //back to folding mode
-            $(".left_clickbar>img").css("transform", "rotate(180deg)");
-            $("#selector").css("width", "335px");
-            $(".left_back").animate({
-                left: "-335px",
-            }, 300, function () { });
-            $("#selector").animate({
-                left: "-335px",
-            }, 300, function () { });
-            $(".slide_hide").animate({
-                left: "0px"
-            }, 300, function () { });
-            $("#todrop").hide();
-
-            $("#todrop").hide(); 
-            $("#zoomIn").animate({
-                left: "50px"
-            }, 300, function () { });                
-            $("#zoomOut").animate({
-                left: "95px"
-            }, 300, function () { });    
-
-            setTimeout(function(){
-               $('.gradient_container').hide(); 
-           }, 100);
-        }
-    });
-
-    //////////////////////////////////// .rm dataset from the right panel
-    $(".rm_data").click(function(){
-        var myid = $(this).parent().parent().parent().parent().attr("id");
-        
-        console.log(myid);
-        $("#"+myid).hide();
-        $("#d_"+myid).show();
-
-        var myindex = selectedCharts.indexOf(myid);
-        if (myindex > -1) {
-            selectedCharts.splice(myindex, 1);
-        }
-        updateChart(selectedCharts);
-
-    })
-
-    $(".tag_item").click(function () {
-
-        if ($(this).attr("class").indexOf("selected") > -1) {
-            $(".tag_item").removeClass("selected");
-            $(".data_item").show();
-            updateChart(selectedCharts);
-        } else {
-            $(".tag_item").removeClass("selected");
-            $(this).toggleClass("selected");
-            $(".data_item").hide();
-            $("." + $(this).attr("id")).show();
-            updateChart(selectedCharts);
-        }
-
-    });
-
-    $(".data_searchbox input").val("Enter your search term...").css({
-       'font-size' : '10px',
-       'color' : 'gray'
-    });
-    $(".data_searchbox input").focus(function () { 
-        $(this).val("");
-    });
-    $(".data_searchbox input").focusout(function () { 
-        $(".data_searchbox input").val("Enter your search term..").css({
-       'font-size' : '10px',
-       'color' : 'gray'
-        });
-    });
-    $(".data_searchbox input").keyup(function () {
-        if (!$(this).val()) {
-            $(".data_item").show();
-        } else {
-            $(".data_item").hide();
-            $(".data_item[id*='" + $(this).val() + "']").show();
-        }
-    });
-
-    $("#export_btn").click(function () { //$("#export .bottom_btn")
-        $("#export_add").css("display", "block");
-        $("#export_add input").val(window.location.href);
-
-        var data = window.newData;
-        var csvContent = "";
-
-        csvContent += Object.keys(data[0]).join(",") + "\n";
-        data.forEach(function (infoArray, index) {
-            var dataString = Object.values(infoArray).join(",");
-            csvContent += index < data.length ? dataString + "\n" : dataString;
-        });
-
-        var encodedUri = encodeURI(csvContent);
-        var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-
-        var link = document.getElementById("exportcsv");
-        link.setAttribute("href", URL.createObjectURL(blob));
-        link.setAttribute("download", "exported_data.csv");
-
-    });
-
-    $("#cp_btn").click(function () {
-        var copyTextarea = document.querySelector('#export_add input');
-        copyTextarea.select();
-        try {
-            var successful = document.execCommand('copy');
-            var msg = successful ? 'successful' : 'unsuccessful';
-            console.log('Copying text command was ' + msg);
-        } catch (err) {
-            console.log('Oops, unable to copy');
-        }
-    });
-    $("#bk_btn").click(function () {
-        $("#export_add").css("display", "none");
-    });
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
@@ -1171,14 +825,6 @@ function charts(data, selectedCharts) {
 
     var ligAveDimension = window.ndx.dimension(function (d) { return parseInt(d.averlight) });
     var laGroup = ligAveDimension.group();
-    
-    /*
-    var firstQL = d3.quantile(sortedLights, 0.33);
-    var secondQL= d3.quantile(sortedLights, 0.66);
-    var xOfFirstQL = actChrtWidth*(firstQL/(extent[1]-extent[0]));
-    var xOfSecondQL = actChrtWidth*(secondQL/(extent[1]-extent[0]));
-    */
-
     var appendableLig = true;
 
     ligAveChart.width(chartWidth).height(chartHeight)
@@ -1259,9 +905,6 @@ function charts(data, selectedCharts) {
         return parseInt(parseFloat(d.income) / 1000) * 1000;
     });
     var iGroup = incomeDimension.group();
-    //var iGroupEmpty = remove_empty_bins(iGroup);
-    //console.log(maxIncY);
-
 
     var appendableInc = true;
     incomeChart.width(chartWidth).height(chartHeight).dimension(incomeDimension).group(iGroup)
@@ -1359,6 +1002,7 @@ function cellSelect(d) {
 
     var cell_id = d.cell_id;
 
+    // Needs a change with ref(MSA_1/cell_id) ..
     var ref = firebase.database().ref(cell_id);
     ref.once("value")
         .then(function (snapshot) {
