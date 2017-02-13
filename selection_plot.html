@@ -54,10 +54,9 @@ var svg = d3.select("#chart").append("svg")
     
 var xSelection = "group"
 var ySelection = "group"
-
 d3.csv("data/groupdata.csv", function(error, data) {
   var list = ["group","value","density","gmp","popChange","gridorder"]
-  
+
   if (error) throw error;
   draw(data,xSelection,ySelection)
   
@@ -129,7 +128,6 @@ function draw(data,xLabel,yLabel){
       d[xLabel] = +d[xLabel];
       d[yLabel] = +d[yLabel];
   });
-
   x.domain(d3.extent(data, function(d) { return d[xLabel]; }));
   y.domain(d3.extent(data, function(d) { return d[yLabel] ; }));
 

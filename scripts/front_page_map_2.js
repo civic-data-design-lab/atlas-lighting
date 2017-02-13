@@ -54,7 +54,10 @@ var list= ["Land_Area","MAX","Average_Sum_of_Light","Sum_of_Light","Population_i
 var tip = d3.tip()
     .attr("class","d3-tip")
     .offset([100,60])
+
 function drawKey(keyData){
+  console.log('drawKey')
+
   //  console.log("key")
     d3.selectAll("#bubble-key svg").remove()
     var size = 30
@@ -98,6 +101,7 @@ var __nodes = null
 var padding = 1;
 var __msaOverview = null
  //drawKey(typeColors)
+
 $(function() {
 	d3.queue()
 		.defer(d3.csv, "../data/groupdata.csv")
@@ -106,6 +110,7 @@ $(function() {
 		.defer(d3.csv, "../data/msa_overview.csv")
     .await(caseDataDidLoad);
 })
+
 function caseDataDidLoad(error,data,us,msaOverview) {
      __msaOverview = msaOverview
     d3.selectAll("#info").style("display","inline")
@@ -123,7 +128,7 @@ function caseDataDidLoad(error,data,us,msaOverview) {
     
     svg.call(tip)    
         
-        d3.select("#frontpage-map svg").selectAll("circle")
+    d3.select("#frontpage-map svg").selectAll("circle")
         .data(msaOverview)        
         .enter()
         .append("circle")
@@ -135,7 +140,7 @@ function caseDataDidLoad(error,data,us,msaOverview) {
         })
     d3.select("#centered").append("div").attr("id","chartTitle")
         
-        draw('mapB',data,us,msaOverview);
+    draw('mapB',data,us,msaOverview);
 
     $( ".radio" ).click(function() {
         $(this).parent().find("label").removeClass("active")
@@ -146,6 +151,8 @@ function caseDataDidLoad(error,data,us,msaOverview) {
 }
 
 var getCenters = function (vname, size,data) {
+  console.log('getCenters')
+
   var centers, map;
   
   var sortedData = data.sort(function(a,b){return parseInt(b.gridorder)-parseInt(a.gridorder)})
@@ -156,8 +163,12 @@ var getCenters = function (vname, size,data) {
   map.nodes({children: centers});
   return centers;
 };
+
+
 function drawPolygons(geoData){
-    var svg = d3.select("#frontpage-map svg")
+  console.log('drawPolygons')
+
+  var svg = d3.select("#frontpage-map svg")
 	var path = d3.geo.path().projection(projection);
     svg.insert("path", ".graticule")
       .datum(topojson.feature(geoData, geoData.objects.land))
@@ -212,90 +223,95 @@ var yAxis = d3.svg.axis()
     .scale(y)
     .ticks(4)
     .orient("left");
-function draw (varname,data,map,msaOverview) {
-    
-      var centers = getCenters(varname, [800, 600],data);
-      labels(centers)
-   //   force.stop();
-      //  var r = d3.scale.linear().range([5,20])
 
-//   r.domain(d3.extent(msaOverview, function(d) {return d["Population_2014"];}));
-r.domain([1000000,20000000])
-    if(varname == "mapB"){
-        d3.selectAll(".country").remove()
-        d3.select("#yAxisData").remove()
-        d3.select("#xAxisData").remove()
-        d3.select("#yAxisArrow").remove()
-        d3.select("#xAxisArrow").remove()
-        force.stop();
-        drawPolygons(map)
-        d3.selectAll("circle")
-        .data(msaOverview)        
-       // .enter()
-        //.append("circle")
-        .transition()//.delay(100).duration(800)          
-        .style("fill",function(d){return cityTypeColors[d.Class]; })
-        .attr("r",function(d){
-            return r(d[rLabel])
-          //  return densityScale(d.density)
-        })
-        .attr("opacity",.5)
-        .attr("cx",function(d){
-            var lat = parseFloat(cityCentroids[d.name].lat)
-            var lng = parseFloat(cityCentroids[d.name].lng)
-            var projectedLat = projection([lng,lat])[0]
-            return projectedLat
-        })
-        .attr("cy",function(d){
-            var lat = parseFloat(cityCentroids[d.name].lat)
-            var lng = parseFloat(cityCentroids[d.name].lng)
-            var projectedLat = projection([lng,lat])[1]
-            return projectedLat
-        })
-        .attr("transform", "translate(80,0)")
-        .attr("cursor","pointer")
+function draw(varname,data,map,msaOverview) {
 
-d3.selectAll("circle")        
-        .on("mouseover",function(d){
-          var tipText = formatTip(d)
-          tip.html(tipText)
-            tip.show()})
-        .on("mouseout",function(){tip.hide()})
+  console.log('draw')
 
-        d3.selectAll(".axis").remove()
-        drawKey(typeColors)  
- //       force.stop();        
-//    }else if(varname =="group"){
-//        d3.select("#yAxisData").remove()
-//        d3.select("#xAxisData").remove()
-//        force.on("tick", tick(centers, varname,data));
-//        
-//        d3.selectAll(".country").remove()
-//         force.resume();
-//        var rScale = d3.scale.linear().domain([10,100]).range([3,25])
-//        d3.selectAll("circle").data(data)
-//                // .transition().duration(100)          
-//        .style("fill",function(d){ return cityNameColors[d.name]})
-//        .attr("r",function(d){return rScale(parseFloat(d.value))})
-//        .attr("opacity",1)
-//        d3.selectAll(".axis").remove()
-//        drawKey(cityNameColors)
-//        labels(centers)
-//        .attr("cursor","pointer")
-//        d3.selectAll("#groupF").style("fill","red")        
-    }else if(varname =="msaB"){
+  var centers = getCenters(varname, [800, 600],data);
+  labels(centers)
+  //   force.stop();
+  //  var r = d3.scale.linear().range([5,20])
 
-             force.stop();
-        d3.selectAll(".country").remove()
-        d3.selectAll(".axis").remove()         
-             force.resume();
-        d3.select("#yAxisData").remove()
-        d3.select("#xAxisData").remove()
-        d3.select("#yAxisArrow").remove()
-        d3.select("#xAxisArrow").remove()
-        drawCustomBubbleChart(__msaOverview)
-    }
+  //   r.domain(d3.extent(msaOverview, function(d) {return d["Population_2014"];}));
+  r.domain([1000000,20000000])
+  if(varname == "mapB"){
+      d3.selectAll(".country").remove()
+      d3.select("#yAxisData").remove()
+      d3.select("#xAxisData").remove()
+      d3.select("#yAxisArrow").remove()
+      d3.select("#xAxisArrow").remove()
+      force.stop();
+      drawPolygons(map)
+      d3.selectAll("circle")
+      .data(msaOverview)        
+     // .enter()
+      //.append("circle")
+      .transition()//.delay(100).duration(800)          
+      .style("fill",function(d){return cityTypeColors[d.Class]; })
+      .attr("r",function(d){
+          return r(d[rLabel])
+        //  return densityScale(d.density)
+      })
+      .attr("opacity",.5)
+      .attr("cx",function(d){
+          var lat = parseFloat(cityCentroids[d.name].lat)
+          var lng = parseFloat(cityCentroids[d.name].lng)
+          var projectedLat = projection([lng,lat])[0]
+          return projectedLat
+      })
+      .attr("cy",function(d){
+          var lat = parseFloat(cityCentroids[d.name].lat)
+          var lng = parseFloat(cityCentroids[d.name].lng)
+          var projectedLat = projection([lng,lat])[1]
+          return projectedLat
+      })
+      .attr("transform", "translate(80,0)")
+      .attr("cursor","pointer")
+
+  d3.selectAll("circle")        
+      .on("mouseover",function(d){
+        var tipText = formatTip(d)
+        tip.html(tipText)
+          tip.show()})
+      .on("mouseout",function(){tip.hide()})
+
+      d3.selectAll(".axis").remove()
+      drawKey(typeColors)  
+  //       force.stop();        
+  //    }else if(varname =="group"){
+  //        d3.select("#yAxisData").remove()
+  //        d3.select("#xAxisData").remove()
+  //        force.on("tick", tick(centers, varname,data));
+  //        
+  //        d3.selectAll(".country").remove()
+  //         force.resume();
+  //        var rScale = d3.scale.linear().domain([10,100]).range([3,25])
+  //        d3.selectAll("circle").data(data)
+  //                // .transition().duration(100)          
+  //        .style("fill",function(d){ return cityNameColors[d.name]})
+  //        .attr("r",function(d){return rScale(parseFloat(d.value))})
+  //        .attr("opacity",1)
+  //        d3.selectAll(".axis").remove()
+  //        drawKey(cityNameColors)
+  //        labels(centers)
+  //        .attr("cursor","pointer")
+  //        d3.selectAll("#groupF").style("fill","red")        
+  }else if(varname =="msaB"){
+
+           force.stop();
+      d3.selectAll(".country").remove()
+      d3.selectAll(".axis").remove()         
+           force.resume();
+      d3.select("#yAxisData").remove()
+      d3.select("#xAxisData").remove()
+      d3.select("#yAxisArrow").remove()
+      d3.select("#xAxisArrow").remove()
+      drawCustomBubbleChart(__msaOverview)
+  }
 }
+
+
 var units = {
   "value":"value unit",
   "density":"# per sq mile",
@@ -303,27 +319,27 @@ var units = {
   "popChange":"%"
 }
 
-
-
 function drawCustomBubbleChart(data){
+  console.log('drawCustomBubbleChart')
 
-    var svg = d3.select("#frontpage-map svg")
+  var svg = d3.select("#frontpage-map svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
       .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    
-
-  d3.selectAll("#frontpage-map circle").remove()
+  
+  d3.selectAll("#frontpage-map circle").remove();
                 
   generateAxis(list,data,xSelection,ySelection,rLabel)
   drawChart(data,xSelection,ySelection,rLabel)
     
 }
+
 function generateAxis(list,data,xSelection,ySelection,rLabel){
+  console.log('generateAxis')
     d3.select("#centered").append("select").attr("id","xAxisData")
     d3.select("#centered").append("select").attr("id","yAxisData")
-          d3.select("#chartTitle").html(ySelection.split("_").join(" ")+"/"+xSelection.split("_").join(" "))
+    d3.select("#chartTitle").html(ySelection.split("_").join(" ")+"/"+xSelection.split("_").join(" "))
 
     d3.select("#centered").append("svg").attr("id","xAxisArrow")
     .attr("width",8)
@@ -345,37 +361,41 @@ function generateAxis(list,data,xSelection,ySelection,rLabel){
     .attr("height",8)
     .attr("xlink:href","../icons/arrow_down.png")
 
-      for(var i in list){
-          var label = list[i].split("_").join(" ")
-        d3.select("#yAxisData").append("option").attr("value",list[i])
-          .text(label)
-          .attr("id",list[i])
-              d3.select("#"+ySelection).attr("selected","selected")
-      }
-      for(var i in list){
-          var label = list[i].split("_").join(" ")
-          
-        d3.select("#xAxisData").append("option").attr("value",list[i]).text(label).attr("id",list[i])
-          if(list[i]==xSelection){
-              d3.select("#"+xSelection).attr("selected","selected")
-          }
-      }
-      
-      d3.select("#xAxisData").on("change",function(){
-        xSelection = d3.select("#xAxisData").property('value')
-        update(data,xSelection,ySelection,rLabel)
-          d3.select("#chartTitle").html(ySelection.split("_").join(" ")+"/"+xSelection.split("_").join(" "))
-      })
-      d3.select("#yAxisData").on("change",function(){
-        ySelection = d3.select("#yAxisData").property('value')
-        update(data,xSelection,ySelection,rLabel)
-          d3.select("#chartTitle").html(ySelection.split("_").join(" ")+"/"+xSelection.split("_").join(" "))
-      })
+    for(var i in list) {
+        var label = list[i].split("_").join(" ")
+      d3.select("#yAxisData").append("option").attr("value",list[i])
+        .text(label)
+        .attr("id",list[i])
+            d3.select("#"+ySelection).attr("selected","selected")
+    }
+
+    for(var i in list){
+        var label = list[i].split("_").join(" ")
+        
+      d3.select("#xAxisData").append("option").attr("value",list[i]).text(label).attr("id",list[i])
+        if(list[i]==xSelection){
+            d3.select("#"+xSelection).attr("selected","selected")
+        }
+    }
+    
+    d3.select("#xAxisData").on("change",function(){
+  console.log(data.length)
+
+      xSelection = d3.select("#xAxisData").property('value')
+      update(data,xSelection,ySelection,rLabel)
+      d3.select("#chartTitle").html(ySelection.split("_").join(" ")+"/"+xSelection.split("_").join(" "))
+    })
+    d3.select("#yAxisData").on("change",function(){
+      ySelection = d3.select("#yAxisData").property('value')
+      update(data,xSelection,ySelection,rLabel)
+      d3.select("#chartTitle").html(ySelection.split("_").join(" ")+"/"+xSelection.split("_").join(" "))
+    })
 
 }
 
 function update(data,xLabel,yLabel,rLabel){
-
+  console.log('update')
+  console.log(data.length)
   data.forEach(function(d) {
     d[xLabel] = +d[xLabel];
     d[yLabel] = +d[yLabel];
@@ -383,25 +403,26 @@ function update(data,xLabel,yLabel,rLabel){
   x.domain(d3.extent(data, function(d) { return d[xLabel];}));  
   y.domain(d3.extent(data, function(d) { return d[yLabel];}));
   //r.domain(d3.extent(data, function(d) { return d[rLabel];}));
-r.domain([1000000,20000000])
-  
- var svg = d3.select("#frontpage-map svg")
-d3.selectAll(".axis").remove()
-svg.append("g")
-    .attr("class", "x axis")
-      .attr("transform", "translate(80," + height + ")")
-    .call(xAxis)
-  .append("text")
-    .attr("class", "label")
-    .attr("x", width)
-    .attr("y", -6)
-    .style("text-anchor", "end")
-    .text(units[xLabel]);
+  r.domain([1000000,20000000])
+    
+  var svg = d3.select("#frontpage-map svg")
+  d3.selectAll(".axis").remove();
+  // d3.selectAll("circle").remove();
+  svg.append("g")
+      .attr("class", "x axis")
+        .attr("transform", "translate(80," + height + ")")
+      .call(xAxis)
+    .append("text")
+      .attr("class", "label")
+      .attr("x", width)
+      .attr("y", -6)
+      .style("text-anchor", "end")
+      .text(units[xLabel]);
 
-svg.append("g")
-    .attr("class", "y axis")
-    .call(yAxis)
-      .attr("transform", "translate(80,0)")
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+        .attr("transform", "translate(80,0)")
     
   .append("text")
     .attr("class", "label")
@@ -411,15 +432,17 @@ svg.append("g")
     .style("text-anchor", "end")
     .text(units[yLabel])
 
-  d3.selectAll("circle")    
+  svg.selectAll("circle")    
     .transition().duration(1000)
     .attr("cx", function(d) { return x(d[xLabel]); })
     .attr("cy", function(d) { return y(d[yLabel] ); })
-      .attr("r", function(d){ return r(d[rLabel]);})
+    .attr("r", function(d){ return r(d[rLabel]);})
     
 }
 
 function drawChart(data,xLabel,yLabel,rLabel){
+  console.log('drawChart')
+
   var svg = d3.select("#frontpage-map svg")
   
     var tip = d3.tip()
@@ -432,11 +455,10 @@ function drawChart(data,xLabel,yLabel,rLabel){
       d[xLabel] = +d[xLabel];
       d[yLabel] = +d[yLabel];
   });
-
   x.domain(d3.extent(data, function(d) { return d[xLabel];}));  
   y.domain(d3.extent(data, function(d) { return d[yLabel];}));
-//  r.domain(d3.extent(data, function(d) { return d[rLabel];}));
-r.domain([1000000,20000000])
+  //  r.domain(d3.extent(data, function(d) { return d[rLabel];}));
+  r.domain([1000000,20000000])
 
   svg.append("g")
       .attr("class", "x axis")
@@ -466,7 +488,7 @@ r.domain([1000000,20000000])
       .enter().append("circle")
       .attr("transform", "translate(80,0)")
       .attr("class", xLabel+"_"+yLabel)
-      .attr("r", function(d){ return r(d[rLabel]);;})
+      .attr("r", function(d){ return r(d[rLabel]);})
       .attr("opacity",.5)
       .attr("cx", function(d) { return x(d[xLabel]); })
       .attr("cy", function(d) { return y(d[yLabel] ); })
@@ -520,35 +542,36 @@ function formatTip(data){
   
   return formatted
 }
+
 function tick(centers, varname,data) {
     var nodes = __nodes
-  var foci = {};
-  for (var i = 0; i < centers.length; i++) {
-    foci[centers[i].name] = centers[i];
-  }
-  return function (e) {
-    for (var i = 0; i < data.length; i++) {
-      var o = data[i];
-      var f = foci[o[varname]];
-      o.y += ((f.y + (f.dy / 2)) - o.y) * e.alpha;
-      o.x += ((f.x + (f.dx / 2)) - o.x) * e.alpha;
+    var foci = {};
+    for (var i = 0; i < centers.length; i++) {
+      foci[centers[i].name] = centers[i];
     }
-    nodes.each(collide(.05,data))
-      .attr("cx", function (d) { return d.x; })
-      .attr("cy", function (d) { return d.y; });
-  }
+    return function (e) {
+      for (var i = 0; i < data.length; i++) {
+        var o = data[i];
+        var f = foci[o[varname]];
+        o.y += ((f.y + (f.dy / 2)) - o.y) * e.alpha;
+        o.x += ((f.x + (f.dx / 2)) - o.x) * e.alpha;
+      }
+      nodes.each(collide(.05,data))
+        .attr("cx", function (d) { return d.x; })
+        .attr("cy", function (d) { return d.y; });
+    }
 }
 
 function labels (centers) {
-var svg = d3.select("#frontpage-map svg")
-  svg.selectAll(".label").remove();
-  svg.selectAll(".label")
-  .data(centers).enter().append("text")
-  .attr("class", "label")
-  .text(function (d) {return groupToWords[d.name] })
-  .attr("transform", function (d) {
-    return "translate(" + (d.x + (d.dx / 4)) + ", " + (d.y + 20) + ")";
-  });
+  var svg = d3.select("#frontpage-map svg")
+    svg.selectAll(".label").remove();
+    svg.selectAll(".label")
+    .data(centers).enter().append("text")
+    .attr("class", "label")
+    .text(function (d) {return groupToWords[d.name] })
+    .attr("transform", function (d) {
+      return "translate(" + (d.x + (d.dx / 4)) + ", " + (d.y + 20) + ")";
+    });
 }
 
 function removePopovers () {
@@ -575,8 +598,8 @@ function showPopover (d) {
 function collide(alpha,data) {
     var maxRadius = d3.max(_.pluck(data, 'radius'));
     
-  var quadtree = d3.geom.quadtree(data);
-  return function (d) {
+    var quadtree = d3.geom.quadtree(data);
+    return function (d) {
     var r = d.radius + maxRadius + padding,
         nx1 = d.x - r,
         nx2 = d.x + r,
