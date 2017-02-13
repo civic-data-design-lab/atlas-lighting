@@ -207,12 +207,22 @@ function initControl() {
             $(this).css("background-color", "rgba(255,255,255,0)");
             var currentToDropHeight = $('#todrop').css('height');
             $('#todrop').css('height', 'calc(100%-300px)');
+            $(this).css("background-color", "rgba(0,0,0,0)");
+            $(this).css("border-width", "1px");
+            $('.drop_indi').css("color", "rgba(255,255,255,1)");
+            $('#todrop > img').removeClass("invert");
         },
         over: function (event, ui) {
-            $(this).css("background-color", "rgba(255,255,255,0.2)");
+            $(this).css("background-color", "rgba(255,255,255,0.6)");
+            $(this).css("border-width", "0px");
+            $('.drop_indi').css("color", "rgba(0,0,0,1)");
+            $('#todrop > img').attr("class", "invert");
         },
         out: function (event, ui) {
-            $(this).css("background-color", "rgba(255,255,255,0)");
+            $(this).css("background-color", "rgba(0,0,0,0)");
+            $(this).css("border-width", "1px");
+            $('.drop_indi').css("color", "rgba(255,255,255,1)");
+            $('#todrop > img').removeClass("invert");
         }
 
 

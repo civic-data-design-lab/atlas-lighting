@@ -59,6 +59,8 @@
 
   app.use(serveStatic('./data'));
 
+  app.use(serveStatic('./view'));
+
   app.use(serveStatic('./node_modules/dc'));
 
   app.use(serveStatic('./scripts'));
@@ -66,13 +68,13 @@
   app.use(serveStatic('./', {
     'index': ['landing.html', 'landing.htm']
   }));
-
+  
   app.get('/', function(req, res) {
     res.render('index', function(err, html) {
       res.send(html);
     });
   });
-
+  
   app.get('/grids/:msa', function(req, res) {
     sequelize.query('SELECT * FROM grid WHERE msa = :msa ', {
       replacements: {

@@ -17,10 +17,12 @@
 
 html {
     overflow: scroll;
+
 }
 
 .container- {
     overflow: hidden;
+
 }
 
 body{
@@ -247,6 +249,7 @@ canvas {
     font-weight: 200;
     
 }
+
 .dc-data-count a{
     display: none;
     color:#fff;
@@ -365,12 +368,13 @@ canvas {
     padding: 10px;
     background-color: rgba(0,0,0,.7);
     width: 410px;    
-    height: calc(100% - 100px);    
+    height: 100%;  /*calc(100% - 100px);*/  
     position: absolute;
     top: 40px;
     right: 0px;
     overflow: auto;
     overflow-x: hidden;
+    display:table;
     /*overflow-y: hidden;*/
 }
 
@@ -577,14 +581,20 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 }
 
 #todrop {
-    position: absolute;
-    background-color: rgba(255,255,255,0);
+    z-index: 99 !important;
+    position: fixed;
+    display:table-row;
+    background-color: rgba(0,0,0,0);
     margin-top:10px;
-    border: 1px dashed #ddd;
+    border-width: 1px;
+    border-style: dashed;
+    border-color: #ddd;
     border-radius: 5px;
     font-size: 20px;
     width: 410px;
-    height: 400px;
+    height: 160px;
+    bottom:0;
+    margin-bottom:50px;
 }
 
 .fold_bar {
@@ -620,10 +630,12 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 .drop_indi {
     position: absolute;
     left: 50%;
-    top:65%;
+    top:75%;
     -webkit-transform: translate(-50%,-50%);
             transform: translate(-50%,-50%);
-    font-size: 24px;
+    /*font-family:Dosis;
+    font-weight:500;*/
+    font-size: 18px;
     width: 300px;
     text-align: center;
 }
@@ -931,11 +943,14 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 
 #export {
     position: fixed;
-    width: 430px;    
+    width: 410px;    
     right: 0px;
     bottom: 0px;
     height: 40px;
-    background-color: rgba(100,100,100,.7);
+    margin-left:10px;
+    margin-right:10px;
+    border: 2px solid white;
+    /*background-color: rgba(100,100,100,.7);*/
 }
 
 #case-navigation {
@@ -1244,10 +1259,28 @@ a.reset {
 
 #todrop > img {
     position: relative;
-    top: 30%;
-    width: 90px;
-    left: 35%;
+    top: 15%;
+    width: 60px;
+    left: 38%;
 }
+
+#all_charts{;/*480px;*/
+    diplay:table-row;
+    position:fixed;
+    height: calc(100% - 275px);
+    /*border:1px solid white;*/
+    border-bottom:1px solid white;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin-bottom:5px;
+}
+
+
+.invert {
+    -webkit-filter: invert(100%);
+    filter: invert(100%);
+}
+
 
 p#export_btn.mybtn {
     display: block;
