@@ -76,7 +76,8 @@ function showCase(caseNum, pageNum){
 		break;
 	case 2:
 		if (pageNum == 7){
-			$("#case-navigation .nav-next").hide()
+			$("#case-navigation .nav-next").hide();
+			$("#back_to_map").show();
 		} else {
 			$("#case-navigation .nav-next").show()
 		}
@@ -123,7 +124,8 @@ function showCase(caseNum, pageNum){
 			$("#case-text").html(
 				'<p>This is Case 2, Page 5. Chicago urban high population density with streetview. In Chicago Metropolitan Statistical Area , we see that a large proportion of the high intensity lightings occur within the Cook county, whereas low lighting areas occur in suburban and rural areas.  Cook county has higher population density than outer suburbs, with more of the population living inside multi-floored townhouses and apartment buildings. The urban fabric is dense and street lighting network is tightly connected.</p>')
 			incomeChart.filter([0, 250000])
-			dc.redrawAll()
+			incomeChart._doRedraw()
+			//dc.redrawAll()
 
 			__map.setZoom(13);
 			__map.setCenter(new mapboxgl.LngLat(-87.60073880988456,41.80349170325138));
@@ -196,7 +198,7 @@ $("#case_studies #case_study_2").click(function () {
 		window.old_data = window.mydata
 		window.old_zoom = __map.getZoom()
 		window.old_center = __map.getCenter()
-		dataDidLoad(null, window.chicago_data)
+		dataDidLoad(null,  window.chicago_data)
 	}
 
     $("#case-info #case-1").hide()
@@ -206,9 +208,17 @@ $("#case_studies #case_study_2").click(function () {
 
 $("#case-navigation .nav-next").click(function(){
 	$(".dc-chart").hide();
+	$("#todrop").hide();
 	showCase(currCase, currPage + 1)
 })
+
 $("#case-navigation .nav-prev").click(function(){
 	$(".dc-chart").hide();
 	showCase(currCase, currPage - 1)
 })
+
+$("#back_to_map").click(function(){
+	
+})
+
+

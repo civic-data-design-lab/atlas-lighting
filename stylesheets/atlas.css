@@ -955,10 +955,11 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 
 #case-navigation {
     position: fixed;
-    width: 400px;    
+    width: 405px;    
     right: 0px;
     bottom: 0px;
     height: 40px;
+    margin-right:12px;
     background-color: rgba(100,100,100,.7);
 }
 
@@ -967,6 +968,10 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     color: white;
     font-size: 15px;
     padding-top: 10px;
+}
+
+#back_to_map {
+    display:none;
 }
 
 #export_add {
@@ -1306,6 +1311,17 @@ p#export_btn.mybtn {
     position: relative;
     display: block;
     top: 35%;
+}
+
+#tab-name-2 {
+    -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
+    -webkit-writing-mode: vertical-rl;
+        -ms-writing-mode: tb-rl;
+            writing-mode: vertical-rl;
+    position: relative;
+    display: block;
+    top: 20%;
 }
 
 

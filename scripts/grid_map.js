@@ -122,6 +122,23 @@ function dataDidLoad(error, grid, chicago_data) {
     
 }
 
+function dataDidLoad2(error, grid, chicago_data){
+    if (chicago_data) {
+        window.chicago_data = chicago_data
+    }
+    d3.select("#loader").transition().duration(600).style("opacity", 0).remove();
+
+    window.dataLst = Object.keys(grid[0])
+    window.mydata = grid;
+
+    charts(grid, selectedCharts);
+
+    initCanvas(grid);
+
+    initControl();
+
+}
+
 function project(d) {
     return __map.project(getLL(d));
 }
@@ -1270,6 +1287,7 @@ function charts(data, selectedCharts) {
             var extent = d3.extent(data, function(el){return parseInt(parseFloat(el.income) / 1000) * 1000});
             var sorted = data.map(function(el){return parseInt(parseFloat(el.income) / 1000) * 1000}).sort(function(a, b){return a - b});
             var quants = quantileCalc(extent, sorted, actChrtWidth);
+            console.log(extent)
 
             if (appendableInc){
                 addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6); // 5, 5
