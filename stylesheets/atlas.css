@@ -368,7 +368,7 @@ canvas {
     padding: 10px;
     background-color: rgba(0,0,0,.7);
     width: 410px;    
-    height: 100%;  /*calc(100% - 100px);*/  
+    height:calc(100% - 100px);   /*100%;*/  
     position: absolute;
     top: 40px;
     right: 0px;
@@ -591,10 +591,10 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     border-color: #ddd;
     border-radius: 5px;
     font-size: 20px;
-    width: 410px;
+    width: 405px;
     height: 160px;
     bottom:0;
-    margin-bottom:50px;
+    margin-bottom:52px;
 }
 
 .fold_bar {
@@ -943,12 +943,12 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 
 #export {
     position: fixed;
-    width: 410px;    
+    width: 405px;    
     right: 0px;
     bottom: 0px;
     height: 40px;
-    margin-left:10px;
-    margin-right:10px;
+    margin-left:0px;
+    margin-right:12px;
     border: 2px solid white;
     /*background-color: rgba(100,100,100,.7);*/
 }
@@ -974,7 +974,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     position: absolute;
     z-index: 10;
     top: -3px;
-    background-color: black;
+    background-color: rgba(0, 0, 0, 0.8);
     width: 460px;
     height: 43px;
 }
