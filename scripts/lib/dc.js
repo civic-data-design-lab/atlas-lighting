@@ -2792,7 +2792,8 @@ dc.coordinateGridMixin = function (_chart) {
     var _zoomOutRestrict = true;
 
     var _zoom = d3.behavior.zoom().on('zoom', zoomHandler);
-    var _nullZoom = d3.behavior.zoom().on('zoom', null);
+    //var _nullZoom = d3.behavior.zoom().on('zoom', null);
+    var _nullZoom = function () { return null; }
     var _hasBeenMouseZoomable = false;
 
     var _rangeChart;

@@ -5,6 +5,13 @@
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
+function updateNDX(data){
+    console.log(data.length);
+    window.ndx.remove();
+    window.ndx.add(data);
+    dc.redrawAll();
+}
+
 
 /* Convert Thousands to K format. Code by @Jake Feasel.
  */

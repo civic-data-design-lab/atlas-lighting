@@ -12,6 +12,7 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
 
     var selectedTypes = [];
     var cellsData = [];
+    var originalData = [];
     var cellSelected = false;
 
     var margin = { top: 0, left: 10, right: 10, bottom: 20 },
@@ -210,7 +211,7 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
      }
     
     /* 
-     * Initiate the cells with random values(1 or 0).
+     * Initiate the cells with 0's.
      * @method initial
      * @return {Void}
      */
@@ -222,39 +223,68 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
     };
     
     
-    that.clean = function(){
-        cells = cells.map(function(e){ return e && 0});
+    that.clean = function(cells){
+        var cleaned = cells.map(function(e){ return e && 0});
+        return cleaned;
     };
-
 
     that.difference = function(a, b){
         exist = _.isEqual(a, b) ? false : true;
         return exist
     };
 
-    that.differenceArray = function(a, b){
-        return true;
+    that.convertToArray = function(data){
+        cellState = data.map(function(el){
+            return ($('#c'+el.cell_id+':visible').length == 0) ? 0 : 1 ;
+        });
+        return cellState;
+
     }
 
-    that.merge= function(a, b){
+    that.convertToObject = function(data){
+        cellState = data.map(function(el){
+            var val = ($('#c'+el.cell_id+':visible').length == 0) ? 0 : 1 ;
+            return {cell_id: el.cell_id, state:val};
+        });
+        return cellState;
+
+    }
+
+    that.merge = function(a, b){
         var merged = a.map(function(e, i){
             return e || b[i];
         });
         return merged;
     };
 
-    /* Display our binary array as cells.
-     * @method displayByBinary
-     * @param {Array} initial or merged array
-     */
+    that.alterState = function(data){
+        var state = convertToArray(data);
+        var remember = state.slice(0);
+        state.map();
+        return {oldState:stateToRemember, newState:state};
 
-    that.displayByBinary = function(merged){
-        merged.forEach(function(el){
-            d3.select("#c" + el.cell_id).style("display", "block");
-        })
     }
 
-    //This should be rewritten
+    
+    var filterToOriginal = function(data){
+
+        data.map(function(el){
+            var total = selectedTypes.reduce(function(acc, e){
+                return el[e] ? (acc + 1) : acc ;
+            }, 0);
+
+            if (total !== selectedTypes.length){
+                d3.select("#c" + el.cell_id).style("display", "none");
+                //avg_light += el.averlight;
+                //count ++;
+            } else {
+                d3.select("#c" + el.cell_id).style("display", "block");
+            }
+        });
+        console.log("I'm here!");
+        updateNDX(data);
+
+    }
 
     /* Filter grid cells by checking whether they contain at least one business  
      * from selected types. 
@@ -262,14 +292,47 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
      * @param {Array} Data array
      */
 
+    var filterTypes2 = function(data){
+        //var avg_light = 0;
+        //var count = 0;
+        var filtered = data.filter(function(el){
+            var total = selectedTypes.reduce(function(acc, e){
+                return el[e] ? (acc + 1) : acc ;
+            }, 0);
+
+            if (total !== selectedTypes.length){
+                d3.select("#c" + el.cell_id).style("display", "none");
+                //avg_light += el.averlight;
+                //count ++;
+            } else {
+                d3.select("#c" + el.cell_id).style("display", "block");
+                return el;
+            }
+        });
+
+        updateNDX(filtered);
+
+        //avg_light /= count;
+        //avg_light = Math.round(avg_light);
+        //d3.select("#light_digits_o").text(avg_light);
+        //d3.select("#light_digits_o").attr("sv_val", avg_light);
+    }
+
+ 
+    // This should be rewritten
+
+    /* Filter grid cells by checking whether they contain at least one business  
+     * from selected types. 
+     * @method filterTypes
+     * @param {Array} Data array
+     */
+
+
     var filterTypes = function(data) {
-
-         d3.selectAll(".cellgrids").style("display", "none");
-
          var avg_light = 0;
          var count = 0;
 
-         data.forEach(function(el){
+         data.map(function(el){
              var total = selectedTypes.reduce(function(acc, e){
                  return el[e] ? (acc + 1) : acc ;
              }, 0);
@@ -278,11 +341,13 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
                  d3.select("#c" + el.cell_id).style("display", "block");
                  avg_light += el.averlight;
                  count ++;
+             } else {
+                 d3.select("#c" + el.cell_id).style("display", "none");
              }
          });
 
          avg_light /= count;
-         avg_light = Math.round(avg_light * 100) / 100
+         avg_light = Math.round(avg_light);
          d3.select("#light_digits_o").text(avg_light);
          d3.select("#light_digits_o").attr("sv_val", avg_light);
 
@@ -306,6 +371,15 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
         cellsData = data;
     }
 
+    /* Bind original cell data to the widget
+     * @method bindData
+     * @param {Array} Data array
+     */
+
+    that.bindOriginalData = function(data){
+        originalData = data;
+    }
+
     /* Update business types widget with new data
      * @method updateBusTypes
      * @param {Array} Data array
@@ -314,9 +388,7 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
     that.updateBusTypes = function(data) {
 
         var fData = formatData(data);
-
         var fData = fData.sort(function(a, b) {return b.count - a.count});
-
         var fiData = calcXAndY(fData);
 
         var typeSort = g.selectAll("text")
@@ -379,12 +451,16 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
                         var category = d3.select(this).text();
                         var ind = selectedTypes.indexOf(category);
                         selectedTypes.splice(ind, 1);
-                        filterTypes(cellsData);
+                        if (selectedTypes.length === 0){
+                            filterToOriginal(originalData);
+                        } else {
+                            filterTypes2(cellsData);
+                        }
                     } else {
                         d3.select(this).classed("active", true);
                         var category = d3.select(this).text();
                         selectedTypes.push(category);
-                        filterTypes(cellsData);
+                        filterTypes2(cellsData);
                         }
                 //} else {
                 //    console.log("You can filter by business types if you deselect grid cells")

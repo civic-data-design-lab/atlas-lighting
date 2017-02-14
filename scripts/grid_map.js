@@ -21,6 +21,8 @@ window.dataLst = [];
 window.mydata;
 window.zoomedData = ["street_view", "instagram_pics"];
 window.newData;
+window.topics;
+window.state;
 window.typesData = [];
 
 var __map = null
@@ -53,7 +55,7 @@ var instaTopics = ['advertising','beverage','car','entertainment',
         'family','fashion','food','interiors','landscape','monochrome','nature',
         'portrait','sky','sports'];
 
-// Business Types Widget is initiated here.
+// Business Types Widget is initiated here:
 var newBusTypesChart = tagCloudChart(390, 100, "#business_types");
 var instaTopicsChart = tagCloudChart(370, 100, "#instagram_topics" ); //390
 ////////////////////////////////////////////////////////////////////////////////
@@ -112,6 +114,7 @@ function dataDidLoad(error, grid, topics) {
 
     window.dataLst = Object.keys(grid[0])
     window.mydata = grid;
+    window.state = newBusTypesChart.convertToArray(grid);
     window.topics = topics;
 
     charts(grid, selectedCharts);
@@ -128,7 +131,7 @@ function dataDidLoad2(error, grid, chicago_data){
     }
     d3.select("#loader").transition().duration(600).style("opacity", 0).remove();
 
-    window.dataLst = Object.keys(chi[0])
+    window.dataLst = Object.keys(chicago_data[0])
     window.mydata = grid;
 
     charts(grid, selectedCharts);
@@ -538,9 +541,9 @@ function charts(data, selectedCharts) {
     });
 
     window.typesData = typeSums;
-    
-    newBusTypesChart.bindData(data);
-    newBusTypesChart.updateBusTypes(typeSums);
+    //newBusTypesChart.bindData(window.newdata);
+    //newBusTypesChart.updateBusTypes(typeSums);
+
     window.count = data.length;
     
     ////////////////////////////////////////////////////////////////////////////////
@@ -927,6 +930,7 @@ function charts(data, selectedCharts) {
             var end = mytime[1];
 
             filterhour(window.newData,start,end);
+            newBusTypesChart.bindData(window.newData);
 
             var extent = d3.extent(data, function(el){return parseInt(parseFloat(el.income) / 1000) * 1000});
             var sorted = data.map(function(el){return parseInt(parseFloat(el.income) / 1000) * 1000}).sort(function(a, b){return a - b});
@@ -950,6 +954,13 @@ function charts(data, selectedCharts) {
 
     incomeChart.yAxis().ticks(2)
     incomeChart.xAxis().ticks(4)
+
+
+    //////////////////////////////////// Business Types Chart ///////////////////////////////////
+
+    newBusTypesChart.bindOriginalData(data);
+    newBusTypesChart.bindData(window.newData);
+    newBusTypesChart.updateBusTypes(typeSums);
 
     dc.dataCount(".dc-data-count")
         .dimension(window.ndx)
@@ -1220,7 +1231,6 @@ function timeSelector(chartWidth,chartHeight) {
         brush.extent()[1] = Math.round(brush.extent()[1])
         var rdstart = Math.round(brush.extent()[0]);
         var rdend = Math.round(brush.extent()[1]);
-        console.log(rdstart);
         
         brush.extent([rdstart,rdend]);
         
@@ -1230,7 +1240,6 @@ function timeSelector(chartWidth,chartHeight) {
             //d3.selectAll('.brushItem').select('g.resize.e').attr("transform", "translate(202.5,0)");
             //d3.selectAll('.brushItem').select('g.resize.w').attr("transform", "translate(67.5,0)");
             //use mbstock example here:
-            console.log(brush.empty());
             filterhour(window.newData, start, end);
             brush.extent([6, 18]); //rdstart, rdend
             brush(d3.select(".brushItem").transition().duration(500));

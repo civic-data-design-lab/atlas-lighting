@@ -102,6 +102,7 @@ function showCase(caseNum, pageNum){
 			$("#map-info").show()
 			incomeChart.filter([0, 58000])
 			incomeChart._doRedraw()
+			//dc.redrawAll();
 			updateAndSelectCharts(["income"])
 			break;
 		case 3:
