@@ -957,6 +957,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     bottom: 0px;
     height: 40px;
     background-color: rgba(0,0,0,.8);
+    border-left: 1px solid rgba(255,255,255,0.5);
 }
 
 
