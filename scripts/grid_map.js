@@ -920,6 +920,7 @@ function charts(data, selectedCharts) {
             d3.select("#map .datalayer").remove()
             var canvas = __canvas
 
+            
             d3.selectAll(".cellgrids").style("display", "none");
             var mytime = $("#selected_time").text().split(" - ");
             var start = mytime[0];
