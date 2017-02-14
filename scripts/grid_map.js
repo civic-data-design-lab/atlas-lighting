@@ -90,10 +90,9 @@ var myinit = function () {
 
     var q = d3.queue(2).defer(d3.csv, "../data/" + currentCity_o + "_grid.csv")
                        .defer(d3.csv, "../data/denver_instagram_topics.csv")
-    /*
     if (currentCity_o != "Chicago"){
-        q.defer(d3.csv, "../data/" + "Chicago" + "_grid.csv"/*"grids/" + currentCity)
-    } */
+        q.defer(d3.csv, "../data/Chicago_grid.csv")
+    }
     //.defer(d3.json, "data/"+currentCity+"_zipcode.json"/*"zipcode_business_geojson/" + currentCity*/)
     q.await(dataDidLoad);
 }
@@ -107,12 +106,15 @@ var myinit = function () {
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-function dataDidLoad(error, grid, topics) {
+function dataDidLoad(error, grid, topics, chicago_data) {
+    if (!grid) return
+
     d3.select("#loader").transition().duration(600).style("opacity", 0).remove();
 
     window.dataLst = Object.keys(grid[0])
     window.mydata = grid;
-    window.topics = topics;
+    if (topics) window.topics = topics;
+    if (chicago_data) window.chicago_data = chicago_data;
 
     charts(grid, selectedCharts);
 
@@ -120,23 +122,6 @@ function dataDidLoad(error, grid, topics) {
 
     initControl();
     
-}
-
-function dataDidLoad2(error, grid, chicago_data){
-    if (chicago_data) {
-        window.chicago_data = chicago_data
-    }
-    d3.select("#loader").transition().duration(600).style("opacity", 0).remove();
-
-    window.dataLst = Object.keys(chi[0])
-    window.mydata = grid;
-
-    charts(grid, selectedCharts);
-
-    initCanvas(grid);
-
-    initControl();
-
 }
 
 function project(d) {

@@ -375,6 +375,7 @@ canvas {
     overflow: auto;
     overflow-x: hidden;
     display:table;
+    border-left: 1px solid rgba(255,255,255,0.5);
     /*overflow-y: hidden;*/
 }
 
@@ -573,7 +574,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     padding: 10px;
     position: absolute;
     left: 0px;
-    width: 200px;
+    /*width: 200px;*/
     text-align: left;
     top: 50%;
     -webkit-transform: translateY(-50%);
@@ -665,7 +666,16 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 }
 
 #case-text {
-    font-size: 15px;
+    margin-left: 12px;
+    font-size: 18px;
+    padding-bottom: 20px;
+}
+
+.case-title{
+    padding-top: 12px;
+    margin-left: 12px;
+    font-size: 27px;
+    font-family: Dosis;
 }
 
 .selectedTab {
@@ -962,14 +972,17 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     /*background-color: rgba(0,0,0,.8);*/
 }
 
+#case-navigation .bottom_btn {
+    padding-bottom: 9px;
+    outline: rgba(255,255,255,0.5) solid thin;
+}
+
 #case-navigation {
     position: fixed;
-    width: 405px;    
+    width: 430px;    
     right: 0px;
     bottom: 0px;
     height: 40px;
-    margin-right:12px;
-    background-color: rgba(100,100,100,.7);
 }
 
 .bottom_btn {

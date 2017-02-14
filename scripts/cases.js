@@ -103,6 +103,7 @@ function showCase(caseNum, pageNum){
 			incomeChart.filter([0, 58000])
 			incomeChart._doRedraw()
 			updateAndSelectCharts(["income"])
+			$("#light_average").show();
 			break;
 		case 3:
 			$("#case-text").html(
@@ -113,6 +114,7 @@ function showCase(caseNum, pageNum){
 			incomeChart.filter([58000,84000])
 			incomeChart._doRedraw()
 			updateAndSelectCharts(["income"])
+			$("#light_average").show();
 			break;
 		case 4:
 			$("#case-text").html(
@@ -121,6 +123,7 @@ function showCase(caseNum, pageNum){
 			incomeChart.filter([84000, 250000])
 			incomeChart._doRedraw()
 			updateAndSelectCharts(["income"])
+			$("#light_average").show();
 			break;
 		case 5:
 			$("#case-text").html(
@@ -134,6 +137,7 @@ function showCase(caseNum, pageNum){
 			__map.fire("move");
 			$("rect#c259733").d3Click()
 			updateAndSelectCharts(["income", "street_view"])
+			$("#light_average").show();
 			break;
 		case 6:
 			$("#case-text").html(
@@ -144,6 +148,7 @@ function showCase(caseNum, pageNum){
 			__map.fire("move");
 			$("rect#c252893").d3Click()
 			updateAndSelectCharts(["income", "street_view"])
+			$("#light_average").show();
 			break;
 		case 7:
 			$("#case-text").html(
@@ -162,12 +167,16 @@ function showCase(caseNum, pageNum){
 	}
 }
 
-$("#hide_cases").click(function () {
-	dataDidLoad2(null, window.old_data)
-	window.old_data = undefined
-	__map.setZoom(window.old_zoom)
-	__map.setCenter(window.old_center)
-	__map.fire("move")
+$(".datasets").click(function () {
+	// if in case mode, hide cases
+	if ($("#case-info").is(":hidden")) return
+	if (window.old_data){
+		dataDidLoad(null, window.old_data)
+		window.old_data = undefined
+		__map.setZoom(window.old_zoom)
+		__map.setCenter(window.old_center)
+		__map.fire("move")
+	}
     $("#cases").hide();
     $("#case-info").hide();
     $("#case-navigation").hide()
@@ -200,7 +209,7 @@ $("#case_studies #case_study_2").click(function () {
 		window.old_data = window.mydata
 		window.old_zoom = __map.getZoom()
 		window.old_center = __map.getCenter()
-		dataDidLoad2(null,  window.chicago_data)
+		dataDidLoad(null, window.chicago_data)
 	}
 
     $("#case-info #case-1").hide()
