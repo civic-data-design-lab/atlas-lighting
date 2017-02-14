@@ -418,8 +418,8 @@ function charts(data, selectedCharts) {
 
     
 
-    if(selectedCharts.indexOf("street_view") !==- 1){
-        d3.select("#street_view").style("opacity", "1");
+    if(selectedCharts.indexOf("street_view") !== - 1){
+        d3.select("#street_view").style("display", "block");
         d3.select("#street_view").style("position", "relative");
     }
 
