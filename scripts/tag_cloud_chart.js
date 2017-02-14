@@ -187,60 +187,6 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
      } 
 
 
-    /*
-     * Simple iteration abstraction for populating an array with a custom function
-     * @method arrayFromTo
-     * @param {Integer} start index
-     * @param {Integer} end index
-     * @param {Array} array to be filled.
-     * @param {method} Function for specifying the value of an array element
-     * @return {Array} New array
-     */ 
-    
-    var arrayFromTo = function (from, to, array, f) {
-        if (from > to) return array;
-        f(array); arrayFromTo(from+1, to, array, f);
-    };
-    
-     /*
-      * Function that adds clean elements to an array.
-      * @param {Array} Array to be appended.
-      */ 
-     var initiate = function(a) {
-        a.push(0);
-     }
-    
-    /* 
-     * Initiate the cells with 0's.
-     * @method initial
-     * @return {Void}
-     */
-    
-    that.initial = function(size) {
-        var empty = [];
-        arrayFromTo(0, size-1, empty, initiate);
-        return empty;
-    };
-    
-    
-    that.clean = function(cells){
-        var cleaned = cells.map(function(e){ return e && 0});
-        return cleaned;
-    };
-
-    that.difference = function(a, b){
-        exist = _.isEqual(a, b) ? false : true;
-        return exist
-    };
-
-    that.convertToArray = function(data){
-        cellState = data.map(function(el){
-            return ($('#c'+el.cell_id+':visible').length == 0) ? 0 : 1 ;
-        });
-        return cellState;
-
-    }
-
     that.convertToObject = function(data){
         cellState = data.map(function(el){
             var val = ($('#c'+el.cell_id+':visible').length == 0) ? 0 : 1 ;
@@ -249,22 +195,6 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
         return cellState;
 
     }
-
-    that.merge = function(a, b){
-        var merged = a.map(function(e, i){
-            return e || b[i];
-        });
-        return merged;
-    };
-
-    that.alterState = function(data){
-        var state = convertToArray(data);
-        var remember = state.slice(0);
-        state.map();
-        return {oldState:stateToRemember, newState:state};
-
-    }
-
     
     var filterToOriginal = function(data){
 
@@ -451,16 +381,16 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
                         var category = d3.select(this).text();
                         var ind = selectedTypes.indexOf(category);
                         selectedTypes.splice(ind, 1);
-                        if (selectedTypes.length === 0){
-                            filterToOriginal(originalData);
-                        } else {
-                            filterTypes2(cellsData);
-                        }
+                        //if (selectedTypes.length === 0){
+                            //filterToOriginal(originalData);
+                        //} else {
+                        filterTypes(cellsData);
+                        //}
                     } else {
                         d3.select(this).classed("active", true);
                         var category = d3.select(this).text();
                         selectedTypes.push(category);
-                        filterTypes2(cellsData);
+                        filterTypes(cellsData);
                         }
                 //} else {
                 //    console.log("You can filter by business types if you deselect grid cells")

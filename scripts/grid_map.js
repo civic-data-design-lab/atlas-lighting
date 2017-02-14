@@ -92,10 +92,9 @@ var myinit = function () {
 
     var q = d3.queue(2).defer(d3.csv, "../data/" + currentCity_o + "_grid.csv")
                        .defer(d3.csv, "../data/denver_instagram_topics.csv")
-    /*
     if (currentCity_o != "Chicago"){
-        q.defer(d3.csv, "../data/" + "Chicago" + "_grid.csv"/*"grids/" + currentCity)
-    } */
+        q.defer(d3.csv, "../data/Chicago_grid.csv")
+    }
     //.defer(d3.json, "data/"+currentCity+"_zipcode.json"/*"zipcode_business_geojson/" + currentCity*/)
     q.await(dataDidLoad);
 }
@@ -109,13 +108,17 @@ var myinit = function () {
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-function dataDidLoad(error, grid, topics) {
+function dataDidLoad(error, grid, topics, chicago_data) {
+    if (!grid) return
+
     d3.select("#loader").transition().duration(600).style("opacity", 0).remove();
 
     window.dataLst = Object.keys(grid[0])
     window.mydata = grid;
-    window.state = newBusTypesChart.convertToArray(grid);
+    //window.state = newBusTypesChart.convertToArray(grid);
     window.topics = topics;
+    if (topics) window.topics = topics;
+    if (chicago_data) window.chicago_data = chicago_data;
 
     charts(grid, selectedCharts);
 
@@ -541,8 +544,8 @@ function charts(data, selectedCharts) {
     });
 
     window.typesData = typeSums;
-    //newBusTypesChart.bindData(window.newdata);
-    //newBusTypesChart.updateBusTypes(typeSums);
+    newBusTypesChart.bindData(data);
+    newBusTypesChart.updateBusTypes(typeSums);
 
     window.count = data.length;
     
@@ -930,7 +933,7 @@ function charts(data, selectedCharts) {
             var end = mytime[1];
 
             filterhour(window.newData,start,end);
-            newBusTypesChart.bindData(window.newData);
+            //newBusTypesChart.bindData(window.newData);
 
             var extent = d3.extent(data, function(el){return parseInt(parseFloat(el.income) / 1000) * 1000});
             var sorted = data.map(function(el){return parseInt(parseFloat(el.income) / 1000) * 1000}).sort(function(a, b){return a - b});
@@ -958,9 +961,9 @@ function charts(data, selectedCharts) {
 
     //////////////////////////////////// Business Types Chart ///////////////////////////////////
 
-    newBusTypesChart.bindOriginalData(data);
-    newBusTypesChart.bindData(window.newData);
-    newBusTypesChart.updateBusTypes(typeSums);
+    //newBusTypesChart.bindOriginalData(data);
+    //newBusTypesChart.bindData(window.newData);
+    //newBusTypesChart.updateBusTypes(typeSums);
 
     dc.dataCount(".dc-data-count")
         .dimension(window.ndx)
