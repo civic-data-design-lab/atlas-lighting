@@ -336,7 +336,6 @@ function drawCustomBubbleChart(data){
 }
 
 function generateAxis(list,data,xSelection,ySelection,rLabel){
-  // console.log('generateAxis')
     d3.select("#centered").append("select").attr("id","xAxisData")
     d3.select("#centered").append("select").attr("id","yAxisData")
     d3.select("#chartTitle").html(ySelection.split("_").join(" ")+"/"+xSelection.split("_").join(" "))
