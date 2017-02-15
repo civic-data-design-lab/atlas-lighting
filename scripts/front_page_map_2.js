@@ -345,7 +345,7 @@ function generateAxis(list,data,xSelection,ySelection,rLabel){
     .attr("height",8)
     .append("svg:image")
     .attr("x",0)
-    .attr("y",0)
+    .attr("y",7)
     .attr("width",8)
     .attr("height",8)
     .attr("xlink:href","../icons/arrow_down.png")
