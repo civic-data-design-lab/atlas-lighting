@@ -876,8 +876,6 @@ function charts(data, selectedCharts) {
             busTypesChart.bindData(window.newData);
             instaTopicsChart.bindData(window.newData);
 
-            console.log(window.newData.length);
-
             if (!window.filtered){
                 filterCells(window.newData);
             } else {
@@ -1445,7 +1443,6 @@ var filterCells = function(data){
             }
         }
     } else if (selectedCharts.includes("business_opening_percent")) {
-        console.log("I should be here!");
         filtered = data.filter(function(el){
             if (el.OBIaverage!=0){
                 d3.select("#c" + el.cell_id).style("display", "block");
@@ -1466,7 +1463,6 @@ var filterCells = function(data){
 
 
 var displayCells = function(data){
-    console.log(data.length);
     data.map(function(el){
         d3.select("#c"+el.cell_id).style("display", "block");
     })
