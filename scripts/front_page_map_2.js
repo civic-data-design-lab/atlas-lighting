@@ -56,7 +56,7 @@ var tip = d3.tip()
     .offset([100,60])
 
 function drawKey(keyData){
-  console.log('drawKey')
+  // console.log('drawKey')
 
   //  console.log("key")
     d3.selectAll("#bubble-key svg").remove()
@@ -151,7 +151,7 @@ function caseDataDidLoad(error,data,us,msaOverview) {
 }
 
 var getCenters = function (vname, size,data) {
-  console.log('getCenters')
+  // console.log('getCenters')
 
   var centers, map;
   
@@ -166,7 +166,7 @@ var getCenters = function (vname, size,data) {
 
 
 function drawPolygons(geoData){
-  console.log('drawPolygons')
+  // console.log('drawPolygons')
 
   var svg = d3.select("#frontpage-map svg")
 	var path = d3.geo.path().projection(projection);
@@ -226,7 +226,7 @@ var yAxis = d3.svg.axis()
 
 function draw(varname,data,map,msaOverview) {
 
-  console.log('draw')
+  // console.log('draw')
 
   var centers = getCenters(varname, [800, 600],data);
   labels(centers)
@@ -320,7 +320,7 @@ var units = {
 }
 
 function drawCustomBubbleChart(data){
-  console.log('drawCustomBubbleChart')
+  // console.log('drawCustomBubbleChart')
 
   var svg = d3.select("#frontpage-map svg")
         .attr("width", width + margin.left + margin.right)
@@ -336,7 +336,6 @@ function drawCustomBubbleChart(data){
 }
 
 function generateAxis(list,data,xSelection,ySelection,rLabel){
-  console.log('generateAxis')
     d3.select("#centered").append("select").attr("id","xAxisData")
     d3.select("#centered").append("select").attr("id","yAxisData")
     d3.select("#chartTitle").html(ySelection.split("_").join(" ")+"/"+xSelection.split("_").join(" "))
@@ -346,7 +345,7 @@ function generateAxis(list,data,xSelection,ySelection,rLabel){
     .attr("height",8)
     .append("svg:image")
     .attr("x",0)
-    .attr("y",0)
+    .attr("y",7)
     .attr("width",8)
     .attr("height",8)
     .attr("xlink:href","../icons/arrow_down.png")
@@ -379,7 +378,7 @@ function generateAxis(list,data,xSelection,ySelection,rLabel){
     }
     
     d3.select("#xAxisData").on("change",function(){
-  console.log(data.length)
+  // console.log(data.length)
 
       xSelection = d3.select("#xAxisData").property('value')
       update(data,xSelection,ySelection,rLabel)
@@ -394,8 +393,8 @@ function generateAxis(list,data,xSelection,ySelection,rLabel){
 }
 
 function update(data,xLabel,yLabel,rLabel){
-  console.log('update')
-  console.log(data.length)
+  // console.log('update')
+  // console.log(data.length)
   data.forEach(function(d) {
     d[xLabel] = +d[xLabel];
     d[yLabel] = +d[yLabel];
@@ -441,7 +440,7 @@ function update(data,xLabel,yLabel,rLabel){
 }
 
 function drawChart(data,xLabel,yLabel,rLabel){
-  console.log('drawChart')
+  // console.log('drawChart')
 
   var svg = d3.select("#frontpage-map svg")
   

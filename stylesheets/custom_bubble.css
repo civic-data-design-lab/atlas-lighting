@@ -29,12 +29,14 @@ select {
     height:20px;
 }
 #xAxisData{
-  width:615px;
-  margin-left:105px;
-  margin-top:595px;
-  z-index:999;
-  padding-left:20px;
-  cursor: pointer;
+    width: 615px;
+    left: 105px;
+    top: 595px;
+    z-index: 999;
+    padding-left: 20px;
+    cursor: pointer;
+    display: block;
+    position: relative;
 }
 #yAxisData{
   z-index:999;
@@ -67,7 +69,7 @@ left:113px;
 position:absolute;
 top:540px;
 left:31px;
-    z-index:9999;
+z-index:9999;
 }
 
 #mapB {

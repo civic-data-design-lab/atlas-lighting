@@ -1029,13 +1029,13 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 
 #bk_btn {
     position: absolute;
-    right:35px;
+    right:60px;
     top:10px;
 }
 
 #exportcsv {
     position: absolute;
-    right: 85px;
+    right: 95px;
     top: 10px;
 }
 
@@ -1049,7 +1049,8 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 
 
 #street_view {
-    opacity: 0;
+    /*opacity: 0;*/
+    display: block;
     position: absolute;
     background-color: rgba(0,0,0,0) !important;
 }

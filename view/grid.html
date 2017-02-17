@@ -34,7 +34,9 @@
   <link href='../scripts/lib/mapbox.css' rel='stylesheet' />
   <link href='https://fonts.googleapis.com/css?family=Dosis:500,300|Ropa+Sans' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="../scripts/lib/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="../stylesheets/custom_bubble.css"> </style>     
   <link rel="stylesheet" type="text/css" href="../stylesheets/atlas.css"> </style>
+
 </head>
 
 <body>
@@ -69,7 +71,7 @@
 
     </div>
 
-    <!-- cases -->
+<!-- cases -->
     <div id="cases" style="display:none">
       <div id="centered">
         <div id="frontpage-map"><div class="svg"></div>
@@ -100,9 +102,9 @@
         <div class="case-title" id="hide_cases"> Light Intensity & Income</div>
         <br><br>
         <div id="case-text" class="content"></div>
-        <!--<div id="bubble-key">
+<!--         <div id="bubble-key">
           <div class="dropdownPrompt"> MSA CATEGORIES</div>
-        </div> -->
+        </div>  -->
       </div>
       <!-- end case info -->
 
@@ -278,7 +280,6 @@
             </div>
             <img src="../icons/placeholder_streetview2.png" id = "street_view_plc">
             <img src="../icons/select_streetview.png" id = "street_view_plc0">
-
             <div id="streetview_window"></div>
           </div>
 
@@ -503,16 +504,14 @@
       </div>
 
       <div id="case_studies" style="display:none">
-      <!--
-        <div class="data_item" id="case_study_1">
+<!--         <div class="data_item" id="case_study_1">
           <p class="data_item_title">CASE STUDIES 1: CHICAGO</p>
-        </div> 
+        </div>  -->
         <div class="data_item" id="case_study_2" style="height:120px">
-          <p class="data_item_title">CASE STUDY I: <br/>
+          <p class="data_item_title">CASE STUDIES 1:  <br/>
             <span style="font-size:17px">LIGHT USE IN DIFFERENT INCOME GROUPS</span><br/>
             <i>This case study examines the relationship between economic conditions of urban areas and their average radiance of artificial light at night.</i></p>
         </div>
-        -->
       </div>
     </div>
 
@@ -522,6 +521,7 @@
 
   <script src="../scripts/city_comparisons_data.js"></script>
   <script src="../scripts/city_dropdown.js"></script>
+  <script src="../scripts/front_page_map_2.js"></script>
 
   <script src="../scripts/atlas_utility.js"></script>
   <script src="../scripts/tag_cloud_chart.js"></script>
@@ -531,7 +531,6 @@
   <script src="../scripts/filter_rollovers.js"></script>
 
   <script src="../scripts/underscore.js"></script>
-  <script src="../scripts/front_page_map_2.js"></script>
 
 
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBM59LWQXfxJzh06UPYicEM9Ro6RRFCHQc&callback=myinit"></script>
