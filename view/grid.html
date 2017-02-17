@@ -116,7 +116,7 @@
           <div id=all_charts>
 
           <div id="light_average" class="lock">
-            <div class="chart-title">LIGHTING AVERAGE
+            <div class="chart-title">NIGHT LIGHT INTENSITY
               <span class="source">
                 <a class="reset" href="javascript:ligAveChart.filterAll();dc.redrawAll();" style="display: none;">RESET </a>
               </span>
@@ -253,7 +253,7 @@
           </div>
 
           <div id="income">
-            <div class="chart-title">MEDIAN HOUSEHOLD INCOME
+            <div class="chart-title">HOUSEHOLD MEDIAN INCOME
               <span class="source">
                 <a class="reset" href="javascript:incomeChart.filterAll();dc.redrawAll();"      style="display: none;">RESET </a>
                 <a href="javascript:incomeChart.filterAll();dc.redrawAll();"  ><span class = "rm_data"> x</span> </a>
@@ -298,7 +298,7 @@
           </div>
 
           <div id="instagram_topics" class = "dc-chart insta-types">
-            <div class="chart-title">INSTAGRAM TOPICS
+            <div class="chart-title">INSTAGRAM CONTENT TOPICS
               <span class="source">
                 <a><span class = "rm_data"> x</span></a>
               </span>
@@ -322,7 +322,7 @@
           </div>
 
           <div id="instagram_pics" class="extra_data dc-chart">
-            <div class="chart-title">INSTAGRAM POSTS
+            <div class="chart-title">INSTAGRAM ACTIVITY
               <span class="source">
                 <a><span class = "rm_data"> x</span></a>
               </span>
@@ -415,31 +415,31 @@
           <p class="data_item_title">BUSINESS DIVERSITY</p>
           <img src="../icons/final_icons/busDiversity.png" class = "data_icon">
           <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Diversity of business types in a grid cell. Source: Google Places API</p>
+          <p class = "data_intro">Indicates total number of Google Places in a grid cell, which includes businesses, institutions, parks, and other points of interest.</p>
         </div>        
         <div class="data_item ui-widget-content tag_bus" id="d_business_price">
           <p class="data_item_title">BUSINESS PRICE</p>
           <img src="../icons/final_icons/busPrice.png" class = "data_icon">
           <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Average price of business in a grid cell. Source: Google Places API</p>
+          <p class = "data_intro">Indicates the average price level of a grid cell, using Google Places classifications.</p>
         </div>
         <div class="data_item ui-widget-content tag_bus" id="d_places">
           <p class="data_item_title">BUSINESS DENSITY</p>
           <img src="../icons/final_icons/busDensity.png" class = "data_icon">
           <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Total number of places in a grid cell. Source: Google Places API</p>
+          <p class = "data_intro">Indicates total number of Google Places in a grid cell, which includes businesses, institutions, parks, and other points of interest.</p>
         </div>
         <div class="data_item ui-widget-content tag_bus" id="d_business_types">
           <p class="data_item_title">BUSINESS TYPES</p>
           <img src="../icons/final_icons/busTypes.png" class = "data_icon">
           <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Types of businesses in a grid cell. Source: Google Places API</p>
+          <p class = "data_intro">Indicates the types of the local businesses in a grid cell, using Google Places classifications.</p>
         </div>
         <div class="data_item ui-widget-content tag_bus" id="d_business_opening_percent">
           <p class="data_item_title">OPEN BUSINESS INDEX</p>
           <img src="../icons/final_icons/busOBI.png" class = "data_icon">
           <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Indicates business activity by percentage and average number of businesses in a grid a cell during a particular time period. Source: Google Places API</p>
+          <p class = "data_intro">Indicates the percentage and average number of businesses that are open per hour in a given period of time in a grid cell. Source: Google Places API</p>
         </div>
         <div class="data_item ui-widget-content tag_bus" id="d_business_opening_average" style="display: none">
           <p class="data_item_title">AVERAGE NUMBER OF BUSINESSES OPEN</p>
@@ -453,51 +453,51 @@
           <p class="data_item_title">DEVELOPMENT INTENSITY</p>
           <img src="../icons/final_icons/devIntensity.png" class = "data_icon">
           <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">NLCD provides spatial reference and descriptive data for characteristics of the land surface such as low,medium and high intensity development. Source: National Land Cover Database 2011</p>
+          <p class = "data_intro">Indicates characteristics and classification of the land surface such as urban, agricultural, and forest, as well as percent impervious surface. Source: National Land Cover Database 2011</p>
         </div>
         <div class="data_item ui-widget-content tag_dem" id="d_population">
           <p class="data_item_title">POPULATION</p>
           <img src="../icons/final_icons/popDensity.png" class = "data_icon">
           <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Population density is the measure of the number people per unit area, commonly represented as people per square mile. Source: 2010 - 2014 ACS - 5 Year Estimate</p>
+          <p class = "data_intro">Indicates the number people in a given unit area, commonly represented as population per square mile. Source: 2010 - 2014 ACS - 5 Year Estimate</p>
         </div>
         <div class="data_item ui-widget-content tag_dem" id="d_income">
-          <p class="data_item_title">INCOME</p>
+          <p class="data_item_title">HOUSEHOLD MEDIAN INCOME</p>
           <img src="../icons/final_icons/medianIncome.png" class = "data_icon">
           <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Household income is a measure of the combined incomes of all people sharing a particular household or place of residence. Source: 2010 - 2014 ACS - 5 Year Estimate</p>
+          <p class = "data_intro">Indicates the median value of the combined incomes of people sharing a household or place of residence. Census block group values are redistributed to each grid cell using ArcGIS. Source: 2010 - 2014 ACS - 5 Year Estimate</p>
         </div>        
         <!-- ************************************************************** Social filters **************************************************************-->
         <div class="data_item ui-widget-content tag_soc" id="d_street_view">
           <p class="data_item_title">GOOGLE STREET VIEW</p>
           <img src="../icons/final_icons/googleStreet.png" class = "data_icon">
           <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Source: Google Street View API</p>
+          <p class = "data_intro">Provides 360-degree, panoramic, and street-level imagery from the centroid point in a selected grid cell. Source: Google Street View API</p>
         </div>
         <div class="data_item ui-widget-content tag_soc" id="d_ins">
           <p class="data_item_title">INSTAGRAM DENSITY</p>
           <img src="../icons/final_icons/instaDensity.png" class = "data_icon">
           <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Total number of Instagram posts in a grid cell. Source: Instagram API</p>
+          <p class = "data_intro">Indicates total number of Instagram posts geo-tagged in a grid cell. Source: Instagram API</p>
         </div>        
         <div class="data_item ui-widget-content tag_soc" id="d_instagram_pics">
-          <p class="data_item_title">INSTAGRAM POST THUMBNAILS</p>
+          <p class="data_item_title">INSTAGRAM THUMBNAILS</p>
           <img src="../icons/final_icons/instaThumbnails.png" class = "data_icon">
           <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Instagram posts in a grid cell. Source: Instagram API</p>
+          <p class = "data_intro">Provides a collection of Instagram media thumbnails in a selected grid cell. Source: Instagram API</p>
         </div>
         <div class="data_item ui-widget-content tag_soc" id="d_ins_likes">
           <p class="data_item_title">INSTAGRAM LIKES</p>
           <img src="../icons/final_icons/instaLikes.png" class = "data_icon">
           <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Instagram likes in a grid cell. Source: Instagram API</p>
+          <p class = "data_intro">Indicates total number of all the likes that are attached to Instagram posts geo-tagged in a grid cell. Source: Instagram API</p>
         </div>
         <!--
         <div class="data_item ui-widget-content tag_soc" id="d_ins_topics">
-          <p class="data_item_title">INSTAGRAM TOPICS</p>
+          <p class="data_item_title">INSTAGRAM CONTENT TOPICS</p>
           <img src="../icons/final_icons/instaTopics.png" class = "data_icon">
           <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Popular content in Instagram Posts. Source: Google Vision API</p>
+          <p class = "data_intro">Provides a collection of topics that describe the content of Instagram media, using machine learning tools from the Google Vision API. Source: Google Vision API</p>
         </div>
         -->
       </div>

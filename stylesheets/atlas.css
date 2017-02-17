@@ -1082,7 +1082,7 @@ div#streetview_window {
     position: absolute;
     -webkit-transform: translateY(6px);
             transform: translateY(6px);
-    left: 21px;
+    left: 10px;
 }
 
 .toolip_img {

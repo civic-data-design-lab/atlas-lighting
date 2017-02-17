@@ -5,15 +5,31 @@
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-function updateNDX(data){
-    console.log(data.length);
+function updateAndDraw(data){
+    window.filtered = true;
     window.ndx.remove();
     window.ndx.add(data);
     dc.redrawAll();
 }
 
+function updateNDX(data){
+    window.ndx.remove();
+    window.ndx.add(data);
+}
 
-/* Convert Thousands to K format. Code by @Jake Feasel.
+
+/* Reduce function for tagCloud charts.
+ */
+
+var betterReduce = function(el, elements){
+    var reduced = elements.reduce(function(acc, e){
+        return el[e] ? (acc + 1) : acc ;
+    }, 0);
+    return reduced
+}
+
+
+/* Convert Thousands to K format.
  */
 
 function kFormatter(num) {

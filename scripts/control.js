@@ -68,7 +68,11 @@ function initControl() {
         drop: function (event, ui) {
             $(ui.draggable).attr("style", "position: relative; display: none;");
             // $(ui.draggable).attr("style", "opacity: 0.5;");
-            selectedCharts.push($(ui.draggable).attr("id").split("d_")[1]);
+            var id = $(ui.draggable).attr("id").split("d_")[1];
+            selectedCharts.push(id);
+            if (id == "business_types" || id == "ins_topics"){
+                window.tagCharts.push(id);
+            }
             updateChart(selectedCharts);
             $(this).css("background-color", "rgba(255,255,255,0)");
             var currentToDropHeight = $('#todrop').css('height');
@@ -262,11 +266,23 @@ function initControl() {
         $("#"+myid).hide();
         $("#d_"+myid).show();
 
+        if (myid == "business_types" || myid == "instagram_topics" ) {
+            window.tagCharts.splice(window.tagCharts.indexOf(myid),1)
+        }
+
         var myindex = selectedCharts.indexOf(myid);
         if (myindex > -1) {
             selectedCharts.splice(myindex, 1);
         }
         updateChart(selectedCharts);
+
+        if (myid == "business_opening_percent") {
+            console.log("I'm now here!");
+            //d3.selectAll(".cellgrids").style("display", "none");
+            window.filtered = false;
+            filterCells(window.mydata);
+            //updateAndDraw(window.)
+        }
 
     })
 

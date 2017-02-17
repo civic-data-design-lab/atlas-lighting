@@ -1,5 +1,5 @@
 
-/* Generic tag cloud maker for Business types chart and Vision API Topics chart
+/* Generic tag cloud maker for Business types chart and Instagram Topics chart
  * This has the module functionality in order to use the update function.
  * @module tagCloudChart
  * @params chartWidth, chartHeight
@@ -14,6 +14,7 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
     var cellsData = [];
     var originalData = [];
     var cellSelected = false;
+    var typeSelected = false;
 
     var margin = { top: 0, left: 10, right: 10, bottom: 20 },
         width = chartWidth - margin.right - margin.left, //chartWidth = 390
@@ -195,6 +196,12 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
         return cellState;
 
     }
+
+    /* Filter grid cells by checking whether they contain at least one business  
+     * from selected types. 
+     * @method filterTypes
+     * @param {Array} Data array
+     */
     
     var filterToOriginal = function(data){
 
@@ -205,13 +212,10 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
 
             if (total !== selectedTypes.length){
                 d3.select("#c" + el.cell_id).style("display", "none");
-                //avg_light += el.averlight;
-                //count ++;
             } else {
                 d3.select("#c" + el.cell_id).style("display", "block");
             }
         });
-        console.log("I'm here!");
         updateNDX(data);
 
     }
@@ -223,8 +227,7 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
      */
 
     var filterTypes2 = function(data){
-        //var avg_light = 0;
-        //var count = 0;
+
         var filtered = data.filter(function(el){
             var total = selectedTypes.reduce(function(acc, e){
                 return el[e] ? (acc + 1) : acc ;
@@ -232,8 +235,6 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
 
             if (total !== selectedTypes.length){
                 d3.select("#c" + el.cell_id).style("display", "none");
-                //avg_light += el.averlight;
-                //count ++;
             } else {
                 d3.select("#c" + el.cell_id).style("display", "block");
                 return el;
@@ -241,11 +242,6 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
         });
 
         updateNDX(filtered);
-
-        //avg_light /= count;
-        //avg_light = Math.round(avg_light);
-        //d3.select("#light_digits_o").text(avg_light);
-        //d3.select("#light_digits_o").attr("sv_val", avg_light);
     }
 
  
@@ -283,6 +279,24 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
 
     }
 
+    /* Return boolean value if a type is selected.
+     * @method isTypeSelected
+     */
+
+     that.selectedElements = function(){
+        return selectedTypes;
+    }
+
+
+
+    /* Return boolean value if a type is selected.
+     * @method isTypeSelected
+     */
+
+    that.isTypeSelected = function(){
+        return typeSelected;
+    }
+
     /* Change boolean value of whether a cell is selected or not
      * @method assignSelect
      * @param {Bool} Truth value
@@ -315,7 +329,7 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
      * @param {Array} Data array
      */
 
-    that.updateBusTypes = function(data) {
+    that.updateElements = function(data) {
 
         var fData = formatData(data);
         var fData = fData.sort(function(a, b) {return b.count - a.count});
@@ -330,12 +344,10 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
             .style("fill-opacity", 1e-6)
             .remove();
 
-
         //update pattern
         typeSort
             .text(function(d){
                 return d.category;
-
             })
             .classed("active", function(d){
                 if (selectedTypes.indexOf(d.category) > -1) {
@@ -350,8 +362,6 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
             .style("font-size", function(d) { return d.textSize + "px"; })
             .attr("y", function(d){ return textMargin.top + d.y;})
             .attr("x", function(d) { return textMargin.left + d.x; })
-            
-            
 
         //enter pattern
         typeSort.enter()
@@ -381,16 +391,21 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
                         var category = d3.select(this).text();
                         var ind = selectedTypes.indexOf(category);
                         selectedTypes.splice(ind, 1);
-                        //if (selectedTypes.length === 0){
-                            //filterToOriginal(originalData);
-                        //} else {
-                        filterTypes(cellsData);
-                        //}
+                        if (selectedTypes.length === 0){
+                            typeSelected = false;
+                            window.filtered = false;
+                            filterCells(originalData);
+                        } else {
+                            window.filtered = false;
+                            filterCells(cellsData);
+                        }
                     } else {
+                        typeSelected = true;
                         d3.select(this).classed("active", true);
                         var category = d3.select(this).text();
                         selectedTypes.push(category);
-                        filterTypes(cellsData);
+                        window.filtered = false;
+                        filterCells(cellsData);
                         }
                 //} else {
                 //    console.log("You can filter by business types if you deselect grid cells")
