@@ -235,7 +235,7 @@ function drawDotsMap(cities){
   //  console.log(cities)
     var cityCentroidsArray = []
     for(var i in cityCentroids){
-        cityCentroidsArray.push([i,cityCentroids[i]])
+        cityCentroidsArray.push([i,cityCentroids2[i]])
     }
     var tip = d3.tip()
         .attr("class","d3-tip")

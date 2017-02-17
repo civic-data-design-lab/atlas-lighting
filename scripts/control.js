@@ -277,7 +277,6 @@ function initControl() {
         updateChart(selectedCharts);
 
         if (myid == "business_opening_percent") {
-            console.log("I'm now here!");
             //d3.selectAll(".cellgrids").style("display", "none");
             window.filtered = false;
             filterCells(window.mydata);

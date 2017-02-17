@@ -8,6 +8,8 @@ var currentCity_o = document.URL.split("#")[1].split("*")[0];
 var currentCity = document.URL.split("#")[1].split("*")[0].toLowerCase();
 d3.selectAll("#nowmsa").text(fullName[currentCity_o]);
 var center = cityCentroids[currentCity_o];
+console.log(currentCity_o);
+console.log(cityCentroids);
 var initurl = window.location.href;
 var selectedCharts = [];
 
@@ -60,7 +62,7 @@ var instaTopics = ['advertising','beverage','car','entertainment',
 
 // Business Types Widget is initiated here:
 var busTypesChart = tagCloudChart(390, 100, "#business_types");
-var instaTopicsChart = tagCloudChart(370, 100, "#instagram_topics" ); //390
+var instaTopicsChart = tagCloudChart(370, 100, "#instagram_topics"); //390
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 //  myinit()                                                                  //
@@ -93,11 +95,14 @@ var myinit = function () {
     firebase.initializeApp(config);
     var rootRef = firebase.database().ref();
 
+    console.log(currentCity_o);
+
     var q = d3.queue(2).defer(d3.csv, "../data/" + currentCity_o + "_grid.csv")
                        .defer(d3.csv, "../data/denver_instagram_topics.csv")
+    /*
     if (currentCity_o != "Chicago"){
         q.defer(d3.csv, "../data/Chicago_grid.csv")
-    }
+    }*/
     //.defer(d3.json, "data/"+currentCity+"_zipcode.json"/*"zipcode_business_geojson/" + currentCity*/)
     q.await(dataDidLoad);
 }
@@ -123,7 +128,7 @@ function dataDidLoad(error, grid, topics, chicago_data) {
     if (topics) window.topics = topics;
     if (chicago_data) window.chicago_data = chicago_data;
 
-    charts(grid, selectedCharts);
+    charts(grid, topics, selectedCharts);
 
     initCanvas(grid);
 
@@ -405,7 +410,7 @@ window.OBIpercent = dc.barChart("#business_opening_percent");
 //  Rendering the charts                                                      //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
-function charts(data, selectedCharts) {
+function charts(data, topics, selectedCharts) {
     d3.selectAll(".dc-chart").style("display", "none");
     d3.select("#street_view").style("display", "block");
     d3.selectAll(".lock").style("display", "block");
@@ -516,6 +521,27 @@ function charts(data, selectedCharts) {
         }
 
     })
+
+    /*
+    topics.forEach(function(d){
+        d.advertising = +d.advertising ? +d.advertising : 0;
+        d.beverage = +d.beverage ? +d.beverage :0 ;
+        d.car = +d.car ? +d.car : 0;
+        d.entertainment = +d.entertainment ? +d.entertainment : 0;
+        d.family = +d.family ? +d.family : 0;
+        d.fashion = +d.fashion ? +d.fashion : 0;
+        d.food = +d.food ? +d.food : 0;
+        d.interiors = +d.interiors ? +d.interiors : 0;
+        d.landscape = +d.landscape ? +d.landscape : 0;
+        d.monochrome = +d.monochrome ? +d.monochrome : 0;
+        d.nature = +d.nature ? +d.nature : 0;
+        d.portrait = +d.portrait ? +d.portrait: 0;
+        d.sky = +d.sky ? +d.sky: 0;
+        d.sports = +d.sports ? +d.sports: 0;
+
+    })*/
+
+
     var chartWidth = 320; //304 //320
     var chartHeight = 140; //52
 

@@ -22,7 +22,7 @@ var cityType = {
     "5":"Growth Magnets"
 }
 
-var cityCentroids = {
+var cityCentroids2 = {
     "Port St. Lucie":{lat:27.273049,lng:-80.358226},
     "Phoenix":{lat:33.448377,lng:-112.074037},
     "Salt Lake City":{lat:40.760779,lng:-111.891047},
@@ -255,14 +255,14 @@ function draw(varname,data,map,msaOverview) {
       })
       .attr("opacity",.5)
       .attr("cx",function(d){
-          var lat = parseFloat(cityCentroids[d.name].lat)
-          var lng = parseFloat(cityCentroids[d.name].lng)
+          var lat = parseFloat(cityCentroids2[d.name].lat)
+          var lng = parseFloat(cityCentroids2[d.name].lng)
           var projectedLat = projection([lng,lat])[0]
           return projectedLat
       })
       .attr("cy",function(d){
-          var lat = parseFloat(cityCentroids[d.name].lat)
-          var lng = parseFloat(cityCentroids[d.name].lng)
+          var lat = parseFloat(cityCentroids2[d.name].lat)
+          var lng = parseFloat(cityCentroids2[d.name].lng)
           var projectedLat = projection([lng,lat])[1]
           return projectedLat
       })
