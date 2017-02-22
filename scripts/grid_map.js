@@ -8,8 +8,7 @@ var currentCity_o = document.URL.split("#")[1].split("*")[0];
 var currentCity = document.URL.split("#")[1].split("*")[0].toLowerCase();
 d3.selectAll("#nowmsa").text(fullName[currentCity_o]);
 var center = cityCentroids[currentCity_o];
-console.log(currentCity_o);
-console.log(cityCentroids);
+console.log(center);
 var initurl = window.location.href;
 var selectedCharts = [];
 
@@ -74,7 +73,7 @@ var myinit = function () {
     window.panorama = new google.maps.StreetViewPanorama(
         document.getElementById('streetview_window'),
         {
-            position: { lat: 41.878180, lng: -87.630270 },
+            position: { lat: center.lat /*41.878180*/, lng: center.lat /*-87.630270*/ },
             pov: { heading: 165, pitch: 0 },
             zoom: 1
         });
@@ -254,26 +253,40 @@ function initCanvas(data) {
                     if (map.getZoom() >= 0) { //12
                         var mypos = $(this).position();
                         var thisradius = 6 / 1400 * Math.pow(2, map.getZoom());
+                        var left = mypos.left+(thisradius - 10)/2;
+                        var top = mypos.top+(thisradius - 10)/2;
+                        var latLngo = unproject([left, top]);
 
-                        streetviewService.getPanorama(
-                            {location: unproject([mypos.left+(thisradius - 10)/2, mypos.top+(thisradius - 10)/2])},
+                        var oldPoint = new google.maps.LatLng(parseFloat(latLngo.lat), parseFloat(latLngo.lng));
+                        //console.log(oldPoint);
+
+                        //var streetViewMaxDistance = 100; 
+
+                        streetviewService.getPanoramaByLocation(
+                            /*{location: latLngo}*/ oldPoint, 50,
                             function(result, status) {
                                 if (status === 'OK') {
-                                    //console.log("ok");
-                                    window.panorama.setPosition(unproject([mypos.left+(thisradius - 10)/2, mypos.top+(thisradius - 10)/2]));
+                                    console.log("ok");
+                                    var newPoint = result.location.latLng;
+                                    var heading = google.maps.geometry.spherical.computeHeading(newPoint, oldPoint);
+                                    window.panorama.setPosition(latLngo);
+                                    window.panorama.setPov({
+                                        heading:heading,
+                                        zoom:1,
+                                        pitch:0
+                                    });
                                     d3.select("#street_view_plc").style("display", "none");
                                     d3.select("#street_view_plc0").style("display", "none");
                                     d3.select("#streetview_window").style("display", "block");
 
                                 }else{
-                                    //console.log("not ok");
+                                    console.log("not ok");
                                     d3.select("#streetview_window").style("display", "none");
                                     d3.select("#street_view_plc").style("display", "block");
                                     d3.select("#street_view_plc0").style("display", "none");
 
                                 }
                         });
-
                         //Switch pattern might be better here
                         if (currentCity_o == "LA") {
                             thisradius = 1.82 * thisradius;
@@ -301,8 +314,11 @@ function initCanvas(data) {
                         var myy = d3.event.clientY;
 
                         var loc = unproject([myx, myy]);
+                        //console.log(loc);
                         var mykey = "AIzaSyBM59LWQXfxJzh06UPYicEM9Ro6RRFCHQc";
                         var latlng = loc.lat+","+loc.lng
+
+                        //console.log(latlng);
 
                         var myreq = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+latlng+"&key="+mykey
 
@@ -591,6 +607,7 @@ function charts(data, topics, selectedCharts) {
     //newBusTypesChart.updateBusTypes(typeSums);
 
     window.count = data.length;
+    console.log(window.count);
     
     ////////////////////////////////////////////////////////////////////////////////
     //                                                                            //
@@ -599,8 +616,9 @@ function charts(data, topics, selectedCharts) {
     ////////////////////////////////////////////////////////////////////////////////
 
     var busDivDimension = window.ndx.dimension(function (d) {
-        return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0
+        return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0;
     });
+
     var busDivGroup = busDivDimension.group();
 
     var latDimension = window.ndx.dimension(function (d) {
@@ -761,7 +779,7 @@ function charts(data, topics, selectedCharts) {
 
 
 
-    busDivChart.width(chartWidthBusDiv).height(chartHeightBusDiv*2)
+    window.busDivChart.width(chartWidthBusDiv).height(chartHeightBusDiv*2)
         .group(busDivGroup).dimension(busDivDimension)
         .ordinalColors(["#aaaaaa"])
         .margins({top: 0, left: 50, right: 10, bottom: 20})
@@ -770,6 +788,16 @@ function charts(data, topics, selectedCharts) {
         //.r(d3.scale.linear().domain([0, window.count*5]))
         .colors(["#808080"])
         //.elasticRadius([true])
+        .on('renderlet', function(chart){
+            window.newData = busDivDimension.top(Infinity);
+            var extent = d3.extent(window.newData, function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0});
+            var sorted = data.map(function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0}).sort(function(a, b){return a - b});
+            var quants = quantileCalc(extent, sorted, actChrtWidth);
+
+            var median = d3.median(window.newData, function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0});
+            var correspond = thisQuantile(median, extent, quants.first, quants.second);
+            bindText(correspond, median, "#busDiv_digits","#busDiv_digits_o");
+        })
         .keyAccessor(function (p) {
             return p.key;
         })
@@ -796,8 +824,8 @@ function charts(data, topics, selectedCharts) {
                 return ""
             }
         })
-    busDivChart.xAxis().ticks(4);        
-    busDivChart.yAxis().ticks(0); 
+    window.busDivChart.xAxis().ticks(4);        
+    window.busDivChart.yAxis().ticks(0); 
 
     /* Places chart
      * 

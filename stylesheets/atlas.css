@@ -1060,9 +1060,11 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     height: auto !important;
 }
 
-div#streetview_window {
+#streetview_window {
     height: 160px;
-    width: 410px;
+    width: 410px;    
+    opacity: 0;
+    position: absolute;
 }
 
 #instagram_plc {
@@ -1073,10 +1075,12 @@ div#streetview_window {
     display: none;
 }
 
+/*
 #streetview_window {
     opacity: 0;
     position: absolute;
 }
+*/
 
 #selected_time {
     font-size: 24px;
