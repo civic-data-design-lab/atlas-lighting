@@ -341,28 +341,6 @@ function initCanvas(data) {
                 })
         });
 
-        // //////////////////////////////////// ANIMATION BEHAVIOR /////////////////////////////////// 
-        // var increment=0;
-        // var animationIsRunning=false;
-        // (function tick() {  
-        //     $('button.toggleAnimation').off().on('click', function(e) {
-        //         e.preventDefault();
-        //         animationIsRunning = !animationIsRunning;
-        //         if (animationIsRunning) {
-        //             $('button.toggleAnimation').addClass('isPressed');
-        //         }
-        //         else {
-        //             $('button.toggleAnimation').addClass('isNotPressed');
-        //         }
-        //         console.log("click", animationIsRunning);
-        //     })
-        //     if (animationIsRunning) {  
-        //         if (increment<23) {  filterhour(window.newData, increment, increment+1); }
-        //         else { increment = 0; }
-        //         ++increment; 
-        //     }
-        //     setTimeout(tick, 1000);
-        // })();
     }
 
     //////////////////////////////////// CALL TO RENDER ///////////////////////////////////
@@ -728,7 +706,6 @@ function charts(data, topics, selectedCharts) {
         .on('renderlet', function(chart){
             var OBIpercent_digits = d3.mean(window.newData, function(el){return el.OBIpercentage>0;});
             bindSmallText((OBIpercent_digits/(24)*100).toFixed(2), "#OBIpercent_digits");
-
         })
         .on('postRender', function(chart) {
             chart.svg().append('text').attr('class', 'y-label').attr('text-anchor', 'middle')
@@ -921,9 +898,9 @@ function charts(data, topics, selectedCharts) {
             //var canvas = __canvas
 
             d3.selectAll(".cellgrids").style("display", "none");
-            var mytime = $("#selected_time").text().split(" - ");
-            var start = mytime[0];
-            var end = mytime[1];
+            // var mytime = $("#selected_time").text().split(" - ");
+            // var start = mytime[0];
+            // var end = mytime[1];
 
             //console.log(window.newData);
 
@@ -1497,7 +1474,7 @@ var filterCells = function(data){
             }
         }
     } else if (selectedCharts.includes("business_opening_percent")) {
-        filtered = data.filter(function(el){
+        var filtered = data.filter(function(el){
             if (el.OBIaverage!=0){
                 d3.select("#c" + el.cell_id).style("display", "block");
                 return el;
@@ -1557,8 +1534,4 @@ function updateOBI(start,end){
     window.ndx.add(window.newData);
     //dc.redrawAll();
 }
-
-
-////////////////////////////////////////////////////////////////////////////////
-
 
