@@ -1222,6 +1222,12 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     color:white;
 }*/
 
+/* Google */
+
+.gm-style > div:nth-child(7){
+ display:none;
+}
+
 /*--------------------------------------------- Kalli additions -------------------*/
 
 .data_item.ui-widget-content.tag_dem.ui-draggable.ui-draggable-handle:hover {

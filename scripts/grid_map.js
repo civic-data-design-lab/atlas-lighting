@@ -585,7 +585,6 @@ function charts(data, topics, selectedCharts) {
     //newBusTypesChart.updateBusTypes(typeSums);
 
     window.count = data.length;
-    console.log(window.count);
     
     ////////////////////////////////////////////////////////////////////////////////
     //                                                                            //
@@ -593,11 +592,6 @@ function charts(data, topics, selectedCharts) {
     //                                                                            //
     ////////////////////////////////////////////////////////////////////////////////
 
-    var busDivDimension = window.ndx.dimension(function (d) {
-        return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0;
-    });
-
-    var busDivGroup = busDivDimension.group();
 
     var latDimension = window.ndx.dimension(function (d) {
         return d.lat
@@ -753,7 +747,13 @@ function charts(data, topics, selectedCharts) {
                 .style("font-size", "8px");
         }) 
         .yAxis().ticks(2)
+;
 
+    var busDivDimension = window.ndx.dimension(function (d) {
+        return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0;
+    });
+
+    var busDivGroup = busDivDimension.group();
 
 
     window.busDivChart.width(chartWidthBusDiv).height(chartHeightBusDiv*2)
@@ -1459,7 +1459,6 @@ var filterCells = function(data){
                     }
                 })
                 updateAndDraw(filtered);
-                //updateNDX(filtered);
             } else {
                 var filtered = data.filter(function(el){
                     var topics = betterReduce(el, selectedTopics);
