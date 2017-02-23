@@ -586,16 +586,6 @@ function charts(data, topics, selectedCharts) {
     //                                                                            //
     ////////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
-||||||| merged common ancestors
-    var busDivDimension = window.ndx.dimension(function (d) {
-        return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0
-    });
-    var busDivGroup = busDivDimension.group();
-
-=======
-
->>>>>>> upstream/master
     var latDimension = window.ndx.dimension(function (d) {
         return d.lat
     });
@@ -749,22 +739,13 @@ function charts(data, topics, selectedCharts) {
                 .text('AVERAGE # OF OPEN BUSINESSES').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
                 .style("font-size", "8px");
         }) 
-        .yAxis().ticks(2)
-;
+        .yAxis().ticks(2);
 
     var busDivDimension = window.ndx.dimension(function (d) {
         return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0;
     });
 
-<<<<<<< HEAD
-    var busDivDimension = window.ndx.dimension(function (d) {
-        return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0
-    });
     var busDivGroup = busDivDimension.group();
-||||||| merged common ancestors
-=======
-    var busDivGroup = busDivDimension.group();
->>>>>>> upstream/master
 
 
     window.busDivChart.width(chartWidthBusDiv).height(chartHeightBusDiv*2)
