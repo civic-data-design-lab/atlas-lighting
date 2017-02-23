@@ -5,7 +5,7 @@
  * @params chartWidth, chartHeight
 */
 
-var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_types"
+var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#business_types"
 
     var that = {};
     var that = Object.create(tagCloudChart.prototype);
@@ -15,6 +15,7 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
     var originalData = [];
     var cellSelected = false;
     var typeSelected = false;
+    var isInstagram = isInsta;
 
     var margin = { top: 0, left: 10, right: 10, bottom: 20 },
         width = chartWidth - margin.right - margin.left, //chartWidth = 390
@@ -42,17 +43,33 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
      */
 
     var formatObject = function (d) {
-        var typeSums = [];
-        busTypes.forEach(function(el){
-            var typeCount = +d[el] ? +d[el] : 0 ;
-            if (typeCount){
-                typeSums.push({
-                    category: el, 
-                    count: typeCount
-                });
-            }
-        });
-        return typeSums;
+
+        if (!isInstagram){
+            var typeSums = [];
+            busTypes.map(function(el){
+                var typeCount = +d[el] ? +d[el] : 0 ;
+                if (typeCount){
+                    typeSums.push({
+                        category: el, 
+                        count: typeCount
+                    });
+                }
+            });
+            return typeSums
+        } else {
+            var topicSums = [];
+            instaTopics.map(function(el){
+                var topicCount = +d[el] ? +d[el] : 0 ;
+                if (topicCount){
+                    var newEl = el.replace('insta_', '');
+                    topicSums.push({
+                        category: newEl, 
+                        count: topicCount
+                    });
+                }
+            });
+            return topicSums;
+        }
     }
 
     /* Calculate relative size of each text element
@@ -62,14 +79,14 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
 
     var formatData = function (data) {
 
-       var typeSums = Array.isArray(data) ? data : formatObject(data);
+       var elementSums = Array.isArray(data) ? data : formatObject(data);
        
-       var maxCount = d3.max(typeSums, function(d) { return d.count;});
-       var minCount = d3.min(typeSums, function(d) { return d.count;});
+       var maxCount = d3.max(elementSums, function(d) { return d.count;});
+       var minCount = d3.min(elementSums, function(d) { return d.count;});
        var countRange = maxCount - minCount;
        var range = maxTextSize - minTextSize;
 
-       var newArr = typeSums.map(function(el, i){
+       var newArr = elementSums.map(function(el, i){
            if (el.count == maxCount){
                return {category:el.category, count: el.count, textSize: maxTextSize};
            } else if (el.count == minCount){
@@ -197,88 +214,6 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
 
     }
 
-    /* Filter grid cells by checking whether they contain at least one business  
-     * from selected types. 
-     * @method filterTypes
-     * @param {Array} Data array
-     */
-    
-    var filterToOriginal = function(data){
-
-        data.map(function(el){
-            var total = selectedTypes.reduce(function(acc, e){
-                return el[e] ? (acc + 1) : acc ;
-            }, 0);
-
-            if (total !== selectedTypes.length){
-                d3.select("#c" + el.cell_id).style("display", "none");
-            } else {
-                d3.select("#c" + el.cell_id).style("display", "block");
-            }
-        });
-        updateNDX(data);
-
-    }
-
-    /* Filter grid cells by checking whether they contain at least one business  
-     * from selected types. 
-     * @method filterTypes
-     * @param {Array} Data array
-     */
-
-    var filterTypes2 = function(data){
-
-        var filtered = data.filter(function(el){
-            var total = selectedTypes.reduce(function(acc, e){
-                return el[e] ? (acc + 1) : acc ;
-            }, 0);
-
-            if (total !== selectedTypes.length){
-                d3.select("#c" + el.cell_id).style("display", "none");
-            } else {
-                d3.select("#c" + el.cell_id).style("display", "block");
-                return el;
-            }
-        });
-
-        updateNDX(filtered);
-    }
-
- 
-    // This should be rewritten
-
-    /* Filter grid cells by checking whether they contain at least one business  
-     * from selected types. 
-     * @method filterTypes
-     * @param {Array} Data array
-     */
-
-
-    var filterTypes = function(data) {
-         var avg_light = 0;
-         var count = 0;
-
-         data.map(function(el){
-             var total = selectedTypes.reduce(function(acc, e){
-                 return el[e] ? (acc + 1) : acc ;
-             }, 0);
-
-             if (total == selectedTypes.length){
-                 d3.select("#c" + el.cell_id).style("display", "block");
-                 avg_light += el.averlight;
-                 count ++;
-             } else {
-                 d3.select("#c" + el.cell_id).style("display", "none");
-             }
-         });
-
-         avg_light /= count;
-         avg_light = Math.round(avg_light);
-         d3.select("#light_digits_o").text(avg_light);
-         d3.select("#light_digits_o").attr("sv_val", avg_light);
-
-    }
-
     /* Return boolean value if a type is selected.
      * @method isTypeSelected
      */
@@ -286,8 +221,6 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
      that.selectedElements = function(){
         return selectedTypes;
     }
-
-
 
     /* Return boolean value if a type is selected.
      * @method isTypeSelected
@@ -325,7 +258,7 @@ var tagCloudChart = function(chartWidth,chartHeight, selection) { //"#business_t
     }
 
     /* Update business types widget with new data
-     * @method updateBusTypes
+     * @method updateElements
      * @param {Array} Data array
      */
 

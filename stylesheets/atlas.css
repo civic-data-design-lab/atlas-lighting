@@ -1181,6 +1181,32 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     margin-top:3px;
 }
 
+#instagram_topics  svg {
+    margin-left: 0px;  
+}
+
+#instagram_topics .textElements {
+    color: rgb(32, 192, 226);
+    position: absolute;  
+    display: inline-block;
+    display: inline;
+    margin-left: 5px;
+    margin-top:3px;
+}
+
+#instagram_topics  svg {
+    margin-left: 0px;  
+}
+
+#instagram_topics .textElements {
+    color: rgb(32, 192, 226);
+    position: absolute;  
+    display: inline-block;
+    display: inline;
+    margin-left: 5px;
+    margin-top:3px;
+}
+
 .types-text {
     fill-opacity: 0.5;
 }

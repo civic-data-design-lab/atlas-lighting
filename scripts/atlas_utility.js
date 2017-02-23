@@ -29,6 +29,18 @@ var betterReduce = function(el, elements){
     return reduced
 }
 
+/* Reduce function for tagCloud charts.
+ */
+
+var betterReduceInsta = function(el, elements){
+    var reduced = elements.reduce(function(acc, e){
+        var newE = 'insta_'+e;
+        return el[newE] ? (acc + 1) : acc ;
+    }, 0);
+    return reduced
+}
+
+
 
 /* Convert Thousands to K format.
  */
@@ -269,6 +281,378 @@ var quantileCalc = function(extent, sorted, width){
 
 var quantileCalcDev = function(width){
     return {firstX: width*(1/2), secondX: width*(4/5), first:49, second:79}
+}
+
+
+var recastingHelper = function(data, city) {
+
+    var maxBDiv = null;
+    var minBDiv = null;    
+    var maxDInt = null;
+    var maxLight = null;
+    var maxPlaces = null;
+
+    if (city == "Denver") {
+        data.forEach(function (d) {
+            d.OBIaverage = 0;
+            d.OBIcount = +d.b_opening_count;
+            d.lng = +d.lng;
+            d.lat = +d.lat;
+            d.cell_id = +d.cell_id;
+            d.population = +d.population ? +d.population : 0;
+            d.averlight = +d.averlight ? +d.averlight : 0;
+            d.places = +d.places ? +d.places : 0;
+            d.b_diversity = +d.b_diversity// ? +d.b_diversity : 0;
+            d.dev_intensity = +d.dev_intensity ? +d.dev_intensity : 0;//groups
+            d.income = +d.income;
+            d.b_price = +d.b_price;
+            d.insta_cnt = +d.insta_cnt ? +d.insta_cnt : 0;
+            d.insta_like = +d.insta_like ? +d.insta_like : 0;
+    
+            // Business types recasting
+            d.beauty = +d.beauty ? +d.beauty : 0; 
+            d.culture = +d.culture ? +d.culture : 0;
+            d.education = +d.education ? +d.education : 0; 
+            d.entertainment = +d.entertainment ? +d.entertainment : 0; 
+            d.finance = +d.finance ? +d.finance : 0; 
+            d.food = +d.food ? +d.food : 0; 
+            d.health = +d.health ? +d.health : 0;
+            d.nightclub = +d.nightclub ? +d.nightclub : 0;
+            d.office = +d.office ? +d.office : 0; 
+            d.other = +d.other ? +d.other : 0; 
+            d.public_use = +d.public_use ? +d.public_use : 0; 
+            d.recreation = +d.recreation ? +d.recreation : 0; 
+            d.religious = +d.religious ? +d.religious : 0; 
+            d.residential = +d.residential ? +d.residential : 0; 
+            d.restaurant = +d.restaurant ? +d.restaurant : 0; 
+            d.retail = +d.retail ? +d.retail : 0; 
+            d.service = +d.service ? +d.service : 0; 
+            d.transportation = +d.transportation ? +d.transportation : 0;   
+    
+            // Instagram topics recasting
+            
+            d.insta_advertising = +d.insta_advertising ? +d.insta_advertising : 0;
+            d.insta_beverage = +d.insta_beverage ? +d.insta_beverage :0 ;
+            d.insta_car = +d.insta_car ? +d.insta_car : 0;
+            d.insta_entertainment = +d.insta_entertainment ? +d.insta_entertainment : 0;
+            d.insta_family = +d.insta_family ? +d.insta_family : 0;
+            d.insta_fashion = +d.insta_fashion ? +d.insta_fashion : 0;
+            d.insta_food = +d.insta_food ? +d.insta_food : 0;
+            d.insta_interiors = +d.insta_interiors ? +d.insta_interiors : 0;
+            d.insta_landscape = +d.insta_landscape ? +d.insta_landscape : 0;
+            d.insta_monochrome = +d.insta_monochrome ? +d.insta_monochrome : 0;
+            d.insta_nature = +d.insta_nature ? +d.insta_nature : 0;
+            d.insta_portrait = +d.insta_portrait ? +d.insta_portrait: 0;
+            d.insta_sky = +d.insta_sky ? +d.insta_sky: 0;
+            d.insta_sports = +d.insta_sports ? +d.insta_sports: 0;
+            
+            // -------------------------------------------------------------------------- OBI values
+            for (var i=0;i<24;i++){
+                if  (+d['b_opening_'+i] >0) {
+                    d.OBIaverage += +d['b_opening_'+i];
+                }
+            }
+            if (d.OBIcount > 0) {
+                d.OBIpercentage = Math.floor((d.OBIaverage/ 24) / d.OBIcount * 100);
+            }
+            else {
+                d.OBIpercentage = 0;
+            }
+            if (d.b_diversity) {
+                if (maxBDiv == null || d.b_diversity > maxBDiv) {
+                    maxBDiv = d.b_diversity
+                }
+                if (minBDiv == null || d.b_diversity < minBDiv) {
+                    minBDiv = d.b_diversity
+                }
+            }
+    
+            if (d.dev_intensity) {
+                if (maxDInt == null || d.dev_intensity > maxDInt) {
+                    maxDInt = d.dev_intensity
+                }
+            }
+            if (d.averlight) {
+                if (maxLight == null || d.averlight > maxLight) {
+                    maxLight = d.averlight
+                }
+            }
+            if (d.places) {
+                if (maxPlaces == null || d.places > maxPlaces) {
+                    maxPlaces = d.places
+                }
+            }
+
+        })
+
+        return {maxBDiv: maxBDiv, minBDiv: minBDiv, maxDInt:maxDInt, maxLight: maxLight, maxPlaces: maxPlaces};
+
+    } else if (city == "Sanjose") {
+        data.forEach(function (d) {
+            d.OBIaverage = 0;
+            d.OBIcount = +d.b_opening_count;
+            d.lng = +d.lng;
+            d.lat = +d.lat;
+            d.cell_id = +d.cell_id;
+            d.population = +d.population ? +d.population : 0;
+            d.averlight = +d.averlight ? +d.averlight : 0;
+            d.places = +d.places ? +d.places : 0;
+            d.b_diversity = +d.b_diversity// ? +d.b_diversity : 0;
+            d.dev_intensity = +d.dev_intensity ? +d.dev_intensity : 0;//groups
+            d.income = +d.income;
+            d.b_price = +d.b_price;
+            d.insta_cnt = +d.insta_cnt ? +d.insta_cnt : 0;
+            d.insta_like = +d.insta_like ? +d.insta_like : 0;
+    
+            // Business types recasting
+            d.beauty = +d.beauty ? +d.beauty : 0; 
+            d.culture = +d.culture ? +d.culture : 0;
+            d.education = +d.education ? +d.education : 0; 
+            d.entertainment = +d.entertainment ? +d.entertainment : 0; 
+            d.finance = +d.finance ? +d.finance : 0; 
+            d.food = +d.food ? +d.food : 0; 
+            d.health = +d.health ? +d.health : 0;
+            d.nightclub = +d.nightclub ? +d.nightclub : 0;
+            d.office = +d.office ? +d.office : 0; 
+            d.other = +d.other ? +d.other : 0; 
+            d.public_use = +d.public_use ? +d.public_use : 0; 
+            d.recreation = +d.recreation ? +d.recreation : 0; 
+            d.religious = +d.religious ? +d.religious : 0; 
+            d.residential = +d.residential ? +d.residential : 0; 
+            d.restaurant = +d.restaurant ? +d.restaurant : 0; 
+            d.retail = +d.retail ? +d.retail : 0; 
+            d.service = +d.service ? +d.service : 0; 
+            d.transportation = +d.transportation ? +d.transportation : 0;   
+    
+            // Instagram topics recasting
+            d.insta_advertising = +d.insta_advertising ? +d.insta_advertising : 0;
+            d.insta_animal = +d.insta_animal ? +d.insta_animal :0 ;
+            d.insta_car = +d.insta_car ? +d.insta_car : 0;
+            d.insta_entertainment = +d.insta_entertainment ? +d.insta_entertainment : 0;
+            d.insta_fashion = +d.insta_fashion ? +d.insta_fashion : 0;
+            d.insta_food = +d.insta_food ? +d.insta_food : 0;
+            d.insta_group = +d.insta_group ? +d.insta_group : 0;
+            d.insta_interiors = +d.insta_interiors ? +d.insta_interiors : 0;
+            d.insta_monochrome = +d.insta_monochrome ? +d.insta_monochrome : 0;
+            d.insta_nature = +d.insta_nature ? +d.insta_nature : 0;
+            d.insta_portrait = +d.insta_portrait ? +d.insta_portrait: 0;
+            d.insta_sky = +d.insta_sky ? +d.insta_sky: 0;
+            d.insta_sports = +d.insta_sports ? +d.insta_sports: 0;
+            
+            // -------------------------------------------------------------------------- OBI values
+            for (var i=0;i<24;i++){
+                if  (+d['b_opening_'+i] >0) {
+                    d.OBIaverage += +d['b_opening_'+i];
+                }
+            }
+            if (d.OBIcount > 0) {
+                d.OBIpercentage = Math.floor((d.OBIaverage/ 24) / d.OBIcount * 100);
+            }
+            else {
+                d.OBIpercentage = 0;
+            }
+            if (d.b_diversity) {
+                if (maxBDiv == null || d.b_diversity > maxBDiv) {
+                    maxBDiv = d.b_diversity
+                }
+                if (minBDiv == null || d.b_diversity < minBDiv) {
+                    minBDiv = d.b_diversity
+                }
+            }
+    
+            if (d.dev_intensity) {
+                if (maxDInt == null || d.dev_intensity > maxDInt) {
+                    maxDInt = d.dev_intensity
+                }
+            }
+            if (d.averlight) {
+                if (maxLight == null || d.averlight > maxLight) {
+                    maxLight = d.averlight
+                }
+            }
+            if (d.places) {
+                if (maxPlaces == null || d.places > maxPlaces) {
+                    maxPlaces = d.places
+                }
+            }
+    
+        })
+
+        return {maxBDiv: maxBDiv, minBDiv: minBDiv, maxDInt:maxDInt, maxLight: maxLight, maxPlaces: maxPlaces};
+
+    } else if (city == "Pittsburgh"){
+        console.log("I should be here!");
+        data.forEach(function (d) {
+            d.OBIaverage = 0;
+            d.OBIcount = +d.b_opening_count;
+            d.lng = +d.lng;
+            d.lat = +d.lat;
+            d.cell_id = +d.cell_id;
+            d.population = +d.population ? +d.population : 0;
+            d.averlight = +d.averlight ? +d.averlight : 0;
+            d.places = +d.places ? +d.places : 0;
+            d.b_diversity = +d.b_diversity// ? +d.b_diversity : 0;
+            d.dev_intensity = +d.dev_intensity ? +d.dev_intensity : 0;//groups
+            d.income = +d.income;
+            d.b_price = +d.b_price;
+            d.insta_cnt = +d.insta_cnt ? +d.insta_cnt : 0;
+            d.insta_like = +d.insta_like ? +d.insta_like : 0;
+    
+            // Business types recasting
+            d.beauty = +d.beauty ? +d.beauty : 0; 
+            d.culture = +d.culture ? +d.culture : 0;
+            d.education = +d.education ? +d.education : 0; 
+            d.entertainment = +d.entertainment ? +d.entertainment : 0;
+            d.food = +d.food ? +d.food : 0; 
+            d.health = +d.health ? +d.health : 0;
+            d.nightclub = +d.nightclub ? +d.nightclub : 0;
+            d.office = +d.office ? +d.office : 0; 
+            d.other = +d.other ? +d.other : 0; 
+            d.public_use = +d.public_use ? +d.public_use : 0; 
+            d.recreation = +d.recreation ? +d.recreation : 0; 
+            d.religious = +d.religious ? +d.religious : 0; 
+            d.residential = +d.residential ? +d.residential : 0; 
+            d.restaurant = +d.restaurant ? +d.restaurant : 0; 
+            d.retail = +d.retail ? +d.retail : 0; 
+            d.service = +d.service ? +d.service : 0; 
+            d.transportation = +d.transportation ? +d.transportation : 0;   
+    
+            // Instagram topics recasting
+            d.insta_advertising = +d.insta_advertising ? +d.insta_advertising : 0;
+            d.insta_animal = +d.insta_animal ? +d.insta_animal :0 ;
+            d.insta_architecture = +d.insta_architecture ? +d.insta_architecture : 0;
+            d.insta_car = +d.insta_car ? +d.insta_car : 0;
+            d.insta_entertainment = +d.insta_entertainment ? +d.insta_entertainment : 0;
+            d.insta_family = +d.insta_fashion ? +d.insta_fashion : 0;
+            d.insta_fashion = +d.insta_fashion ? +d.insta_fashion : 0;
+            d.insta_food = +d.insta_food ? +d.insta_food : 0;
+            d.insta_interiors = +d.insta_interiors ? +d.insta_interiors : 0;
+            d.insta_monochrome = +d.insta_monochrome ? +d.insta_monochrome : 0;
+            d.insta_nature = +d.insta_nature ? +d.insta_nature : 0;
+            d.insta_sky = +d.insta_sky ? +d.insta_sky: 0;
+            d.insta_sports = +d.insta_sports ? +d.insta_sports: 0;
+            
+            // -------------------------------------------------------------------------- OBI values
+            for (var i=0;i<24;i++){
+                if  (+d['b_opening_'+i] >0) {
+                    d.OBIaverage += +d['b_opening_'+i];
+                }
+            }
+            if (d.OBIcount > 0) {
+                d.OBIpercentage = Math.floor((d.OBIaverage/ 24) / d.OBIcount * 100);
+            }
+            else {
+                d.OBIpercentage = 0;
+            }
+            if (d.b_diversity) {
+                if (maxBDiv == null || d.b_diversity > maxBDiv) {
+                    maxBDiv = d.b_diversity
+                }
+                if (minBDiv == null || d.b_diversity < minBDiv) {
+                    minBDiv = d.b_diversity
+                }
+            }
+    
+            if (d.dev_intensity) {
+                if (maxDInt == null || d.dev_intensity > maxDInt) {
+                    maxDInt = d.dev_intensity
+                }
+            }
+            if (d.averlight) {
+                if (maxLight == null || d.averlight > maxLight) {
+                    maxLight = d.averlight
+                }
+            }
+            if (d.places) {
+                if (maxPlaces == null || d.places > maxPlaces) {
+                    maxPlaces = d.places
+                }
+            }
+    
+        })
+
+        return {maxBDiv: maxBDiv, minBDiv: minBDiv, maxDInt:maxDInt, maxLight: maxLight, maxPlaces: maxPlaces};
+
+    } else {
+        data.forEach(function (d) {
+            d.OBIaverage = 0;
+            d.OBIcount = +d.b_opening_count;
+            d.lng = +d.lng;
+            d.lat = +d.lat;
+            d.cell_id = +d.cell_id;
+            d.population = +d.population ? +d.population : 0;
+            d.averlight = +d.averlight ? +d.averlight : 0;
+            d.places = +d.places ? +d.places : 0;
+            d.b_diversity = +d.b_diversity// ? +d.b_diversity : 0;
+            d.dev_intensity = +d.dev_intensity ? +d.dev_intensity : 0;//groups
+            d.income = +d.income;
+            d.b_price = +d.b_price;
+            d.insta_cnt = +d.insta_cnt ? +d.insta_cnt : 0;
+            d.insta_like = +d.insta_like ? +d.insta_like : 0;
+    
+            // Business types recasting
+            d.beauty = +d.beauty ? +d.beauty : 0; 
+            d.culture = +d.culture ? +d.culture : 0;
+            d.education = +d.education ? +d.education : 0; 
+            d.entertainment = +d.entertainment ? +d.entertainment : 0; 
+            d.finance = +d.finance ? +d.finance : 0; 
+            d.food = +d.food ? +d.food : 0; 
+            d.health = +d.health ? +d.health : 0;
+            d.nightclub = +d.nightclub ? +d.nightclub : 0;
+            d.office = +d.office ? +d.office : 0; 
+            d.other = +d.other ? +d.other : 0; 
+            d.public_use = +d.public_use ? +d.public_use : 0; 
+            d.recreation = +d.recreation ? +d.recreation : 0; 
+            d.religious = +d.religious ? +d.religious : 0; 
+            d.residential = +d.residential ? +d.residential : 0; 
+            d.restaurant = +d.restaurant ? +d.restaurant : 0; 
+            d.retail = +d.retail ? +d.retail : 0; 
+            d.service = +d.service ? +d.service : 0; 
+            d.transportation = +d.transportation ? +d.transportation : 0;
+            
+            // -------------------------------------------------------------------------- OBI values
+            for (var i=0;i<24;i++){
+                if  (+d['b_opening_'+i] >0) {
+                    d.OBIaverage += +d['b_opening_'+i];
+                }
+            }
+            if (d.OBIcount > 0) {
+                d.OBIpercentage = Math.floor((d.OBIaverage/ 24) / d.OBIcount * 100);
+            }
+            else {
+                d.OBIpercentage = 0;
+            }
+            if (d.b_diversity) {
+                if (maxBDiv == null || d.b_diversity > maxBDiv) {
+                    maxBDiv = d.b_diversity
+                }
+                if (minBDiv == null || d.b_diversity < minBDiv) {
+                    minBDiv = d.b_diversity
+                }
+            }
+    
+            if (d.dev_intensity) {
+                if (maxDInt == null || d.dev_intensity > maxDInt) {
+                    maxDInt = d.dev_intensity
+                }
+            }
+            if (d.averlight) {
+                if (maxLight == null || d.averlight > maxLight) {
+                    maxLight = d.averlight
+                }
+            }
+            if (d.places) {
+                if (maxPlaces == null || d.places > maxPlaces) {
+                    maxPlaces = d.places
+                }
+            }
+    
+        })
+
+        return {maxBDiv: maxBDiv, minBDiv: minBDiv, maxDInt:maxDInt, maxLight: maxLight, maxPlaces: maxPlaces};
+    
+    }
+
 }
 
 

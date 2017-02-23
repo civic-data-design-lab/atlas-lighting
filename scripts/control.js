@@ -70,7 +70,7 @@ function initControl() {
             // $(ui.draggable).attr("style", "opacity: 0.5;");
             var id = $(ui.draggable).attr("id").split("d_")[1];
             selectedCharts.push(id);
-            if (id == "business_types" || id == "ins_topics"){
+            if (id == "business_types" || id == "instagram_topics"){
                 window.tagCharts.push(id);
             }
             updateChart(selectedCharts);
@@ -260,22 +260,19 @@ function initControl() {
 
     //////////////////////////////////// collapse datasets
 
-    $(".chart-title").click(function(){
-        var parent = $(this).parents()[0];
+    $(".toggle-title").click(function(){
+        var firstParent = $(this).parents()[0];
+        var parent = $(firstParent).parent();
         var myid = $(parent).attr("id");
-        //var wasPlaceholder1 = false;
-        //var wasPlaceholder2 = false;
         var queryId = "#"+myid;
         if (myid == "street_view") {
             $("#frame_for_streets").toggle();
         } else if (myid == "instagram_pics"){
             $("#frame_for_instas").toggle();
-        } else if (myid == "light_average") {
         } else {
             $(`${queryId} > .digits`).toggle();
             $(`${queryId} > svg`).toggle();
         }
-
     })
 
     //////////////////////////////////// .rm dataset from the right panel

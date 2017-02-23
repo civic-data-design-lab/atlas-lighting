@@ -54,13 +54,39 @@ var busTypes = ['beauty','culture','education','entertainment',
         'transportation'];
 
 // busTypes is a list of predefined types utilized in the business types chart.
-var instaTopics = ['advertising','beverage','car','entertainment',
+/*var denveTopics = ['advertising','beverage','car','entertainment',
         'family','fashion','food','interiors','landscape','monochrome','nature',
-        'portrait','sky','sports'];
+        'portrait','sky','sports'];*/
+
 
 // Business Types Widget is initiated here:
-var busTypesChart = tagCloudChart(390, 100, "#business_types");
-var instaTopicsChart = tagCloudChart(370, 100, "#instagram_topics"); //390
+var busTypesChart = tagCloudChart(390, 100, "#business_types", false);
+
+if (currentCity_o == 'LA' || currentCity_o == 'Chicago' ){
+    $("#d_instagram_topics").hide();
+    var instaTopics = [];
+    var instaTopicsChart = tagCloudChart(370, 100, "#instagram_topics", true);
+} else {
+    if (!$("#d_instagram_topics").is(":visible")){
+        $("#d_instagram_topics").show();
+    }
+    if (currentCity_o == 'Denver') {
+        var instaTopics = ['insta_advertising','insta_beverage','insta_car','insta_entertainment',
+        'insta_family','insta_fashion','insta_food','insta_interiors','insta_landscape','insta_monochrome','insta_nature',
+        'insta_portrait','insta_sky','insta_sports'];
+
+    } else if (currentCity_o == 'Sanjose') {
+        var instaTopics = ['insta_advertising','insta_animal','insta_car','insta_entertainment',
+        'insta_fashion','insta_food', 'insta_group', 'insta_interiors','insta_monochrome','insta_nature',
+        'insta_portrait','insta_sky','insta_sports'];
+
+    } else if (currentCity_o == 'Pittsburgh'){
+        var instaTopics = ['insta_advertising','insta_animal','insta_architecture', 'insta_car', 'insta_entertainment',
+        'insta_family','insta_fashion','insta_food','insta_interiors','insta_monochrome','insta_nature','insta_sky','insta_sports'];
+
+    }
+    var instaTopicsChart = tagCloudChart(370, 100, "#instagram_topics", true); //390
+}
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 //  myinit()                                                                  //
@@ -94,7 +120,6 @@ var myinit = function () {
     var rootRef = firebase.database().ref();
 
     var q = d3.queue(2).defer(d3.csv, "../data/" + currentCity_o + "_grid.csv")
-                       .defer(d3.csv, "../data/denver_instagram_topics.csv")
     /*
     if (currentCity_o != "Chicago"){
         q.defer(d3.csv, "../data/Chicago_grid.csv")
@@ -112,7 +137,7 @@ var myinit = function () {
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-function dataDidLoad(error, grid, topics, chicago_data) {
+function dataDidLoad(error, grid, chicago_data) { //add topics if necessary
     if (!grid) return
 
     d3.select("#loader").transition().duration(600).style("opacity", 0).remove();
@@ -121,10 +146,10 @@ function dataDidLoad(error, grid, topics, chicago_data) {
     window.mydata = grid;
     //window.state = newBusTypesChart.convertToArray(grid);
     //window.topics = topics;
-    if (topics) window.topics = topics;
+    //if (topics) window.topics = topics;
     if (chicago_data) window.chicago_data = chicago_data;
 
-    charts(grid, topics, selectedCharts);
+    charts(grid, selectedCharts);
 
     initCanvas(grid);
 
@@ -400,7 +425,7 @@ window.OBIpercent = dc.barChart("#business_opening_percent");
 //  Rendering the charts                                                      //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
-function charts(data, topics, selectedCharts) {
+function charts(data, selectedCharts) {
     d3.selectAll(".dc-chart").style("display", "none");
     d3.select("#street_view").style("display", "block");
     d3.selectAll(".lock").style("display", "block");
@@ -427,111 +452,15 @@ function charts(data, topics, selectedCharts) {
         d3.select("#instagram_pics").style("display", "block");
     }
 
-    var maxBDiv = null;
-    var minBDiv = null;    
-    var maxDInt = null;
-    var maxLight = null;
-    var maxPlaces = null;
+    // Major Recasting
+    
+    var varsForCharts = recastingHelper(data, currentCity_o);
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //                                                                            //
-    //  Getting the data for each cell                                            //
-    //                                                                            //
-    ////////////////////////////////////////////////////////////////////////////////
-
-    data.forEach(function (d) {
-        d.OBIaverage = 0;
-        d.OBIcount = +d.b_opening_count;
-        d.lng = +d.lng;
-        d.lat = +d.lat;
-        d.cell_id = +d.cell_id;
-        d.population = +d.population ? +d.population : 0;
-        d.averlight = +d.averlight ? +d.averlight : 0;
-        d.places = +d.places ? +d.places : 0;
-        d.b_diversity = +d.b_diversity// ? +d.b_diversity : 0;
-        d.dev_intensity = +d.dev_intensity ? +d.dev_intensity : 0;//groups
-        d.income = +d.income;
-        d.b_price = +d.b_price;
-        d.insta_cnt = +d.insta_cnt ? +d.insta_cnt : 0;
-        d.insta_like = +d.insta_like ? +d.insta_like : 0;
-
-        // Business types recasting
-        d.beauty = +d.beauty ? +d.beauty : 0; 
-        d.culture = +d.culture ? +d.culture : 0;
-        d.education = +d.education ? +d.education : 0; 
-        d.entertainment = +d.entertainment ? +d.entertainment : 0; 
-        d.finance = +d.finance ? +d.finance : 0; 
-        d.food = +d.food ? +d.food : 0; 
-        d.health = +d.health ? +d.health : 0;
-        d.nightclub = +d.nightclub ? +d.nightclub : 0;
-        d.office = +d.office ? +d.office : 0; 
-        d.other = +d.other ? +d.other : 0; 
-        d.public_use = +d.public_use ? +d.public_use : 0; 
-        d.recreation = +d.recreation ? +d.recreation : 0; 
-        d.religious = +d.religious ? +d.religious : 0; 
-        d.residential = +d.residential ? +d.residential : 0; 
-        d.restaurant = +d.restaurant ? +d.restaurant : 0; 
-        d.retail = +d.retail ? +d.retail : 0; 
-        d.service = +d.service ? +d.service : 0; 
-        d.transportation = +d.transportation ? +d.transportation : 0;   
-        // -------------------------------------------------------------------------- OBI values
-        for (var i=0;i<24;i++){
-            if  (+d['b_opening_'+i] >0) {
-                d.OBIaverage += +d['b_opening_'+i];
-            }
-        }
-        if (d.OBIcount > 0) {
-            d.OBIpercentage = Math.floor((d.OBIaverage/ 24) / d.OBIcount * 100);
-        }
-        else {
-            d.OBIpercentage = 0;
-        }
-        if (d.b_diversity) {
-            if (maxBDiv == null || d.b_diversity > maxBDiv) {
-                maxBDiv = d.b_diversity
-            }
-            if (minBDiv == null || d.b_diversity < minBDiv) {
-                minBDiv = d.b_diversity
-            }
-        }
-
-        if (d.dev_intensity) {
-            if (maxDInt == null || d.dev_intensity > maxDInt) {
-                maxDInt = d.dev_intensity
-            }
-        }
-        if (d.averlight) {
-            if (maxLight == null || d.averlight > maxLight) {
-                maxLight = d.averlight
-            }
-        }
-        if (d.places) {
-            if (maxPlaces == null || d.places > maxPlaces) {
-                maxPlaces = d.places
-            }
-        }
-
-    })
-
-    /*
-    topics.forEach(function(d){
-        d.advertising = +d.advertising ? +d.advertising : 0;
-        d.beverage = +d.beverage ? +d.beverage :0 ;
-        d.car = +d.car ? +d.car : 0;
-        d.entertainment = +d.entertainment ? +d.entertainment : 0;
-        d.family = +d.family ? +d.family : 0;
-        d.fashion = +d.fashion ? +d.fashion : 0;
-        d.food = +d.food ? +d.food : 0;
-        d.interiors = +d.interiors ? +d.interiors : 0;
-        d.landscape = +d.landscape ? +d.landscape : 0;
-        d.monochrome = +d.monochrome ? +d.monochrome : 0;
-        d.nature = +d.nature ? +d.nature : 0;
-        d.portrait = +d.portrait ? +d.portrait: 0;
-        d.sky = +d.sky ? +d.sky: 0;
-        d.sports = +d.sports ? +d.sports: 0;
-
-    })*/
-
+    var maxBDiv = varsForCharts.maxBDiv;
+    var minBDiv = varsForCharts.minBDiv;
+    var maxDInt = varsForCharts.maxDInt;
+    var maxLight = varsForCharts.maxLight;
+    var maxPlaces = varsForCharts.maxPlaces;
 
     var chartWidth = 320; //304 //320
     var chartHeight = 140; //52
@@ -567,8 +496,9 @@ function charts(data, topics, selectedCharts) {
     instaTopics.map(function(el){
         var topicSum = window.ndx.groupAll().reduceSum(function(d){return d[el];}).value();
         if (topicSum){
+            var newEl = el.replace('insta_', '');
             topicSums.push({
-                category: el, 
+                category: newEl, 
                 count: topicSum
             });
         }
@@ -1013,13 +943,10 @@ function charts(data, topics, selectedCharts) {
 
     //////////////////////////////////// Business Types Chart ///////////////////////////////////
     busTypesChart.bindOriginalData(data);
-    //busTypesChart.bindData(window.newData);
     busTypesChart.updateElements(typeSums);
 
     //////////////////////////////////// Instagram Topics Chart /////////////////////////////////
-
     instaTopicsChart.bindOriginalData(data);
-    //instaTopicsChart.bindData(window.newData);
     instaTopicsChart.updateElements(topicSums);
 
     //////////////////////////////////// Data Count /////////////////////////////////
@@ -1154,9 +1081,11 @@ function cellDisselect() {
     d3.select("#street_view").style("display", "none"); */
 
     busTypesChart.assignSelect(false);
-    instaTopicsChart.assignSelect(false);
     busTypesChart.updateElements(window.typesData);
+    
+    instaTopicsChart.assignSelect(false);
     instaTopicsChart.updateElements(window.topicsData);
+    
 
 }
 
@@ -1341,7 +1270,7 @@ var filterCells = function(data){
             if ((busTypesChart.isTypeSelected() && instaTopicsChart.isTypeSelected())) {
                 var filteredData = data.filter(function(el){
                     var types = betterReduce(el, selectedTypes);
-                    var topics = betterReduce(el, selectedTopics);
+                    var topics = betterReduceInsta(el, selectedTopics);
                     if ((types == typesLen) && (topics == topicsLen) && el.OBIaverage!=0 ){
                         d3.select("#c" + el.cell_id).style("display", "block");
                         return el;
@@ -1363,7 +1292,7 @@ var filterCells = function(data){
                 updateAndDraw(filteredData);
             } else {
                 var filteredData = data.filter(function(el){
-                    var topics = betterReduce(el, selectedTopics);
+                    var topics = betterReduceInsta(el, selectedTopics);
                     if ((topics == topicsLen) && el.OBIaverage!=0 ){
                         d3.select("#c" + el.cell_id).style("display", "block");
                         return el;
@@ -1377,7 +1306,7 @@ var filterCells = function(data){
         if ((busTypesChart.isTypeSelected() && instaTopicsChart.isTypeSelected())) {
                 var filteredData = data.filter(function(el){
                     var types = betterReduce(el, selectedTypes);
-                    var topics = betterReduce(el, selectedTopics);
+                    var topics = betterReduceInsta(el, selectedTopics);
                     if ((types == typesLen) && (topics == topicsLen)){
                         d3.select("#c" + el.cell_id).style("display", "block");
                         return el;
@@ -1400,7 +1329,7 @@ var filterCells = function(data){
                 //updateNDX(filtered);
             } else {
                 var filteredData = data.filter(function(el){
-                    var topics = betterReduce(el, selectedTopics);
+                    var topics = betterReduceInsta(el, selectedTopics);
                     if (topics == topicsLen){
                         d3.select("#c" + el.cell_id).style("display", "block");
                         return el;
@@ -1423,6 +1352,7 @@ var filterCells = function(data){
         // updateAndDraw(filteredData);
 
     }  else {
+        console.log("Likely, I'm here");
         data.map(function(el){
             d3.select("#c" + el.cell_id).style("display", "block");
         })
@@ -1432,6 +1362,7 @@ var filterCells = function(data){
 
 
 function displayCells(data){
+    console.log("Most likely, I'm here");
     data.map(function(el){
         d3.select("#c"+el.cell_id).style("display", "block");
     })
