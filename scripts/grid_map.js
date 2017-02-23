@@ -62,6 +62,8 @@ var busTypes = ['beauty','culture','education','entertainment',
 // Business Types Widget is initiated here:
 var busTypesChart = tagCloudChart(390, 100, "#business_types", false);
 
+console.log(currentCity_o);
+
 if (currentCity_o == 'LA' || currentCity_o == 'Chicago' ){
     $("#d_instagram_topics").hide();
     var instaTopics = [];
@@ -453,7 +455,7 @@ function charts(data, selectedCharts) {
     }
 
     // Major Recasting
-    
+
     var varsForCharts = recastingHelper(data, currentCity_o);
 
     var maxBDiv = varsForCharts.maxBDiv;
