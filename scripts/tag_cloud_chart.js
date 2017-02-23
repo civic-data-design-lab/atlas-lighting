@@ -330,7 +330,7 @@ var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#b
                             filterCells(originalData);
                         } else {
                             window.filtered = false;
-                            filterCells(cellsData);
+                            filterCells(originalData);
                         }
                     } else {
                         typeSelected = true;

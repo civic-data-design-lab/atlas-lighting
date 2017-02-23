@@ -53,16 +53,10 @@ var busTypes = ['beauty','culture','education','entertainment',
         'recreation','religious','residential','restaurant','retail','service',
         'transportation'];
 
-// busTypes is a list of predefined types utilized in the business types chart.
-/*var denveTopics = ['advertising','beverage','car','entertainment',
-        'family','fashion','food','interiors','landscape','monochrome','nature',
-        'portrait','sky','sports'];*/
-
-
 // Business Types Widget is initiated here:
 var busTypesChart = tagCloudChart(390, 100, "#business_types", false);
 
-console.log(currentCity_o);
+$("#d_business_diversity").hide();
 
 if (currentCity_o == 'LA' || currentCity_o == 'Chicago' ){
     $("#d_instagram_topics").hide();
@@ -122,11 +116,7 @@ var myinit = function () {
     var rootRef = firebase.database().ref();
 
     var q = d3.queue(2).defer(d3.csv, "../data/" + currentCity_o + "_grid.csv")
-    /*
-    if (currentCity_o != "Chicago"){
-        q.defer(d3.csv, "../data/Chicago_grid.csv")
-    }*/
-    //.defer(d3.json, "data/"+currentCity+"_zipcode.json"/*"zipcode_business_geojson/" + currentCity*/)
+
     q.await(dataDidLoad);
 }
 
@@ -146,9 +136,6 @@ function dataDidLoad(error, grid, chicago_data) { //add topics if necessary
 
     window.dataLst = Object.keys(grid[0])
     window.mydata = grid;
-    //window.state = newBusTypesChart.convertToArray(grid);
-    //window.topics = topics;
-    //if (topics) window.topics = topics;
     if (chicago_data) window.chicago_data = chicago_data;
 
     charts(grid, selectedCharts);
@@ -673,61 +660,6 @@ function charts(data, selectedCharts) {
         }) 
         .yAxis().ticks(2);
 
-    var busDivDimension = window.ndx.dimension(function (d) {
-        return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0;
-    });
-
-    var busDivGroup = busDivDimension.group();
-
-
-    window.busDivChart.width(chartWidthBusDiv).height(chartHeightBusDiv*2)
-        .group(busDivGroup).dimension(busDivDimension)
-        .ordinalColors(["#aaaaaa"])
-        .margins({top: 0, left: 50, right: 10, bottom: 20})
-        .x(d3.scale.linear().domain([0.5, 4.5]))
-        .y(d3.scale.linear().domain([0, 1]))
-        // .r(d3.scale.linear().domain([0, window.count*5]))
-        .colors(["#808080"])
-        //.elasticRadius([true])
-        .on('renderlet', function(chart){
-            window.newData = busDivDimension.top(Infinity);
-            var extent = d3.extent(data, function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0});
-            var sorted = data.map(function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0}).sort(function(a, b){return a - b});
-            var quants = quantileCalc(extent, sorted, actChrtWidth);
-
-            var median = d3.median(window.newData, function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0});
-            var correspond = thisQuantile(median, extent, quants.first, quants.second);
-            bindText(correspond, median, "#busDiv_digits","#busDiv_digits_o");
-        })
-        .keyAccessor(function (p) {
-            return p.key;
-        })
-        .valueAccessor(function (p) {
-            return 0.5;
-        })
-        .radiusValueAccessor(function (p) {
-            //console.log(p.value);
-            return p.value/window.count*chartHeightBusDiv*4/5;
-        })
-        .label(function (p) {
-            return p.value
-        })
-        .xAxis().tickFormat(function(d, i){
-            switch(i) {
-            case 0:
-                return "VERY LOW"
-            case 1:
-                return "LOW"
-            case 2:
-                return "MEDIUM"
-            case 3:
-                return "HIGH"
-            default:
-                return ""
-            }
-        })
-    window.busDivChart.xAxis().ticks(4);        
-    window.busDivChart.yAxis().ticks(0); 
 
     /* Places chart
      * 
@@ -819,7 +751,7 @@ function charts(data, selectedCharts) {
             var sorted = data.map(function(el){return parseInt(el.averlight)}).sort(function(a, b){return a - b});
             var quants = quantileCalc(extent, sorted, actChrtWidth);
 
-            d3.select("#map .datalayer").remove()
+            //d3.select("#map .datalayer").remove()
             //var canvas = __canvas
 
             d3.selectAll(".cellgrids").style("display", "none");
@@ -833,10 +765,10 @@ function charts(data, selectedCharts) {
             instaTopicsChart.bindData(window.newData);
 
             if (!window.filtered){
-                console.log("filterCells")
+                //console.log("filterCells")
                 filterCells(window.newData);
             } else {
-                console.log("displayCells")
+                //console.log("displayCells")
                 displayCells(window.newData);
             }
 
@@ -854,7 +786,63 @@ function charts(data, selectedCharts) {
             drawLabels(chart, "NANOWATTS/CM²/SR", "# OF CELLS");
         })
         .yAxis().ticks(3);
+
+
         
+    var busDivDimension = window.ndx.dimension(function (d) {
+        return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0;
+    });
+
+    var busDivGroup = busDivDimension.group();
+
+    window.busDivChart.width(chartWidthBusDiv).height(chartHeightBusDiv*2)
+        .group(busDivGroup).dimension(busDivDimension)
+        .ordinalColors(["#aaaaaa"])
+        .margins({top: 0, left: 50, right: 10, bottom: 20})
+        .x(d3.scale.linear().domain([0.5, 4.5]))
+        .y(d3.scale.linear().domain([0, 1]))
+        // .r(d3.scale.linear().domain([0, window.count*5]))
+        .colors(["#808080"])
+        //.elasticRadius([true])
+        .on('renderlet', function(chart){
+            window.newData = busDivDimension.top(Infinity);
+            var extent = d3.extent(data, function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0});
+            var sorted = data.map(function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0}).sort(function(a, b){return a - b});
+            var quants = quantileCalc(extent, sorted, actChrtWidth);
+
+            var median = d3.median(window.newData, function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0});
+            var correspond = thisQuantile(median, extent, quants.first, quants.second);
+            bindText(correspond, median, "#busDiv_digits","#busDiv_digits_o");
+        })
+        .keyAccessor(function (p) {
+            return p.key;
+        })
+        .valueAccessor(function (p) {
+            return 0.5;
+        })
+        .radiusValueAccessor(function (p) {
+            //console.log(p.value);
+            return p.value/window.count*chartHeightBusDiv*4/5;
+        })
+        .label(function (p) {
+            return p.value
+        })
+        .xAxis().tickFormat(function(d, i){
+            switch(i) {
+            case 0:
+                return "VERY LOW"
+            case 1:
+                return "LOW"
+            case 2:
+                return "MEDIUM"
+            case 3:
+                return "HIGH"
+            default:
+                return ""
+            }
+        })
+    window.busDivChart.xAxis().ticks(4);        
+    window.busDivChart.yAxis().ticks(0); 
 
     /* Population Chart
      * We are dividing the distribution into three quantiles: low, medium and high 
@@ -978,7 +966,7 @@ function charts(data, selectedCharts) {
     d3.selectAll("#business_diversity line").remove();
     
     //////////////////////////////////// timeSelector   --- d3.js ---- ///////////////////////////////////
-    console.log("call to timeSelector")
+    //console.log("call to timeSelector")
     timeSelector(chartWidth,chartHeight); 
     if (selectedCharts.indexOf("business_opening_percent") !== -1) { //show second bar on load
         $('#business_opening_average').show();
@@ -1354,7 +1342,6 @@ var filterCells = function(data){
         // updateAndDraw(filteredData);
 
     }  else {
-        console.log("Likely, I'm here");
         data.map(function(el){
             d3.select("#c" + el.cell_id).style("display", "block");
         })
@@ -1364,7 +1351,6 @@ var filterCells = function(data){
 
 
 function displayCells(data){
-    console.log("Most likely, I'm here");
     data.map(function(el){
         d3.select("#c"+el.cell_id).style("display", "block");
     })
