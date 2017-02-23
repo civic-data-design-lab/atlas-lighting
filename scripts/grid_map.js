@@ -8,8 +8,6 @@ var currentCity_o = document.URL.split("#")[1].split("*")[0];
 var currentCity = document.URL.split("#")[1].split("*")[0].toLowerCase();
 d3.selectAll("#nowmsa").text(fullName[currentCity_o]);
 var center = cityCentroids[currentCity_o];
-console.log(currentCity_o);
-console.log(cityCentroids);
 var initurl = window.location.href;
 var selectedCharts = [];
 
@@ -74,11 +72,11 @@ var myinit = function () {
     window.panorama = new google.maps.StreetViewPanorama(
         document.getElementById('streetview_window'),
         {
-            position: { lat: 41.878180, lng: -87.630270 },
+            position: { lat: parseFloat(center.lat) , lng: parseFloat(center.lng)  },
             pov: { heading: 165, pitch: 0 },
             zoom: 1
         });
-
+    
     window.streetviewService = new google.maps.StreetViewService;
 
 
@@ -94,8 +92,6 @@ var myinit = function () {
     };
     firebase.initializeApp(config);
     var rootRef = firebase.database().ref();
-
-    console.log(currentCity_o);
 
     var q = d3.queue(2).defer(d3.csv, "../data/" + currentCity_o + "_grid.csv")
                        .defer(d3.csv, "../data/denver_instagram_topics.csv")
@@ -254,13 +250,28 @@ function initCanvas(data) {
                     if (map.getZoom() >= 0) { //12
                         var mypos = $(this).position();
                         var thisradius = 6 / 1400 * Math.pow(2, map.getZoom());
+                        var left = mypos.left+(thisradius - 10)/2;
+                        var top = mypos.top+(thisradius - 10)/2;
+                        var latLngo = unproject([left, top]);
 
-                        streetviewService.getPanorama(
-                            {location: unproject([mypos.left+(thisradius - 10)/2, mypos.top+(thisradius - 10)/2])},
+                        var oldPoint = new google.maps.LatLng(parseFloat(latLngo.lat), parseFloat(latLngo.lng));
+                        //console.log(oldPoint);
+
+                        //var streetViewMaxDistance = 100; 
+
+                        streetviewService.getPanoramaByLocation(
+                            /*{location: latLngo}*/ oldPoint, 100,
                             function(result, status) {
                                 if (status === 'OK') {
                                     //console.log("ok");
-                                    window.panorama.setPosition(unproject([mypos.left+(thisradius - 10)/2, mypos.top+(thisradius - 10)/2]));
+                                    var newPoint = result.location.latLng;
+                                    var heading = google.maps.geometry.spherical.computeHeading(newPoint, oldPoint);
+                                    window.panorama.setPosition(latLngo);
+                                    window.panorama.setPov({
+                                        heading:heading,
+                                        zoom:1,
+                                        pitch:0
+                                    });
                                     d3.select("#street_view_plc").style("display", "none");
                                     d3.select("#street_view_plc0").style("display", "none");
                                     d3.select("#streetview_window").style("display", "block");
@@ -273,7 +284,6 @@ function initCanvas(data) {
 
                                 }
                         });
-
                         //Switch pattern might be better here
                         if (currentCity_o == "LA") {
                             thisradius = 1.82 * thisradius;
@@ -303,6 +313,8 @@ function initCanvas(data) {
                         var loc = unproject([myx, myy]);
                         var mykey = "AIzaSyBM59LWQXfxJzh06UPYicEM9Ro6RRFCHQc";
                         var latlng = loc.lat+","+loc.lng
+
+                        //console.log(latlng);
 
                         var myreq = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+latlng+"&key="+mykey
 
@@ -407,6 +419,7 @@ function charts(data, topics, selectedCharts) {
     if(selectedCharts.indexOf("street_view") !== - 1){
         d3.select("#street_view").style("display", "block");
         d3.select("#street_view").style("position", "relative");
+        d3.select("#streetview_window").style("display", "block");
     }
 
 
@@ -565,9 +578,6 @@ function charts(data, topics, selectedCharts) {
 
     window.typesData = typeSums;
     window.topicsData =  topicSums;
-    //newBusTypesChart.bindData(data);
-    //newBusTypesChart.updateBusTypes(typeSums);
-
     window.count = data.length;
     
     ////////////////////////////////////////////////////////////////////////////////
@@ -576,6 +586,16 @@ function charts(data, topics, selectedCharts) {
     //                                                                            //
     ////////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
+||||||| merged common ancestors
+    var busDivDimension = window.ndx.dimension(function (d) {
+        return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0
+    });
+    var busDivGroup = busDivDimension.group();
+
+=======
+
+>>>>>>> upstream/master
     var latDimension = window.ndx.dimension(function (d) {
         return d.lat
     });
@@ -730,14 +750,24 @@ function charts(data, topics, selectedCharts) {
                 .style("font-size", "8px");
         }) 
         .yAxis().ticks(2)
+;
 
+    var busDivDimension = window.ndx.dimension(function (d) {
+        return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0;
+    });
 
+<<<<<<< HEAD
     var busDivDimension = window.ndx.dimension(function (d) {
         return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0
     });
     var busDivGroup = busDivDimension.group();
+||||||| merged common ancestors
+=======
+    var busDivGroup = busDivDimension.group();
+>>>>>>> upstream/master
 
-    busDivChart.width(chartWidthBusDiv).height(chartHeightBusDiv*2)
+
+    window.busDivChart.width(chartWidthBusDiv).height(chartHeightBusDiv*2)
         .group(busDivGroup).dimension(busDivDimension)
         .ordinalColors(["#aaaaaa"])
         .margins({top: 0, left: 50, right: 10, bottom: 20})
@@ -746,6 +776,16 @@ function charts(data, topics, selectedCharts) {
         // .r(d3.scale.linear().domain([0, window.count*5]))
         .colors(["#808080"])
         //.elasticRadius([true])
+        .on('renderlet', function(chart){
+            window.newData = busDivDimension.top(Infinity);
+            var extent = d3.extent(data, function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0});
+            var sorted = data.map(function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0}).sort(function(a, b){return a - b});
+            var quants = quantileCalc(extent, sorted, actChrtWidth);
+
+            var median = d3.median(window.newData, function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0});
+            var correspond = thisQuantile(median, extent, quants.first, quants.second);
+            bindText(correspond, median, "#busDiv_digits","#busDiv_digits_o");
+        })
         .keyAccessor(function (p) {
             return p.key;
         })
@@ -753,6 +793,7 @@ function charts(data, topics, selectedCharts) {
             return 0.5;
         })
         .radiusValueAccessor(function (p) {
+            //console.log(p.value);
             return p.value/window.count*chartHeightBusDiv*4/5;
         })
         .label(function (p) {
@@ -772,8 +813,8 @@ function charts(data, topics, selectedCharts) {
                 return ""
             }
         })
-    busDivChart.xAxis().ticks(4);        
-    busDivChart.yAxis().ticks(0); 
+    window.busDivChart.xAxis().ticks(4);        
+    window.busDivChart.yAxis().ticks(0); 
 
     /* Places chart
      * 
@@ -990,7 +1031,6 @@ function charts(data, topics, selectedCharts) {
 
 
     //////////////////////////////////// Business Types Chart ///////////////////////////////////
-
     busTypesChart.bindOriginalData(data);
     //busTypesChart.bindData(window.newData);
     busTypesChart.updateElements(typeSums);
@@ -1056,6 +1096,12 @@ function cellSelect(d) {
     var cell_id = d.cell_id;
 
     // Needs a change with ref(MSA_1/cell_id) ..
+    /*
+    if (currentCity_o == "LA") {
+        var firebaseRef = "la/"+cell_id;
+    } else {
+        var firebaseRef = "la/"+cell_id;
+    }*/
     var ref = firebase.database().ref(cell_id);
     ref.once("value")
         .then(function (snapshot) {
@@ -1069,7 +1115,9 @@ function cellSelect(d) {
                     (function(k){
                         if (count < limit) {
                             //console.log(k);
-                            d3.select("#instagram_pics").append("img").attr("src", insdata[k]["url"]).attr("class", "ins_thumb")
+                            //d3.select("#instagram_pics").append("img").attr("src", insdata[k]["url"]).attr("class", "ins_thumb")
+                            d3.select("#frame_for_instas").append("img").attr("src", insdata[k]["url"]).attr("class", "ins_thumb")
+                            
                                 .on('error', function() {
                                     console.log('error on instagram pics');
                                     d3.select(this).remove();
@@ -1099,10 +1147,8 @@ function cellSelect(d) {
             }
         });
 
-
     busTypesChart.assignSelect(true);
     busTypesChart.updateElements(d);
-
 
     instaTopicsChart.assignSelect(true);
     instaTopicsChart.updateElements(d);

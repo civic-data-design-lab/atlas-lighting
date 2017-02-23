@@ -71,6 +71,7 @@ a:hover{
     border-bottom:1px solid #aaa;
     font-size:15px;
     margin:10px;
+    margin-top:15px;
 }
 
 .mapboxgl-popup {
@@ -280,7 +281,6 @@ canvas {
 /* Business Diversity chart */
 
 #business_diversity {
-    margin-bottom:10px;
 }
 
 #business_types{
@@ -1057,10 +1057,13 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     height: auto !important;
 }
 
-div#streetview_window {
+#streetview_window {
     height: 160px;
-    width: 410px;
+    width: 410px;    
+    opacity: 0;
+    position: absolute;
 }
+
 
 #instagram_plc {
     display: none;
@@ -1070,10 +1073,12 @@ div#streetview_window {
     display: none;
 }
 
+/*
 #streetview_window {
     opacity: 0;
     position: absolute;
 }
+*/
 
 #selected_time {
     font-size: 24px;
@@ -1217,6 +1222,12 @@ div#streetview_window {
     left:5px;
     color:white;
 }*/
+
+/* Google */
+
+.gm-style > div:nth-child(7){
+ display:none;
+}
 
 /*--------------------------------------------- Kalli additions -------------------*/
 
