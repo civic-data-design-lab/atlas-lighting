@@ -586,7 +586,16 @@ function charts(data, topics, selectedCharts) {
     //                                                                            //
     ////////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
+||||||| merged common ancestors
+    var busDivDimension = window.ndx.dimension(function (d) {
+        return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0
+    });
+    var busDivGroup = busDivDimension.group();
 
+=======
+
+>>>>>>> upstream/master
     var latDimension = window.ndx.dimension(function (d) {
         return d.lat
     });
@@ -747,7 +756,15 @@ function charts(data, topics, selectedCharts) {
         return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0;
     });
 
+<<<<<<< HEAD
+    var busDivDimension = window.ndx.dimension(function (d) {
+        return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0
+    });
     var busDivGroup = busDivDimension.group();
+||||||| merged common ancestors
+=======
+    var busDivGroup = busDivDimension.group();
+>>>>>>> upstream/master
 
 
     window.busDivChart.width(chartWidthBusDiv).height(chartHeightBusDiv*2)
@@ -756,7 +773,7 @@ function charts(data, topics, selectedCharts) {
         .margins({top: 0, left: 50, right: 10, bottom: 20})
         .x(d3.scale.linear().domain([0.5, 4.5]))
         .y(d3.scale.linear().domain([0, 1]))
-        //.r(d3.scale.linear().domain([0, window.count*5]))
+        // .r(d3.scale.linear().domain([0, window.count*5]))
         .colors(["#808080"])
         //.elasticRadius([true])
         .on('renderlet', function(chart){
@@ -903,8 +920,10 @@ function charts(data, topics, selectedCharts) {
             instaTopicsChart.bindData(window.newData);
 
             if (!window.filtered){
+                console.log("filterCells")
                 filterCells(window.newData);
             } else {
+                console.log("displayCells")
                 displayCells(window.newData);
             }
 
@@ -915,11 +934,6 @@ function charts(data, topics, selectedCharts) {
             var median = d3.median(window.newData, function(el){return parseInt(el.averlight)} );
             var correspond = thisQuantile(median, extent, quants.first, quants.second);
             bindText(correspond, median, "#light_digits","#light_digits_o");
-
-            /*
-            if (selectedCharts.indexOf("business_opening_percent") !== -1) {
-                filterhour(window.newData,start,end);
-            }*/
             
         })
         .x(d3.scale.linear().domain([0, maxLight]))
@@ -991,15 +1005,6 @@ function charts(data, topics, selectedCharts) {
         .on('renderlet', function (chart) {
             
             window.newData = incomeDimension.top(Infinity)
-            //d3.select("#map .datalayer").remove()
-            //var canvas = __canvas
-
-            //d3.selectAll(".cellgrids").style("display", "none");
-            //var mytime = $("#selected_time").text().split(" - ");
-            //var start = mytime[0];
-            //var end = mytime[1];
-
-            //filterhour(window.newData,start,end);
 
             var extent = d3.extent(data, function(el){return parseInt(parseFloat(el.income) / 1000) * 1000});
             var sorted = data.map(function(el){return parseInt(parseFloat(el.income) / 1000) * 1000}).sort(function(a, b){return a - b});
@@ -1063,6 +1068,7 @@ function charts(data, topics, selectedCharts) {
     d3.selectAll("#business_diversity line").remove();
     
     //////////////////////////////////// timeSelector   --- d3.js ---- ///////////////////////////////////
+    console.log("call to timeSelector")
     timeSelector(chartWidth,chartHeight); 
     if (selectedCharts.indexOf("business_opening_percent") !== -1) { //show second bar on load
         $('#business_opening_average').show();
@@ -1244,7 +1250,6 @@ function updateChart(selectedCharts) {
         $('#business_opening_average').find('#time_selector').hide();
         $('#business_opening_average').find('#selected_time').hide();
         //timeSelectorReset(); //reset the time selector
-
         filterCells(window.newData);
         $('#timeSelectorReset').css('opacity', 0); // hide the specific button
     } 
@@ -1324,72 +1329,24 @@ function timeSelector(chartWidth,chartHeight) {
         brush.extent([rdstart,rdend]);
         
         if (rdend - rdstart <= 1){
-            //$('#business_opening_percent').find('#selected_time').text(0+" - "+24); // 0 - 24
-            //d3.selectAll('.brushItem').select('rect.extent').attr('width', 135).attr('x', 67.5);
-            //d3.selectAll('.brushItem').select('g.resize.e').attr("transform", "translate(202.5,0)");
-            //d3.selectAll('.brushItem').select('g.resize.w').attr("transform", "translate(67.5,0)");
-            //use mbstock example here:
-            //filterhour(window.newData, start, end);
             window.filtered = false;
             filterCells(window.mydata);
             brush.extent([6, 18]); //rdstart, rdend
             brush(d3.select(".brushItem").transition().duration(500));
-            if (selectedCharts.includes("business_opening_average") || selectedCharts.includes("business_opening_percent")) { updateOBI(start,end);} //rdstart, rdend
+            if (selectedCharts.includes("business_opening_average") || selectedCharts.includes("business_opening_percent")) { 
+                updateOBI(start,end);} //rdstart, rdend
         }
         else {
             $('#business_opening_percent').find('#selected_time').text(rdstart+" - "+rdend);
-            //filterhour(window.newData, rdstart, rdend);
             window.filtered = false;
             filterCells(window.newData);
-            if (selectedCharts.includes("business_opening_average") || selectedCharts.includes("business_opening_percent")) { updateOBI(rdstart,rdend);}
+            if (selectedCharts.includes("business_opening_average") || selectedCharts.includes("business_opening_percent")) { 
+                updateOBI(rdstart,rdend);}
         }
 	}
 
 }
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-//                                                                            //
-//  filterhour(data, rdstart, rdend)  --- d3.js ---                           //
-//                                                                            //
-//  Syncs the map with the selected values after using the time slider        //
-//  *We can make this a more generic function by integrating it with the tag  //
-//  cloud charts' filtering function*                                         //
-//                                                                            //
-////////////////////////////////////////////////////////////////////////////////
-
-function filterhour(data, rdstart, rdend){
-    $('#timeSelectorReset').css('opacity', 1);
-    var ave_lit = 0;
-    var count_ = 0;
-    $('#business_opening_percent').find('#selected_time').text(rdstart+" - "+rdend);
-    data.map(function (d) {
-        // if (rdstart == rdend || (rdstart == 0 && rdend == 24)){
-        //     d3.select("#c" + d.cell_id).style("display", "block");
-        //     ave_lit += d.averlight;
-        //     count_ ++;
-        // }
-        // else {
-        //     d3.select("#c" + d.cell_id).style("display", "none");
-        // }
-        if (d.OBIaverage!=0){
-            d3.select("#c" + d.cell_id).style("display", "block");
-            ave_lit += d.averlight;
-            count_ ++;
-        }
-        else {
-            d3.select("#c" + d.cell_id).style("display", "none");
-        }
-    })
-
-    if (count_!==0) {
-        ave_lit /= count_;
-        ave_lit = Math.round(ave_lit);
-        d3.select("#light_digits_o").text(ave_lit);
-        d3.select("#light_digits_o").attr("sv_val", ave_lit);
-    }
-
-}*/
 
 var filterCells = function(data){
 
@@ -1401,7 +1358,7 @@ var filterCells = function(data){
     if ((busTypesChart.isTypeSelected() || instaTopicsChart.isTypeSelected())) {
         if (selectedCharts.includes("business_opening_percent")){
             if ((busTypesChart.isTypeSelected() && instaTopicsChart.isTypeSelected())) {
-                var filtered = data.filter(function(el){
+                var filteredData = data.filter(function(el){
                     var types = betterReduce(el, selectedTypes);
                     var topics = betterReduce(el, selectedTopics);
                     if ((types == typesLen) && (topics == topicsLen) && el.OBIaverage!=0 ){
@@ -1411,9 +1368,9 @@ var filterCells = function(data){
                         d3.select("#c" + el.cell_id).style("display", "none");
                     }
                 })
-                updateAndDraw(filtered);
+                updateAndDraw(filteredData);
             } else if (busTypesChart.isTypeSelected()) {
-                var filtered = data.filter(function(el){
+                var filteredData = data.filter(function(el){
                     var types = betterReduce(el, selectedTypes);
                     if ((types == typesLen) && el.OBIaverage!=0 ){
                         d3.select("#c" + el.cell_id).style("display", "block");
@@ -1422,9 +1379,9 @@ var filterCells = function(data){
                         d3.select("#c" + el.cell_id).style("display", "none");
                     }
                 })
-                updateAndDraw(filtered);
+                updateAndDraw(filteredData);
             } else {
-                var filtered = data.filter(function(el){
+                var filteredData = data.filter(function(el){
                     var topics = betterReduce(el, selectedTopics);
                     if ((topics == topicsLen) && el.OBIaverage!=0 ){
                         d3.select("#c" + el.cell_id).style("display", "block");
@@ -1433,11 +1390,11 @@ var filterCells = function(data){
                         d3.select("#c" + el.cell_id).style("display", "none");
                     }
                 })
-                updateAndDraw(filtered);
+                updateAndDraw(filteredData);
             } 
     } else {
         if ((busTypesChart.isTypeSelected() && instaTopicsChart.isTypeSelected())) {
-                var filtered = data.filter(function(el){
+                var filteredData = data.filter(function(el){
                     var types = betterReduce(el, selectedTypes);
                     var topics = betterReduce(el, selectedTopics);
                     if ((types == typesLen) && (topics == topicsLen)){
@@ -1447,9 +1404,9 @@ var filterCells = function(data){
                         d3.select("#c" + el.cell_id).style("display", "none");
                     }
                 })
-                updateAndDraw(filtered);
+                updateAndDraw(filteredData);
             } else if (busTypesChart.isTypeSelected()) {
-                var filtered = data.filter(function(el){
+                var filteredData = data.filter(function(el){
                     var types = betterReduce(el, selectedTypes);
                     if (types == typesLen){
                         d3.select("#c" + el.cell_id).style("display", "block");
@@ -1458,9 +1415,10 @@ var filterCells = function(data){
                         d3.select("#c" + el.cell_id).style("display", "none");
                     }
                 })
-                updateAndDraw(filtered);
+                updateAndDraw(filteredData);
+                //updateNDX(filtered);
             } else {
-                var filtered = data.filter(function(el){
+                var filteredData = data.filter(function(el){
                     var topics = betterReduce(el, selectedTopics);
                     if (topics == topicsLen){
                         d3.select("#c" + el.cell_id).style("display", "block");
@@ -1469,11 +1427,11 @@ var filterCells = function(data){
                         d3.select("#c" + el.cell_id).style("display", "none");
                     }
                 })
-                updateAndDraw(filtered);
+                updateAndDraw(filteredData);
             }
         }
     } else if (selectedCharts.includes("business_opening_percent")) {
-        var filtered = data.filter(function(el){
+        var filteredData = data.filter(function(el){
             if (el.OBIaverage!=0){
                 d3.select("#c" + el.cell_id).style("display", "block");
                 return el;
@@ -1481,7 +1439,7 @@ var filterCells = function(data){
                 d3.select("#c" + el.cell_id).style("display", "none");
             }
         })
-        updateAndDraw(filtered);
+        // updateAndDraw(filteredData);
 
     }  else {
         data.map(function(el){
@@ -1492,20 +1450,14 @@ var filterCells = function(data){
 }
 
 
-var displayCells = function(data){
+function displayCells(data){
     data.map(function(el){
         d3.select("#c"+el.cell_id).style("display", "block");
     })
 }
 
 
-function timeSelectorReset() {
-    filterhour(window.newData, 6, 18); //0 - 24
-};
 
-function timeSelectorResetBack() {
-    filterhour(window.newData, 0, 24);
-}
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 //  updateOBI(start, end)  --- dc.js ---                                      //
@@ -1531,6 +1483,6 @@ function updateOBI(start,end){
         }
     });
     window.ndx.add(window.newData);
-    //dc.redrawAll();
+    dc.redrawAll();
 }
 
