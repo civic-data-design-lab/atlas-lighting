@@ -10,6 +10,7 @@ function updateAndDraw(data){
     window.ndx.remove();
     window.ndx.add(data);
     dc.redrawAll();
+    //window.busDivChart.render();
 }
 
 function updateNDX(data){

@@ -8,7 +8,6 @@ var currentCity_o = document.URL.split("#")[1].split("*")[0];
 var currentCity = document.URL.split("#")[1].split("*")[0].toLowerCase();
 d3.selectAll("#nowmsa").text(fullName[currentCity_o]);
 var center = cityCentroids[currentCity_o];
-console.log(center);
 var initurl = window.location.href;
 var selectedCharts = [];
 
@@ -73,11 +72,11 @@ var myinit = function () {
     window.panorama = new google.maps.StreetViewPanorama(
         document.getElementById('streetview_window'),
         {
-            position: { lat: center.lat /*41.878180*/, lng: center.lat /*-87.630270*/ },
+            position: { lat: parseFloat(center.lat) , lng: parseFloat(center.lng)  },
             pov: { heading: 165, pitch: 0 },
             zoom: 1
         });
-
+    
     window.streetviewService = new google.maps.StreetViewService;
 
 
@@ -93,8 +92,6 @@ var myinit = function () {
     };
     firebase.initializeApp(config);
     var rootRef = firebase.database().ref();
-
-    console.log(currentCity_o);
 
     var q = d3.queue(2).defer(d3.csv, "../data/" + currentCity_o + "_grid.csv")
                        .defer(d3.csv, "../data/denver_instagram_topics.csv")
@@ -263,10 +260,10 @@ function initCanvas(data) {
                         //var streetViewMaxDistance = 100; 
 
                         streetviewService.getPanoramaByLocation(
-                            /*{location: latLngo}*/ oldPoint, 50,
+                            /*{location: latLngo}*/ oldPoint, 100,
                             function(result, status) {
                                 if (status === 'OK') {
-                                    console.log("ok");
+                                    //console.log("ok");
                                     var newPoint = result.location.latLng;
                                     var heading = google.maps.geometry.spherical.computeHeading(newPoint, oldPoint);
                                     window.panorama.setPosition(latLngo);
@@ -280,7 +277,7 @@ function initCanvas(data) {
                                     d3.select("#streetview_window").style("display", "block");
 
                                 }else{
-                                    console.log("not ok");
+                                    //console.log("not ok");
                                     d3.select("#streetview_window").style("display", "none");
                                     d3.select("#street_view_plc").style("display", "block");
                                     d3.select("#street_view_plc0").style("display", "none");
@@ -314,7 +311,6 @@ function initCanvas(data) {
                         var myy = d3.event.clientY;
 
                         var loc = unproject([myx, myy]);
-                        //console.log(loc);
                         var mykey = "AIzaSyBM59LWQXfxJzh06UPYicEM9Ro6RRFCHQc";
                         var latlng = loc.lat+","+loc.lng
 
@@ -423,6 +419,7 @@ function charts(data, topics, selectedCharts) {
     if(selectedCharts.indexOf("street_view") !== - 1){
         d3.select("#street_view").style("display", "block");
         d3.select("#street_view").style("position", "relative");
+        d3.select("#streetview_window").style("display", "block");
     }
 
 
@@ -581,9 +578,6 @@ function charts(data, topics, selectedCharts) {
 
     window.typesData = typeSums;
     window.topicsData =  topicSums;
-    //newBusTypesChart.bindData(data);
-    //newBusTypesChart.updateBusTypes(typeSums);
-
     window.count = data.length;
     
     ////////////////////////////////////////////////////////////////////////////////
@@ -767,7 +761,7 @@ function charts(data, topics, selectedCharts) {
         //.elasticRadius([true])
         .on('renderlet', function(chart){
             window.newData = busDivDimension.top(Infinity);
-            var extent = d3.extent(window.newData, function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0});
+            var extent = d3.extent(data, function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0});
             var sorted = data.map(function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0}).sort(function(a, b){return a - b});
             var quants = quantileCalc(extent, sorted, actChrtWidth);
 
@@ -782,6 +776,7 @@ function charts(data, topics, selectedCharts) {
             return 0.5;
         })
         .radiusValueAccessor(function (p) {
+            //console.log(p.value);
             return p.value/window.count*chartHeightBusDiv*4/5;
         })
         .label(function (p) {
@@ -1031,7 +1026,6 @@ function charts(data, topics, selectedCharts) {
 
 
     //////////////////////////////////// Business Types Chart ///////////////////////////////////
-
     busTypesChart.bindOriginalData(data);
     //busTypesChart.bindData(window.newData);
     busTypesChart.updateElements(typeSums);
@@ -1096,6 +1090,12 @@ function cellSelect(d) {
     var cell_id = d.cell_id;
 
     // Needs a change with ref(MSA_1/cell_id) ..
+    /*
+    if (currentCity_o == "LA") {
+        var firebaseRef = "la/"+cell_id;
+    } else {
+        var firebaseRef = "la/"+cell_id;
+    }*/
     var ref = firebase.database().ref(cell_id);
     ref.once("value")
         .then(function (snapshot) {
@@ -1109,7 +1109,9 @@ function cellSelect(d) {
                     (function(k){
                         if (count < limit) {
                             //console.log(k);
-                            d3.select("#instagram_pics").append("img").attr("src", insdata[k]["url"]).attr("class", "ins_thumb")
+                            //d3.select("#instagram_pics").append("img").attr("src", insdata[k]["url"]).attr("class", "ins_thumb")
+                            d3.select("#frame_for_instas").append("img").attr("src", insdata[k]["url"]).attr("class", "ins_thumb")
+                            
                                 .on('error', function() {
                                     console.log('error on instagram pics');
                                     d3.select(this).remove();
@@ -1139,10 +1141,8 @@ function cellSelect(d) {
             }
         });
 
-
     busTypesChart.assignSelect(true);
     busTypesChart.updateElements(d);
-
 
     instaTopicsChart.assignSelect(true);
     instaTopicsChart.updateElements(d);

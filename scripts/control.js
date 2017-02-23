@@ -258,11 +258,29 @@ function initControl() {
         }
     });
 
+    //////////////////////////////////// collapse datasets
+
+    $(".chart-title").click(function(){
+        var parent = $(this).parents()[0];
+        var myid = $(parent).attr("id");
+        //var wasPlaceholder1 = false;
+        //var wasPlaceholder2 = false;
+        var queryId = "#"+myid;
+        if (myid == "street_view") {
+            $("#frame_for_streets").toggle();
+        } else if (myid == "instagram_pics"){
+            $("#frame_for_instas").toggle();
+        } else if (myid == "light_average") {
+        } else {
+            $(`${queryId} > .digits`).toggle();
+            $(`${queryId} > svg`).toggle();
+        }
+
+    })
+
     //////////////////////////////////// .rm dataset from the right panel
     $(".rm_data").click(function(){
         var myid = $(this).parent().parent().parent().parent().attr("id");
-        
-        console.log(myid);
         $("#"+myid).hide();
         $("#d_"+myid).show();
 
