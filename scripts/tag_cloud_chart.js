@@ -103,6 +103,7 @@ var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#b
      }
 
 
+    // Better design is possible, but not urgent.
     /* Calculate x and y values for each text item
      * @method calcXandY
      * @param {Array} data array
@@ -116,8 +117,7 @@ var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#b
             fourthRow = [],
             fifthRow = [];
 
-        var secondAlready = [],
-            thirdAlready = [],
+        var thirdAlready = [],
             fourthAlready = [],
             fifthAlready = [];
 
@@ -155,7 +155,6 @@ var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#b
             if(row == 0){
                 firstRow.push(el);
                 if (firstRow.length > 1){
-
                     return {category:el.category, count: el.count, textSize: el.textSize, x: count, y:0};
                 } else {
                     return {category:el.category, count: el.count, textSize: el.textSize, x: 0, y:0}
