@@ -12,6 +12,11 @@ function updateAndSelectCharts(charts){
 	updateZoomedChart(selectedCharts);
 }
 
+function resetMapChicago(){
+	__map.setZoom(8);
+	__map.setCenter(new mapboxgl.LngLat(-87.39999999999993,41.84692829282653));
+}
+
 // 2d array of functions to be run ([i][j] = case i, page j)
 var currCase = -1
 var currPage = -1
@@ -90,9 +95,8 @@ function showCase(caseNum, pageNum){
 
 			$("#cases").hide()
 			$("#map").show()
-			__map.setZoom(8);
-			__map.setCenter(new mapboxgl.LngLat(-87.39999999999993,41.84692829282653));
-			__map.fire("move");
+			updateIncome(0, 250000)
+			resetMapChicago()
 			updateAndSelectCharts([])
 			break;
 		case 2:
@@ -100,9 +104,8 @@ function showCase(caseNum, pageNum){
 				'<p>This is Case 2, Page 2. Analysis of low income. The method is simple. First, we define our range from $0 to $45,000 per year in order to select the cells that belong to lower income tier. This gives us an average lighting intensity for the low income cells. We repeat the same procedure for the middle and upper income tiers. Finally, we aggregate all three intensities together to relate them to each other. The values show us that lighting intensity of lighting is inversely proportional to household median income. As income increases, the lighting intensity decreases. This relationship has several implications. </p>')
 
 			$("#map-info").show()
-			incomeChart.filter([0, 58000])
-			incomeChart._doRedraw()
-			//dc.redrawAll();
+			resetMapChicago()
+			updateIncome(0, 58000)
 			updateAndSelectCharts(["income"])
 			$("#light_average").show();
 			break;
@@ -111,9 +114,8 @@ function showCase(caseNum, pageNum){
 				'<p>This is Case 2, Page 3. Medium income. The method is simple. First, we define our range from $0 to $45,000 per year in order to select the cells that belong to lower income tier. This gives us an average lighting intensity for the low income cells. We repeat the same procedure for the middle and upper income tiers. Finally, we aggregate all three intensities together to relate them to each other. The values show us that lighting intensity of lighting is inversely proportional to household median income. As income increases, the lighting intensity decreases. This relationship has several implications. </p>')
 
 			$("#map-info").show()
-
-			incomeChart.filter([58000,84000])
-			incomeChart._doRedraw()
+			resetMapChicago()
+			updateIncome(58000,84000)
 			updateAndSelectCharts(["income"])
 			$("#light_average").show();
 			break;
@@ -121,21 +123,17 @@ function showCase(caseNum, pageNum){
 			$("#case-text").html(
 				'<p>This is Case 2, Page 4. High Income. The method is simple. First, we define our range from $0 to $45,000 per year in order to select the cells that belong to lower income tier. This gives us an average lighting intensity for the low income cells. We repeat the same procedure for the middle and upper income tiers. Finally, we aggregate all three intensities together to relate them to each other. The values show us that lighting intensity of lighting is inversely proportional to household median income. As income increases, the lighting intensity decreases. This relationship has several implications. </p>')
 
-			incomeChart.filter([84000, 250000])
-			incomeChart._doRedraw()
+			resetMapChicago()
+			updateIncome(84000, 250000)
 			updateAndSelectCharts(["income"])
 			$("#light_average").show();
 			break;
 		case 5:
 			$("#case-text").html(
 				'<p>This is Case 2, Page 5. Chicago urban high population density with streetview. In Chicago Metropolitan Statistical Area , we see that a large proportion of the high intensity lightings occur within the Cook county, whereas low lighting areas occur in suburban and rural areas.  Cook county has higher population density than outer suburbs, with more of the population living inside multi-floored townhouses and apartment buildings. The urban fabric is dense and street lighting network is tightly connected.</p>')
-			incomeChart.filter([0, 250000])
-			incomeChart._doRedraw()
-			//dc.redrawAll()
-
+			updateIncome(0, 250000)
 			__map.setZoom(13);
-			__map.setCenter(new mapboxgl.LngLat(-87.60073880988456,41.80349170325138));
-			__map.fire("move");
+			__map.setCenter(new mapboxgl.LngLat(-87.841285,42.212873)); 
 			$("rect#c259733").d3Click()
 			updateAndSelectCharts(["income", "street_view"])
 			$("#light_average").show();
@@ -145,8 +143,7 @@ function showCase(caseNum, pageNum){
 					'<p>This is Case 2, Page 6. Chicago suburban low population density. On the other hand, suburban areas have lower densities than central cities, dominated by single-family homes on small plots of land or farm fields. Residential and commercial development is separated and dispersed. Eventually, the street lighting becomes more loose and intensity getting concentrated on main streets and shopping malls.</p>')
 			
 			__map.setZoom(13);
-			__map.setCenter(new mapboxgl.LngLat(-87.825248146057,41.829015128986356));
-			__map.fire("move");
+			__map.setCenter(new mapboxgl.LngLat(-87.651257, 41.865412));
 			$("rect#c252893").d3Click()
 			updateAndSelectCharts(["income", "street_view"])
 			$("#light_average").show();
@@ -156,10 +153,8 @@ function showCase(caseNum, pageNum){
 				'<p>This is Case 2, Page 7. There are at least two speculations that we can raise about lighting intensity pattern in different income groups. First, there is a strong correlation between income and spatial patterns. These spatial patterns directly influence street lighting network, street width, building height, prevalence and typical radiance of commercial facilities which can be the main reason for the variation in lighting intensities. For example, car oriented suburban streets may be simply less brightly lit than walkable city center streets. Second explanation could be the lamp technology (LED vs. sodium lamps) that is in use. It is possible that big proportion of street lighting in the city center is using old technology. Whereas the new settlements in suburban parts might be using LED technologies.</p>')
 			$("#map-info").show()
 
-			__map.setZoom(8);
-			__map.setCenter(new mapboxgl.LngLat(-87.39999999999993,41.84692829282653));
-			__map.fire("move");
 			updateAndSelectCharts([])
+			resetMapChicago()
 			break;
 		}
 		break;
@@ -171,12 +166,11 @@ function showCase(caseNum, pageNum){
 $(".datasets").click(function () {
 	// if in case mode, hide cases
 	if ($("#case-info").is(":hidden")) return
-	if (window.old_data){
-		dataDidLoad(null, window.old_data)
-		window.old_data = undefined
+	if (window.old_zoom){
 		__map.setZoom(window.old_zoom)
 		__map.setCenter(window.old_center)
 		__map.fire("move")
+		window.old_zoom = undefined
 	}
     $("#cases").hide();
     $("#case-info").hide();
@@ -186,6 +180,8 @@ $(".datasets").click(function () {
     $("#map-info").show();
     __map.setZoom(8);
     $(".dc-chart").hide();
+    $("#light-average").show();
+    $("#todrop").show();
 })
 
 $("#case_studies .data_item").click(function () {
@@ -206,11 +202,9 @@ $("#case_studies #case_study_1").click(function () {
 })
 
 $("#case_studies #case_study_2").click(function () {
-	if (window.old_data == undefined){
-		window.old_data = window.mydata
+	if (window.old_zoom == undefined){
 		window.old_zoom = __map.getZoom()
 		window.old_center = __map.getCenter()
-		dataDidLoad(null, window.chicago_data)
 	}
 
     $("#case-info #case-1").hide()

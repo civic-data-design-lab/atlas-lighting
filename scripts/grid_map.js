@@ -58,6 +58,9 @@ var busTypesChart = tagCloudChart(390, 100, "#business_types", false);
 
 $("#d_business_diversity").hide();
 
+// enable chicago case if current city is chicago
+$("#case_study_2").toggle(currentCity_o === 'Chicago')
+
 if (currentCity_o == 'LA' || currentCity_o == 'Chicago' ){
     $("#d_instagram_topics").hide();
     var instaTopics = [];
@@ -129,14 +132,11 @@ var myinit = function () {
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-function dataDidLoad(error, grid, chicago_data) { //add topics if necessary
-    if (!grid) return
-
+function dataDidLoad(error, grid) { //add topics if necessary
     d3.select("#loader").transition().duration(600).style("opacity", 0).remove();
 
     window.dataLst = Object.keys(grid[0])
     window.mydata = grid;
-    if (chicago_data) window.chicago_data = chicago_data;
 
     charts(grid, selectedCharts);
 
@@ -890,7 +890,7 @@ function charts(data, selectedCharts) {
      * We are dividing the distribution into three quantiles: low, medium and high 
     */
 
-    var incomeDimension = window.ndx.dimension(function (d) {
+    window.incomeDimension = window.ndx.dimension(function (d) {
         return parseInt(parseFloat(d.income) / 1000) * 1000;
     });
     var iGroup = incomeDimension.group();
@@ -992,6 +992,7 @@ function cellSelect(d) {
     $("#instagram_plc0").hide();
 
     var cell_id = d.cell_id;
+    console.log(cell_id);
 
     // Needs a change with ref(MSA_1/cell_id) ..
     /*
@@ -1386,3 +1387,9 @@ function updateOBI(start,end){
     dc.redrawAll();
 }
 
+// updates the dc.js charts to match a given income range
+function updateIncome(start,end){
+    incomeChart.filter(dc.filters.RangedFilter(start, end))
+    window.incomeDimension.filterRange([start,end])
+    dc.redrawAll()
+}
