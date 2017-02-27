@@ -113,13 +113,16 @@ var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#b
         var firstRow = [],
             secondRow = [],
             thirdRow = [],
-            fourthRow = [];
+            fourthRow = [],
+            fifthRow = [];
 
-        var firstRowOpen = true, 
-            secondRowOpen = true,
-            thirdRowOpen = true;
+        var secondAlready = [],
+            thirdAlready = [],
+            fourthAlready = [],
+            fifthAlready = [];
 
         var bestArr = [];
+        var newWidth = 0;
         
         var range = maxTextSize - minTextSize;
 
@@ -127,7 +130,11 @@ var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#b
             var textLength = el.category.length; 
             var ratio = (el.textSize-minTextSize)*1.0/range;
             var actualWidth = Math.round(textLength*(letterSize * (1 + ratio)));// 7.15 is actual size, it can be changed
-            return {count:el.count, category: el.category, textSize: el.textSize, textWidth:actualWidth};
+            if (el.category !== 'monochrome') {
+                return {count:el.count, category: el.category, textSize: el.textSize, textWidth:actualWidth};
+            } else {
+                return {count:el.count, category: el.category, textSize: el.textSize, textWidth:actualWidth+15};
+            }
         })
 
         calcedArr.sort(function(a, b){return b.count - a.count});
@@ -148,6 +155,7 @@ var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#b
             if(row == 0){
                 firstRow.push(el);
                 if (firstRow.length > 1){
+
                     return {category:el.category, count: el.count, textSize: el.textSize, x: count, y:0};
                 } else {
                     return {category:el.category, count: el.count, textSize: el.textSize, x: 0, y:0}
@@ -162,7 +170,13 @@ var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#b
                     if(Math.floor((nCount + el.textWidth)/width) > 0){
                         secondRow.splice(-1, 1);
                         thirdRow.push(el);
-                        return {category:el.category, count: el.count, textSize: el.textSize, x:0, y:47};
+                        if (thirdAlready.length){
+                            newWidth = thirdAlready[0].textWidth + btwMargin;
+                        } else {
+                            thirdAlready.push(el);
+                            newWidth = 0;
+                        }
+                        return {category:el.category, count: el.count, textSize: el.textSize, x:newWidth, y:47};
                     } else { 
                         return {category:el.category, count: el.count, textSize: el.textSize, x:nCount, y:25};
                     }
@@ -179,23 +193,52 @@ var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#b
                     if(Math.floor((nCount + el.textWidth)/width) > 0){
                         thirdRow.splice(-1, 1);
                         fourthRow.push(el);
-                        return {category:el.category, count: el.count, textSize: el.textSize, x:0, y:69};
-                } else {
-                    return {category:el.category, count: el.count, textSize: el.textSize, x:nCount, y:47};
+                        if (fourthAlready.length){
+                            newWidth = fourthAlready[0].textWidth + btwMargin;
+                        } else {
+                            fourthAlready.push(el);
+                            newWidth = 0;
+                        }
+                        return {category:el.category, count: el.count, textSize: el.textSize, x:newWidth, y:69};
+                    } else {
+                        return {category:el.category, count: el.count, textSize: el.textSize, x:nCount, y:47};
                 }
                } else {
                     return {category:el.category, count: el.count, textSize: el.textSize, x: 0, y:47};
                 }
-            } else {
+            } else if (row == 3) {
                 fourthRow.push(el);
                 if (fourthRow.length > 1){
                     var nCount = 0;
                     for (var j=0; j<fourthRow.length-1; j++){
                         nCount += fourthRow[j].textWidth + btwMargin;
                     }
-                    return {category:el.category, count: el.count, textSize: el.textSize, x:nCount, y:69};
+                    if(Math.floor((nCount + el.textWidth)/width) > 0){
+                        fourthRow.splice(-1, 1);
+                        fifthRow.push(el);
+                        if (fifthAlready.length) {
+                            newWidth = fifthAlready[0].textWidth + btwMargin;
+                        } else {
+                            fifthAlready.push(el);
+                            newWidth = 0;
+                        }
+                        return {category:el.category, count: el.count, textSize: el.textSize, x:newWidth, y:91};
+                    } else {
+                        return {category:el.category, count: el.count, textSize: el.textSize, x:nCount, y:69};
+                 }
                 } else {
                     return {category:el.category, count: el.count, textSize: el.textSize, x:0, y:69};
+                }
+            } else {
+                fifthRow.push(el);
+                if (fifthRow.length > 1){
+                    var nCount = 0;
+                    for (var j=0; j<fifthRow.length-1; j++){
+                        nCount += fifthRow[j].textWidth + btwMargin;
+                    }
+                    return {category:el.category, count: el.count, textSize: el.textSize, x:nCount, y:91};
+                } else {
+                    return {category:el.category, count: el.count, textSize: el.textSize, x:0, y:91};
                 }
             }
 

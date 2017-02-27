@@ -81,7 +81,7 @@ if (currentCity_o == 'LA' || currentCity_o == 'Chicago' ){
         'insta_family','insta_fashion','insta_food','insta_interiors','insta_monochrome','insta_nature','insta_sky','insta_sports'];
 
     }
-    var instaTopicsChart = tagCloudChart(370, 100, "#instagram_topics", true); //390
+    var instaTopicsChart = tagCloudChart(370, 125, "#instagram_topics", true); //100
 }
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
