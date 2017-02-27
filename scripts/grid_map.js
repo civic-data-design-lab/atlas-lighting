@@ -56,7 +56,7 @@ var busTypes = ['beauty','culture','education','entertainment',
 // Business Types Widget is initiated here:
 var busTypesChart = tagCloudChart(390, 100, "#business_types", false);
 
-$("#d_business_diversity").hide();
+// $("#d_business_diversity").hide();
 
 // enable chicago case if current city is chicago
 $("#case_study_2").toggle(currentCity_o === 'Chicago')
@@ -536,6 +536,8 @@ function charts(data, selectedCharts) {
         })
         .x(d3.scale.linear().domain([1, 51]))
         .y(d3.scale.linear().domain([0, 600]))
+
+
     window.insChart.yAxis().ticks(2)
 
     var insLikesDimension = window.ndx.dimension(function(d) { 
@@ -544,9 +546,7 @@ function charts(data, selectedCharts) {
         }
     });
 
-
     var insLikesGroup = insLikesDimension.group().reduceSum(function(d){return d.insta_like>=100;});
-
     window.insLikesChart.width(chartWidth).height(chartHeight)
         .dimension(insLikesDimension).group(insLikesGroup)
         .margins(chartMargins)
@@ -762,7 +762,7 @@ function charts(data, selectedCharts) {
             //console.log(window.newData);
 
             busTypesChart.bindData(window.newData);
-            instaTopicsChart.bindData(window.newData);
+            instaTopicsChart.bindData(window.newDatbrusha);
 
             if (!window.filtered){
                 //console.log("filterCells")
@@ -790,6 +790,7 @@ function charts(data, selectedCharts) {
 
         
     var busDivDimension = window.ndx.dimension(function (d) {
+        // console.log((Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1))
         return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0;
     });
 
@@ -805,7 +806,7 @@ function charts(data, selectedCharts) {
         .colors(["#808080"])
         //.elasticRadius([true])
         .on('renderlet', function(chart){
-            window.newData = busDivDimension.top(Infinity);
+            // window.newData = busDivDimension.top(Infinity);
             var extent = d3.extent(data, function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0});
             var sorted = data.map(function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0}).sort(function(a, b){return a - b});
             var quants = quantileCalc(extent, sorted, actChrtWidth);
@@ -821,7 +822,6 @@ function charts(data, selectedCharts) {
             return 0.5;
         })
         .radiusValueAccessor(function (p) {
-            //console.log(p.value);
             return p.value/window.count*chartHeightBusDiv*4/5;
         })
         .label(function (p) {
@@ -1231,7 +1231,7 @@ function timeSelector(chartWidth,chartHeight) {
         
         if (rdend - rdstart <= 1){
             window.filtered = false;
-            filterCells(window.mydata);
+            filterhour(window.newData, rdstart, rdend);
             brush.extent([6, 18]); //rdstart, rdend
             brush(d3.select(".brushItem").transition().duration(500));
             if (selectedCharts.includes("business_opening_average") || selectedCharts.includes("business_opening_percent")) { 
@@ -1240,13 +1240,48 @@ function timeSelector(chartWidth,chartHeight) {
         else {
             $('#business_opening_percent').find('#selected_time').text(rdstart+" - "+rdend);
             window.filtered = false;
-            filterCells(window.newData);
+            filterhour(window.newData, rdstart, rdend);
             if (selectedCharts.includes("business_opening_average") || selectedCharts.includes("business_opening_percent")) { 
                 updateOBI(rdstart,rdend);}
         }
+
 	}
 
 }
+
+function filterhour(data, rdstart, rdend){
+    $('#timeSelectorReset').css('opacity', 1);
+    var ave_lit = 0;
+    var count_ = 0;
+    $('#business_opening_percent').find('#selected_time').text(rdstart+" - "+rdend);
+    data.forEach(function (d) {
+        // if (rdstart == rdend || (rdstart == 0 && rdend == 24)){
+        //     d3.select("#c" + d.cell_id).style("display", "block");
+        //     ave_lit += d.averlight;
+        //     count_ ++;
+        // }
+        // else {
+        //     d3.select("#c" + d.cell_id).style("display", "none");
+        // }
+        if (d.OBIaverage!=0){
+            d3.select("#c" + d.cell_id).style("display", "block");
+            ave_lit += d.averlight;
+            count_ ++;
+        }
+        else {
+            d3.select("#c" + d.cell_id).style("display", "none");
+        }
+    })
+
+    if (count_!==0) {
+        ave_lit /= count_;
+        ave_lit = Math.round(ave_lit * 100) / 100; 
+        d3.select("#light_digits_o").text(ave_lit);
+        d3.select("#light_digits_o").attr("sv_val", ave_lit);
+    }
+
+}
+
 
 
 var filterCells = function(data){
