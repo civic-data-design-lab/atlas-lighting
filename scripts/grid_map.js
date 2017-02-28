@@ -59,7 +59,7 @@ var busTypesChart = tagCloudChart(390, 100, "#business_types", false);
 // $("#d_business_diversity").hide();
 
 // enable chicago case if current city is chicago
-$("#case_study_2").toggle(currentCity_o === 'Chicago')
+// $("#case_study_2").toggle(currentCity_o === 'Chicago')
 
 if (currentCity_o == 'LA' || currentCity_o == 'Chicago' ){
     $("#d_instagram_topics").hide();
@@ -992,7 +992,7 @@ function cellSelect(d) {
     $("#instagram_plc0").hide();
 
     var cell_id = d.cell_id;
-    console.log(cell_id);
+    // console.log(cell_id);
 
     // Needs a change with ref(MSA_1/cell_id) ..
     /*

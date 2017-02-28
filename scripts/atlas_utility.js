@@ -480,7 +480,6 @@ var recastingHelper = function(data, city) {
         return {maxBDiv: maxBDiv, minBDiv: minBDiv, maxDInt:maxDInt, maxLight: maxLight, maxPlaces: maxPlaces};
 
     } else if (city == "Pittsburgh"){
-        console.log("I should be here!");
         data.forEach(function (d) {
             d.OBIaverage = 0;
             d.OBIcount = +d.b_opening_count;
