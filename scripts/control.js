@@ -91,8 +91,9 @@ function initControl() {
         $(".click_data").removeClass("selectedTab");
     });
 
-    $(".rightbar").click(function(){
+    $(".rightbar").click(function(){  
         if(!$(this).attr("style") || ($(this).attr("style") && $(this).attr("style").indexOf("180") > -1)){
+            // hide
             $(this).css("transform", "rotate(0deg)");
 
             $("#info").animate({
@@ -105,6 +106,10 @@ function initControl() {
 
             $(".right_back").animate({
                 right: "-405px"
+            }, 300, function () { });            
+
+            $(".right_clickbar").animate({
+                right: "0px"
             }, 300, function () { });
 
             $("#export").animate({
@@ -113,6 +118,7 @@ function initControl() {
 
         }
         else{
+            // show
             $(this).css("transform", "rotate(180deg)");
 
             $("#info").animate({
@@ -125,6 +131,10 @@ function initControl() {
 
             $(".right_back").animate({
                 right: "0px"
+            }, 300, function () { });
+
+            $(".right_clickbar").animate({
+                right: "430px"
             }, 300, function () { });
 
             $("#export").animate({
