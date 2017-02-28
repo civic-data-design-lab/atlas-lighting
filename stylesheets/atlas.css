@@ -652,19 +652,6 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     top: calc(20% + 20px);
 }
 
-#case-text {
-    margin-left: 12px;
-    font-size: 18px;
-    padding-bottom: 20px;
-}
-
-.case-title{
-    padding-top: 12px;
-    margin-left: 12px;
-    font-size: 27px;
-    font-family: Dosis;
-}
-
 .selectedTab {
     background-color: rgba(150,150,150,1) !important;
 }
@@ -1452,13 +1439,27 @@ button:focus {outline:0;}
     right: 430px;
     height: 150px;
     border-top-left-radius: 20px;
+    cursor: pointer;
 }
 
 .right_back {
     position: fixed;
-    width: 405px;
+    width: 430px;
     height: calc(100% - 40px);
     background-color: rgba(0,0,0,0.6);
     top: 40px;
     right: 0px;
+}
+
+#report-text {
+    margin-left: 12px;
+    font-size: 18px;
+    padding-bottom: 20px;
+}
+
+.report-title{
+    padding-top: 12px;
+    margin-left: 12px;
+    font-size: 27px;
+    font-family: Dosis;
 }

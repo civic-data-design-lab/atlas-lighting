@@ -76,6 +76,7 @@ function initControl() {
 
     });
 
+    //used to control the left bar tabs
     $(".click_data").click(function () {
         $("#datasets").show()
         $("#case_studies").hide()
@@ -83,14 +84,84 @@ function initControl() {
         $(".click_case").removeClass("selectedTab");
 
     });
-
     $(".click_case").click(function () {
         $("#datasets").hide()
         $("#case_studies").show();
         $(this).addClass("selectedTab");
         $(".click_data").removeClass("selectedTab");
+    });   
+
+    //controls the left bar collapsing and showing
+    $(".left_clickbar.datasets>img").click(function () {
+        if ($(this).attr("style") && $(this).attr("style").indexOf("180") > -1) {
+            //back to selecting mode            
+            $(".left_clickbar>img").css("transform", "rotate(0deg)");
+            $("#selector").css("width", "335px");
+            $("#selector").css("overflow-y", "auto");
+            $(".left_back").animate({
+                left: "0px"
+            }, 300, function () { });
+            $("#selector").animate({
+                left: "0px"
+            }, 300, function () { });
+            $(".slide_hide").animate({
+                left: "333px"
+            }, 300, function () { });
+            $("#todrop").show();
+            $("#zoomIn").animate({
+                left: "345px"
+            }, 300, function () { });                
+            $("#zoomOut").animate({
+                left: "390px"
+            }, 300, function () { });
+            setTimeout(function(){
+               $('.gradient_container').show(); 
+           }, 300);
+        } else {
+            //back to folding mode
+            $(".left_clickbar>img").css("transform", "rotate(180deg)");
+            $("#selector").css("width", "335px");
+            $("#todrop").hide();
+            $("#zoomIn").animate({
+                left: "50px"
+            }, 300, function () { });                
+            $("#zoomOut").animate({
+                left: "95px"
+            }, 300, function () { });    
+            $(".left_back").animate({
+                left: "-335px",
+            }, 300, function () { });
+            $("#selector").animate({
+                left: "-335px",
+            }, 300, function () { });
+            $(".slide_hide").animate({
+                left: "0px"
+            }, 300, function () { });
+            setTimeout(function(){
+               $('.gradient_container').hide(); 
+           }, 100);
+
+        }
+    })
+
+
+
+    //controls the right bar tabs
+    $(".click_case_right").click(function () {
+        $("#map-info").hide();
+        $("#report-info").show();
+        $(this).addClass("selectedTab");
+        $(".fold_bar").removeClass("selectedTab");
     });
 
+     $(".fold_bar").click(function () {
+        $("#map-info").show();
+        $("#report-info").hide();       
+        $(this).addClass("selectedTab");
+        $(".click_case_right").removeClass("selectedTab");
+    });   
+
+    // controls the right bar collapsing and showing
     $(".rightbar").click(function(){  
         if(!$(this).attr("style") || ($(this).attr("style") && $(this).attr("style").indexOf("180") > -1)){
             // hide
@@ -144,59 +215,6 @@ function initControl() {
         }
     });
 
-
-
-    $(".left_clickbar.datasets>img").click(function () {
-        if ($(this).attr("style") && $(this).attr("style").indexOf("180") > -1) {
-            //back to selecting mode            
-            $(".left_clickbar>img").css("transform", "rotate(0deg)");
-            $("#selector").css("width", "335px");
-            $("#selector").css("overflow-y", "auto");
-            $(".left_back").animate({
-                left: "0px"
-            }, 300, function () { });
-            $("#selector").animate({
-                left: "0px"
-            }, 300, function () { });
-            $(".slide_hide").animate({
-                left: "333px"
-            }, 300, function () { });
-            $("#todrop").show();
-            $("#zoomIn").animate({
-                left: "345px"
-            }, 300, function () { });                
-            $("#zoomOut").animate({
-                left: "390px"
-            }, 300, function () { });
-            setTimeout(function(){
-               $('.gradient_container').show(); 
-           }, 300);
-        } else {
-            //back to folding mode
-            $(".left_clickbar>img").css("transform", "rotate(180deg)");
-            $("#selector").css("width", "335px");
-            $("#todrop").hide();
-            $("#zoomIn").animate({
-                left: "50px"
-            }, 300, function () { });                
-            $("#zoomOut").animate({
-                left: "95px"
-            }, 300, function () { });    
-            $(".left_back").animate({
-                left: "-335px",
-            }, 300, function () { });
-            $("#selector").animate({
-                left: "-335px",
-            }, 300, function () { });
-            $(".slide_hide").animate({
-                left: "0px"
-            }, 300, function () { });
-            setTimeout(function(){
-               $('.gradient_container').hide(); 
-           }, 100);
-
-        }
-    })
 
     //////////////////////////////////// collapse datasets
 
