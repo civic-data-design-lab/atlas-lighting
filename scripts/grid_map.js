@@ -1054,9 +1054,14 @@ function cellSelect(d) {
     instaTopicsChart.updateElements(d);
 
 
-    // Cell view cell lights up
-    $('.click_case_right').css('color', '#fff');
-    $('.click_case_right').css('background-color', 'rgb(32, 192, 226)');
+    // Cell view cell lights on
+    $('.click_case_right').animate({
+      backgroundColor: "rgb(32, 192, 226)"
+    }, 30);
+    // Cell view cell lights off
+    $('.click_case_right').animate({
+      backgroundColor: "rgba(150, 150, 150, 0.4)"
+    }, 330);
 
 }
 

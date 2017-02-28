@@ -1427,7 +1427,7 @@ button:focus {outline:0;}
     cursor: pointer;
     border-bottom-left-radius: 20px;
     background-color: rgba(150,150,150,0.4);
-    top: calc(20% + 20px);
+    top: calc(20% + 26px);
 }
 
 .fold_bar {
