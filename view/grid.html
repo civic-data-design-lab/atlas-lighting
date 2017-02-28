@@ -94,6 +94,11 @@
     <div id="info" class="data_select_ui">
 
       <div class = "fold_bar">
+        <div id="tab-name">MAP VIEW </div>
+        <img src="../icons/triangle_left.png" class="selector_arrow rightbar">
+      </div>
+      <div class="right_clickbar click_case slide_hide"> 
+        <div id="tab-name">SELECTED CELL </div>
         <img src="../icons/triangle_left.png" class="selector_arrow rightbar">
       </div>
 
@@ -381,10 +386,10 @@
         <div id="tab-name">DATASETS </div>
         <img src="../icons/triangle_left.png" class="selector_arrow">
       </div>
-      <div class="left_clickbar case_studies click_case slide_hide"> 
+<!--       <div class="left_clickbar case_studies click_case slide_hide"> 
         <div id="tab-name-2">CASE STUDIES </div>
         <img src="../icons/triangle_left.png" class="selector_arrow">
-      </div>
+      </div> -->
       <div class="gradient_container"></div>
       <div class="zoom_icons">
         <button id="zoomIn"></button>
@@ -417,14 +422,14 @@
         </div>
 
         <!-- ************************************************************** Business filters **************************************************************-->
-        <!--
+        
         <div class="data_item ui-widget-content tag_bus" id="d_business_diversity">
           <p class="data_item_title">BUSINESS DIVERSITY</p>
           <img src="../icons/final_icons/busDiversity.png" class = "data_icon">
           <img src="../icons/final_icons/info.png" class = "data_icon_handle">
           <p class = "data_intro">Indicates total number of Google Places in a grid cell, which includes businesses, institutions, parks, and other points of interest.</p>
         </div>
-        -->        
+                
         <div class="data_item ui-widget-content tag_bus" id="d_business_price">
           <p class="data_item_title">BUSINESS PRICE</p>
           <img src="../icons/final_icons/busPrice.png" class = "data_icon">
@@ -449,7 +454,7 @@
           <img src="../icons/final_icons/info.png" class = "data_icon_handle">
           <p class = "data_intro">Indicates the percentage and average number of businesses that are open per hour in a given period of time in a grid cell. Source: Google Places API</p>
         </div>
-        <div class="data_item ui-widget-content tag_bus" id="d_business_opening_average" style="display: none">
+        <div class="data_item ui-widget-content" id="d_business_opening_average" style="display: none">
           <p class="data_item_title">AVERAGE NUMBER OF BUSINESSES OPEN</p>
           <img src="../icons/final_icons/busOBI.png" class = "data_icon">
           <img src="../icons/final_icons/info.png" class = "data_icon_handle">
@@ -509,16 +514,17 @@
         </div>
       </div>
 
-      <div id="case_studies" style="display:none">
-<!--         <div class="data_item" id="case_study_1">
+<!--       <div id="case_studies" style="display:none">
+        <div class="data_item" id="case_study_1">
           <p class="data_item_title">CASE STUDIES 1: CHICAGO</p>
-        </div>  -->
+        </div> 
         <div class="data_item" id="case_study_2" style="height:120px; display: none;">
           <p class="data_item_title">CASE STUDIES 1:  <br/>
             <span style="font-size:17px">LIGHT USE IN DIFFERENT INCOME GROUPS</span><br/>
             <i>This case study examines the relationship between economic conditions of urban areas and their average radiance of artificial light at night.</i></p>
         </div>
-      </div>
+      </div> -->
+
     </div>
 
 
@@ -526,13 +532,13 @@
 
   <script src="../scripts/city_comparisons_data.js"></script>
   <script src="../scripts/city_dropdown.js"></script>
-  <script src="../scripts/front_page_map_2.js"></script>
+  <!-- <script src="../scripts/front_page_map_2.js"></script> -->
 
   <script src="../scripts/atlas_utility.js"></script>
   <script src="../scripts/tag_cloud_chart.js"></script>
   <script src="../scripts/control.js"></script>
   <script src="../scripts/grid_map.js"></script>
-  <script src="../scripts/cases.js"></script>
+  <!-- <script src="../scripts/cases.js"></script> -->
   <script src="../scripts/filter_rollovers.js"></script>
 
   <script src="../scripts/underscore.js"></script>

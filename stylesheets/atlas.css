@@ -595,16 +595,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     margin-bottom:52px;
 }
 
-.fold_bar {
-    position: fixed;
-    top: 0px;
-    bottom: 0px;
-    width: 20px;
-    background-color: rgb(150,150,150);
-    right: 430px;
-    height: 190px;
-    border-bottom-left-radius: 20px;
-}
+
 
 .left_back {
     position: fixed;
@@ -1439,4 +1430,26 @@ button:focus {outline:0;}
     left: 350px;
     line-height: 1.5;
     top: 30px;
+}
+
+/* Report card --------------------*/
+.right_clickbar {
+    position: fixed;
+    width: 20px;
+    right: 430px;
+    height: calc(20% - 20px);
+    cursor: pointer;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 0px;
+}
+
+.fold_bar {
+    position: fixed;
+    top: 40px;
+    bottom: 0px;
+    width: 20px;
+    background-color: rgb(150,150,150);
+    right: 430px;
+    height: 150px;
+    border-top-left-radius: 20px;
 }
