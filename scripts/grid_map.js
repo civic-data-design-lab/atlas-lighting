@@ -1001,6 +1001,7 @@ function cellSelect(d) {
     } else {
         var firebaseRef = "la/"+cell_id;
     }*/
+    
     var ref = firebase.database().ref(cell_id);
     ref.once("value")
         .then(function (snapshot) {

@@ -605,7 +605,6 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     background-color: rgba(0,0,0,0.6);
     top: 40px;
     left: 0px;
-
 }
 
 #drop_indication {
@@ -1453,4 +1452,13 @@ button:focus {outline:0;}
     right: 430px;
     height: 150px;
     border-top-left-radius: 20px;
+}
+
+.right_back {
+    position: fixed;
+    width: 405px;
+    height: calc(100% - 40px);
+    background-color: rgba(0,0,0,0.6);
+    top: 40px;
+    right: 0px;
 }
