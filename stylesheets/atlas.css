@@ -1427,7 +1427,7 @@ button:focus {outline:0;}
     cursor: pointer;
     border-bottom-left-radius: 20px;
     background-color: rgba(150,150,150,0.4);
-    top: calc(20% + 26px);
+    top: calc(20% + 25px);
 }
 
 .fold_bar {
@@ -1435,7 +1435,7 @@ button:focus {outline:0;}
     top: 40px;
     bottom: 0px;
     width: 20px;
-    background-color: rgb(150,150,150);
+    background-color: rgba(150,150,150,0.4);
     right: 430px;
     height: 150px;
     border-top-left-radius: 20px;
