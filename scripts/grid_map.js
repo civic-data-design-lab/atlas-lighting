@@ -1052,6 +1052,11 @@ function cellSelect(d) {
     instaTopicsChart.assignSelect(true);
     instaTopicsChart.updateElements(d);
 
+
+    // Cell view cell lights up
+    $('.click_case_right').css('color', '#fff');
+    $('.click_case_right').css('background-color', 'rgb(32, 192, 226)');
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1066,10 +1071,6 @@ function cellDisselect() {
     d3.select(".overlay_rect").remove();
     d3.select("#light_digits_o").text(d3.select("#light_digits_o").attr("sv_val"));
     updateZoomedChart(selectedCharts);
-    /*
-    d3.select("#street_view").style("opacity", "1");
-    d3.select("#street_view").style("position", "relative");
-    d3.select("#street_view").style("display", "none"); */
 
     busTypesChart.assignSelect(false);
     busTypesChart.updateElements(window.typesData);
@@ -1077,6 +1078,10 @@ function cellDisselect() {
     instaTopicsChart.assignSelect(false);
     instaTopicsChart.updateElements(window.topicsData);
     
+
+    // Cell view cell back to normal
+    $('.click_case_right').css('color', '#ddd');
+    $('.click_case_right').css('background-color', 'rgba(150,150,150,0.4)');
 
 }
 
