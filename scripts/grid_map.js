@@ -59,9 +59,10 @@ var busTypesChart = tagCloudChart(390, 100, "#business_types", false);
 $("#d_business_diversity").hide();
 
 // enable chicago case if current city is chicago
-$("#case_study_2").toggle(currentCity_o === 'Chicago')
 
-if (currentCity_o == 'LA' || currentCity_o == 'Chicago' ){
+//$("#case_study_2").toggle(currentCity_o === 'Chicago')
+
+if (currentCity_o === 'LA' || currentCity_o === 'Chicago' ){
     $("#d_instagram_topics").hide();
     var instaTopics = [];
     var instaTopicsChart = tagCloudChart(370, 100, "#instagram_topics", true);
@@ -69,23 +70,25 @@ if (currentCity_o == 'LA' || currentCity_o == 'Chicago' ){
     if (!$("#d_instagram_topics").is(":visible")){
         $("#d_instagram_topics").show();
     }
-    if (currentCity_o == 'Denver') {
+    if (currentCity_o === 'Denver') {
         var instaTopics = ['insta_advertising','insta_beverage','insta_car','insta_entertainment',
         'insta_family','insta_fashion','insta_food','insta_interiors','insta_landscape','insta_monochrome','insta_nature',
         'insta_portrait','insta_sky','insta_sports'];
 
-    } else if (currentCity_o == 'Sanjose') {
+    } else if (currentCity_o === 'Sanjose') {
         var instaTopics = ['insta_advertising','insta_animal','insta_car','insta_entertainment',
         'insta_fashion','insta_food', 'insta_group', 'insta_interiors','insta_monochrome','insta_nature',
         'insta_portrait','insta_sky','insta_sports'];
 
-    } else if (currentCity_o == 'Pittsburgh'){
+    } else if (currentCity_o === 'Pittsburgh'){
         var instaTopics = ['insta_advertising','insta_animal','insta_architecture', 'insta_car', 'insta_entertainment',
         'insta_family','insta_fashion','insta_food','insta_interiors','insta_monochrome','insta_nature','insta_sky','insta_sports'];
 
     }
     var instaTopicsChart = tagCloudChart(370, 125, "#instagram_topics", true); //100
 }
+
+
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 //  myinit()                                                                  //
@@ -108,13 +111,26 @@ var myinit = function () {
     // Initialize Firebase
     // TODO: Replace with your project's customized code snippet
     // Initialize Firebase
-    var config = {
-        apiKey: "AIzaSyClx2B45ikrkZ5mYRvMnC8hIAcSN23LZXE",
-        authDomain: "atlas-lighting.firebaseapp.com",
-        databaseURL: "https://atlas-lighting.firebaseio.com",
-        storageBucket: "atlas-lighting.appspot.com",
-        messagingSenderId: "784412993307"
-    };
+
+    if (currentCity_o === "LA") {
+        var config = {
+            apiKey: "AIzaSyClx2B45ikrkZ5mYRvMnC8hIAcSN23LZXE",
+            authDomain: "atlas-lighting.firebaseapp.com",
+            databaseURL: "https://atlas-lighting.firebaseio.com",
+            storageBucket: "atlas-lighting.appspot.com",
+            messagingSenderId: "784412993307"
+        };
+    } else {
+        console.log("I'm here");
+        var config = {
+            apiKey: "AIzaSyAcFyiE8y8GoHmwJlOIGqqrNISo_38Vkgs",
+            authDomain:"atlas-of-lighting-2645f.firebaseapp.com",
+            databaseURL: "https://atlas-of-lighting-2645f.firebaseio.com",
+            storageBucket: "atlas-of-lighting-2645f.appspot.com",
+            messagingSenderId: "247511274959"
+        };
+    }
+
     firebase.initializeApp(config);
     var rootRef = firebase.database().ref();
 
@@ -992,20 +1008,18 @@ function cellSelect(d) {
     $("#instagram_plc0").hide();
 
     var cell_id = d.cell_id;
-    console.log(cell_id);
 
-    // Needs a change with ref(MSA_1/cell_id) ..
-    /*
-    if (currentCity_o == "LA") {
-        var firebaseRef = "la/"+cell_id;
+    if (currentCity_o !== "LA") {
+        var query = currentCity_o.toLowerCase() + "/"+ `${cell_id}`;
     } else {
-        var firebaseRef = "la/"+cell_id;
-    }*/
-    var ref = firebase.database().ref(cell_id);
+        var query = cell_id
+    }
+    var ref = firebase.database().ref(query); //cell_id
     ref.once("value")
         .then(function (snapshot) {
             d3.selectAll(".ins_thumb").remove();
             var insdata = snapshot.val();
+            console.log(insdata);
 
             if (insdata) {
                 var limit = 48;
@@ -1015,7 +1029,13 @@ function cellSelect(d) {
                         if (count < limit) {
                             //console.log(k);
                             //d3.select("#instagram_pics").append("img").attr("src", insdata[k]["url"]).attr("class", "ins_thumb")
-                            d3.select("#frame_for_instas").append("img").attr("src", insdata[k]["url"]).attr("class", "ins_thumb")
+                            if (currentCity_o === "LA"){
+                                var instaAccessor = insdata[k]["url"];
+                            } else {
+                                var instaAccessor = insdata[k];
+                            }
+                            //d3.select("#frame_for_instas").append("img").attr("src", insdata[k]["url"]).attr("class", "ins_thumb")
+                            d3.select("#frame_for_instas").append("img").attr("src", instaAccessor).attr("class", "ins_thumb")
                             
                                 .on('error', function() {
                                     console.log('error on instagram pics');
@@ -1026,7 +1046,8 @@ function cellSelect(d) {
                                     var myx = d3.event.clientX;
                                     var myy = d3.event.clientY;
                                     d3.select(".toolip_img").remove();
-                                    d3.select("body").append("img").attr("src", insdata[k]["url"]).attr("class", "toolip_img")
+                                    //d3.select("body").append("img").attr("src", insdata[k]["url"]).attr("class", "toolip_img")
+                                    d3.select("body").append("img").attr("src", instaAccessor).attr("class", "toolip_img")
                                         .style("left",(myx-5-150)+"px")
                                         .style("top",(myy+5)+"px");
                                 })
