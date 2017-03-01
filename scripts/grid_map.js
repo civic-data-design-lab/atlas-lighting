@@ -1021,7 +1021,7 @@ function cellSelect(d) {
         .then(function (snapshot) {
             d3.selectAll(".ins_thumb").remove();
             var insdata = snapshot.val();
-            console.log(insdata);
+            // console.log(insdata);
 
             if (insdata) {
                 var limit = 48;
