@@ -1063,6 +1063,25 @@ function cellSelect(d) {
       backgroundColor: "rgba(150, 150, 150, 0.4)"
     }, 330);
 
+
+    //show report
+    $('#report-text').show();
+    $('#report-message').hide();
+
+    //append values to the report card
+    $('#report-text-light').text(d.averlight);
+    $('#report-text-diversity').text(d.b_diversity);
+    $('#report-text-price').text(d.b_price);
+    $('#report-text-density').text(d.places);
+    $('#report-text-types').text(window.typesData[0].category + "   " + window.typesData[1].category + "   " + window.typesData[2].category);
+    $('#report-text-OBIpercent').text(d.OBIpercentage);
+    $('#report-text-OBIaverage').text(d.OBIaverage);
+    $('#report-text-dev').text(d.dev_intensity);
+    $('#report-text-population').text(d.population);
+    $('#report-text-income').text(d.income);
+    $('#report-text-insta-density').text(d.insta_cnt);
+    $('#report-text-insta-likes').text(d.insta_like);
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1088,6 +1107,10 @@ function cellDisselect() {
     // Cell view cell back to normal
     $('.click_case_right').css('color', '#ddd');
     $('.click_case_right').css('background-color', 'rgba(150,150,150,0.4)');
+
+    //hide report
+    $('#report-text').hide();
+    $('#report-message').show();
 
 }
 

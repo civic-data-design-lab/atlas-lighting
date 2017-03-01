@@ -1449,17 +1449,20 @@ button:focus {outline:0;}
     background-color: rgba(0,0,0,0.6);
     top: 40px;
     right: 0px;
+    z-index: -1;
 }
 
-#report-text {
+#report-text, #report-message {
     margin-left: 12px;
-    font-size: 18px;
     padding-bottom: 20px;
+    font-family: 'Ropa Sans', sans-serif;
+    font-weight: 400;
+    fill: rgba(255,255,255,.3);
+    font-size: 11px;    
+    line-height: 1.2;
 }
 
-.report-title{
-    padding-top: 12px;
-    margin-left: 12px;
-    font-size: 27px;
-    font-family: Dosis;
+.report-text-value {
+    font-size: 14px;
+    color: rgb(32, 192, 226);;
 }
