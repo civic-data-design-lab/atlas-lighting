@@ -434,8 +434,8 @@ function charts(data, selectedCharts) {
     d3.selectAll(".dc-chart").style("display", "none");
     d3.select("#street_view").style("display", "block");
     d3.selectAll(".lock").style("display", "block");
-    d3.select("#street_view").style("display", "none");
-    d3.select("#streetview_window").style("display", "none");
+    // d3.select("#street_view").style("display", "none");
+    // d3.select("#streetview_window").style("display", "none");
 
     selectedCharts.forEach(function (d) {
         d3.select("#d_" + d).style("display", "none");
