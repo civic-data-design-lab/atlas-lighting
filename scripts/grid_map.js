@@ -302,14 +302,14 @@ function initCanvas(data) {
                                         zoom:1,
                                         pitch:0
                                     });
-                                    // d3.select("#street_view_plc").style("display", "none");
+                                    d3.select("#street_view_plc").style("display", "none");
                                     // d3.select("#street_view_plc0").style("display", "none");
                                     // d3.select("#streetview_window").style("display", "block");
 
                                 }else{
                                     //console.log("not ok");
                                     // d3.select("#streetview_window").style("display", "none");
-                                    // d3.select("#street_view_plc").style("display", "block");
+                                    d3.select("#street_view_plc").style("display", "block");
                                     // d3.select("#street_view_plc0").style("display", "none");
 
                                 }
