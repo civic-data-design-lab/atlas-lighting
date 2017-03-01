@@ -611,7 +611,6 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     background-color: rgba(0,0,0,0.6);
     top: 40px;
     left: 0px;
-
 }
 
 #drop_indication {
@@ -657,19 +656,6 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     background-color: rgba(150,150,150,0.4);
     border-bottom-right-radius: 20px;
     top: calc(20% + 20px);
-}
-
-#case-text {
-    margin-left: 12px;
-    font-size: 18px;
-    padding-bottom: 20px;
-}
-
-.case-title{
-    padding-top: 12px;
-    margin-left: 12px;
-    font-size: 27px;
-    font-family: Dosis;
 }
 
 .selectedTab {
@@ -1446,7 +1432,8 @@ button:focus {outline:0;}
     height: calc(20% - 20px);
     cursor: pointer;
     border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 0px;
+    background-color: rgba(150,150,150,0.4);
+    top: calc(20% + 25px);
 }
 
 .fold_bar {
@@ -1454,8 +1441,34 @@ button:focus {outline:0;}
     top: 40px;
     bottom: 0px;
     width: 20px;
-    background-color: rgb(150,150,150);
+    background-color: rgba(150,150,150,0.4);
     right: 430px;
     height: 150px;
     border-top-left-radius: 20px;
+    cursor: pointer;
+}
+
+.right_back {
+    position: fixed;
+    width: 430px;
+    height: calc(100% - 40px);
+    background-color: rgba(0,0,0,0.6);
+    top: 40px;
+    right: 0px;
+    z-index: -1;
+}
+
+#report-text, #report-message {
+    margin-left: 12px;
+    font-family: 'Ropa Sans', sans-serif;
+    font-weight: 400;
+    fill: rgba(255,255,255,.3);
+    font-size: 11px;    
+    line-height: 1;
+}
+
+.report-text-value {
+    font-size: 15px;
+    color: rgb(32, 192, 226);
+    padding-left: 5px;
 }

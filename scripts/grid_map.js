@@ -1003,7 +1003,7 @@ function charts(data, selectedCharts) {
 function cellSelect(d) {
     window.cell_selected = true;
     updateZoomedChart(selectedCharts);
-    d3.select("#light_digits_o").text(d.averlight);
+    // d3.select("#light_digits_o").text(d.averlight);
     $("#instagram_plc").hide();
     $("#instagram_plc0").hide();
 
@@ -1012,9 +1012,11 @@ function cellSelect(d) {
     if (currentCity_o !== "LA") {
         var query = currentCity_o.toLowerCase() + "/"+ `${cell_id}`;
     } else {
-        var query = cell_id
+        var firebaseRef = "la/"+cell_id;
     }
+    
     var ref = firebase.database().ref(query); //cell_id
+
     ref.once("value")
         .then(function (snapshot) {
             d3.selectAll(".ins_thumb").remove();
@@ -1073,6 +1075,31 @@ function cellSelect(d) {
     instaTopicsChart.assignSelect(true);
     instaTopicsChart.updateElements(d);
 
+
+    //switch to the cell view
+    $("#map-info").hide();
+    $("#report-info").show();
+    $(".click_case_right").addClass("selectedTab");
+    $(".fold_bar").removeClass("selectedTab");
+
+    //show report
+    $('#report-text').show();
+    $('#report-message').hide();
+
+    //append values to the report card
+    $('#report-text-light').text(d.averlight);
+    $('#report-text-diversity').text(d.b_diversity);
+    $('#report-text-price').text(d.b_price);
+    $('#report-text-density').text(d.places);
+    $('#report-text-types').text(window.typesData[0].category + "   " + window.typesData[1].category + "   " + window.typesData[2].category);
+    $('#report-text-OBIpercent').text(d.OBIpercentage);
+    $('#report-text-OBIaverage').text(d.OBIaverage);
+    $('#report-text-dev').text(d.dev_intensity);
+    $('#report-text-population').text(d.population);
+    $('#report-text-income').text(d.income);
+    $('#report-text-insta-density').text(d.insta_cnt);
+    $('#report-text-insta-likes').text(d.insta_like);
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1087,10 +1114,6 @@ function cellDisselect() {
     d3.select(".overlay_rect").remove();
     d3.select("#light_digits_o").text(d3.select("#light_digits_o").attr("sv_val"));
     updateZoomedChart(selectedCharts);
-    /*
-    d3.select("#street_view").style("opacity", "1");
-    d3.select("#street_view").style("position", "relative");
-    d3.select("#street_view").style("display", "none"); */
 
     busTypesChart.assignSelect(false);
     busTypesChart.updateElements(window.typesData);
@@ -1098,6 +1121,14 @@ function cellDisselect() {
     instaTopicsChart.assignSelect(false);
     instaTopicsChart.updateElements(window.topicsData);
     
+
+    // Cell view cell back to normal
+    $('.click_case_right').css('color', '#ddd');
+    $('.click_case_right').css('background-color', 'rgba(150,150,150,0.4)');
+
+    //hide report
+    $('#report-text').hide();
+    $('#report-message').show();
 
 }
 

@@ -55,65 +55,207 @@
         <a href="http://cau.mit.edu/" target="_blank"><img src="../logos/cau.jpg" style="height:30px "></a>
       </div>
     </div>
+
     <div id="loader">
       <div id="loader-text">
         Loading data for
         <p id="nowmsa"></p><img id="loader_small" src="../icons/Loading.gif">
         <br/><br/>
       </div>
-
-    <!--
-    <video autoplay id="bgvid" loop>
-   WCAG general accessibility recommendation is that media such as background video play through only once. Loop turned on for the purposes of illustration; if removed, the end of the video will fade in the same way created by pressing the "Pause" button  
-  <source src="../website_video4_small.mp4" type="video/mp4"></source>
-  </video> -->
-
-
     </div>
 
-<!-- cases -->
-    <div id="cases" style="display:none">
-      <div id="centered">
-        <div id="frontpage-map"><div class="svg"></div>
-          <div class="btn-group" data-toggle="buttons">
-            <form>
-              <label class="radio" id="mapB">
-                     <input type="radio" name="options"  checked="checked"><img src="../icons/usa.png" style="height:15px "> Map &nbsp;&nbsp;</label>
-              <label class="radio" id="msaB">
-                    <input type="radio" name="options" id="msaB"> <img src="../icons/bubble.png" style="height:15px "> Chart &nbsp;&nbsp;</label>
-              <!-- <label class="radio" id="group">
-                     <input type="radio" name="options"> LIGHTING AND INCOME &nbsp;&nbsp;</label>-->
-            </form>
+    <!--  LEFT SIDE PANEL -->
+    <div id="selector" class="data_select_ui">
+      <div class="left_back"></div>
+      <div class="left_clickbar datasets click_data slide_hide selectedTab"> 
+        <div id="tab-name">DATASETS </div>
+        <img src="../icons/triangle_left.png" class="selector_arrow">
+      </div>
+      <!--  <div class="left_clickbar case_studies click_case slide_hide"> 
+        <div id="tab-name-2">CASE STUDIES </div>
+        <img src="../icons/triangle_left.png" class="selector_arrow">
+      </div> -->
+      <div class="gradient_container"></div>
+      <div class="zoom_icons">
+        <button id="zoomIn"></button>
+        <button id="zoomOut"></button>
+      </div>
+      <div id="datasets">
+        <div class="data_filters">
+          <div id="city-title city-title-grid" class="title2 city-title-grid">
+            <div class="dropdown">
+              <button onclick="myFunction()" class="dropbtn" id="nowmsa"><img src="../icons/arrow_down.png"> CHICAGO-JOLIET-NAPERVILLE,IL-IN-WI</button>
+              <div id="myDropdown" class="dropdown-content">
+                <a href="javascript:window.location.assign('grid.html#Chicago');window.location.reload();">CHICAGO-JOLIET-NAPERVILLE,IL-IN-WI</a> 
+                <a href="javascript:window.location.assign('grid.html#LA');window.location.reload();">LOS ANGELES-LONG BEACH-SANTA ANA, CA</a>
+                <a href="javascript:window.location.assign('grid.html#Pittsburgh');window.location.reload();">PITTSBURGH, PA</a>
+                <a href="javascript:window.location.assign('grid.html#Sanjose');window.location.reload();">SAN JOSE-SUNNYVALE-SANTA CLARA, CA</a>
+                <a href="javascript:window.location.assign('grid.html#Denver');window.location.reload();">DENVER-AURORA-BROOMFIELD, CO</a>              
+              </div>
+              <img src="../icons/arrow_down.png" style="width:7px; position: relative; left: 298px; opacity: 0.8;">
+            </div>
+          </div>
+
+          <div class="data_tags">
+            <div CLASS="tag_item" id="tag_bus">BUSINESS</div>
+            <div CLASS="tag_item" id="tag_dem">DEMOGRAPHICS</div>
+            <div CLASS="tag_item" id="tag_soc">SOCIAL MEDIA</div>
+          </div>
+          <div class="data_searchbox">
+            <input type="text">
           </div>
         </div>
+
+        <!-- ************************************************************** Business filters **************************************************************-->
+        
+        <div class="data_item ui-widget-content tag_bus" id="d_business_diversity">
+          <p class="data_item_title">BUSINESS DIVERSITY</p>
+          <img src="../icons/final_icons/busDiversity.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
+          <p class = "data_intro">Indicates total number of Google Places in a grid cell, which includes businesses, institutions, parks, and other points of interest.</p>
+        </div>
+                
+        <div class="data_item ui-widget-content tag_bus" id="d_business_price">
+          <p class="data_item_title">BUSINESS PRICE</p>
+          <img src="../icons/final_icons/busPrice.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
+          <p class = "data_intro">Indicates the average price level of a grid cell, using Google Places classifications.</p>
+        </div>
+        <div class="data_item ui-widget-content tag_bus" id="d_places">
+          <p class="data_item_title">BUSINESS DENSITY</p>
+          <img src="../icons/final_icons/busDensity.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
+          <p class = "data_intro">Indicates total number of Google Places in a grid cell, which includes businesses, institutions, parks, and other points of interest.</p>
+        </div>
+        <div class="data_item ui-widget-content tag_bus" id="d_business_types">
+          <p class="data_item_title">BUSINESS TYPES</p>
+          <img src="../icons/final_icons/busTypes.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
+          <p class = "data_intro">Indicates the types of the local businesses in a grid cell, using Google Places classifications.</p>
+        </div>
+        <div class="data_item ui-widget-content tag_bus" id="d_business_opening_percent">
+          <p class="data_item_title">OPEN BUSINESS INDEX</p>
+          <img src="../icons/final_icons/busOBI.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
+          <p class = "data_intro">Indicates the percentage and average number of businesses that are open per hour in a given period of time in a grid cell. Source: Google Places API</p>
+        </div>
+        <div class="data_item ui-widget-content" id="d_business_opening_average" style="display: none">
+          <p class="data_item_title">AVERAGE NUMBER OF BUSINESSES OPEN</p>
+          <img src="../icons/final_icons/busOBI.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
+          <p class = "data_intro">Average number of businesses open for a given time period. Source: Google Places API</p>
+        </div>        
+        <!-- ************************************************************** Dem filters **************************************************************-->
+
+        <div class="data_item ui-widget-content tag_dem" id="d_development_intensity">
+          <p class="data_item_title">DEVELOPMENT INTENSITY</p>
+          <img src="../icons/final_icons/devIntensity.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
+          <p class = "data_intro">Indicates characteristics and classification of the land surface such as urban, agricultural, and forest, as well as percent impervious surface. Source: National Land Cover Database 2011</p>
+        </div>
+        <div class="data_item ui-widget-content tag_dem" id="d_population">
+          <p class="data_item_title">POPULATION</p>
+          <img src="../icons/final_icons/popDensity.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
+          <p class = "data_intro">Indicates the number people in a given unit area, commonly represented as population per square mile. Source: 2010 - 2014 ACS - 5 Year Estimate</p>
+        </div>
+        <div class="data_item ui-widget-content tag_dem" id="d_income">
+          <p class="data_item_title">MEDIAN HOUSEHOLD INCOME</p>
+          <img src="../icons/final_icons/medianIncome.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
+          <p class = "data_intro">Indicates the median value of the combined incomes of people sharing a household or place of residence. Census block group values are redistributed to each grid cell using ArcGIS. Source: 2010 - 2014 ACS - 5 Year Estimate</p>
+        </div>        
+        <!-- ************************************************************** Social filters **************************************************************-->
+        <div class="data_item ui-widget-content tag_soc" id="d_street_view">
+          <p class="data_item_title">GOOGLE STREET VIEW</p>
+          <img src="../icons/final_icons/googleStreet.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
+          <p class = "data_intro">Provides 360-degree, panoramic, and street-level imagery from the centroid point in a selected grid cell. Source: Google Street View API</p>
+        </div>
+        <div class="data_item ui-widget-content tag_soc" id="d_ins">
+          <p class="data_item_title">INSTAGRAM DENSITY</p>
+          <img src="../icons/final_icons/instaDensity.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
+          <p class = "data_intro">Indicates total number of Instagram posts geo-tagged in a grid cell. Source: Instagram API</p>
+        </div>        
+        <div class="data_item ui-widget-content tag_soc" id="d_instagram_pics">
+          <p class="data_item_title">INSTAGRAM THUMBNAILS</p>
+          <img src="../icons/final_icons/instaThumbnails.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
+          <p class = "data_intro">Provides a collection of Instagram media thumbnails in a selected grid cell. Source: Instagram API</p>
+        </div>
+        <div class="data_item ui-widget-content tag_soc" id="d_ins_likes">
+          <p class="data_item_title">INSTAGRAM LIKES</p>
+          <img src="../icons/final_icons/instaLikes.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
+          <p class = "data_intro">Indicates total number of all the likes that are attached to Instagram posts geo-tagged in a grid cell. Source: Instagram API</p>
+        </div>
+        
+        <div class="data_item ui-widget-content tag_soc" id="d_instagram_topics">
+          <p class="data_item_title">INSTAGRAM CONTENT TOPICS</p>
+          <img src="../icons/final_icons/instaTopics.png" class = "data_icon">
+          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
+          <p class = "data_intro">Provides a collection of topics that describe the content of Instagram media, using machine learning tools from the Google Vision API. Source: Google Vision API</p>
+        </div>
       </div>
+
+      <!-- <div id="case_studies" style="display:none">
+        <div class="data_item" id="case_study_1">
+          <p class="data_item_title">CASE STUDIES 1: CHICAGO</p>
+        </div> 
+        <div class="data_item" id="case_study_2" style="height:120px; display: none;">
+          <p class="data_item_title">CASE STUDIES 1:  <br/>
+            <span style="font-size:17px">LIGHT USE IN DIFFERENT INCOME GROUPS</span><br/>
+            <i>This case study examines the relationship between economic conditions of urban areas and their average radiance of artificial light at night.</i></p>
+        </div>
+      </div> -->
     </div>
-    <!-- end cases -->
 
+
+    <!-- MAP -->
     <div id="map"></div>
-    <div id="info" class="data_select_ui">
 
-      <div class = "fold_bar">
+
+    <!-- RIGHT PANEL -->
+    <div id="info" class="data_select_ui">
+      <div class="right_back"></div>
+      <div class = "fold_bar selectedTab">
         <div id="tab-name">MAP VIEW </div>
         <img src="../icons/triangle_left.png" class="selector_arrow rightbar">
       </div>
-      <div class="right_clickbar click_case slide_hide"> 
-        <div id="tab-name">SELECTED CELL </div>
+      <div class="right_clickbar click_case_right slide_hide_right"> 
+        <div id="tab-name" style="top: 15%">SELECTED CELL VIEW </div>
         <img src="../icons/triangle_left.png" class="selector_arrow rightbar">
       </div>
 
       <!-- case info -->
-      <div id="case-info" style="display:none">
-        <div class="case-title" id="hide_cases"> Light Intensity & Income</div>
+      <div id="report-info" style="display: none">
+        <div class="chart-title" id="hide_report" > SELECTED CELL VIEW</div>
         <br><br>
-        <div id="case-text" class="content"></div>
-<!--         <div id="bubble-key">
-          <div class="dropdownPrompt"> MSA CATEGORIES</div>
-        </div>  -->
+        <div id="report-text" style="display: none">
+          <p>AVERAGE NIGHT LIGHT INTENSITY <span id="report-text-light" class="report-text-value"></span>  </p>
+          <p>BUSINESS DIVERSITY <span id="report-text-diversity" class="report-text-value"></span> </p> 
+          <p>BUSINESS PRICE  <span id="report-text-price" class="report-text-value"></span></p>
+          <p>BUSINESS DENSITY  <span id="report-text-density" class="report-text-value"></span></p>
+          <p>TOP 3 BUSINESS TYPES  <span id="report-text-types" class="report-text-value"></span></p>
+          <p>PERCENTAGE OF OPEN BUSINESSES FROM 6AM TO 6PM <span id="report-text-OBIpercent" class="report-text-value"></span> </p>
+          <p>AVERAGE NUMBER OF OPEN BUSINESSES FROM 6AM TO 6PM  <span id="report-text-OBIaverage" class="report-text-value"></span></p>
+          <p>DEVELOPMENT INTENSITY  <span id="report-text-dev" class="report-text-value"></span></p>
+          <p>POPULATION  <span id="report-text-population" class="report-text-value"></span></p>
+          <p>MEDIAN HOUSEHOLD INCOME  <span id="report-text-income" class="report-text-value"></span></p>
+          <p>INSTAGRAM DENSITY  <span id="report-text-insta-density" class="report-text-value"></span></p>
+          <p>INSTAGRAM LIKES  <span id="report-text-insta-likes" class="report-text-value"></span></p>
+          <p>TOP 3 INSTAGRAM TOPICS  <span id="report-text-topics" class="report-text-value"></span></p>
+          <p>GOOGLE STREET VIEW</p> 
+          <p>INSTAGRAM THUMBNAILS</p> 
+        </div>
+        <br><br>
+        <div id="report-message">
+          Please select a cell 
+        </div>
       </div>
-      <!-- end case info -->
 
-      <!-- map info -->
+      <!-- graphs -->
       <div id="map-info">
         <div id="view-selection" class="icons">
         </div>
@@ -369,163 +511,10 @@
 
         </div>
       </div>
-      <!-- end map info -->
 
     </div>
 
-    <div id="case-navigation" style="display:none">
-      <div style="width:50%; float:left"><p class="bottom_btn mybtn nav-prev">PREVIOUS</p></div>
-      <div style="width:50%; float:right"><p class="bottom_btn mybtn nav-next">NEXT</p></div>
-      <div style="width:50%; float:right"><p class="bottom_btn mybtn end" id="back_to_map"> <br> <!-- BACK TO MAP --></p></div>
-    </div>
 
-
-    <div id="selector" class="data_select_ui">
-      <div class="left_back"></div>
-      <div class="left_clickbar datasets click_data slide_hide selectedTab"> 
-        <div id="tab-name">DATASETS </div>
-        <img src="../icons/triangle_left.png" class="selector_arrow">
-      </div>
-<!--       <div class="left_clickbar case_studies click_case slide_hide"> 
-        <div id="tab-name-2">CASE STUDIES </div>
-        <img src="../icons/triangle_left.png" class="selector_arrow">
-      </div> -->
-      <div class="gradient_container"></div>
-      <div class="zoom_icons">
-        <button id="zoomIn"></button>
-        <button id="zoomOut"></button>
-      </div>
-      <div id="datasets">
-        <div class="data_filters">
-          <div id="city-title city-title-grid" class="title2 city-title-grid">
-            <div class="dropdown">
-              <button onclick="myFunction()" class="dropbtn" id="nowmsa"><img src="../icons/arrow_down.png"> CHICAGO-JOLIET-NAPERVILLE,IL-IN-WI</button>
-              <div id="myDropdown" class="dropdown-content">
-                <a href="javascript:window.location.assign('grid.html#Chicago');window.location.reload();">CHICAGO-JOLIET-NAPERVILLE,IL-IN-WI</a> 
-                <a href="javascript:window.location.assign('grid.html#LA');window.location.reload();">LOS ANGELES-LONG BEACH-SANTA ANA, CA</a>
-                <a href="javascript:window.location.assign('grid.html#Pittsburgh');window.location.reload();">PITTSBURGH, PA</a>
-                <a href="javascript:window.location.assign('grid.html#Sanjose');window.location.reload();">SAN JOSE-SUNNYVALE-SANTA CLARA, CA</a>
-                <a href="javascript:window.location.assign('grid.html#Denver');window.location.reload();">DENVER-AURORA-BROOMFIELD, CO</a>              
-              </div>
-              <img src="../icons/arrow_down.png" style="width:7px; position: relative; left: 298px; opacity: 0.8;">
-            </div>
-          </div>
-
-          <div class="data_tags">
-            <div CLASS="tag_item" id="tag_bus">BUSINESS</div>
-            <div CLASS="tag_item" id="tag_dem">DEMOGRAPHICS</div>
-            <div CLASS="tag_item" id="tag_soc">SOCIAL MEDIA</div>
-          </div>
-          <div class="data_searchbox">
-            <input type="text">
-          </div>
-        </div>
-
-        <!-- ************************************************************** Business filters **************************************************************-->
-        
-        <div class="data_item ui-widget-content tag_bus" id="d_business_diversity">
-          <p class="data_item_title">BUSINESS DIVERSITY</p>
-          <img src="../icons/final_icons/busDiversity.png" class = "data_icon">
-          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Indicates total number of Google Places in a grid cell, which includes businesses, institutions, parks, and other points of interest.</p>
-        </div>
-                
-        <div class="data_item ui-widget-content tag_bus" id="d_business_price">
-          <p class="data_item_title">BUSINESS PRICE</p>
-          <img src="../icons/final_icons/busPrice.png" class = "data_icon">
-          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Indicates the average price level of a grid cell, using Google Places classifications.</p>
-        </div>
-        <div class="data_item ui-widget-content tag_bus" id="d_places">
-          <p class="data_item_title">BUSINESS DENSITY</p>
-          <img src="../icons/final_icons/busDensity.png" class = "data_icon">
-          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Indicates total number of Google Places in a grid cell, which includes businesses, institutions, parks, and other points of interest.</p>
-        </div>
-        <div class="data_item ui-widget-content tag_bus" id="d_business_types">
-          <p class="data_item_title">BUSINESS TYPES</p>
-          <img src="../icons/final_icons/busTypes.png" class = "data_icon">
-          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Indicates the types of the local businesses in a grid cell, using Google Places classifications.</p>
-        </div>
-        <div class="data_item ui-widget-content tag_bus" id="d_business_opening_percent">
-          <p class="data_item_title">OPEN BUSINESS INDEX</p>
-          <img src="../icons/final_icons/busOBI.png" class = "data_icon">
-          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Indicates the percentage and average number of businesses that are open per hour in a given period of time in a grid cell. Source: Google Places API</p>
-        </div>
-        <div class="data_item ui-widget-content" id="d_business_opening_average" style="display: none">
-          <p class="data_item_title">AVERAGE NUMBER OF BUSINESSES OPEN</p>
-          <img src="../icons/final_icons/busOBI.png" class = "data_icon">
-          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Average number of businesses open for a given time period. Source: Google Places API</p>
-        </div>        
-        <!-- ************************************************************** Dem filters **************************************************************-->
-
-        <div class="data_item ui-widget-content tag_dem" id="d_development_intensity">
-          <p class="data_item_title">DEVELOPMENT INTENSITY</p>
-          <img src="../icons/final_icons/devIntensity.png" class = "data_icon">
-          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Indicates characteristics and classification of the land surface such as urban, agricultural, and forest, as well as percent impervious surface. Source: National Land Cover Database 2011</p>
-        </div>
-        <div class="data_item ui-widget-content tag_dem" id="d_population">
-          <p class="data_item_title">POPULATION</p>
-          <img src="../icons/final_icons/popDensity.png" class = "data_icon">
-          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Indicates the number people in a given unit area, commonly represented as population per square mile. Source: 2010 - 2014 ACS - 5 Year Estimate</p>
-        </div>
-        <div class="data_item ui-widget-content tag_dem" id="d_income">
-          <p class="data_item_title">MEDIAN HOUSEHOLD INCOME</p>
-          <img src="../icons/final_icons/medianIncome.png" class = "data_icon">
-          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Indicates the median value of the combined incomes of people sharing a household or place of residence. Census block group values are redistributed to each grid cell using ArcGIS. Source: 2010 - 2014 ACS - 5 Year Estimate</p>
-        </div>        
-        <!-- ************************************************************** Social filters **************************************************************-->
-        <div class="data_item ui-widget-content tag_soc" id="d_street_view">
-          <p class="data_item_title">GOOGLE STREET VIEW</p>
-          <img src="../icons/final_icons/googleStreet.png" class = "data_icon">
-          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Provides 360-degree, panoramic, and street-level imagery from the centroid point in a selected grid cell. Source: Google Street View API</p>
-        </div>
-        <div class="data_item ui-widget-content tag_soc" id="d_ins">
-          <p class="data_item_title">INSTAGRAM DENSITY</p>
-          <img src="../icons/final_icons/instaDensity.png" class = "data_icon">
-          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Indicates total number of Instagram posts geo-tagged in a grid cell. Source: Instagram API</p>
-        </div>        
-        <div class="data_item ui-widget-content tag_soc" id="d_instagram_pics">
-          <p class="data_item_title">INSTAGRAM THUMBNAILS</p>
-          <img src="../icons/final_icons/instaThumbnails.png" class = "data_icon">
-          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Provides a collection of Instagram media thumbnails in a selected grid cell. Source: Instagram API</p>
-        </div>
-        <div class="data_item ui-widget-content tag_soc" id="d_ins_likes">
-          <p class="data_item_title">INSTAGRAM LIKES</p>
-          <img src="../icons/final_icons/instaLikes.png" class = "data_icon">
-          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Indicates total number of all the likes that are attached to Instagram posts geo-tagged in a grid cell. Source: Instagram API</p>
-        </div>
-        
-        <div class="data_item ui-widget-content tag_soc" id="d_instagram_topics">
-          <p class="data_item_title">INSTAGRAM CONTENT TOPICS</p>
-          <img src="../icons/final_icons/instaTopics.png" class = "data_icon">
-          <img src="../icons/final_icons/info.png" class = "data_icon_handle">
-          <p class = "data_intro">Provides a collection of topics that describe the content of Instagram media, using machine learning tools from the Google Vision API. Source: Google Vision API</p>
-        </div>
-      </div>
-
-<!--       <div id="case_studies" style="display:none">
-        <div class="data_item" id="case_study_1">
-          <p class="data_item_title">CASE STUDIES 1: CHICAGO</p>
-        </div> 
-        <div class="data_item" id="case_study_2" style="height:120px; display: none;">
-          <p class="data_item_title">CASE STUDIES 1:  <br/>
-            <span style="font-size:17px">LIGHT USE IN DIFFERENT INCOME GROUPS</span><br/>
-            <i>This case study examines the relationship between economic conditions of urban areas and their average radiance of artificial light at night.</i></p>
-        </div>
-      </div> -->
-
-    </div>
 
 
   </div>

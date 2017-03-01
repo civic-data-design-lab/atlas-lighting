@@ -24,28 +24,6 @@ function initControl() {
 
     });
 
-    /*
-    $('.data_icon_handle').mouseenter(function(event){
-        event.preventDefault();
-        $(this).siblings(".data_intro").css("display", "block");
-    });
-
-    $('.data_icon_handle').mouseover(function(event){
-        event.preventDefault();
-        $(this).siblings(".data_intro").css("display", "block");
-    });
-
-    $('.data_icon_handle').mouseleave(function(event){
-        event.preventDefault();
-        $(this).siblings(".data_intro").css("display", "none");
-
-    $('.data_icon_handle').mouseout(function(event){
-        event.preventDefault();
-        $(this).siblings(".data_intro").css("display", "none");
-
-    }); */
-
-
     $('.data_item').draggable({
         drag: function (event, ui) {
             $("#selector").css("width", "100%");
@@ -98,6 +76,7 @@ function initControl() {
 
     });
 
+    //used to control the left bar tabs
     $(".click_data").click(function () {
         $("#datasets").show()
         $("#case_studies").hide()
@@ -105,52 +84,14 @@ function initControl() {
         $(".click_case").removeClass("selectedTab");
 
     });
-
     $(".click_case").click(function () {
         $("#datasets").hide()
         $("#case_studies").show();
         $(this).addClass("selectedTab");
         $(".click_data").removeClass("selectedTab");
-    });
+    });   
 
-    $(".rightbar").click(function(){
-        if(!$(this).attr("style") || ($(this).attr("style") && $(this).attr("style").indexOf("180") > -1)){
-            $(this).css("transform", "rotate(0deg)");
-
-            $("#info").animate({
-                right: "-430px"
-            }, 300, function () { });
-
-            $(".fold_bar").animate({
-                right: "0px"
-            }, 300, function () { });
-
-
-            $("#export").animate({
-                right: "-430px"
-            }, 300, function () { });
-
-        }
-        else{
-            $(this).css("transform", "rotate(180deg)");
-
-            $("#info").animate({
-                right: "0px"
-            }, 300, function () { });
-
-            $(".fold_bar").animate({
-                right: "430px"
-            }, 300, function () { });
-
-            $("#export").animate({
-                right: "0px"
-            }, 300, function () { });
-
-        }
-    });
-
-
-
+    //controls the left bar collapsing and showing
     $(".left_clickbar.datasets>img").click(function () {
         if ($(this).attr("style") && $(this).attr("style").indexOf("180") > -1) {
             //back to selecting mode            
@@ -164,7 +105,7 @@ function initControl() {
                 left: "0px"
             }, 300, function () { });
             $(".slide_hide").animate({
-                left: "331px"
+                left: "333px"
             }, 300, function () { });
             $("#todrop").show();
             $("#zoomIn").animate({
@@ -203,60 +144,78 @@ function initControl() {
         }
     })
 
-    $(".left_clickbar.case_studies>img").click(function () {
-        if ($(this).attr("style") && $(this).attr("style").indexOf("180") > -1) {
-            //back to selecting mode
-            $(".left_clickbar>img").css("transform", "rotate(0deg)");
-            $("#selector").css("width", "335px");
-            $("#selector").css("overflow-y", "auto");
-            $(".left_back").animate({
-                left: "0px"
-            }, 300, function () { });
-            $("#selector").animate({
-                left: "0px"
-            }, 300, function () { });
-            $(".slide_hide").animate({
-                left: "331px"
-            }, 300, function () { });
-            $("#todrop").show();
-            $("#zoomIn").animate({
-                left: "345px"
-            }, 300, function () { });                
-            $("#zoomOut").animate({
-                left: "390px"
-            }, 300, function () { });   
-            setTimeout(function(){
-               $('.gradient_container').show(); 
-           }, 300);
 
-        } else {
-            //back to folding mode
-            $(".left_clickbar>img").css("transform", "rotate(180deg)");
-            $("#selector").css("width", "335px");
-            $(".left_back").animate({
-                left: "-335px",
-            }, 300, function () { });
-            $("#selector").animate({
-                left: "-335px",
-            }, 300, function () { });
-            $(".slide_hide").animate({
-                left: "0px"
-            }, 300, function () { });
-            $("#todrop").hide();
 
-            $("#todrop").hide(); 
-            $("#zoomIn").animate({
-                left: "50px"
-            }, 300, function () { });                
-            $("#zoomOut").animate({
-                left: "95px"
-            }, 300, function () { });    
+    //show report
+    $(".click_case_right").click(function () {
+        $("#map-info").hide();
+        $("#report-info").show();
+        $(this).addClass("selectedTab");
+        $(".fold_bar").removeClass("selectedTab");
+    });
+    
+    //show graphs
+    $(".fold_bar").click(function () {
+        $("#map-info").show();
+        $("#report-info").hide();       
+        $(this).addClass("selectedTab");
+        $(".click_case_right").removeClass("selectedTab");
+    });   
 
-            setTimeout(function(){
-               $('.gradient_container').hide(); 
-           }, 100);
+    // controls the right bar collapsing and showing
+    $(".rightbar").click(function(){  
+        if(!$(this).attr("style") || ($(this).attr("style") && $(this).attr("style").indexOf("180") > -1)){
+            // hide
+            $(this).css("transform", "rotate(0deg)");
+
+            $("#info").animate({
+                right: "-430px"
+            }, 300, function () { });
+
+            $(".fold_bar").animate({
+                right: "0px"
+            }, 300, function () { });
+
+            $(".right_back").animate({
+                right: "-405px"
+            }, 300, function () { });            
+
+            $(".right_clickbar").animate({
+                right: "0px"
+            }, 300, function () { });
+
+            $("#export").animate({
+                right: "-430px"
+            }, 300, function () { });
+
+        }
+        else{
+            // show
+            $(this).css("transform", "rotate(180deg)");
+
+            $("#info").animate({
+                right: "0px"
+            }, 300, function () { });
+
+            $(".fold_bar").animate({
+                right: "430px"
+            }, 300, function () { });
+
+            $(".right_back").animate({
+                right: "0px"
+            }, 300, function () { });
+
+            $(".right_clickbar").animate({
+                right: "430px"
+            }, 300, function () { });
+
+            $("#export").animate({
+                right: "0px"
+            }, 300, function () { });
+
         }
     });
+
 
     //////////////////////////////////// collapse datasets
 
