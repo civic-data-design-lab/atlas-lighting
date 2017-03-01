@@ -146,15 +146,16 @@ function initControl() {
 
 
 
-    //controls the right bar tabs
+    //show report
     $(".click_case_right").click(function () {
         $("#map-info").hide();
         $("#report-info").show();
         $(this).addClass("selectedTab");
         $(".fold_bar").removeClass("selectedTab");
     });
-
-     $(".fold_bar").click(function () {
+    
+    //show graphs
+    $(".fold_bar").click(function () {
         $("#map-info").show();
         $("#report-info").hide();       
         $(this).addClass("selectedTab");

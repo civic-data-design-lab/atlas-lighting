@@ -987,7 +987,7 @@ function charts(data, selectedCharts) {
 function cellSelect(d) {
     window.cell_selected = true;
     updateZoomedChart(selectedCharts);
-    d3.select("#light_digits_o").text(d.averlight);
+    // d3.select("#light_digits_o").text(d.averlight);
     $("#instagram_plc").hide();
     $("#instagram_plc0").hide();
 
@@ -1054,15 +1054,11 @@ function cellSelect(d) {
     instaTopicsChart.updateElements(d);
 
 
-    // Cell view cell lights on
-    $('.click_case_right').animate({
-      backgroundColor: "rgb(32, 192, 226)"
-    }, 30);
-    // Cell view cell lights off
-    $('.click_case_right').animate({
-      backgroundColor: "rgba(150, 150, 150, 0.4)"
-    }, 330);
-
+    //switch to the cell view
+    $("#map-info").hide();
+    $("#report-info").show();
+    $(".click_case_right").addClass("selectedTab");
+    $(".fold_bar").removeClass("selectedTab");
 
     //show report
     $('#report-text').show();
