@@ -1043,17 +1043,19 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 
 #streetview_window {
     height: 160px;
-    width: 410px;    
+    width: 400px;    
     position: relative;
 }
 
 
 #instagram_plc {
     display: none;
+    width: 80%;
 }
 
 #street_view_plc {
     display: none;
+    width: 80%;
 }
 
 /*
@@ -1471,4 +1473,8 @@ button:focus {outline:0;}
     font-size: 15px;
     color: rgb(32, 192, 226);
     padding-left: 5px;
+}
+
+#frame_for_instas {
+    width: 410px;
 }

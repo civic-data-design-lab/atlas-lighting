@@ -302,15 +302,15 @@ function initCanvas(data) {
                                         zoom:1,
                                         pitch:0
                                     });
-                                    d3.select("#street_view_plc").style("display", "none");
-                                    d3.select("#street_view_plc0").style("display", "none");
+                                    // d3.select("#street_view_plc").style("display", "none");
+                                    // d3.select("#street_view_plc0").style("display", "none");
                                     // d3.select("#streetview_window").style("display", "block");
 
                                 }else{
                                     //console.log("not ok");
                                     // d3.select("#streetview_window").style("display", "none");
-                                    d3.select("#street_view_plc").style("display", "block");
-                                    d3.select("#street_view_plc0").style("display", "none");
+                                    // d3.select("#street_view_plc").style("display", "block");
+                                    // d3.select("#street_view_plc0").style("display", "none");
 
                                 }
                         });
@@ -1004,8 +1004,6 @@ function cellSelect(d) {
     window.cell_selected = true;
     updateZoomedChart(selectedCharts);
     // d3.select("#light_digits_o").text(d.averlight);
-    $("#instagram_plc").hide();
-    $("#instagram_plc0").hide();
 
     var cell_id = d.cell_id;
 
@@ -1100,7 +1098,10 @@ function cellSelect(d) {
     $('#report-text-insta-density').text(d.insta_cnt);
     $('#report-text-insta-likes').text(d.insta_like);
     // $('#report-text-topics').text(window.topicsData[0].category + " ,  " + window.topicsData[1].category + " ,  " + window.topicsData[2].category);
+    $('#report-text-topics').text("coming soon");
 
+    //hide instagram and google street placeholders
+    $("#instagram_plc").hide();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
