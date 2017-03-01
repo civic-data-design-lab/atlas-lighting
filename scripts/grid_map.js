@@ -1069,7 +1069,7 @@ function cellSelect(d) {
     $('#report-text-diversity').text(d.b_diversity);
     $('#report-text-price').text(d.b_price);
     $('#report-text-density').text(d.places);
-    $('#report-text-types').text(window.typesData[0].category + "   " + window.typesData[1].category + "   " + window.typesData[2].category);
+    $('#report-text-types').text(window.typesData[0].category + " ,  " + window.typesData[1].category + " ,  " + window.typesData[2].category);
     $('#report-text-OBIpercent').text(d.OBIpercentage);
     $('#report-text-OBIaverage').text(d.OBIaverage);
     $('#report-text-dev').text(d.dev_intensity);
@@ -1077,6 +1077,7 @@ function cellSelect(d) {
     $('#report-text-income').text(d.income);
     $('#report-text-insta-density').text(d.insta_cnt);
     $('#report-text-insta-likes').text(d.insta_like);
+    // $('#report-text-topics').text(window.topicsData[0].category + " ,  " + window.topicsData[1].category + " ,  " + window.topicsData[2].category);
 
 }
 
