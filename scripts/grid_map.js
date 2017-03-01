@@ -304,11 +304,11 @@ function initCanvas(data) {
                                     });
                                     d3.select("#street_view_plc").style("display", "none");
                                     d3.select("#street_view_plc0").style("display", "none");
-                                    d3.select("#streetview_window").style("display", "block");
+                                    // d3.select("#streetview_window").style("display", "block");
 
                                 }else{
                                     //console.log("not ok");
-                                    d3.select("#streetview_window").style("display", "none");
+                                    // d3.select("#streetview_window").style("display", "none");
                                     d3.select("#street_view_plc").style("display", "block");
                                     d3.select("#street_view_plc0").style("display", "none");
 
@@ -432,7 +432,7 @@ window.OBIpercent = dc.barChart("#business_opening_percent");
 ////////////////////////////////////////////////////////////////////////////////
 function charts(data, selectedCharts) {
     d3.selectAll(".dc-chart").style("display", "none");
-    d3.select("#street_view").style("display", "block");
+    // d3.select("#street_view").style("display", "block");
     d3.selectAll(".lock").style("display", "block");
     // d3.select("#street_view").style("display", "none");
     // d3.select("#streetview_window").style("display", "none");
@@ -446,16 +446,16 @@ function charts(data, selectedCharts) {
 
     
 
-    if(selectedCharts.indexOf("street_view") !== - 1){
-        d3.select("#street_view").style("display", "block");
-        d3.select("#street_view").style("position", "relative");
-        d3.select("#streetview_window").style("display", "block");
-    }
+    // if(selectedCharts.indexOf("street_view") !== - 1){
+        // d3.select("#street_view").style("display", "block");
+        // d3.select("#street_view").style("position", "relative");
+        // d3.select("#streetview_window").style("display", "block");
+    // }
 
 
-    if(selectedCharts.indexOf("instagram_pics")>-1){
-        d3.select("#instagram_pics").style("display", "block");
-    }
+    // if(selectedCharts.indexOf("instagram_pics")>-1){
+        // d3.select("#instagram_pics").style("display", "block");
+    // }
 
     // Major Recasting
 
@@ -1151,30 +1151,30 @@ function updateZoomedChart(selectedCharts) {
     })
 
     //d3.select("#street_view").style("opacity", "1");
-    d3.select("#street_view").style("position", "relative");
-    d3.select("#street_view").style("display", "none");
+    // d3.select("#street_view").style("position", "relative");
+    // d3.select("#street_view").style("display", "none");
 
-    if(selectedCharts.indexOf("street_view")>-1){
-        d3.select("#street_view").style("display", "block");
-        d3.select("#streetview_window").style("opacity", "1");
-        d3.select("#street_view_plc0").style("display", "block");
-        d3.select("#street_view_plc").style("display", "none");
+    // if(selectedCharts.indexOf("street_view")>-1){
+    //     d3.select("#street_view").style("display", "block");
+    //     d3.select("#streetview_window").style("opacity", "1");
+        // d3.select("#street_view_plc0").style("display", "block");
+    //     d3.select("#street_view_plc").style("display", "none");
 
-    }else{
-        d3.select("#street_view").style("display", "none");
-    }
-    //d3.select("#streetview_window").style("opacity", "1");
-    d3.select("#streetview_window").style("position", "relative");
-    d3.select("#streetview_window").style("display", "none");
+    // }else{
+    //     d3.select("#street_view").style("display", "none");
+    // }
+    // //d3.select("#streetview_window").style("opacity", "1");
+    // d3.select("#streetview_window").style("position", "relative");
+    // d3.select("#streetview_window").style("display", "none");
 
-    if(selectedCharts.indexOf("instagram_pics")>-1){
-        d3.select("#instagram_pics").style("display", "block");
-        $("#instagram_plc0").show();
-        $("#instagram_plc").hide();
-        d3.selectAll(".ins_thumb").remove();
-    }else{
-        d3.select("#instagram_pics").style("display", "none");
-    }
+    // if(selectedCharts.indexOf("instagram_pics")>-1){
+    //     d3.select("#instagram_pics").style("display", "block");
+    //     $("#instagram_plc0").show();
+    //     $("#instagram_plc").hide();
+    //     d3.selectAll(".ins_thumb").remove();
+    // }else{
+    //     d3.select("#instagram_pics").style("display", "none");
+    // }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
