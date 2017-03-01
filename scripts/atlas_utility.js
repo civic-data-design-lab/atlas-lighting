@@ -6,10 +6,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 function updateAndDraw(data){
-    // window.filtered = true;
-    // window.ndx.remove();
-    // window.ndx.add(data);
-    // dc.redrawAll();
+    window.filtered = true;
+    window.ndx.remove();
+    window.ndx.add(data);
+    dc.redrawAll();
 }
 
 function updateNDX(data){
