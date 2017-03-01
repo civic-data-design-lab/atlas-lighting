@@ -640,7 +640,7 @@ function charts(data, selectedCharts) {
                 .text('PERCENTAGE OF OPEN BUSINESSES').style("fill", "white").style("font-family", "Dosis").style("font-weight", "300")
                 .style("font-size", "8px")
 
-            updateOBI(6,18);
+            // updateOBI(6,18);
         }) 
         .yAxis().ticks(2);
 
@@ -794,7 +794,10 @@ function charts(data, selectedCharts) {
             }
             var median = d3.median(window.newData, function(el){return parseInt(el.averlight)} );
             var correspond = thisQuantile(median, extent, quants.first, quants.second);
-            bindText(correspond, median, "#light_digits","#light_digits_o");
+            if (selectedCharts.indexOf("business_opening_percent") === -1) {
+                bindText(correspond, median, "#light_digits","#light_digits_o");
+            }
+
             
         })
         .x(d3.scale.linear().domain([0, maxLight]))
@@ -1424,7 +1427,7 @@ var filterCells = function(data){
         var filteredData = data.filter(function(el){
             if (el.OBIaverage!=0){
                 d3.select("#c" + el.cell_id).style("display", "block");
-                return el;
+                // return el;
             } else {
                 d3.select("#c" + el.cell_id).style("display", "none");
             }
