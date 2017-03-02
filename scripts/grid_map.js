@@ -121,7 +121,6 @@ var myinit = function () {
             messagingSenderId: "784412993307"
         };
     } else {
-        console.log("I'm here");
         var config = {
             apiKey: "AIzaSyAcFyiE8y8GoHmwJlOIGqqrNISo_38Vkgs",
             authDomain:"atlas-of-lighting-2645f.firebaseapp.com",
@@ -411,7 +410,8 @@ function initCanvas(data) {
 
 window.populationChart = dc.barChart("#population")
 window.incomeChart = dc.barChart("#income")
-window.busDivChart = dc.bubbleChart("#business_diversity")
+//window.busDivChart = dc.bubbleChart("#business_diversity")
+window.busDivChart2 = dc.barChart("#business_diversity")
 
 window.devIntChart = dc.barChart("#development_intensity")
 window.ligAveChart = dc.barChart("#light_average")
@@ -812,17 +812,14 @@ function charts(data, selectedCharts) {
 
     var busDivGroup = busDivDimension.group();
 
-    window.busDivChart.width(chartWidthBusDiv).height(chartHeightBusDiv*2)
-        .group(busDivGroup).dimension(busDivDimension)
+    window.busDivChart2.width(chartWidth).height(chartHeight)
+        .dimension(busDivDimension).group(busDivGroup)
+        .margins(chartMargins)
+        .elasticY(true)
         .ordinalColors(["#aaaaaa"])
-        .margins({top: 0, left: 50, right: 10, bottom: 20})
-        .x(d3.scale.linear().domain([0.5, 4.5]))
-        .y(d3.scale.linear().domain([0, 1]))
-        // .r(d3.scale.linear().domain([0, window.count*5]))
-        .colors(["#808080"])
-        //.elasticRadius([true])
+        .gap(5)
+        // .centerBar(true)
         .on('renderlet', function(chart){
-            // window.newData = busDivDimension.top(Infinity);
             var extent = d3.extent(data, function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0});
             var sorted = data.map(function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0}).sort(function(a, b){return a - b});
             var quants = quantileCalc(extent, sorted, chartWidth);
@@ -831,18 +828,14 @@ function charts(data, selectedCharts) {
             var correspond = thisQuantile(median, extent, quants.first, quants.second);
             bindText(correspond, median, "#busDiv_digits","#busDiv_digits_o");
         })
-        .keyAccessor(function (p) {
-            return p.key;
+        .on('postRender', function(chart){
+            //drawLabels(chart, "# OF LIKES", "# OF CELLS");
+            //var text = "CELLS THAT HAS LESS THAN 100 LIKES HAS NOT BEEN SELECTED"
+            //bindSmallText2(text, "#insta_explain");
+            // chart.selectAll("rect.bar").on("click", chart.onClick);
         })
-        .valueAccessor(function (p) {
-            return 0.5;
-        })
-        .radiusValueAccessor(function (p) {
-            return p.value/window.count*chartHeightBusDiv*4/5;
-        })
-        .label(function (p) {
-            return p.value
-        })
+        .x(d3.scale.ordinal().domain([1, 2, 3, 4]))
+        .xUnits(dc.units.ordinal)
         .xAxis().tickFormat(function(d, i){
             switch(i) {
             case 0:
@@ -856,9 +849,11 @@ function charts(data, selectedCharts) {
             default:
                 return ""
             }
-        })
-    window.busDivChart.xAxis().ticks(4);        
-    window.busDivChart.yAxis().ticks(0); 
+        });
+        
+
+    window.busDivChart2.yAxis().ticks(2);
+
 
     /* Population Chart
      * We are dividing the distribution into three quantiles: low, medium and high 

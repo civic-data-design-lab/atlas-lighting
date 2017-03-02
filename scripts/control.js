@@ -240,8 +240,16 @@ function initControl() {
         $("#"+myid).hide();
         $("#d_"+myid).show();
 
-        if (myid == "business_types" || myid == "instagram_topics" ) {
-            window.tagCharts.splice(window.tagCharts.indexOf(myid),1)
+        if (myid === "business_types" || myid === "instagram_topics" ) {
+            window.tagCharts.splice(window.tagCharts.indexOf(myid),1);
+            if (myid === "business_types"){
+                busTypesChart.tagRelease("business_types");
+            }
+
+            if (myid ==="instagram_topics"){
+                instaTopicsChart.tagRelease("instagram_topics");
+            }
+
         }
 
         var myindex = selectedCharts.indexOf(myid);
@@ -263,7 +271,7 @@ function initControl() {
 
         if ($(this).attr("class").indexOf("selected") > -1) {
             $(".tag_item").removeClass("selected");
-            $(".data_item").show();
+            $(".data_item:not(#d_business_opening_average)").show();
             updateChart(selectedCharts);
         } else {
             $(".tag_item").removeClass("selected");

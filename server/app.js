@@ -70,7 +70,7 @@
       auth = new Buffer(req.headers.authorization.substring(6), 'base64').toString().split(':');
     }
     //if (!auth || auth[0] !== 'atlas' || auth[1] !== 'Atlas0fL1ght1ng') {
-    if (!auth || auth[0] !== 'atlas' || auth[1] !== 'AtlasWorkshop1') {
+    if (!auth || auth[0] !== 'philips-guest' || auth[1] !== 'm!t_CdDL') {
       res.statusCode = 401;
       res.setHeader('WWW-Authenticate', 'Basic realm="Access to atlas is restricted in beta version"');
       res.end('Unauthorized');
