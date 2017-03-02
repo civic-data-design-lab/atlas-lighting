@@ -375,7 +375,7 @@ canvas {
     padding: 10px;
     background-color: rgba(0,0,0,.7);
     width: 410px;    
-    height: 100%;   /*100%;*/  
+    height: calc(100% - 40px);
     position: absolute;
     top: 40px;
     right: 0px;
