@@ -78,6 +78,7 @@ a:hover{
     font-size:15px;
     margin:10px;
     margin-top:15px;
+    width: 380px;
 }
 
 .mapboxgl-popup {
@@ -1451,7 +1452,7 @@ button:focus {outline:0;}
     top: 30px;
 }
 
-/* Report card --------------------*/
+/* # card --------------------*/
 .right_clickbar {
     position: fixed;
     width: 20px;
@@ -1493,6 +1494,7 @@ button:focus {outline:0;}
     fill: rgba(255,255,255,.3);
     font-size: 11px;    
     line-height: 1;
+    width: 400px;
 }
 
 .report-text-value {
