@@ -73,12 +73,18 @@ a:hover{
     font-family: 'Dosis', sans-serif;
     letter-spacing: 2px;
 }
-.chart-title{
+.chart-title {
     border-bottom:1px solid #aaa;
     font-size:15px;
     margin:10px;
     margin-top:15px;
+    width:380px;
 }
+
+.chart-title-collapsible:hover{
+    font-size:14px;
+}
+
 
 .mapboxgl-popup {
         max-width: 400px;
@@ -649,6 +655,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 .click_data {
     background-color: rgba(150,150,150,0.4);
     border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
     top: 40px;
 }
 
@@ -783,6 +790,9 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     position: relative;
 }
 
+#light_average > svg {
+    margin-left: 105px;
+}
 
 .digits {
     color: rgb(32, 192, 226);
@@ -1074,7 +1084,26 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     position: absolute;
     -webkit-transform: translateY(6px);
             transform: translateY(6px);
-    left: 10px;
+    left: 10px;    
+}
+
+#selected_time_AM {
+    font-size: 12px;
+    position: absolute;
+    left: 20px;
+    top: 245px;
+    color: rgb(32, 192, 226);
+    font-family: Dosis;
+    font-weight: 300;    
+}
+#selected_time_PM {
+    font-size: 12px;
+    position: absolute;
+    left: 56px;
+    top: 245px;
+    color: rgb(32, 192, 226);
+    font-family: Dosis;
+    font-weight: 300;    
 }
 
 .toolip_img {
@@ -1430,7 +1459,7 @@ button:focus {outline:0;}
     top: 30px;
 }
 
-/* Report card --------------------*/
+/* # card --------------------*/
 .right_clickbar {
     position: fixed;
     width: 20px;
@@ -1472,6 +1501,7 @@ button:focus {outline:0;}
     fill: rgba(255,255,255,.3);
     font-size: 11px;    
     line-height: 1;
+    width: 400px;
 }
 
 .report-text-value {

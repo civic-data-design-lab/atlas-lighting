@@ -87,7 +87,7 @@ var bindText = function(quanText, median, selection_1, selection_2){
     $(selection_1).attr("sv_val", quanText);
     var newText =`${kFormatter(median)}`;
     $(selection_2).html(newText);
-    $(selection_2).attr("sv_val", newText);
+    $(selection_2).attr("sv_val", newText);       
 }
 
 
