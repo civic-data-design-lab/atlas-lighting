@@ -25,8 +25,6 @@ window.newData;
 window.topics;
 window.state;
 window.typesData = [];
-window.cellTypes = [];
-window.cellTopics = [];
 window.topicsData = [];
 window.filtered = false;
 
