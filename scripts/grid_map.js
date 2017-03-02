@@ -778,7 +778,7 @@ function charts(data, selectedCharts) {
             //console.log(window.newData);
 
             busTypesChart.bindData(window.newData);
-            instaTopicsChart.bindData(window.newDatbrusha);
+            instaTopicsChart.bindData(window.newData);
 
             if (!window.filtered){
                 //console.log("filterCells")
@@ -792,13 +792,19 @@ function charts(data, selectedCharts) {
                 addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6);
                 appendableLig = false;
             }
-            var median = d3.median(window.newData, function(el){return parseInt(el.averlight)} );
-            var correspond = thisQuantile(median, extent, quants.first, quants.second);
-            if (selectedCharts.indexOf("business_opening_percent") === -1) {
-                bindText(correspond, median, "#light_digits","#light_digits_o");
-            }
 
-            
+            chart.select('.brush').on("click", function() {
+                var median = d3.median(window.newData, function(el){return parseInt(el.averlight)})
+                var correspond = thisQuantile(median, extent, quants.first, quants.second);
+                bindText(correspond, median, "#light_digits","#light_digits_o");
+            });
+
+            $('#time_selector').on("click", function(){
+                var currentLight = d3.select("#light_digits_o").attr("sv_val");
+                var median = d3.median(window.newData, function(){return currentLight})
+                var correspond = thisQuantile(median, extent, quants.first, quants.second);
+                bindText(correspond, median, "#light_digits","#light_digits_o");              
+            })
         })
         .x(d3.scale.linear().domain([0, maxLight]))
         .on('postRender', function(chart) {
