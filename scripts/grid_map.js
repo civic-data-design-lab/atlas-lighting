@@ -470,7 +470,7 @@ function charts(data, selectedCharts) {
     var chartWidth = 320; //304 //320
     var chartHeight = 140; //52
 
-    var actChrtWidth = 264;
+    var chartWidth = 264;
 
     var chartWidthBusDiv = 320;
     var chartHeightBusDiv = 52;
@@ -698,7 +698,7 @@ function charts(data, selectedCharts) {
             window.newData = placesDimension.top(Infinity);
             var extent = d3.extent(data, function (el) { return el.places>100 ? 100 : el.places});
             var sorted = data.map(function (el) { return el.places>100 ? 100 : el.places}).sort(function(a, b){return a - b});
-            var quants = quantileCalc(extent, sorted, actChrtWidth);
+            var quants = quantileCalc(extent, sorted, chartWidth);
             if (appendableP){
                 addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6);
                 appendableP = false;
@@ -728,7 +728,7 @@ function charts(data, selectedCharts) {
         .margins(chartMargins)
         .on('renderlet', function(chart){
             window.newData = devIntDimension.top(Infinity);
-            var quants = quantileCalcDev(actChrtWidth);
+            var quants = quantileCalcDev(chartWidth);
             if (appendableDev){
                 addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6); //5 25 for devInt
                 appendableDev = false;
@@ -763,42 +763,39 @@ function charts(data, selectedCharts) {
         // Draw range lines
         .on('renderlet', function(chart){
             window.newData = ligAveDimension.top(Infinity);
-            var extent = d3.extent(data, function(el){return parseInt(el.averlight)});
-            var sorted = data.map(function(el){return parseInt(el.averlight)}).sort(function(a, b){return a - b});
-            var quants = quantileCalc(extent, sorted, actChrtWidth);
-
-            //d3.select("#map .datalayer").remove()
-            //var canvas = __canvas
+            window.extent = d3.extent(data, function(el){return parseInt(el.averlight)});
+            window.sorted = data.map(function(el){return parseInt(el.averlight)}).sort(function(a, b){return a - b});
+            window.quants = quantileCalc(window.extent, window.sorted, chartWidth);
 
             d3.selectAll(".cellgrids").style("display", "none");
-            // var mytime = $("#selected_time").text().split(" - ");
-            // var start = mytime[0];
-            // var end = mytime[1];
-
-            //console.log(window.newData);
 
             busTypesChart.bindData(window.newData);
-            instaTopicsChart.bindData(window.newDatbrusha);
+            instaTopicsChart.bindData(window.newData);
 
+            if (appendableLig){
+                addQuantiles(chart, window.quants.firstX, window.quants.secondX, chartHeight, chartMargins, 6);
+                appendableLig = false;
+            }
+            
+            chart.on("filtered", function(chart) {
+                window.median = d3.median(window.newData, function(el){return parseInt(el.averlight)})
+                window.correspond = thisQuantile(window.median, window.extent, window.quants.first, window.quants.second);
+                bindText(window.correspond, window.median, "#light_digits","#light_digits_o");
+            });
+            
+            if (selectedCharts.indexOf("business_opening_percent") === -1) {
+                window.median = d3.median(window.newData, function(el){return parseInt(el.averlight)})
+                window.correspond = thisQuantile(window.median, window.extent, window.quants.first, window.quants.second);
+                bindText(window.correspond, window.median, "#light_digits","#light_digits_o");
+            }
+                   
             if (!window.filtered){
                 //console.log("filterCells")
                 filterCells(window.newData);
             } else {
                 //console.log("displayCells")
                 displayCells(window.newData);
-            }
-
-            if (appendableLig){
-                addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6);
-                appendableLig = false;
-            }
-            var median = d3.median(window.newData, function(el){return parseInt(el.averlight)} );
-            var correspond = thisQuantile(median, extent, quants.first, quants.second);
-            if (selectedCharts.indexOf("business_opening_percent") === -1) {
-                bindText(correspond, median, "#light_digits","#light_digits_o");
-            }
-
-            
+            }  
         })
         .x(d3.scale.linear().domain([0, maxLight]))
         .on('postRender', function(chart) {
@@ -825,7 +822,7 @@ function charts(data, selectedCharts) {
         .on('renderlet', function(chart){
             var extent = d3.extent(data, function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0});
             var sorted = data.map(function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0}).sort(function(a, b){return a - b});
-            var quants = quantileCalc(extent, sorted, actChrtWidth);
+            var quants = quantileCalc(extent, sorted, chartWidth);
 
             var median = d3.median(window.newData, function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0});
             var correspond = thisQuantile(median, extent, quants.first, quants.second);
@@ -880,7 +877,7 @@ function charts(data, selectedCharts) {
             window.newData = popDimension.top(Infinity);
             var extent = d3.extent(data, function(el){return parseInt(el.population)});
             var sorted = data.map(function(el){return parseInt(el.population)}).sort(function(a, b){return a - b});
-            var quants = quantileCalc(extent, sorted, actChrtWidth);
+            var quants = quantileCalc(extent, sorted, chartWidth);
 
             if (appendablePop){
                 addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6);
@@ -923,7 +920,7 @@ function charts(data, selectedCharts) {
 
             var extent = d3.extent(data, function(el){return parseInt(parseFloat(el.income) / 1000) * 1000});
             var sorted = data.map(function(el){return parseInt(parseFloat(el.income) / 1000) * 1000}).sort(function(a, b){return a - b});
-            var quants = quantileCalc(extent, sorted, actChrtWidth);
+            var quants = quantileCalc(extent, sorted, chartWidth);
 
             if (appendableInc){
                 addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6); // 5, 5
@@ -1149,31 +1146,6 @@ function updateZoomedChart(selectedCharts) {
             d3.select("#" + d).style("display", "block");
     })
 
-    //d3.select("#street_view").style("opacity", "1");
-    // d3.select("#street_view").style("position", "relative");
-    // d3.select("#street_view").style("display", "none");
-
-    // if(selectedCharts.indexOf("street_view")>-1){
-    //     d3.select("#street_view").style("display", "block");
-    //     d3.select("#streetview_window").style("opacity", "1");
-        // d3.select("#street_view_plc0").style("display", "block");
-    //     d3.select("#street_view_plc").style("display", "none");
-
-    // }else{
-    //     d3.select("#street_view").style("display", "none");
-    // }
-    // //d3.select("#streetview_window").style("opacity", "1");
-    // d3.select("#streetview_window").style("position", "relative");
-    // d3.select("#streetview_window").style("display", "none");
-
-    // if(selectedCharts.indexOf("instagram_pics")>-1){
-    //     d3.select("#instagram_pics").style("display", "block");
-    //     $("#instagram_plc0").show();
-    //     $("#instagram_plc").hide();
-    //     d3.selectAll(".ins_thumb").remove();
-    // }else{
-    //     d3.select("#instagram_pics").style("display", "none");
-    // }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1204,7 +1176,7 @@ function updateChart(selectedCharts) {
         $('#business_opening_average').find('#selected_time').hide();
         //timeSelectorReset(); //reset the time selector
         filterCells(window.newData);
-        $('#timeSelectorReset').css('opacity', 0); // hide the specific button
+        // $('#timeSelectorReset').css('opacity', 0); // hide the specific button
     } 
     updateZoomedChart(selectedCharts);
   
@@ -1302,19 +1274,20 @@ function timeSelector(chartWidth,chartHeight) {
 }
 
 function filterhour(data, rdstart, rdend){
-    $('#timeSelectorReset').css('opacity', 1);
+    // $('#timeSelectorReset').css('opacity', 1);
     var ave_lit = 0;
     var count_ = 0;
+
+    //update the shown time
     $('#business_opening_percent').find('#selected_time').text(rdstart+" - "+rdend);
+
+    //update selected_time_AM
+    rdstart < 12 ? $('#selected_time_AM').text('AM') : $('#selected_time_AM').text('PM'); 
+    //update selected_time_PM 
+    rdend > 12 ? $('#selected_time_PM').text('PM') : $('#selected_time_PM').text('AM'); 
+
+    //update the map
     data.forEach(function (d) {
-        // if (rdstart == rdend || (rdstart == 0 && rdend == 24)){
-        //     d3.select("#c" + d.cell_id).style("display", "block");
-        //     ave_lit += d.averlight;
-        //     count_ ++;
-        // }
-        // else {
-        //     d3.select("#c" + d.cell_id).style("display", "none");
-        // }
         if (d.OBIaverage!=0){
             d3.select("#c" + d.cell_id).style("display", "block");
             ave_lit += d.averlight;
@@ -1328,8 +1301,21 @@ function filterhour(data, rdstart, rdend){
     if (count_!==0) {
         ave_lit /= count_;
         ave_lit = Math.round(ave_lit * 100) / 100; 
+        //update the light average chart digits
         d3.select("#light_digits_o").text(ave_lit);
         d3.select("#light_digits_o").attr("sv_val", ave_lit);
+        
+        //update the light average chart word
+        var currentLight = d3.select("#light_digits_o").attr("sv_val");
+        window.median = d3.median(window.newData, function(){return currentLight})
+        window.correspond = thisQuantile(window.median, window.extent, window.quants.first, window.quants.second);
+        if (window.correspond === "MEDIUM"){
+            $("#light_digits").css("font-size", "14px");
+        } else {
+            $("#light_digits").css("font-size", "24px");
+        }
+        $("#light_digits").html(window.correspond);
+        $("#light_digits").attr("sv_val", window.correspond);
     }
 
 }
