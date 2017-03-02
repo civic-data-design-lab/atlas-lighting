@@ -263,7 +263,7 @@ function initControl() {
 
         if ($(this).attr("class").indexOf("selected") > -1) {
             $(".tag_item").removeClass("selected");
-            $(".data_item").show();
+            $(".data_item:not(#d_business_opening_average)").show();
             updateChart(selectedCharts);
         } else {
             $(".tag_item").removeClass("selected");
