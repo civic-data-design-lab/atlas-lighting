@@ -760,11 +760,12 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     direction:ltr;
 }
 
+
 .extra_data {
     width:410px;
     height:170px;
     margin-bottom:10px; 
-}   
+} 
 
 
 .svg_overlay {
@@ -1032,7 +1033,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     /*opacity: 0;*/
     display: block;
     position: relative;
-    background-color: rgba(0,0,0,0) !important;
+    /*background-color: rgba(0,0,0,0) !important;*/
 }
 
 #instagram_pics {
@@ -1043,7 +1044,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 
 #streetview_window {
     height: 160px;
-    width: 400px;    
+    width: 400px;
     position: absolute;
 }
 
