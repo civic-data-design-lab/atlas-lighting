@@ -470,7 +470,7 @@ function charts(data, selectedCharts) {
     var chartWidth = 320; //304 //320
     var chartHeight = 140; //52
 
-    var actChrtWidth = 264;
+    var chartWidth = 264;
 
     var chartWidthBusDiv = 320;
     var chartHeightBusDiv = 52;
@@ -698,7 +698,7 @@ function charts(data, selectedCharts) {
             window.newData = placesDimension.top(Infinity);
             var extent = d3.extent(data, function (el) { return el.places>100 ? 100 : el.places});
             var sorted = data.map(function (el) { return el.places>100 ? 100 : el.places}).sort(function(a, b){return a - b});
-            var quants = quantileCalc(extent, sorted, actChrtWidth);
+            var quants = quantileCalc(extent, sorted, chartWidth);
             if (appendableP){
                 addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6);
                 appendableP = false;
@@ -728,7 +728,7 @@ function charts(data, selectedCharts) {
         .margins(chartMargins)
         .on('renderlet', function(chart){
             window.newData = devIntDimension.top(Infinity);
-            var quants = quantileCalcDev(actChrtWidth);
+            var quants = quantileCalcDev(chartWidth);
             if (appendableDev){
                 addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6); //5 25 for devInt
                 appendableDev = false;
@@ -763,48 +763,39 @@ function charts(data, selectedCharts) {
         // Draw range lines
         .on('renderlet', function(chart){
             window.newData = ligAveDimension.top(Infinity);
-            var extent = d3.extent(data, function(el){return parseInt(el.averlight)});
-            var sorted = data.map(function(el){return parseInt(el.averlight)}).sort(function(a, b){return a - b});
-            var quants = quantileCalc(extent, sorted, actChrtWidth);
-
-            //d3.select("#map .datalayer").remove()
-            //var canvas = __canvas
+            window.extent = d3.extent(data, function(el){return parseInt(el.averlight)});
+            window.sorted = data.map(function(el){return parseInt(el.averlight)}).sort(function(a, b){return a - b});
+            window.quants = quantileCalc(window.extent, window.sorted, chartWidth);
 
             d3.selectAll(".cellgrids").style("display", "none");
-            // var mytime = $("#selected_time").text().split(" - ");
-            // var start = mytime[0];
-            // var end = mytime[1];
-
-            //console.log(window.newData);
 
             busTypesChart.bindData(window.newData);
             instaTopicsChart.bindData(window.newData);
 
+            if (appendableLig){
+                addQuantiles(chart, window.quants.firstX, window.quants.secondX, chartHeight, chartMargins, 6);
+                appendableLig = false;
+            }
+            
+            chart.on("filtered", function(chart) {
+                window.median = d3.median(window.newData, function(el){return parseInt(el.averlight)})
+                window.correspond = thisQuantile(window.median, window.extent, window.quants.first, window.quants.second);
+                bindText(window.correspond, window.median, "#light_digits","#light_digits_o");
+            });
+            
+            if (selectedCharts.indexOf("business_opening_percent") === -1) {
+                window.median = d3.median(window.newData, function(el){return parseInt(el.averlight)})
+                window.correspond = thisQuantile(window.median, window.extent, window.quants.first, window.quants.second);
+                bindText(window.correspond, window.median, "#light_digits","#light_digits_o");
+            }
+                   
             if (!window.filtered){
                 //console.log("filterCells")
                 filterCells(window.newData);
             } else {
                 //console.log("displayCells")
                 displayCells(window.newData);
-            }
-
-            if (appendableLig){
-                addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6);
-                appendableLig = false;
-            }
-
-            chart.select('.brush').on("click", function() {
-                var median = d3.median(window.newData, function(el){return parseInt(el.averlight)})
-                var correspond = thisQuantile(median, extent, quants.first, quants.second);
-                bindText(correspond, median, "#light_digits","#light_digits_o");
-            });
-
-            $('#time_selector').on("click", function(){
-                var currentLight = d3.select("#light_digits_o").attr("sv_val");
-                var median = d3.median(window.newData, function(){return currentLight})
-                var correspond = thisQuantile(median, extent, quants.first, quants.second);
-                bindText(correspond, median, "#light_digits","#light_digits_o");              
-            })
+            }  
         })
         .x(d3.scale.linear().domain([0, maxLight]))
         .on('postRender', function(chart) {
@@ -834,7 +825,7 @@ function charts(data, selectedCharts) {
             // window.newData = busDivDimension.top(Infinity);
             var extent = d3.extent(data, function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0});
             var sorted = data.map(function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0}).sort(function(a, b){return a - b});
-            var quants = quantileCalc(extent, sorted, actChrtWidth);
+            var quants = quantileCalc(extent, sorted, chartWidth);
 
             var median = d3.median(window.newData, function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0});
             var correspond = thisQuantile(median, extent, quants.first, quants.second);
@@ -891,7 +882,7 @@ function charts(data, selectedCharts) {
             window.newData = popDimension.top(Infinity);
             var extent = d3.extent(data, function(el){return parseInt(el.population)});
             var sorted = data.map(function(el){return parseInt(el.population)}).sort(function(a, b){return a - b});
-            var quants = quantileCalc(extent, sorted, actChrtWidth);
+            var quants = quantileCalc(extent, sorted, chartWidth);
 
             if (appendablePop){
                 addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6);
@@ -934,7 +925,7 @@ function charts(data, selectedCharts) {
 
             var extent = d3.extent(data, function(el){return parseInt(parseFloat(el.income) / 1000) * 1000});
             var sorted = data.map(function(el){return parseInt(parseFloat(el.income) / 1000) * 1000}).sort(function(a, b){return a - b});
-            var quants = quantileCalc(extent, sorted, actChrtWidth);
+            var quants = quantileCalc(extent, sorted, chartWidth);
 
             if (appendableInc){
                 addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6); // 5, 5
@@ -1160,31 +1151,6 @@ function updateZoomedChart(selectedCharts) {
             d3.select("#" + d).style("display", "block");
     })
 
-    //d3.select("#street_view").style("opacity", "1");
-    // d3.select("#street_view").style("position", "relative");
-    // d3.select("#street_view").style("display", "none");
-
-    // if(selectedCharts.indexOf("street_view")>-1){
-    //     d3.select("#street_view").style("display", "block");
-    //     d3.select("#streetview_window").style("opacity", "1");
-        // d3.select("#street_view_plc0").style("display", "block");
-    //     d3.select("#street_view_plc").style("display", "none");
-
-    // }else{
-    //     d3.select("#street_view").style("display", "none");
-    // }
-    // //d3.select("#streetview_window").style("opacity", "1");
-    // d3.select("#streetview_window").style("position", "relative");
-    // d3.select("#streetview_window").style("display", "none");
-
-    // if(selectedCharts.indexOf("instagram_pics")>-1){
-    //     d3.select("#instagram_pics").style("display", "block");
-    //     $("#instagram_plc0").show();
-    //     $("#instagram_plc").hide();
-    //     d3.selectAll(".ins_thumb").remove();
-    // }else{
-    //     d3.select("#instagram_pics").style("display", "none");
-    // }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1318,14 +1284,6 @@ function filterhour(data, rdstart, rdend){
     var count_ = 0;
     $('#business_opening_percent').find('#selected_time').text(rdstart+" - "+rdend);
     data.forEach(function (d) {
-        // if (rdstart == rdend || (rdstart == 0 && rdend == 24)){
-        //     d3.select("#c" + d.cell_id).style("display", "block");
-        //     ave_lit += d.averlight;
-        //     count_ ++;
-        // }
-        // else {
-        //     d3.select("#c" + d.cell_id).style("display", "none");
-        // }
         if (d.OBIaverage!=0){
             d3.select("#c" + d.cell_id).style("display", "block");
             ave_lit += d.averlight;
@@ -1341,6 +1299,17 @@ function filterhour(data, rdstart, rdend){
         ave_lit = Math.round(ave_lit * 100) / 100; 
         d3.select("#light_digits_o").text(ave_lit);
         d3.select("#light_digits_o").attr("sv_val", ave_lit);
+        
+        var currentLight = d3.select("#light_digits_o").attr("sv_val");
+        window.median = d3.median(window.newData, function(){return currentLight})
+        window.correspond = thisQuantile(window.median, window.extent, window.quants.first, window.quants.second);
+        if (window.correspond === "MEDIUM"){
+            $("#light_digits").css("font-size", "14px");
+        } else {
+            $("#light_digits").css("font-size", "24px");
+        }
+        $("#light_digits").html(window.correspond);
+        $("#light_digits").attr("sv_val", window.correspond);
     }
 
 }
