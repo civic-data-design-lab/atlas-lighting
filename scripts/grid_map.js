@@ -904,7 +904,7 @@ function charts(data, selectedCharts) {
     window.incomeDimension = window.ndx.dimension(function (d) {
         return parseInt(parseFloat(d.income) / 1000) * 1000;
     });
-    var iGroup = incomeDimension.group();
+    var iGroup = incomeDimension.group().reduceSum(function(d){return d.income>0;});
 
     var appendableInc = true;
     incomeChart.width(chartWidth).height(chartHeight).dimension(incomeDimension).group(iGroup)
@@ -915,7 +915,6 @@ function charts(data, selectedCharts) {
         .elasticY(true)
         .margins(chartMargins)
         .on('renderlet', function (chart) {
-            
             window.newData = incomeDimension.top(Infinity)
 
             var extent = d3.extent(data, function(el){return parseInt(parseFloat(el.income) / 1000) * 1000});
@@ -1084,6 +1083,11 @@ function cellSelect(d) {
     $('#report-text-diversity').text(d.b_diversity);
     $('#report-text-price').text(d.b_price);
     $('#report-text-density').text(d.places);
+
+    //order the window.typesData object
+    window.typesData.sort(function(a, b) {
+        return parseInt(b.count) - parseInt(a.count);
+    });
     $('#report-text-types').text(window.typesData[0].category + " ,  " + window.typesData[1].category + " ,  " + window.typesData[2].category);
     $('#report-text-OBIpercent').text(d.OBIpercentage);
     $('#report-text-OBIaverage').text(d.OBIaverage);
