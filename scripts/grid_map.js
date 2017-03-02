@@ -1181,7 +1181,7 @@ function updateChart(selectedCharts) {
         $('#business_opening_average').find('#selected_time').hide();
         //timeSelectorReset(); //reset the time selector
         filterCells(window.newData);
-        $('#timeSelectorReset').css('opacity', 0); // hide the specific button
+        // $('#timeSelectorReset').css('opacity', 0); // hide the specific button
     } 
     updateZoomedChart(selectedCharts);
   
@@ -1279,10 +1279,19 @@ function timeSelector(chartWidth,chartHeight) {
 }
 
 function filterhour(data, rdstart, rdend){
-    $('#timeSelectorReset').css('opacity', 1);
+    // $('#timeSelectorReset').css('opacity', 1);
     var ave_lit = 0;
     var count_ = 0;
+
+    //update the shown time
     $('#business_opening_percent').find('#selected_time').text(rdstart+" - "+rdend);
+
+    //update selected_time_AM
+    rdstart < 12 ? $('#selected_time_AM').text('AM') : $('#selected_time_AM').text('PM'); 
+    //update selected_time_PM 
+    rdend > 12 ? $('#selected_time_PM').text('PM') : $('#selected_time_PM').text('AM'); 
+
+    //update the map
     data.forEach(function (d) {
         if (d.OBIaverage!=0){
             d3.select("#c" + d.cell_id).style("display", "block");
@@ -1297,9 +1306,11 @@ function filterhour(data, rdstart, rdend){
     if (count_!==0) {
         ave_lit /= count_;
         ave_lit = Math.round(ave_lit * 100) / 100; 
+        //update the light average chart digits
         d3.select("#light_digits_o").text(ave_lit);
         d3.select("#light_digits_o").attr("sv_val", ave_lit);
         
+        //update the light average chart word
         var currentLight = d3.select("#light_digits_o").attr("sv_val");
         window.median = d3.median(window.newData, function(){return currentLight})
         window.correspond = thisQuantile(window.median, window.extent, window.quants.first, window.quants.second);
