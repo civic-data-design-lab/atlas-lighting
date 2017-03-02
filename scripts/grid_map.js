@@ -25,6 +25,8 @@ window.newData;
 window.topics;
 window.state;
 window.typesData = [];
+window.cellTypes = [];
+window.cellTopics = [];
 window.topicsData = [];
 window.filtered = false;
 
@@ -1022,11 +1024,9 @@ function cellSelect(d) {
                 for (var k in insdata) {
                     (function(k){
                         if (count < limit) {
-                            console.log(k);
                             //d3.select("#instagram_pics").append("img").attr("src", insdata[k]["url"]).attr("class", "ins_thumb")
                             if (currentCity_o === "LA"){
                                 var instaAccessor = insdata[k]["url"];
-                                console.log(instaAccessor);
                             } else {
                                 var instaAccessor = insdata[k];
                             }
@@ -1065,9 +1065,11 @@ function cellSelect(d) {
 
     busTypesChart.assignSelect(true);
     busTypesChart.updateElements(d);
+    var topBusTypes = busTypesChart.topTags(d);
 
     instaTopicsChart.assignSelect(true);
     instaTopicsChart.updateElements(d);
+    var topInstaTopics = instaTopicsChart.topTags(d);
 
 
     //switch to the cell view
@@ -1085,7 +1087,7 @@ function cellSelect(d) {
     $('#report-text-diversity').text(d.b_diversity);
     $('#report-text-price').text(d.b_price);
     $('#report-text-density').text(d.places);
-    $('#report-text-types').text(window.typesData[0].category + " ,  " + window.typesData[1].category + " ,  " + window.typesData[2].category);
+    printTags(topBusTypes, '#report-text-types');
     $('#report-text-OBIpercent').text(d.OBIpercentage);
     $('#report-text-OBIaverage').text(d.OBIaverage);
     $('#report-text-dev').text(d.dev_intensity);

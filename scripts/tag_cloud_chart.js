@@ -149,9 +149,6 @@ var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#b
             var actualPosX = posX % width;
             var row = Math.floor(posX/width);
 
-            // Solve the remainder problem here for the first row, there are times when it looks screwed.
-            // There are some cases that row is calculated beforehand and the case switches to the corresponding row,
-            // Without waiting for the earlier rows. There must be a way to solve this.
             if(row == 0){
                 firstRow.push(el);
                 if (firstRow.length > 1){
@@ -297,6 +294,18 @@ var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#b
 
     that.bindOriginalData = function(data){
         originalData = data;
+    }
+
+    /* Select top 3 types/topics for each cell.
+     */
+
+    that.topTags = function(d){
+        var sums = formatObject(d);
+        var sortedSums = sums.sort(function(a, b) {return b.count - a.count});
+        sortedSums = sortedSums.filter(function(el){
+            if (el.category !== "other") { return el; }
+        });
+        return sortedSums.length > 2 ? sortedSums.slice(0,3).map(function(el){return el.category}) : sortedSums.map(function(el){return el.category});
     }
 
     /* Deselect selected tags
