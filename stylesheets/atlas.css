@@ -650,6 +650,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 .click_data {
     background-color: rgba(150,150,150,0.4);
     border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
     top: 40px;
 }
 
