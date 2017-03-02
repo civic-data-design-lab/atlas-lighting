@@ -299,6 +299,23 @@ var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#b
         originalData = data;
     }
 
+    /* Deselect selected tags
+     * Release filter and bind Data.
+     * @method tagRelease
+     */
+
+     that.tagRelease = function(version){
+        selectedTypes = [];
+        window.filtered = false;
+        filterCells(originalData);
+        $(`#${version} .types-text`).each(function(){
+            if ($(this).hasClass("active")){
+                $(this).removeClass("active");
+                $(this).css("fill-opacity", "0.5");
+            }
+        })
+     }
+
     /* Update business types widget with new data
      * @method updateElements
      * @param {Array} Data array
@@ -360,7 +377,6 @@ var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#b
                 }
             })
             .on('click', function(){
-                //if (!cellSelected){
                     if (d3.select(this).classed("active")) {
                         d3.select(this).classed("active", false)
                         var category = d3.select(this).text();
@@ -381,10 +397,7 @@ var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#b
                         selectedTypes.push(category);
                         window.filtered = false;
                         filterCells(cellsData);
-                        }
-                //} else {
-                //    console.log("You can filter by business types if you deselect grid cells")
-                //}
+                    }
              });
             
     }

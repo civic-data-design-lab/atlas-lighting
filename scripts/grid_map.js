@@ -857,56 +857,6 @@ function charts(data, selectedCharts) {
 
     window.busDivChart2.yAxis().ticks(2);
 
-    /*
-    window.busDivChart.width(chartWidthBusDiv).height(chartHeightBusDiv*2)
-        .group(busDivGroup).dimension(busDivDimension)
-        .ordinalColors(["#aaaaaa"])
-        .margins({top: 0, left: 50, right: 10, bottom: 20})
-        .x(d3.scale.linear().domain([0.5, 4.5]))
-        .y(d3.scale.linear().domain([0, 1]))
-        // .r(d3.scale.linear().domain([0, window.count*5]))
-        .colors(["#808080"])
-        //.elasticRadius([true])
-        .on('renderlet', function(chart){
-            // window.newData = busDivDimension.top(Infinity);
-            var extent = d3.extent(data, function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0});
-            var sorted = data.map(function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0}).sort(function(a, b){return a - b});
-            var quants = quantileCalc(extent, sorted, actChrtWidth);
-
-            var median = d3.median(window.newData, function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0});
-            var correspond = thisQuantile(median, extent, quants.first, quants.second);
-            bindText(correspond, median, "#busDiv_digits","#busDiv_digits_o");
-        })
-        .keyAccessor(function (p) {
-            return p.key;
-        })
-        .valueAccessor(function (p) {
-            return 0.5;
-        })
-        .radiusValueAccessor(function (p) {
-            return p.value/window.count*chartHeightBusDiv*4/5;
-        })
-        .label(function (p) {
-            return p.value
-        })
-        .xAxis().tickFormat(function(d, i){
-            switch(i) {
-            case 0:
-                return "VERY LOW"
-            case 1:
-                return "LOW"
-            case 2:
-                return "MEDIUM"
-            case 3:
-                return "HIGH"
-            default:
-                return ""
-            }
-        })
-    window.busDivChart.xAxis().ticks(4);        
-    window.busDivChart.yAxis().ticks(0); 
-
-    */
 
     /* Population Chart
      * We are dividing the distribution into three quantiles: low, medium and high 
