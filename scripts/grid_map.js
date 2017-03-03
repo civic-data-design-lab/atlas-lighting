@@ -1084,11 +1084,13 @@ function cellSelect(d) {
     $('#report-text-price').text(d.b_price);
     $('#report-text-density').text(d.places);
 
-    //order the window.typesData object
-    window.typesData.sort(function(a, b) {
+    //order the window.typesData object - make a copy to avoid mutation
+    var typesDataSorted = window.typesData;
+    typesDataSorted.sort(function(a, b) {
         return parseInt(b.count) - parseInt(a.count);
     });
-    $('#report-text-types').text(window.typesData[0].category + " ,  " + window.typesData[1].category + " ,  " + window.typesData[2].category);
+    $('#report-text-types').text(typesDataSorted[0].category + " ,  " + typesDataSorted[1].category + " ,  " + typesDataSorted[2].category);
+
     $('#report-text-OBIpercent').text(d.OBIpercentage);
     $('#report-text-OBIaverage').text(d.OBIaverage);
     $('#report-text-dev').text(d.dev_intensity);
@@ -1096,8 +1098,15 @@ function cellSelect(d) {
     $('#report-text-income').text(d.income);
     $('#report-text-insta-density').text(d.insta_cnt);
     $('#report-text-insta-likes').text(d.insta_like);
-    // $('#report-text-topics').text(window.topicsData[0].category + " ,  " + window.topicsData[1].category + " ,  " + window.topicsData[2].category);
-    $('#report-text-topics').text("coming soon");
+
+    //order the window.typesData object - make a copy to avoid mutation
+    var topicsDataSorted = window.topicsData;
+    console.log(topicsDataSorted)
+    topicsDataSorted.sort(function(a, b) {
+        return parseInt(b.count) - parseInt(a.count);
+    });    
+    $('#report-text-topics').text(topicsDataSorted[0].category + " ,  " + topicsDataSorted[1].category + " ,  " + topicsDataSorted[2].category);
+    // $('#report-text-topics').text("coming soon");
 
     //hide instagram and google street placeholders
     $("#instagram_plc").hide();
