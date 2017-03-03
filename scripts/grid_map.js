@@ -905,7 +905,7 @@ function charts(data, selectedCharts) {
     window.incomeDimension = window.ndx.dimension(function (d) {
         return parseInt(parseFloat(d.income) / 1000) * 1000;
     });
-    var iGroup = incomeDimension.group();
+    var iGroup = incomeDimension.group().reduceSum(function(d){return d.income>0;});
 
     var appendableInc = true;
     incomeChart.width(chartWidth).height(chartHeight).dimension(incomeDimension).group(iGroup)
@@ -916,7 +916,6 @@ function charts(data, selectedCharts) {
         .elasticY(true)
         .margins(chartMargins)
         .on('renderlet', function (chart) {
-            
             window.newData = incomeDimension.top(Infinity)
 
             var extent = d3.extent(data, function(el){return parseInt(parseFloat(el.income) / 1000) * 1000});
@@ -1085,7 +1084,9 @@ function cellSelect(d) {
     $('#report-text-diversity').text(d.b_diversity);
     $('#report-text-price').text(d.b_price);
     $('#report-text-density').text(d.places);
+
     printTags(topBusTypes, '#report-text-types');
+
     $('#report-text-OBIpercent').text(d.OBIpercentage);
     $('#report-text-OBIaverage').text(d.OBIaverage);
     $('#report-text-dev').text(d.dev_intensity);
@@ -1093,8 +1094,8 @@ function cellSelect(d) {
     $('#report-text-income').text(d.income);
     $('#report-text-insta-density').text(d.insta_cnt);
     $('#report-text-insta-likes').text(d.insta_like);
-    // $('#report-text-topics').text(window.topicsData[0].category + " ,  " + window.topicsData[1].category + " ,  " + window.topicsData[2].category);
-    $('#report-text-topics').text("coming soon");
+
+    printTags(topInstaTopics, '#report-text-insta-topics');
 
     //hide instagram and google street placeholders
     $("#instagram_plc").hide();
