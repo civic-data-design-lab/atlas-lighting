@@ -778,16 +778,17 @@ function charts(data, selectedCharts) {
                 appendableLig = false;
             }
             
-            chart.on("filtered", function(chart) {
-                window.median = d3.median(window.newData, function(el){return parseInt(el.averlight)})
-                window.correspond = thisQuantile(window.median, window.extent, window.quants.first, window.quants.second);
-                bindText(window.correspond, window.median, "#light_digits","#light_digits_o");
-            });
-            
             if (selectedCharts.indexOf("business_opening_percent") === -1) {
+                console.log("OBI chart OFF")
                 window.median = d3.median(window.newData, function(el){return parseInt(el.averlight)})
                 window.correspond = thisQuantile(window.median, window.extent, window.quants.first, window.quants.second);
                 bindText(window.correspond, window.median, "#light_digits","#light_digits_o");
+            }
+            else {
+                console.log("OBI chart ON")
+                chart.on("filtered", function(chart){
+                    bindText(window.correspond, window.median, "#light_digits","#light_digits_o");
+                })
             }
                    
             if (!window.filtered){
@@ -1282,7 +1283,6 @@ function filterhour(data, rdstart, rdend){
 
     //update the shown time
     $('#business_opening_percent').find('#selected_time').text(rdstart+" - "+rdend);
-
     //update selected_time_AM
     rdstart < 12 ? $('#selected_time_AM').text('AM') : $('#selected_time_AM').text('PM'); 
     //update selected_time_PM 
@@ -1304,13 +1304,15 @@ function filterhour(data, rdstart, rdend){
         ave_lit /= count_;
         ave_lit = Math.round(ave_lit * 100) / 100; 
         //update the light average chart digits
-        d3.select("#light_digits_o").text(ave_lit);
-        d3.select("#light_digits_o").attr("sv_val", ave_lit);
+        // d3.select("#light_digits_o").text(ave_lit);
+        // d3.select("#light_digits_o").attr("sv_val", ave_lit);
         
         //update the light average chart word
-        var currentLight = d3.select("#light_digits_o").attr("sv_val");
-        window.median = d3.median(window.newData, function(){return currentLight})
+        // var currentLight = d3.select("#light_digits_o").attr("sv_val");
+        window.median = d3.median(window.newData, function(){return ave_lit})
         window.correspond = thisQuantile(window.median, window.extent, window.quants.first, window.quants.second);
+        bindText(window.correspond, window.median, "#light_digits","#light_digits_o");
+
         if (window.correspond === "MEDIUM"){
             $("#light_digits").css("font-size", "14px");
         } else {
