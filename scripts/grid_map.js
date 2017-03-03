@@ -104,9 +104,10 @@ var myinit = function () {
             pov: { heading: 100, pitch: 0 }, //165
             zoom: 1
         });
+
+    window.panorama.setVisible(true);
     
     window.streetviewService = new google.maps.StreetViewService;
-
 
     // Initialize Firebase
     // TODO: Replace with your project's customized code snippet
@@ -300,6 +301,7 @@ function initCanvas(data) {
                                         zoom:1,
                                         pitch:0
                                     });
+                                    window.panorama.setVisible(true);
                                     d3.select("#street_view_plc").style("display", "none");
                                     // d3.select("#street_view_plc0").style("display", "none");
                                     // d3.select("#streetview_window").style("display", "block");

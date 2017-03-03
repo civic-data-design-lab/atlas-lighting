@@ -1043,7 +1043,7 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     /*opacity: 0;*/
     display: block;
     position: relative;
-    /*background-color: rgba(0,0,0,0) !important;*/
+    background-color: rgba(0,0,0,0) !important;
 }
 
 #instagram_pics {
