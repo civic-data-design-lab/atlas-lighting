@@ -905,9 +905,10 @@ function charts(data, selectedCharts) {
         return parseInt(parseFloat(d.income) / 1000) * 1000;
     });
     var iGroup = incomeDimension.group().reduceSum(function(d){return d.income>0;});
+    var filteredIGroup =  filter_zero_bins(iGroup, largerThanZero);
 
     var appendableInc = true;
-    incomeChart.width(chartWidth).height(chartHeight).dimension(incomeDimension).group(iGroup)
+    incomeChart.width(chartWidth).height(chartHeight).dimension(incomeDimension).group(filteredIGroup)
         .round(dc.round.floor)
         .ordinalColors(["#ffffff"])
         .alwaysUseRounding(true)

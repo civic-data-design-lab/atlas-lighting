@@ -57,6 +57,30 @@ function kFormatter(num) {
     return num > 999 ? (num/1000).toFixed(1) + 'k' : num
 }
 
+
+/* Predicate 
+ */
+
+ function largerThanZero(val) {
+    if (val > 0) {
+        return val;
+    }
+ }
+
+/* Utility function to remove bins with value 0.
+ */
+
+function filter_zero_bins(source_group, f) {
+    return {
+        all:function () {
+            return source_group.all().filter(function(d) {
+                return f(d.value);
+            });
+        }
+    };
+}
+
+
 /* Utility function to remove empty bins.
  */
 
