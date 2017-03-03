@@ -808,7 +808,6 @@ function charts(data, selectedCharts) {
 
         
     var busDivDimension = window.ndx.dimension(function (d) {
-        // console.log((Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1))
         return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0;
     });
 
@@ -1007,7 +1006,7 @@ function cellSelect(d) {
     if (currentCity_o !== "LA") {
         var query = currentCity_o.toLowerCase() + "/"+ `${cell_id}`;
     } else {
-        var firebaseRef = "la/"+cell_id;
+        var query = cell_id;
     }
     
     var ref = firebase.database().ref(query); //cell_id
