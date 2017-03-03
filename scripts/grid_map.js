@@ -1324,12 +1324,14 @@ function filterhour(data, rdstart, rdend){
 
 
 
-var filterCells = function(data){
+var filterCells = function(data, tagRelease){
 
     var selectedTypes = busTypesChart.selectedElements();
     var selectedTopics = instaTopicsChart.selectedElements();
     var typesLen = selectedTypes.length;
     var topicsLen = selectedTopics.length;
+
+    if (typeof tagRelease === 'undefined') {
 
     if ((busTypesChart.isTypeSelected() || instaTopicsChart.isTypeSelected())) {
         if (selectedCharts.includes("business_opening_percent")){
@@ -1418,11 +1420,18 @@ var filterCells = function(data){
         // updateAndDraw(filteredData);
 
     }  else {
+        console.log("this fires!");
         data.map(function(el){
             d3.select("#c" + el.cell_id).style("display", "block");
         })
         updateAndDraw(data);
-    } 
+      } 
+    } else {
+        console.log("I want this to fire!");
+        updateAndDraw(data);
+
+    }
+
 }
 
 
