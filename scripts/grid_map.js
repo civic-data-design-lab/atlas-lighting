@@ -101,7 +101,7 @@ var myinit = function () {
         document.getElementById('streetview_window'),
         {
             position: { lat: parseFloat(center.lat) , lng: parseFloat(center.lng)  },
-            pov: { heading: 165, pitch: 0 },
+            pov: { heading: 100, pitch: 0 }, //165
             zoom: 1
         });
     
@@ -340,7 +340,8 @@ function initCanvas(data) {
                         var myy = d3.event.clientY;
 
                         var loc = unproject([myx, myy]);
-                        var mykey = "AIzaSyBM59LWQXfxJzh06UPYicEM9Ro6RRFCHQc";
+                        //var mykey = "AIzaSyBM59LWQXfxJzh06UPYicEM9Ro6RRFCHQc";
+                        var mykey = "AIzaSyCnjymTVxXFawXt75rNdBahquCCa_-iR3U";
                         var latlng = loc.lat+","+loc.lng
 
                         //console.log(latlng);
@@ -1013,7 +1014,6 @@ function cellSelect(d) {
         .then(function (snapshot) {
             d3.selectAll(".ins_thumb").remove();
             var insdata = snapshot.val();
-            // console.log(insdata);
 
             if (insdata) {
                 var limit = 48;
@@ -1021,7 +1021,6 @@ function cellSelect(d) {
                 for (var k in insdata) {
                     (function(k){
                         if (count < limit) {
-                            //console.log(k);
                             //d3.select("#instagram_pics").append("img").attr("src", insdata[k]["url"]).attr("class", "ins_thumb")
                             if (currentCity_o === "LA"){
                                 var instaAccessor = insdata[k]["url"];
@@ -1063,9 +1062,11 @@ function cellSelect(d) {
 
     busTypesChart.assignSelect(true);
     busTypesChart.updateElements(d);
+    var topBusTypes = busTypesChart.topTags(d);
 
     instaTopicsChart.assignSelect(true);
     instaTopicsChart.updateElements(d);
+    var topInstaTopics = instaTopicsChart.topTags(d);
 
 
     //switch to the cell view
@@ -1084,12 +1085,7 @@ function cellSelect(d) {
     $('#report-text-price').text(d.b_price);
     $('#report-text-density').text(d.places);
 
-    //order the window.typesData object - make a copy to avoid mutation
-    var typesDataSorted = window.typesData;
-    typesDataSorted.sort(function(a, b) {
-        return parseInt(b.count) - parseInt(a.count);
-    });
-    $('#report-text-types').text(typesDataSorted[0].category + " ,  " + typesDataSorted[1].category + " ,  " + typesDataSorted[2].category);
+    printTags(topBusTypes, '#report-text-types');
 
     $('#report-text-OBIpercent').text(d.OBIpercentage);
     $('#report-text-OBIaverage').text(d.OBIaverage);
@@ -1099,14 +1095,7 @@ function cellSelect(d) {
     $('#report-text-insta-density').text(d.insta_cnt);
     $('#report-text-insta-likes').text(d.insta_like);
 
-    //order the window.typesData object - make a copy to avoid mutation
-    var topicsDataSorted = window.topicsData;
-    console.log(topicsDataSorted)
-    topicsDataSorted.sort(function(a, b) {
-        return parseInt(b.count) - parseInt(a.count);
-    });    
-    $('#report-text-topics').text(topicsDataSorted[0].category + " ,  " + topicsDataSorted[1].category + " ,  " + topicsDataSorted[2].category);
-    // $('#report-text-topics').text("coming soon");
+    printTags(topInstaTopics, '#report-text-insta-topics');
 
     //hide instagram and google street placeholders
     $("#instagram_plc").hide();

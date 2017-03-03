@@ -1,4 +1,5 @@
 
+
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 //  Utility functions                                                         //
@@ -16,6 +17,14 @@ function updateNDX(data){
     window.ndx.remove();
     window.ndx.add(data);
 }
+
+
+var printTags = function(arr, selection){
+    var final = arr.reduce(function(acc, e){
+        return (acc !== "") ? acc + " ,  " + e : acc + e;
+    }, "")
+    $(selection).text(final);
+} 
 
 
 /* Reduce function for tagCloud charts.
