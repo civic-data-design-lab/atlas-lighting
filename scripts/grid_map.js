@@ -1420,14 +1420,12 @@ var filterCells = function(data, tagRelease){
         // updateAndDraw(filteredData);
 
     }  else {
-        console.log("this fires!");
         data.map(function(el){
             d3.select("#c" + el.cell_id).style("display", "block");
         })
         updateAndDraw(data);
       } 
     } else {
-        console.log("I want this to fire!");
         updateAndDraw(data);
 
     }
