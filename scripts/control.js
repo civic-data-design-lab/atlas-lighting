@@ -271,7 +271,12 @@ function initControl() {
 
         if ($(this).attr("class").indexOf("selected") > -1) {
             $(".tag_item").removeClass("selected");
-            $(".data_item:not(#d_business_opening_average)").show();
+            $(".data_item").not("#d_business_opening_average").show();
+            $("#d_instagram_pics").hide();
+            $("#d_street_view").hide();
+            if (currentCity_o === "Chicago") {
+                $("#d_instagram_topics").hide();
+            }
             updateChart(selectedCharts);
         } else {
             $(".tag_item").removeClass("selected");
