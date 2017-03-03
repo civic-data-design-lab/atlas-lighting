@@ -132,8 +132,7 @@ var myinit = function () {
 
     firebase.initializeApp(config);
     var rootRef = firebase.database().ref();
-
-    var q = d3.queue(2).defer(d3.csv, "../data/" + currentCity_o + "_grid.csv")
+    var q = d3.queue(2).defer(d3.csv, "../data/" + currentCity_o + "_grid.csv");
 
     q.await(dataDidLoad);
 }
