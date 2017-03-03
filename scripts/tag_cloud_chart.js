@@ -316,7 +316,7 @@ var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#b
      that.tagRelease = function(version){
         selectedTypes = [];
         window.filtered = false;
-        filterCells(originalData);
+        filterCells(originalData, true);
         $(`#${version} .types-text`).each(function(){
             if ($(this).hasClass("active")){
                 $(this).removeClass("active");
@@ -394,10 +394,10 @@ var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#b
                         if (selectedTypes.length === 0){
                             typeSelected = false;
                             window.filtered = false;
-                            filterCells(originalData);
+                            filterCells(originalData, true);
                         } else {
                             window.filtered = false;
-                            filterCells(originalData);
+                            filterCells(originalData, true);
                         }
                     } else {
                         typeSelected = true;

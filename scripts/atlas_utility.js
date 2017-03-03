@@ -23,7 +23,7 @@ var printTags = function(arr, selection){
     var final = arr.reduce(function(acc, e){
         return (acc !== "") ? acc + " ,  " + e : acc + e;
     }, "")
-    $(selection).text(final);
+    final !== "" ? $(selection).text(final) : $(selection).text("no record");
 } 
 
 
@@ -56,6 +56,30 @@ var betterReduceInsta = function(el, elements){
 function kFormatter(num) {
     return num > 999 ? (num/1000).toFixed(1) + 'k' : num
 }
+
+
+/* Predicate 
+ */
+
+ function largerThanZero(val) {
+    if (val > 0) {
+        return val;
+    }
+ }
+
+/* Utility function to remove bins with value 0.
+ */
+
+function filter_zero_bins(source_group, f) {
+    return {
+        all:function () {
+            return source_group.all().filter(function(d) {
+                return f(d.value);
+            });
+        }
+    };
+}
+
 
 /* Utility function to remove empty bins.
  */

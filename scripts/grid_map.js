@@ -104,9 +104,10 @@ var myinit = function () {
             pov: { heading: 100, pitch: 0 }, //165
             zoom: 1
         });
+
+    window.panorama.setVisible(true);
     
     window.streetviewService = new google.maps.StreetViewService;
-
 
     // Initialize Firebase
     // TODO: Replace with your project's customized code snippet
@@ -132,8 +133,7 @@ var myinit = function () {
 
     firebase.initializeApp(config);
     var rootRef = firebase.database().ref();
-
-    var q = d3.queue(2).defer(d3.csv, "../data/" + currentCity_o + "_grid.csv")
+    var q = d3.queue(2).defer(d3.csv, "../data/" + currentCity_o + "_grid.csv");
 
     q.await(dataDidLoad);
 }
@@ -301,6 +301,7 @@ function initCanvas(data) {
                                         zoom:1,
                                         pitch:0
                                     });
+                                    window.panorama.setVisible(true);
                                     d3.select("#street_view_plc").style("display", "none");
                                     // d3.select("#street_view_plc0").style("display", "none");
                                     // d3.select("#streetview_window").style("display", "block");
@@ -907,9 +908,10 @@ function charts(data, selectedCharts) {
         return parseInt(parseFloat(d.income) / 1000) * 1000;
     });
     var iGroup = incomeDimension.group().reduceSum(function(d){return d.income>0;});
+    var filteredIGroup =  filter_zero_bins(iGroup, largerThanZero);
 
     var appendableInc = true;
-    incomeChart.width(chartWidth).height(chartHeight).dimension(incomeDimension).group(iGroup)
+    incomeChart.width(chartWidth).height(chartHeight).dimension(incomeDimension).group(filteredIGroup)
         .round(dc.round.floor)
         .ordinalColors(["#ffffff"])
         .alwaysUseRounding(true)
@@ -1326,12 +1328,14 @@ function filterhour(data, rdstart, rdend){
 
 
 
-var filterCells = function(data){
+var filterCells = function(data, tagRelease){
 
     var selectedTypes = busTypesChart.selectedElements();
     var selectedTopics = instaTopicsChart.selectedElements();
     var typesLen = selectedTypes.length;
     var topicsLen = selectedTopics.length;
+
+    if (typeof tagRelease === 'undefined') {
 
     if ((busTypesChart.isTypeSelected() || instaTopicsChart.isTypeSelected())) {
         if (selectedCharts.includes("business_opening_percent")){
@@ -1424,7 +1428,12 @@ var filterCells = function(data){
             d3.select("#c" + el.cell_id).style("display", "block");
         })
         updateAndDraw(data);
-    } 
+      } 
+    } else {
+        updateAndDraw(data);
+
+    }
+
 }
 
 
