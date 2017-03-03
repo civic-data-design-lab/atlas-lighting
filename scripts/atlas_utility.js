@@ -22,7 +22,7 @@ var printTags = function(arr, selection){
     var final = arr.reduce(function(acc, e){
         return (acc !== "") ? acc + " ,  " + e : acc + e;
     }, "")
-    $(selection).text(final);
+    final !== "" ? $(selection).text(final) : $(selection).text("no record");
 } 
 
 
