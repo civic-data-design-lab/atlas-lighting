@@ -6,12 +6,357 @@
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
+/* Explicit filtering mechanism to make
+ * d3 and dc charts mutually filterable.
+ * @method filterCells
+ * @param {Array} data
+ * @param {Boolean} tagRelease
+ */
+
+/*
+
+var filterCells = function(data, tagRelease){
+
+    var selectedTypes = busTypesChart.selectedElements();
+    var selectedTopics = instaTopicsChart.selectedElements();
+    var typesLen = selectedTypes.length;
+    var topicsLen = selectedTopics.length;
+
+    if (typeof tagRelease === 'undefined') {
+
+    if ((busTypesChart.isTypeSelected() || instaTopicsChart.isTypeSelected())) {
+        if (selectedCharts.includes("business_opening_percent")){
+            if ((busTypesChart.isTypeSelected() && instaTopicsChart.isTypeSelected())) {
+                var filteredData = data.filter(function(el){
+                    var types = betterReduce(el, selectedTypes);
+                    var topics = betterReduceInsta(el, selectedTopics);
+                    if ((types == typesLen) && (topics == topicsLen) && el.OBIaverage!=0 ){
+                        d3.select("#c" + el.cell_id).style("display", "block");
+                        return el;
+                    } else {
+                        d3.select("#c" + el.cell_id).style("display", "none");
+                    }
+                })
+                updateAndDraw(filteredData);
+            } else if (busTypesChart.isTypeSelected()) {
+                var filteredData = data.filter(function(el){
+                    var types = betterReduce(el, selectedTypes);
+                    if ((types == typesLen) && el.OBIaverage!=0 ){
+                        d3.select("#c" + el.cell_id).style("display", "block");
+                        return el;
+                    } else {
+                        d3.select("#c" + el.cell_id).style("display", "none");
+                    }
+                })
+                updateAndDraw(filteredData);
+            } else {
+                var filteredData = data.filter(function(el){
+                    var topics = betterReduceInsta(el, selectedTopics);
+                    if ((topics == topicsLen) && el.OBIaverage!=0 ){
+                        d3.select("#c" + el.cell_id).style("display", "block");
+                        return el;
+                    } else {
+                        d3.select("#c" + el.cell_id).style("display", "none");
+                    }
+                })
+                updateAndDraw(filteredData);
+            } 
+    } else {
+        if ((busTypesChart.isTypeSelected() && instaTopicsChart.isTypeSelected())) {
+                var filteredData = data.filter(function(el){
+                    var types = betterReduce(el, selectedTypes);
+                    var topics = betterReduceInsta(el, selectedTopics);
+                    if ((types == typesLen) && (topics == topicsLen)){
+                        d3.select("#c" + el.cell_id).style("display", "block");
+                        return el;
+                    } else {
+                        d3.select("#c" + el.cell_id).style("display", "none");
+                    }
+                })
+                updateAndDraw(filteredData);
+            } else if (busTypesChart.isTypeSelected()) {
+                console.log("please fire!");
+                var filteredData = data.filter(function(el){
+                    var types = betterReduce(el, selectedTypes);
+                    if (types == typesLen){
+                        d3.select("#c" + el.cell_id).style("display", "block");
+                        return el;
+                    } else {
+                        d3.select("#c" + el.cell_id).style("display", "none");
+                    }
+                })
+                updateAndDraw(filteredData);
+                //updateNDX(filtered);
+            } else {
+                var filteredData = data.filter(function(el){
+                    var topics = betterReduceInsta(el, selectedTopics);
+                    if (topics == topicsLen){
+                        d3.select("#c" + el.cell_id).style("display", "block");
+                        return el;
+                    } else {
+                        d3.select("#c" + el.cell_id).style("display", "none");
+                    }
+                })
+                updateAndDraw(filteredData);
+            }
+        }
+    } else if (selectedCharts.includes("business_opening_percent")) {
+        var filteredData = data.filter(function(el){
+            if (el.OBIaverage!=0){
+                d3.select("#c" + el.cell_id).style("display", "block");
+                // return el;
+            } else {
+                d3.select("#c" + el.cell_id).style("display", "none");
+            }
+        })
+        // updateAndDraw(filteredData);
+
+    }  else {
+        data.map(function(el){
+            d3.select("#c" + el.cell_id).style("display", "block");
+        })
+        updateAndDraw(data);
+      } 
+    } else {
+        updateAndDraw(data);
+
+    }
+
+} */
+
+
+var filterCells = function(data, tagRelease){
+
+    var selectedTypes = busTypesChart.selectedElements();
+    var selectedTopics = instaTopicsChart.selectedElements();
+    var typesLen = selectedTypes.length;
+    var topicsLen = selectedTopics.length;
+
+    if ((busTypesChart.isTypeSelected() || instaTopicsChart.isTypeSelected())) {
+        if (selectedCharts.includes("business_opening_percent")) {
+            if ((busTypesChart.isTypeSelected() && instaTopicsChart.isTypeSelected())) {
+                if (typeof tagRelease === 'undefined') { 
+                    var filteredData = data.filter(function(el){
+                        var types = betterReduce(el, selectedTypes);
+                        var topics = betterReduceInsta(el, selectedTopics);
+                        if ((types === typesLen) && (topics === topicsLen) && el.OBIaverage!==0 ){
+                            d3.select("#c" + el.cell_id).style("display", "block");
+                            return el;
+                        } else {
+                            d3.select("#c" + el.cell_id).style("display", "none");
+                        }
+                    })
+                } else {
+                    var filteredData = data.filter(function(el){
+                        var types = betterReduce(el, selectedTypes);
+                        var topics = betterReduceInsta(el, selectedTopics);
+                        if ((types === typesLen) && (topics === topicsLen) && el.OBIaverage!==0 ){
+                            return el;
+                        }
+                    })
+
+                }
+                updateAndDraw(filteredData);
+            } else if (busTypesChart.isTypeSelected()) {
+                if (typeof tagRelease === 'undefined') {
+                    var filteredData = data.filter(function(el){
+                        var types = betterReduce(el, selectedTypes);
+                        if ((types === typesLen) && el.OBIaverage!==0 ){
+                            d3.select("#c" + el.cell_id).style("display", "block");
+                            return el;
+                        } else {
+                            d3.select("#c" + el.cell_id).style("display", "none");
+                        }
+                    })
+                } else {
+                    var filteredData = data.filter(function(el){
+                        var types = betterReduce(el, selectedTypes);
+                        if ((types === typesLen) && el.OBIaverage!==0 ){
+                            return el;
+                        }
+                    })
+
+                }
+                updateAndDraw(filteredData);
+            } else {
+                if (typeof tagRelease === 'undefined') {
+                    var filteredData = data.filter(function(el){
+                        var topics = betterReduceInsta(el, selectedTopics);
+                        if ((topics === topicsLen) && el.OBIaverage!==0 ){
+                            d3.select("#c" + el.cell_id).style("display", "block");
+                            return el;
+                        } else {
+                            d3.select("#c" + el.cell_id).style("display", "none");
+                        }
+                    })
+                } else {
+                    var filteredData = data.filter(function(el){
+                        var topics = betterReduceInsta(el, selectedTopics);
+                        if ((topics == topicsLen) && el.OBIaverage!=0 ){
+                            return el;
+                        }
+                    })
+                }
+                updateAndDraw(filteredData);
+            } 
+    } else {
+        if ((busTypesChart.isTypeSelected() && instaTopicsChart.isTypeSelected())) {
+            if (typeof tagRelease === 'undefined') {
+                var filteredData = data.filter(function(el){
+                    var types = betterReduce(el, selectedTypes);
+                    var topics = betterReduceInsta(el, selectedTopics);
+                    if ((types === typesLen) && (topics === topicsLen)){
+                        d3.select("#c" + el.cell_id).style("display", "block");
+                        return el;
+                    } else {
+                        d3.select("#c" + el.cell_id).style("display", "none");
+                    }
+                })
+             } else {
+                var filteredData = data.filter(function(el){
+                    var types = betterReduce(el, selectedTypes);
+                    var topics = betterReduceInsta(el, selectedTopics);
+                    if ((types === typesLen) && (topics === topicsLen)){
+                        return el;
+                    }
+                })
+             }   
+            updateAndDraw(filteredData);
+            } else if (busTypesChart.isTypeSelected()) {
+                console.log("please fire!");
+                if (typeof tagRelease === 'undefined') {
+                    var filteredData = data.filter(function(el){
+                        var types = betterReduce(el, selectedTypes);
+                        if (types === typesLen){
+                            d3.select("#c" + el.cell_id).style("display", "block");
+                            return el;
+                        } else {
+                            d3.select("#c" + el.cell_id).style("display", "none");
+                        }
+                    })
+                } else {
+                    console.log("I assume!");
+                    var filteredData = data.filter(function(el){
+                        var types = betterReduce(el, selectedTypes);
+                        if (types === typesLen){
+                            return el;
+                        }
+                    })
+                }
+                updateAndDraw(filteredData);
+            } else {
+                if (typeof tagRelease === 'undefined') {
+                    var filteredData = data.filter(function(el){
+                        var topics = betterReduceInsta(el, selectedTopics);
+                        if (topics === topicsLen){
+                            d3.select("#c" + el.cell_id).style("display", "block");
+                            return el;
+                        } else {
+                            d3.select("#c" + el.cell_id).style("display", "none");
+                        }
+                    })
+                } else {
+                    var filteredData = data.filter(function(el){
+                        var topics = betterReduceInsta(el, selectedTopics);
+                        if (topics === topicsLen){
+                            return el;
+                        }
+                    })
+                }
+                updateAndDraw(filteredData);
+            }
+        }
+    } else if (selectedCharts.includes("business_opening_percent")) {
+        var filteredData = data.filter(function(el){
+            if (el.OBIaverage!=0){
+                d3.select("#c" + el.cell_id).style("display", "block");
+                // return el;
+            } else {
+                d3.select("#c" + el.cell_id).style("display", "none");
+            }
+        })
+        // updateAndDraw(filteredData);
+
+    }  else {
+        if (typeof tagRelease === 'undefined') {
+            data.map(function(el){
+                d3.select("#c" + el.cell_id).style("display", "block");
+            })
+        }
+        console.log("filter but map");
+        console.log(data.length);
+        updateAndDraw(data);
+      } 
+
+}
+
+
+function displayCells(data){
+    data.map(function(el){
+        d3.select("#c"+el.cell_id).style("display", "block");
+    });
+}
+
+/*
+function nullFilters(arr){
+    newarr = arr.map(function(el){
+        el.chart.filter(null);
+    })
+    return newarr;
+}
+
+function assignFilters(arr, filters){
+    arr.map(function(el){
+        var chart = el.chart;
+        var filter = filters[el[name]];
+        chart.filter([filter]);
+    })
+}
+
+
+function resetData(arr, ndx, dimensions) {
+    console.log(arr);
+    var filters = arr.map(function(el){
+        var name = el[name];
+        var chart = el.chart;
+        console.log(chart);
+        return {name: chart.filters()};
+    });
+    var nulledFilters = nullFilters(arr);
+    window.ndx.remove()
+    assignFilters(arr, filters);
+    //ligAveChart.filter([ligAveFilters]);
+    //console.log(ligAveChart.filters());
+} 
+
+
+function updateAndDraw2(data){
+    console.log("updateAndDraw2");
+    window.filtered = true;
+    resetData(allCharts, window.ndx, window.dimensions);
+    window.ndx.add(data);
+    dc.redrawAll()
+} 
+
+*/
+
+
+/* Updates the state(data) we use
+ * in mutual filtering mechanism.
+ * @method updateAndDraw
+ * @param {Array} data
+ */
+
 function updateAndDraw(data){
+    console.log("updateAndDraw");
+    console.log(data.length);
     window.filtered = true;
     window.ndx.remove();
     window.ndx.add(data);
     dc.redrawAll();
 }
+
+
 
 function updateNDX(data){
     window.ndx.remove();
@@ -47,7 +392,6 @@ var betterReduceInsta = function(el, elements){
     }, 0);
     return reduced
 }
-
 
 
 /* Convert Thousands to K format.

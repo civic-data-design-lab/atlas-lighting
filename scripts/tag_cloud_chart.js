@@ -12,6 +12,7 @@ var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#b
 
     var selectedTypes = [];
     var cellsData = [];
+    var dataMemory = {};
     var originalData = [];
     var cellSelected = false;
     var typeSelected = false;
@@ -287,6 +288,14 @@ var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#b
         cellsData = data;
     }
 
+    that.bindPrevData = function(data){
+        prevData = data;
+    }
+
+    that.bringOriginalData = function(){
+        return originalData;
+    }
+
     /* Bind original cell data to the widget
      * @method bindData
      * @param {Array} Data array
@@ -314,6 +323,7 @@ var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#b
      */
 
      that.tagRelease = function(version){
+        //console.log("this fired!");
         selectedTypes = [];
         window.filtered = false;
         filterCells(originalData, true);
@@ -396,6 +406,8 @@ var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#b
                             window.filtered = false;
                             filterCells(originalData, true);
                         } else {
+                            typeSelected = true;
+                            console.log("this fires!");
                             window.filtered = false;
                             filterCells(originalData, true);
                         }
