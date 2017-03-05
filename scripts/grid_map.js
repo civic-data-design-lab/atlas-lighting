@@ -637,7 +637,6 @@ function charts(data, selectedCharts) {
 
     var OBIpercentDimension = window.ndx.dimension(function (d) { return d.OBIpercentage; });
     var OBIpercentGroup = OBIpercentDimension.group().reduceSum(function(d){return d.OBIpercentage>0;});
-
     window.OBIpercent.width(chartWidth).height(100)
         .group(OBIpercentGroup).dimension(OBIpercentDimension)
         .margins(chartMargins)
@@ -813,7 +812,7 @@ function charts(data, selectedCharts) {
             }
             
             if (selectedCharts.indexOf("business_opening_percent") === -1) {
-                $('#light_average').find("#light_digits_o").show();
+                // $('#light_average').find("#light_digits_o").show();
                 // console.log("OBI chart OFF")
                 window.median = d3.median(window.newData, function(el){return parseInt(el.averlight)})
                 window.correspond = thisQuantile(window.median, window.extent, window.quants.first, window.quants.second);
@@ -822,8 +821,8 @@ function charts(data, selectedCharts) {
             }
             else {
                 // console.log("OBI chart ON")
-                
-                $('#light_average').find("#light_digits_o").hide(); //hide the light digits for average lightmap
+                //hide the light digits for average lightmap
+                // $('#light_average').find("#light_digits_o").hide(); 
 
                 chart.on("filtered", function(chart){
                     var tags = tagSums();
@@ -1249,10 +1248,10 @@ function updateChart(selectedCharts) {
         //timeSelectorReset(); //reset the time selector
         filterCells(window.newData);
         // $('#timeSelectorReset').css('opacity', 0); // hide the specific button
-         $('#light_average').find("#light_digits_o").hide();
+         // $('#light_average').find("#light_digits_o").hide();
     } 
     else {
-         $('#light_average').find("#light_digits_o").show();
+         // $('#light_average').find("#light_digits_o").show();
     }
     updateZoomedChart(selectedCharts);
   
