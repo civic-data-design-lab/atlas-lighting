@@ -1117,6 +1117,10 @@ function cellSelect(d) {
 
     //hide instagram and google street placeholders
     $("#instagram_plc").hide();
+    //hide instagram likes from left panel
+    $("#d_ins_likes").hide();
+    //hide topics from left panel
+    $("#d_instagram_topics").hide();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1146,6 +1150,11 @@ function cellDisselect() {
     //hide report
     $('#report-text').hide();
     $('#report-message').show();
+
+    //show instagram likes from left panel
+    $("#d_ins_likes").show();
+    //show topics from left panel
+    $("#d_instagram_topics").show();    
 
 }
 

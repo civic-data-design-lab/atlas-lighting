@@ -160,6 +160,10 @@ function initControl() {
         $("#report-info").hide();       
         $(this).addClass("selectedTab");
         $(".click_case_right").removeClass("selectedTab");
+        //show instagram likes from left panel
+        $("#d_ins_likes").show();
+        //show topics from left panel
+        $("#d_instagram_topics").show(); 
     });   
 
     // controls the right bar collapsing and showing
