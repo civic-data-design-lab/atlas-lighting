@@ -550,7 +550,7 @@ function charts(data, selectedCharts) {
 
     window.insChart.width(chartWidth).height(chartHeight)
         .group(insGroup).dimension(insDimension)
-        //.elasticY(true)
+        .elasticY(true)
         .ordinalColors(["#aaaaaa"])
         .gap(0)
         .margins(chartMargins)
