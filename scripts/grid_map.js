@@ -793,23 +793,28 @@ function charts(data, selectedCharts) {
             }
             
             if (selectedCharts.indexOf("business_opening_percent") === -1) {
-                console.log("OBI chart OFF")
+                $('#light_average').find("#light_digits_o").show();
+                // console.log("OBI chart OFF")
                 window.median = d3.median(window.newData, function(el){return parseInt(el.averlight)})
                 window.correspond = thisQuantile(window.median, window.extent, window.quants.first, window.quants.second);
                 bindText(window.correspond, window.median, "#light_digits","#light_digits_o");
             }
             else {
-                console.log("OBI chart ON")
+                // console.log("OBI chart ON")
+
+                //hide the light digits for average lightmap
+                $('#light_average').find("#light_digits_o").hide();
+
                 chart.on("filtered", function(chart){
                     bindText(window.correspond, window.median, "#light_digits","#light_digits_o");
                 })
             }
                    
             if (!window.filtered){
-                console.log("filterCells")
+                // console.log("filterCells")
                 filterCells(window.newData);
             } else {
-                console.log("displayCells")
+                // console.log("displayCells")
                 displayCells(window.newData);
             }  
         })
@@ -1206,7 +1211,11 @@ function updateChart(selectedCharts) {
         //timeSelectorReset(); //reset the time selector
         filterCells(window.newData);
         // $('#timeSelectorReset').css('opacity', 0); // hide the specific button
+         $('#light_average').find("#light_digits_o").hide();
     } 
+    else {
+         $('#light_average').find("#light_digits_o").show();
+    }
     updateZoomedChart(selectedCharts);
   
     //$("#dc-data-count").css({"display":"none"});
