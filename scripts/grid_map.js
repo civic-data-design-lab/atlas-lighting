@@ -27,6 +27,7 @@ window.state;
 window.typesData = [];
 window.topicsData = [];
 window.filtered = false;
+window.dimensions = [];
 
 var __map = null
 var __canvas = null
@@ -62,7 +63,7 @@ var busTypesChart = tagCloudChart(390, 100, "#business_types", false);
 
 //$("#case_study_2").toggle(currentCity_o === 'Chicago')
 
-if (currentCity_o === 'LA' || currentCity_o === 'Chicago' ){
+if (currentCity_o === 'Chicago'){
     $("#d_instagram_topics").hide();
     var instaTopics = [];
     var instaTopicsChart = tagCloudChart(370, 100, "#instagram_topics", true);
@@ -72,20 +73,23 @@ if (currentCity_o === 'LA' || currentCity_o === 'Chicago' ){
     }
     if (currentCity_o === 'Denver') {
         var instaTopics = ['insta_advertising','insta_beverage','insta_car','insta_entertainment',
-        'insta_family','insta_fashion','insta_food','insta_interiors','insta_landscape','insta_monochrome','insta_nature',
+        'insta_people','insta_fashion','insta_food','insta_interiors','insta_landscape','insta_monochrome','insta_nature',
         'insta_portrait','insta_sky','insta_sports'];
 
     } else if (currentCity_o === 'Sanjose') {
         var instaTopics = ['insta_advertising','insta_animal','insta_car','insta_entertainment',
-        'insta_fashion','insta_food', 'insta_group', 'insta_interiors','insta_monochrome','insta_nature',
-        'insta_portrait','insta_sky','insta_sports'];
+        'insta_food', 'insta_nature','insta_people','insta_sports'];
 
     } else if (currentCity_o === 'Pittsburgh'){
         var instaTopics = ['insta_advertising','insta_animal','insta_architecture', 'insta_car', 'insta_entertainment',
         'insta_family','insta_fashion','insta_food','insta_interiors','insta_monochrome','insta_nature','insta_sky','insta_sports'];
 
+    } else if (currentCity_o === 'LA'){
+         var instaTopics = ['insta_advertising','insta_animal','insta_coast', 'insta_entertainment',
+        'insta_fashion','insta_food','insta_monochrome','insta_people', 'insta_portrait','insta_sky','insta_sports', 'insta_vehicle'];
+
     }
-    var instaTopicsChart = tagCloudChart(370, 125, "#instagram_topics", true); //100
+    var instaTopicsChart = tagCloudChart(385, 130, "#instagram_topics", true); //125
 }
 
 
@@ -152,6 +156,8 @@ function dataDidLoad(error, grid) { //add topics if necessary
 
     window.dataLst = Object.keys(grid[0])
     window.mydata = grid;
+
+    console.log(grid.length);
 
     charts(grid, selectedCharts);
 
@@ -425,6 +431,11 @@ window.busPriChart = dc.barChart("#business_price");
 window.OBIaverage = dc.barChart("#business_opening_average");
 window.OBIpercent = dc.barChart("#business_opening_percent");
 
+/*var allCharts = [{name: "populationChart", chart:populationChart},{name:"incomeChart", chart:incomeChart},{name:"busDivChart2", chart:busDivChart2},
+                 {name:"devIntChart", chart:devIntChart},{name:"ligAveChart", chart:ligAveChart},{name:"placesChart", chart:placesChart},{name:"insChart", chart:insChart},
+                 {name: "insLikesChart", chart:insLikesChart},{name:"busPriChart", chart:busPriChart}];
+
+*/
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 //  charts(data, selectedCharts)    --- dc.js ---                             //
@@ -773,6 +784,8 @@ function charts(data, selectedCharts) {
 
             busTypesChart.bindData(window.newData);
             instaTopicsChart.bindData(window.newData);
+            console.log("new data binded");
+            console.log(window.newData.length);
 
             if (appendableLig){
                 addQuantiles(chart, window.quants.firstX, window.quants.secondX, chartHeight, chartMargins, 6);
@@ -793,10 +806,10 @@ function charts(data, selectedCharts) {
             }
                    
             if (!window.filtered){
-                //console.log("filterCells")
+                console.log("filterCells")
                 filterCells(window.newData);
             } else {
-                //console.log("displayCells")
+                console.log("displayCells")
                 displayCells(window.newData);
             }  
         })
@@ -806,10 +819,8 @@ function charts(data, selectedCharts) {
         })
         .yAxis().ticks(3);
 
-
         
     var busDivDimension = window.ndx.dimension(function (d) {
-        // console.log((Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1))
         return (Math.round((d.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0;
     });
 
@@ -987,6 +998,10 @@ function charts(data, selectedCharts) {
         $('#business_opening_average').find('#time_selector').hide();
         $('#business_opening_average').find('#selected_time').hide();
     }
+
+
+
+    //window.dimensions.push(ligAveDimension, incomeDimension, busDivDimension, popDimension, placesDimension, OBIaverageDimension, OBIpercentDimension, busPriDimension, insLikesDimension, insDimension);
          
 }
 
@@ -1008,7 +1023,7 @@ function cellSelect(d) {
     if (currentCity_o !== "LA") {
         var query = currentCity_o.toLowerCase() + "/"+ `${cell_id}`;
     } else {
-        var firebaseRef = "la/"+cell_id;
+        var query = cell_id;
     }
     
     var ref = firebase.database().ref(query); //cell_id
@@ -1325,124 +1340,6 @@ function filterhour(data, rdstart, rdend){
     }
 
 }
-
-
-
-var filterCells = function(data, tagRelease){
-
-    var selectedTypes = busTypesChart.selectedElements();
-    var selectedTopics = instaTopicsChart.selectedElements();
-    var typesLen = selectedTypes.length;
-    var topicsLen = selectedTopics.length;
-
-    if (typeof tagRelease === 'undefined') {
-
-    if ((busTypesChart.isTypeSelected() || instaTopicsChart.isTypeSelected())) {
-        if (selectedCharts.includes("business_opening_percent")){
-            if ((busTypesChart.isTypeSelected() && instaTopicsChart.isTypeSelected())) {
-                var filteredData = data.filter(function(el){
-                    var types = betterReduce(el, selectedTypes);
-                    var topics = betterReduceInsta(el, selectedTopics);
-                    if ((types == typesLen) && (topics == topicsLen) && el.OBIaverage!=0 ){
-                        d3.select("#c" + el.cell_id).style("display", "block");
-                        return el;
-                    } else {
-                        d3.select("#c" + el.cell_id).style("display", "none");
-                    }
-                })
-                updateAndDraw(filteredData);
-            } else if (busTypesChart.isTypeSelected()) {
-                var filteredData = data.filter(function(el){
-                    var types = betterReduce(el, selectedTypes);
-                    if ((types == typesLen) && el.OBIaverage!=0 ){
-                        d3.select("#c" + el.cell_id).style("display", "block");
-                        return el;
-                    } else {
-                        d3.select("#c" + el.cell_id).style("display", "none");
-                    }
-                })
-                updateAndDraw(filteredData);
-            } else {
-                var filteredData = data.filter(function(el){
-                    var topics = betterReduceInsta(el, selectedTopics);
-                    if ((topics == topicsLen) && el.OBIaverage!=0 ){
-                        d3.select("#c" + el.cell_id).style("display", "block");
-                        return el;
-                    } else {
-                        d3.select("#c" + el.cell_id).style("display", "none");
-                    }
-                })
-                updateAndDraw(filteredData);
-            } 
-    } else {
-        if ((busTypesChart.isTypeSelected() && instaTopicsChart.isTypeSelected())) {
-                var filteredData = data.filter(function(el){
-                    var types = betterReduce(el, selectedTypes);
-                    var topics = betterReduceInsta(el, selectedTopics);
-                    if ((types == typesLen) && (topics == topicsLen)){
-                        d3.select("#c" + el.cell_id).style("display", "block");
-                        return el;
-                    } else {
-                        d3.select("#c" + el.cell_id).style("display", "none");
-                    }
-                })
-                updateAndDraw(filteredData);
-            } else if (busTypesChart.isTypeSelected()) {
-                var filteredData = data.filter(function(el){
-                    var types = betterReduce(el, selectedTypes);
-                    if (types == typesLen){
-                        d3.select("#c" + el.cell_id).style("display", "block");
-                        return el;
-                    } else {
-                        d3.select("#c" + el.cell_id).style("display", "none");
-                    }
-                })
-                updateAndDraw(filteredData);
-                //updateNDX(filtered);
-            } else {
-                var filteredData = data.filter(function(el){
-                    var topics = betterReduceInsta(el, selectedTopics);
-                    if (topics == topicsLen){
-                        d3.select("#c" + el.cell_id).style("display", "block");
-                        return el;
-                    } else {
-                        d3.select("#c" + el.cell_id).style("display", "none");
-                    }
-                })
-                updateAndDraw(filteredData);
-            }
-        }
-    } else if (selectedCharts.includes("business_opening_percent")) {
-        var filteredData = data.filter(function(el){
-            if (el.OBIaverage!=0){
-                d3.select("#c" + el.cell_id).style("display", "block");
-                // return el;
-            } else {
-                d3.select("#c" + el.cell_id).style("display", "none");
-            }
-        })
-        // updateAndDraw(filteredData);
-
-    }  else {
-        data.map(function(el){
-            d3.select("#c" + el.cell_id).style("display", "block");
-        })
-        updateAndDraw(data);
-      } 
-    } else {
-        updateAndDraw(data);
-
-    }
-
-}
-
-
-function displayCells(data){
-    data.map(function(el){
-        d3.select("#c"+el.cell_id).style("display", "block");
-    })
-}
-
 
 
 ////////////////////////////////////////////////////////////////////////////////
