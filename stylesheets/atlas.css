@@ -1464,11 +1464,11 @@ button:focus {outline:0;}
     position: fixed;
     width: 20px;
     right: 430px;
-    height: calc(20% - 20px);
+    height: 100px;
     cursor: pointer;
     border-bottom-left-radius: 20px;
     background-color: rgba(150,150,150,0.4);
-    top: calc(20% + 25px);
+    top: 190px;
 }
 
 .fold_bar {
