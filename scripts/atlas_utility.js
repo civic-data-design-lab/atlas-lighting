@@ -397,6 +397,39 @@ function updateNDX(data){
 }
 
 
+
+/* Helper for tag charts
+ */
+
+function tagSums() {
+
+    var typeSums = [];
+    busTypes.map(function(el){
+        var typeSum = window.ndx.groupAll().reduceSum(function(d){return d[el];}).value();
+        if (typeSum){
+            typeSums.push({
+                category: el, 
+                count: typeSum
+            });
+        }
+    });
+
+    var topicSums = [];
+    instaTopics.map(function(el){
+        var topicSum = window.ndx.groupAll().reduceSum(function(d){return d[el];}).value();
+        if (topicSum){
+            var newEl = el.replace('insta_', '');
+            topicSums.push({
+                category: newEl, 
+                count: topicSum
+            });
+        }
+    })
+
+    return {types: typeSums, topics:topicSums};
+}
+
+
 var printTags = function(arr, selection){
     var final = arr.reduce(function(acc, e){
         return (acc !== "") ? acc + " ,  " + e : acc + e;
