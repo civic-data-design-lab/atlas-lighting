@@ -82,7 +82,7 @@ a:hover{
 }
 
 .chart-title-collapsible:hover{
-    font-size:14px;
+    margin-left: 11px;
 }
 
 
@@ -790,10 +790,6 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     position: relative;
 }
 
-#light_average > svg {
-    margin-left: 105px;
-}
-
 .digits {
     color: rgb(32, 192, 226);
     position: relative;
@@ -1080,30 +1076,11 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 */
 
 #selected_time {
-    font-size: 24px;
+    font-size: 15px;
     position: absolute;
-    -webkit-transform: translateY(6px);
-            transform: translateY(6px);
+    -webkit-transform: translateY(16px);
+            transform: translateY(16px);
     left: 10px;    
-}
-
-#selected_time_AM {
-    font-size: 12px;
-    position: absolute;
-    left: 20px;
-    top: 245px;
-    color: rgb(32, 192, 226);
-    font-family: Dosis;
-    font-weight: 300;    
-}
-#selected_time_PM {
-    font-size: 12px;
-    position: absolute;
-    left: 56px;
-    top: 245px;
-    color: rgb(32, 192, 226);
-    font-family: Dosis;
-    font-weight: 300;    
 }
 
 .toolip_img {
@@ -1305,31 +1282,6 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     background: linear-gradient(to bottom, rgba(0,0,0, 0.1), rgba(32, 192, 226, 0.15));
 }
 
-button.toggleAnimation {
-    font-size: 10px;
-    background-color: rgba(255,255,255, 0.1);
-    width: auto;
-    border: 1px solid rgba(32, 192, 226, 0.15);
-    box-shadow: 1px 1px 2px 0px rgba(255,255,255, 0.3);
-    border-radius: 5px;
-    /*margin-top: 30px;*/
-    margin-bottom: 5px;
-    margin-left: 375px;
-    position: absolute;
-}
-
-button.toggleAnimation:hover {
-    background-color: rgba(255,255,255,0.2);
-}
-
-button.toggleAnimation.isPressed {
-    background-color: rgba(255,255,255, 0.05);
-}
-
-button.toggleAnimation.isNotPressed {
-    background-color: rgba(255,255,255, 0.1);
-}
-
 a.reset {
     font-size: 10px;
 }
@@ -1464,11 +1416,11 @@ button:focus {outline:0;}
     position: fixed;
     width: 20px;
     right: 430px;
-    height: calc(20% - 20px);
+    height: 100px;
     cursor: pointer;
     border-bottom-left-radius: 20px;
     background-color: rgba(150,150,150,0.4);
-    top: calc(20% + 25px);
+    top: 190px;
 }
 
 .fold_bar {
@@ -1500,7 +1452,7 @@ button:focus {outline:0;}
     font-weight: 400;
     fill: rgba(255,255,255,.3);
     font-size: 11px;    
-    line-height: 1;
+    line-height: 0.7;
     width: 400px;
 }
 

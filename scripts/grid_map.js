@@ -797,16 +797,16 @@ function charts(data, selectedCharts) {
                 appendableLig = false;
             }
             
-            chart.on("filtered", function(chart) {
-                window.median = d3.median(window.newData, function(el){return parseInt(el.averlight)})
-                window.correspond = thisQuantile(window.median, window.extent, window.quants.first, window.quants.second);
-                bindText(window.correspond, window.median, "#light_digits","#light_digits_o");
-            });
-            
             if (selectedCharts.indexOf("business_opening_percent") === -1) {
+                console.log("OBI chart OFF")
                 window.median = d3.median(window.newData, function(el){return parseInt(el.averlight)})
                 window.correspond = thisQuantile(window.median, window.extent, window.quants.first, window.quants.second);
                 bindText(window.correspond, window.median, "#light_digits","#light_digits_o");
+            } else {
+                console.log("OBI chart ON")
+                chart.on("filtered", function(chart){
+                    bindText(window.correspond, window.median, "#light_digits","#light_digits_o");
+                })
             }
 
             ligAveDimension.filter(null);
@@ -1121,6 +1121,10 @@ function cellSelect(d) {
 
     //hide instagram and google street placeholders
     $("#instagram_plc").hide();
+    //hide instagram likes from left panel
+    $("#d_ins_likes").hide();
+    //hide topics from left panel
+    $("#d_instagram_topics").hide();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1150,6 +1154,11 @@ function cellDisselect() {
     //hide report
     $('#report-text').hide();
     $('#report-message').show();
+
+    //show instagram likes from left panel
+    $("#d_ins_likes").show();
+    //show topics from left panel
+    $("#d_instagram_topics").show();    
 
 }
 
@@ -1286,7 +1295,7 @@ function timeSelector(chartWidth,chartHeight) {
                 updateOBI(start,end);} //rdstart, rdend
         }
         else {
-            $('#business_opening_percent').find('#selected_time').text(rdstart+" - "+rdend);
+            $('#business_opening_percent').find('#selected_time').text(rdstart+":00 - "+rdend+":00");
             window.filtered = false;
             filterhour(window.newData, rdstart, rdend);
             if (selectedCharts.includes("business_opening_average") || selectedCharts.includes("business_opening_percent")) { 
@@ -1303,12 +1312,7 @@ function filterhour(data, rdstart, rdend){
     var count_ = 0;
 
     //update the shown time
-    $('#business_opening_percent').find('#selected_time').text(rdstart+" - "+rdend);
-
-    //update selected_time_AM
-    rdstart < 12 ? $('#selected_time_AM').text('AM') : $('#selected_time_AM').text('PM'); 
-    //update selected_time_PM 
-    rdend > 12 ? $('#selected_time_PM').text('PM') : $('#selected_time_PM').text('AM'); 
+    $('#business_opening_percent').find('#selected_time').text(rdstart+":00 - "+rdend+":00");
 
     //update the map
     data.forEach(function (d) {
@@ -1326,13 +1330,15 @@ function filterhour(data, rdstart, rdend){
         ave_lit /= count_;
         ave_lit = Math.round(ave_lit * 100) / 100; 
         //update the light average chart digits
-        d3.select("#light_digits_o").text(ave_lit);
-        d3.select("#light_digits_o").attr("sv_val", ave_lit);
+        // d3.select("#light_digits_o").text(ave_lit);
+        // d3.select("#light_digits_o").attr("sv_val", ave_lit);
         
         //update the light average chart word
-        var currentLight = d3.select("#light_digits_o").attr("sv_val");
-        window.median = d3.median(window.newData, function(){return currentLight})
+        // var currentLight = d3.select("#light_digits_o").attr("sv_val");
+        window.median = d3.median(window.newData, function(){return ave_lit})
         window.correspond = thisQuantile(window.median, window.extent, window.quants.first, window.quants.second);
+        bindText(window.correspond, window.median, "#light_digits","#light_digits_o");
+
         if (window.correspond === "MEDIUM"){
             $("#light_digits").css("font-size", "14px");
         } else {

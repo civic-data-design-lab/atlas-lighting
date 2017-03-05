@@ -220,11 +220,11 @@
     <!-- RIGHT PANEL -->
     <div id="info" class="data_select_ui">
       <div class = "fold_bar selectedTab">
-        <div id="tab-name">MAP VIEW </div>
+        <div id="tab-name">REGIONAL VIEW </div>
         <img src="../icons/triangle_left.png" class="selector_arrow rightbar">
       </div>
       <div class="right_clickbar click_case_right slide_hide_right"> 
-        <div id="tab-name" style="top: 15%">SELECTED CELL VIEW </div>
+        <div id="tab-name" style="top: 15%">CELL VIEW </div>
         <img src="../icons/triangle_left.png" class="selector_arrow rightbar">
       </div>
 
@@ -348,15 +348,15 @@
           </div>
 
           <div id="business_opening_percent">
-            <div class="chart-title"><span class="toggle-title">PERCENTAGE OF BUSINESSES OPEN FOR SELECTED TIMES</span>
+            <div class="chart-title"><span class="toggle-title" style="font-size: 12px">PERCENTAGE OF BUSINESSES OPEN FOR SELECTED TIME</span>
               <span class="source">
                 <a class="reset" href="javascript:OBIpercent.filterAll();dc.redrawAll();" style="display: none;">RESET </a>
                 <a href="javascript:OBIpercent.filterAll();dc.redrawAll();"      ><span class = "rm_data"> x</span> </a>
               </span>
             </div>
             <div id="time_selector" >
-                <p id = "selected_time" class = "plc_digits">6 - 18</p> <!-- 0 - 24 -->
-                <p><span id="selected_time_AM">AM</span><span id="selected_time_PM">PM</span></p>
+                <p id = "selected_time" class = "plc_digits">6:00 - 18:00</p> <!-- 0 - 24 -->
+                <!-- <p><span id="selected_time_AM">AM</span><span id="selected_time_PM">PM</span></p> -->
                 <!-- <a id="timeSelectorReset" class="reset" href="javascript:timeSelectorReset();" style="opacity: 0;">RESET TIME RANGE</a> -->
             </div>
             <div class="digits">
@@ -367,7 +367,7 @@
           </div>
 
           <div id="business_opening_average">
-            <div class="chart-title"><span class="toggle-title">AVERAGE NUMBER OF BUSINESSES OPEN FOR SELECTED TIMES</span>
+            <div class="chart-title"><span class="toggle-title" style="font-size: 12px">AVERAGE NUMBER OF BUSINESSES OPEN FOR SELECTED TIME</span>
               <span class="source">
                 <a class="reset" href="javascript:OBIaverage.filterAll();dc.redrawAll();" style="display: none;">RESET </a>
                </span>
