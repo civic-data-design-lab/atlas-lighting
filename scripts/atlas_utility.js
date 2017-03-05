@@ -462,7 +462,7 @@ var bindText = function(quanText, median, selection_1, selection_2){
     }
     $(selection_1).html(quanText);
     $(selection_1).attr("sv_val", quanText);
-    var newText =`${kFormatter(median)}`;
+    var newText =`${kFormatter(Math.floor(median))}`;
     $(selection_2).html(newText);
     $(selection_2).attr("sv_val", newText);       
 }
@@ -485,7 +485,7 @@ var bindText2 = function(quanText, selection){
  */
 
 var bindDollarText = function(median, selection){
-    var newText =`${median}K`;
+    var newText =`${Math.floor(median)}K`;
     $(selection).html(newText);
     $(selection).attr("sv_val", newText);
 }
