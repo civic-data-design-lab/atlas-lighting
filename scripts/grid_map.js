@@ -838,6 +838,7 @@ function charts(data, selectedCharts) {
                 
             } else {
                 console.log("display Cells");
+                displayCells(window.newData);
                 //chart.brush().clear();
                 //chart.brush().x(null);
                 
