@@ -1291,7 +1291,7 @@ function timeSelector(chartWidth,chartHeight) {
                 updateOBI(start,end);} //rdstart, rdend
         }
         else {
-            $('#business_opening_percent').find('#selected_time').text(rdstart+" - "+rdend);
+            $('#business_opening_percent').find('#selected_time').text(rdstart+":00 - "+rdend+":00");
             window.filtered = false;
             filterhour(window.newData, rdstart, rdend);
             if (selectedCharts.includes("business_opening_average") || selectedCharts.includes("business_opening_percent")) { 
@@ -1308,11 +1308,7 @@ function filterhour(data, rdstart, rdend){
     var count_ = 0;
 
     //update the shown time
-    $('#business_opening_percent').find('#selected_time').text(rdstart+" - "+rdend);
-    //update selected_time_AM
-    rdstart < 12 ? $('#selected_time_AM').text('AM') : $('#selected_time_AM').text('PM'); 
-    //update selected_time_PM 
-    rdend > 12 ? $('#selected_time_PM').text('PM') : $('#selected_time_PM').text('AM'); 
+    $('#business_opening_percent').find('#selected_time').text(rdstart+":00 - "+rdend+":00");
 
     //update the map
     data.forEach(function (d) {

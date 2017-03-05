@@ -82,7 +82,7 @@ a:hover{
 }
 
 .chart-title-collapsible:hover{
-    font-size:14px;
+    margin-left: 11px;
 }
 
 
@@ -1076,30 +1076,11 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 */
 
 #selected_time {
-    font-size: 24px;
+    font-size: 15px;
     position: absolute;
-    -webkit-transform: translateY(6px);
-            transform: translateY(6px);
+    -webkit-transform: translateY(16px);
+            transform: translateY(16px);
     left: 10px;    
-}
-
-#selected_time_AM {
-    font-size: 12px;
-    position: absolute;
-    left: 20px;
-    top: 245px;
-    color: rgb(32, 192, 226);
-    font-family: Dosis;
-    font-weight: 300;    
-}
-#selected_time_PM {
-    font-size: 12px;
-    position: absolute;
-    left: 56px;
-    top: 245px;
-    color: rgb(32, 192, 226);
-    font-family: Dosis;
-    font-weight: 300;    
 }
 
 .toolip_img {
@@ -1299,31 +1280,6 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     height: 30px;
     top: calc(100% - 30px);
     background: linear-gradient(to bottom, rgba(0,0,0, 0.1), rgba(32, 192, 226, 0.15));
-}
-
-button.toggleAnimation {
-    font-size: 10px;
-    background-color: rgba(255,255,255, 0.1);
-    width: auto;
-    border: 1px solid rgba(32, 192, 226, 0.15);
-    box-shadow: 1px 1px 2px 0px rgba(255,255,255, 0.3);
-    border-radius: 5px;
-    /*margin-top: 30px;*/
-    margin-bottom: 5px;
-    margin-left: 375px;
-    position: absolute;
-}
-
-button.toggleAnimation:hover {
-    background-color: rgba(255,255,255,0.2);
-}
-
-button.toggleAnimation.isPressed {
-    background-color: rgba(255,255,255, 0.05);
-}
-
-button.toggleAnimation.isNotPressed {
-    background-color: rgba(255,255,255, 0.1);
 }
 
 a.reset {
