@@ -116,11 +116,13 @@ var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#b
             secondRow = [],
             thirdRow = [],
             fourthRow = [],
-            fifthRow = [];
+            fifthRow = [],
+            sixthRow = [];
 
         var thirdAlready = [],
             fourthAlready = [],
             fifthAlready = [];
+            sixthAlready = [];
 
         var bestArr = [];
         var newWidth = 0;
@@ -134,7 +136,7 @@ var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#b
             if (el.category !== 'monochrome') {
                 return {count:el.count, category: el.category, textSize: el.textSize, textWidth:actualWidth};
             } else {
-                return {count:el.count, category: el.category, textSize: el.textSize, textWidth:actualWidth+15};
+                return {count:el.count, category: el.category, textSize: el.textSize, textWidth:actualWidth+20};
             }
         })
 
@@ -226,16 +228,42 @@ var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#b
                 } else {
                     return {category:el.category, count: el.count, textSize: el.textSize, x:0, y:69};
                 }
-            } else {
+            } else if (row == 4) {
                 fifthRow.push(el);
                 if (fifthRow.length > 1){
                     var nCount = 0;
                     for (var j=0; j<fifthRow.length-1; j++){
                         nCount += fifthRow[j].textWidth + btwMargin;
                     }
-                    return {category:el.category, count: el.count, textSize: el.textSize, x:nCount, y:91};
+                    if(Math.floor((nCount + el.textWidth)/width) > 0){
+                        fifthRow.splice(-1, 1);
+                        sixthRow.push(el);
+                        if (sixthAlready.length) {
+                            newWidth = sixthAlready[0].textWidth + btwMargin;
+                        } else {
+                            sixthAlready.push(el);
+                            newWidth = 0;
+                        }
+                        return {category:el.category, count: el.count, textSize: el.textSize, x:newWidth, y:113};
+                    } else {
+                        return {category:el.category, count: el.count, textSize: el.textSize, x:nCount, y:91};
+                 }
                 } else {
                     return {category:el.category, count: el.count, textSize: el.textSize, x:0, y:91};
+                }
+
+
+
+            } else {
+                sixthRow.push(el);
+                if (sixthRow.length > 1){
+                    var nCount = 0;
+                    for (var j=0; j<sixthRow.length-1; j++){
+                        nCount += sixthRow[j].textWidth + btwMargin;
+                    }
+                    return {category:el.category, count: el.count, textSize: el.textSize, x:nCount, y:113};
+                } else {
+                    return {category:el.category, count: el.count, textSize: el.textSize, x:0, y:113};
                 }
             }
 

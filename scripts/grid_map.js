@@ -63,7 +63,7 @@ var busTypesChart = tagCloudChart(390, 100, "#business_types", false);
 
 //$("#case_study_2").toggle(currentCity_o === 'Chicago')
 
-if (currentCity_o === 'LA' || currentCity_o === 'Chicago' ){
+if (currentCity_o === 'Chicago'){
     $("#d_instagram_topics").hide();
     var instaTopics = [];
     var instaTopicsChart = tagCloudChart(370, 100, "#instagram_topics", true);
@@ -73,20 +73,23 @@ if (currentCity_o === 'LA' || currentCity_o === 'Chicago' ){
     }
     if (currentCity_o === 'Denver') {
         var instaTopics = ['insta_advertising','insta_beverage','insta_car','insta_entertainment',
-        'insta_family','insta_fashion','insta_food','insta_interiors','insta_landscape','insta_monochrome','insta_nature',
+        'insta_people','insta_fashion','insta_food','insta_interiors','insta_landscape','insta_monochrome','insta_nature',
         'insta_portrait','insta_sky','insta_sports'];
 
     } else if (currentCity_o === 'Sanjose') {
         var instaTopics = ['insta_advertising','insta_animal','insta_car','insta_entertainment',
-        'insta_fashion','insta_food', 'insta_group', 'insta_interiors','insta_monochrome','insta_nature',
-        'insta_portrait','insta_sky','insta_sports'];
+        'insta_food', 'insta_nature','insta_people','insta_sports'];
 
     } else if (currentCity_o === 'Pittsburgh'){
         var instaTopics = ['insta_advertising','insta_animal','insta_architecture', 'insta_car', 'insta_entertainment',
         'insta_family','insta_fashion','insta_food','insta_interiors','insta_monochrome','insta_nature','insta_sky','insta_sports'];
 
+    } else if (currentCity_o === 'LA'){
+         var instaTopics = ['insta_advertising','insta_animal','insta_coast', 'insta_entertainment',
+        'insta_fashion','insta_food','insta_monochrome','insta_people', 'insta_portrait','insta_sky','insta_sports', 'insta_vehicle'];
+
     }
-    var instaTopicsChart = tagCloudChart(370, 125, "#instagram_topics", true); //100
+    var instaTopicsChart = tagCloudChart(385, 130, "#instagram_topics", true); //125
 }
 
 
