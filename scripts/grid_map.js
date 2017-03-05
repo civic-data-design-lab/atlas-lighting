@@ -27,6 +27,7 @@ window.state;
 window.typesData = [];
 window.topicsData = [];
 window.filtered = false;
+window.filtered = false;
 window.dimensions = [];
 
 var __map = null
@@ -156,8 +157,6 @@ function dataDidLoad(error, grid) { //add topics if necessary
 
     window.dataLst = Object.keys(grid[0])
     window.mydata = grid;
-
-    console.log(grid.length);
 
     charts(grid, selectedCharts);
 
@@ -541,15 +540,15 @@ function charts(data, selectedCharts) {
     /* Instagram density chart
      * 
     */
-
     var insDimension = window.ndx.dimension(function (d) { 
         if(d.insta_cnt > 50 ) return 50;
         else return d.insta_cnt });
-    var insGroup = insDimension.group()
+    var insGroup = insDimension.group().reduceSum(function(d){return d.insta_cnt>0;});
+    var filteredInsGroup =  filter_zero_bins(insGroup, largerThanZero);
     var appendableIns = true
 
     window.insChart.width(chartWidth).height(chartHeight)
-        .group(insGroup).dimension(insDimension)
+        .group(filteredInsGroup).dimension(insDimension)
         //.elasticY(true)
         .ordinalColors(["#aaaaaa"])
         .gap(0)
@@ -557,7 +556,13 @@ function charts(data, selectedCharts) {
         .centerBar(true)
         .on('renderlet', function(chart){
             window.newData = insDimension.top(Infinity);
-            var median = d3.median(window.newData, function(el){return el.insta_cnt>50 ? 50 : el.insta_cnt});
+            var median = d3.median(window.newData, function(el){
+                if  (el.insta_cnt>50){
+                    return 50
+                } else if (el.insta_cnt > 0){
+                    return el.insta_cnt;
+                }
+            });
             bindInstaText(median, "#instaDen_digits");
         })
         .on('postRender', function(chart){
@@ -784,8 +789,8 @@ function charts(data, selectedCharts) {
 
             busTypesChart.bindData(window.newData);
             instaTopicsChart.bindData(window.newData);
-            console.log("new data binded");
-            console.log(window.newData.length);
+            //console.log("new data binded");
+            //console.log(window.newData.length);
 
             if (appendableLig){
                 addQuantiles(chart, window.quants.firstX, window.quants.secondX, chartHeight, chartMargins, 6);
@@ -803,14 +808,16 @@ function charts(data, selectedCharts) {
                 window.correspond = thisQuantile(window.median, window.extent, window.quants.first, window.quants.second);
                 bindText(window.correspond, window.median, "#light_digits","#light_digits_o");
             }
+
+            ligAveDimension.filter(null);
                    
             if (!window.filtered){
-                console.log("filterCells")
                 filterCells(window.newData);
             } else {
-                console.log("displayCells")
                 displayCells(window.newData);
-            }  
+
+            }
+
         })
         .x(d3.scale.linear().domain([0, maxLight]))
         .on('postRender', function(chart) {
@@ -998,9 +1005,7 @@ function charts(data, selectedCharts) {
         $('#business_opening_average').find('#selected_time').hide();
     }
 
-
-
-    //window.dimensions.push(ligAveDimension, incomeDimension, busDivDimension, popDimension, placesDimension, OBIaverageDimension, OBIpercentDimension, busPriDimension, insLikesDimension, insDimension);
+    window.dimensions.push(ligAveDimension, incomeDimension, busDivDimension, popDimension, placesDimension, OBIaverageDimension, OBIpercentDimension, busPriDimension, insLikesDimension, insDimension);
          
 }
 

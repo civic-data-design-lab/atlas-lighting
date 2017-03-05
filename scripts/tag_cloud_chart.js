@@ -435,7 +435,6 @@ var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#b
                             filterCells(originalData, true);
                         } else {
                             typeSelected = true;
-                            console.log("this fires!");
                             window.filtered = false;
                             filterCells(originalData, true);
                         }

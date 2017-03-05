@@ -223,7 +223,6 @@ var filterCells = function(data, tagRelease){
              }   
             updateAndDraw(filteredData);
             } else if (busTypesChart.isTypeSelected()) {
-                console.log("please fire!");
                 if (typeof tagRelease === 'undefined') {
                     var filteredData = data.filter(function(el){
                         var types = betterReduce(el, selectedTypes);
@@ -235,7 +234,6 @@ var filterCells = function(data, tagRelease){
                         }
                     })
                 } else {
-                    console.log("I assume!");
                     var filteredData = data.filter(function(el){
                         var types = betterReduce(el, selectedTypes);
                         if (types === typesLen){
@@ -246,7 +244,7 @@ var filterCells = function(data, tagRelease){
                 updateAndDraw(filteredData);
             } else {
                 if (typeof tagRelease === 'undefined') {
-                    var filteredData = data.filter(function(el){
+                    var filteredData = data.filters(function(el){
                         var topics = betterReduceInsta(el, selectedTopics);
                         if (topics === topicsLen){
                             d3.select("#c" + el.cell_id).style("display", "block");
@@ -283,8 +281,6 @@ var filterCells = function(data, tagRelease){
                 d3.select("#c" + el.cell_id).style("display", "block");
             })
         }
-        console.log("filter but map");
-        console.log(data.length);
         updateAndDraw(data);
       } 
 
@@ -298,48 +294,85 @@ function displayCells(data){
 }
 
 /*
-function nullFilters(arr){
-    newarr = arr.map(function(el){
-        el.chart.filter(null);
-    })
-    return newarr;
-}
 
-function assignFilters(arr, filters){
-    arr.map(function(el){
-        var chart = el.chart;
-        var filter = filters[el[name]];
-        chart.filter([filter]);
-    })
-}
+function resetData(ndxo, dimensions) {
 
+    var popFilters = populationChart.filters();
+    var incomeFilters = incomeChart.filters();
+    var busDivFilters = busDivChart2.filters();
+    var devIntFilters = devIntChart.filters(); 
+    var ligAveFilters = ligAveChart.filters(); 
+    var placesFilters = placesChart.filters();
+    var insFilters = insChart.filters();
+    var insLikesFilters = insLikesChart.filters()
+    var busPriFilters = busPriChart.filters();
 
-function resetData(arr, ndx, dimensions) {
-    console.log(arr);
-    var filters = arr.map(function(el){
-        var name = el[name];
-        var chart = el.chart;
-        console.log(chart);
-        return {name: chart.filters()};
-    });
-    var nulledFilters = nullFilters(arr);
-    window.ndx.remove()
-    assignFilters(arr, filters);
-    //ligAveChart.filter([ligAveFilters]);
-    //console.log(ligAveChart.filters());
+    populationChart.filter(null);
+    incomeChart.filter(null);
+    busDivChart2.filter(null);
+    devIntChart.filter(null);
+    ligAveChart.filter(null);
+    placesChart.filter(null);
+    insChart.filter(null);
+    insLikesChart.filter(null);
+    busPriChart.filter(null);
+
+    ndxo.remove();
+
+    populationChart.filter([popFilters]);
+    incomeChart.filter([incomeFilters]);
+    busDivChart2.filter([busDivFilters]);
+    devIntChart.filter([devIntFilters]);
+    ligAveChart.filter([ligAveFilters]);
+    placesChart.filter([placesFilters]);
+    insChart.filter([insFilters]);
+    insLikesChart.filter([insLikesFilters]);
+    busPriChart.filter([busPriFilters]);
+
+    console.log(ligAveChart.filters());
+    
 } 
 
 
 function updateAndDraw2(data){
     console.log("updateAndDraw2");
     window.filtered = true;
-    resetData(allCharts, window.ndx, window.dimensions);
+    resetData(window.ndx, window.dimensions);
     window.ndx.add(data);
     dc.redrawAll()
 } 
 
-*/
+function resetDimensionFilter(dimension){
+    dimension.filter(null);
+}
 
+function reset2(dimensions){
+    dimensions.forEach(resetDimensionFilter);
+}
+
+function updateAndDraw3(data){
+    window.filtered = true;
+
+    var allCharts = dc.chartRegistry.list();
+    var filters = [];
+
+    reset2(window.dimensions);
+
+    allCharts.map(function(el){
+        filters.push(el.filters());
+        el.filter(null);
+    })
+
+    window.ndx.remove();
+
+    filters.map(function(e, i){
+        allCharts[i].filter([e]);
+    })
+    
+    window.ndx.add(data);
+    dc.redrawAll();
+}
+*/
 
 /* Updates the state(data) we use
  * in mutual filtering mechanism.
@@ -348,8 +381,8 @@ function updateAndDraw2(data){
  */
 
 function updateAndDraw(data){
-    console.log("updateAndDraw");
-    console.log(data.length);
+    //console.log("updateAndDraw");
+    //console.log(data.length);
     window.filtered = true;
     window.ndx.remove();
     window.ndx.add(data);
@@ -401,7 +434,6 @@ function kFormatter(num) {
     return num > 999 ? (num/1000).toFixed(1) + 'k' : num
 }
 
-
 /* Predicate 
  */
 
@@ -423,7 +455,6 @@ function filter_zero_bins(source_group, f) {
         }
     };
 }
-
 
 /* Utility function to remove empty bins.
  */
@@ -524,7 +555,7 @@ var bindPriceText = function(median, selection){
  */
 
 var bindInstaText = function(median, selection_1){
-    if (median == 0){
+    if (median === 0){
         var newText = `>${median}`
     } else {
         var newText = `${median}`
@@ -945,7 +976,6 @@ var recastingHelper = function(data, city) {
         return {maxBDiv: maxBDiv, minBDiv: minBDiv, maxDInt:maxDInt, maxLight: maxLight, maxPlaces: maxPlaces};
 
     } else if (city === "LA") {
-        console.log("I should be here!");
         data.forEach(function (d) {
             d.OBIaverage = 0;
             d.OBIcount = +d.b_opening_count;
