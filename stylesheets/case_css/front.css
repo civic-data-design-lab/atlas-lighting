@@ -1,0 +1,358 @@
+
+body{
+    color:#ddd;
+    background-color:#000;
+    font-family: 'Ropa Sans', sans-serif;
+    font-weight: 400;
+    fill:rgba(255,255,255,.3);
+    font-size:11px;
+}
+a {
+    text-decoration:none;
+}
+a:hover{
+    text-decoration:none;
+    
+}
+#logos{
+    position:absolute;
+    right:10px;
+    top:10px;
+}
+#logos img{
+    padding:5px;
+}
+.chart-title{
+    border-bottom:1px solid #aaa;
+    font-size:10px;
+    margin:10px;
+}
+
+.mapboxgl-popup {
+        max-width: 400px;
+        font-family: 'Ropa Sans', sans-serif;
+        font-size:10;
+        background-color:rgba(0,0,0,.1);
+    }
+.mapboxgl-popup-content{
+    background:rgba(150,150,150,.5);
+}
+.mapboxgl-popup-tip{
+    border:none;
+    border-bottom-color:rgba(150,150,150,.5);
+} 
+.mapboxgl-popup-anchor-right {
+    margin-right: -100px;
+}
+.largeContent{
+    font-size:36px;
+}
+.section-title{
+    font-size:20px;
+    letter-spacing:1px;
+    color:#fff;
+    margin-left:-20px;
+}
+.subsection-title{
+    font-size:14px;
+    letter-spacing:2px;
+    color:#fff; 
+    margin-left:-10px;
+    
+}
+.overviewby{
+    border-bottom:1px solid #aaa;
+    width:100%;
+    font-size:9;
+}
+#about-1{
+    letter-spacing:1px;
+    font-size:12px;
+    position:absolute;
+    width:30%;
+    left:5%;
+    padding:20px;
+}
+#about-2{
+    letter-spacing:1px;
+    font-size:12px;
+    position:absolute;
+    width:30%;
+    left:35%;
+    padding:20px;
+}
+#about-3{
+    letter-spacing:1px;
+    font-size:12px;
+    position:absolute;
+    width:30%;
+    left:70%;
+    padding:20px;
+}
+#loader{
+	width:100hh;
+    background: #000000; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#000030, #555,#000020); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#000030, #555,#000020); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#000030, #555,#000020); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#000030, #555,#000020); /* Standard syntax (must be last) */
+    opacity:0.9;
+	z-index:99999;
+	position:absolute;
+	top:50px;
+    left:0px;
+	height:100vh;
+	font-size:24px;
+	letter-spacing:3px;
+	color:#fff;
+	line-height:175%;
+    margin:0px;
+}
+#loader-text{
+    width:60%;
+    position: fixed;
+    top: 30%;
+    left: 20%;
+}
+#map{
+    position:absolute; 
+    top:0px;
+    left:0px;
+    width: 100%;
+    height: 100%;
+    overflow:hidden;
+    z-index:-1;
+}
+.popup{
+    color:#000;
+}
+.zipcodemap{
+    position:absolute;
+    width: 1800px;
+    height: 1200px;
+}
+.datalayer{
+    overflow:hidden;
+}
+
+.source {
+    float: right;
+}
+.source .sourcetext {
+    visibility: hidden;
+    width: 200px;
+    background-color: rgba(150,150,150,.7);
+    color: #fff;
+    text-align: left;
+    padding: 5px;
+    font-size:9px;
+    margin-top:20px;
+    margin-left:-200px;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+.source:hover .sourcetext {
+    visibility: visible;
+}
+
+.overviewMenu{
+    padding:10px;
+    font-size:14px;
+}
+canvas {
+     position: absolute;
+     overflow:hidden;
+   }
+#key{
+    border:1px solid #fff;
+    width:200px;
+    height:180px;
+    position:fixed;
+    bottom:20px;
+    left:20px;
+    background-color:rgba(0,0,0,.8);
+    font-family: 'Ropa Sans', sans-serif;
+    font-weight: 200;
+    
+}
+.dc-data-count a{
+    color:#fff;
+}
+.dc-data-count{
+    color:#337ab7;
+}
+.dc-chart{
+    fill-opacity: .5;
+    cursor:pointer;
+    font-size:12px;
+    letter-spacing:1px;
+}
+.dc-chart:hover {
+    fill-opacity: 1;
+    cursor:pointer;
+}
+.dc-chart .selected{
+    fill:#fff;
+}
+.dc-chart .deselected{
+    fill:#888;
+}
+.loader-text{
+    position:absolute;left:0px;
+    font-size:16px;
+    top:60%;
+   width:800px;
+   z-index:999;
+   text-align:left;
+   left:50px;
+   letter-spacing:2px;
+   font-family: 'Dosis', sans-serif;
+   
+}
+.d3-tip{ 
+    background-color:rgba(0,0,0,0.7);
+    border:1px solid #fff;
+    padding:5px;
+    border-radius:5px;
+}
+#row{
+    padding:5px;
+    
+}
+#title{
+    text-align:center;
+    font-family: 'Dosis', sans-serif;
+    font-size:14px;
+    font-weight: 500;
+    letter-spacing:4px;
+    padding:10px;
+}
+.subtitle{
+    border-bottom:1px solid white;
+    font-size:12px;
+    letter-spacing:2px;
+}
+.intro{
+    z-index:999;
+}
+#info{
+    border-radius:10px;
+    padding:10px;
+    background-color:rgba(0,0,0,.7);
+    width:30%;
+    height:100%;
+    position:fixed;
+    top:50px;
+    right:0px;
+    overflow:auto;
+    display:none;
+}
+#frontpage-map{
+    position:absolute;
+    top:100px;
+    left:40px;
+    width:65%;
+}
+
+#centered{
+}
+#frontpage svg{
+    display:block;
+    margin:auto;
+}
+#header{
+    border-bottom:1px solid white;
+    background-color:rgba(0,0,0,.7);
+    z-index:20;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+}
+.btn-group{
+    font-size:18px;
+}
+
+.loader{position:absolute; top:0px; left:0px;overflow:hidden;}
+#moreinfo {position:absolute; top:10px; left:10px;}
+#philips{padding:10px;}
+#civic{padding:10px;}
+.x.axis line {
+  stroke: #fff;
+}
+.x.axis path {
+    stroke: #fff;
+}
+#bubble-key{
+    padding:5px;
+    font-size:10px;
+}
+#info div{
+    margin-top:5px;
+}
+.y.axis line,
+.y.axis path {
+  fill: none;
+  stroke: #fff;
+}
+/* bubble control*/
+
+.label{
+    color:#fff;
+    font-size:14px;
+}
+.radio{
+    float: left;
+}
+
+/* Dropdown Button */
+.dropbtn {
+    background-color: #000;
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    width:100%;
+    text-align:left;
+    letter-spacing:2px;
+    font-family: 'Ropa Sans', sans-serif;
+    
+}
+
+/* Dropdown button on hover & focus */
+.dropbtn:hover, .dropbtn:focus {
+    background-color: #000;
+    color:#aaa;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    width:100%;
+    border:1px solid #fff;
+    z-index:9;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #000;
+    min-width: 160px;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #222}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {display:block;}
