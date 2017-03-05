@@ -790,10 +790,6 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     position: relative;
 }
 
-#light_average > svg {
-    margin-left: 105px;
-}
-
 .digits {
     color: rgb(32, 192, 226);
     position: relative;
