@@ -766,9 +766,10 @@ function charts(data, selectedCharts) {
             devIntDimension.filter(null);
 
             var median = d3.median(window.newData, function (el) {return parseInt(el.dev_intensity)});
+            console.log(median);
             var correspond = thisQuantile(median, [0, 100], quants.first, quants.second);
 
-            bindText(correspond, median+"%", "#devInt_digits", "#devInt_digits_o");
+            bindDev(correspond, median, "#devInt_digits", "#devInt_digits_o");
 
         })
         //.yAxisLabel('# OF CELLS')

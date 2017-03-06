@@ -515,6 +515,9 @@ function remove_small_bins(source_group) {
     };
 }
 
+// These functions should be integrated into a final function that takes
+// flag arguments indicating the chart of the to-be-updated text.
+
 /* Utility function to bind text to a DOM element.
  */
 
@@ -527,6 +530,19 @@ var bindText = function(quanText, median, selection_1, selection_2){
     $(selection_1).html(quanText);
     $(selection_1).attr("sv_val", quanText);
     var newText =`${kFormatter(Math.floor(median))}`;
+    $(selection_2).html(newText);
+    $(selection_2).attr("sv_val", newText);       
+}
+
+var bindDev = function(quanText, median, selection_1, selection_2){
+    if (quanText === "MEDIUM"){
+        $(selection_1).css("font-size", "14px");
+    } else {
+        $(selection_1).css("font-size", "24px");
+    }
+    $(selection_1).html(quanText);
+    $(selection_1).attr("sv_val", quanText);
+    var newText =`%${median}`;
     $(selection_2).html(newText);
     $(selection_2).attr("sv_val", newText);       
 }
