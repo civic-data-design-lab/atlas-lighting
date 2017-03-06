@@ -22,8 +22,6 @@ var filterCells = function(data, tagRelease){
     var typesLen = selectedTypes.length;
     var topicsLen = selectedTopics.length;
 
-    if (typeof tagRelease === 'undefined') {
-
     if ((busTypesChart.isTypeSelected() || instaTopicsChart.isTypeSelected())) {
         if (selectedCharts.includes("business_opening_percent")){
             if ((busTypesChart.isTypeSelected() && instaTopicsChart.isTypeSelected())) {
@@ -116,16 +114,15 @@ var filterCells = function(data, tagRelease){
             d3.select("#c" + el.cell_id).style("display", "block");
         })
         updateAndDraw(data);
-      } 
-    } else {
-        updateAndDraw(data);
-
-    }
+      }
 
 } */
 
 
+
 var filterCells = function(data, tagRelease){
+
+    console.log("filterCells")
 
     var selectedTypes = busTypesChart.selectedElements();
     var selectedTopics = instaTopicsChart.selectedElements();
@@ -244,7 +241,7 @@ var filterCells = function(data, tagRelease){
                 updateAndDraw(filteredData);
             } else {
                 if (typeof tagRelease === 'undefined') {
-                    var filteredData = data.filters(function(el){
+                    var filteredData = data.filter(function(el){
                         var topics = betterReduceInsta(el, selectedTopics);
                         if (topics === topicsLen){
                             d3.select("#c" + el.cell_id).style("display", "block");
@@ -287,10 +284,22 @@ var filterCells = function(data, tagRelease){
 }
 
 
+
 function displayCells(data){
     data.map(function(el){
         d3.select("#c"+el.cell_id).style("display", "block");
     });
+    //resetDims(window.dimensions);
+    //updateAndDraw2(data);
+
+}
+
+function displayCells2(data){
+    data.map(function(el){
+        d3.select("#c"+el.cell_id).style("display", "block");
+    });
+    //resetDims(window.dimensions);
+
 }
 
 
@@ -387,6 +396,15 @@ function updateAndDraw(data){
     //console.log("updateAndDraw");
     //console.log(data.length);
     window.filtered = true;
+    window.ndx.remove();
+    window.ndx.add(data);
+    dc.redrawAll();
+}
+
+function updateAndDraw2(data){
+    //console.log("updateAndDraw");
+    //console.log(data.length);
+    window.filtered2 = true;
     window.ndx.remove();
     window.ndx.add(data);
     dc.redrawAll();

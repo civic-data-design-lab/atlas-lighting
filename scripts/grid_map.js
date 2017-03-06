@@ -30,6 +30,7 @@ window.filtered = false;
 window.filtered2 = false;
 window.dimensions = [];
 window.tags = {};
+window.lastTagReleased = false;
 
 var __map = null
 var __canvas = null
@@ -794,6 +795,9 @@ function charts(data, selectedCharts) {
         .margins(chartMargins)
         // Draw range lines
         .on('renderlet', function(chart){
+            //if (!busTypesChart.isTypeSelected() && !instaTopicsChart.isTypeSelected()){
+            //    updateNDX(busTypesChart.bringOriginalData);
+            //}
             window.newData = ligAveDimension.top(Infinity);
             window.extent = d3.extent(data, function(el){return parseInt(el.averlight)});
             window.sorted = data.map(function(el){return parseInt(el.averlight)}).sort(function(a, b){return a - b});
@@ -803,8 +807,9 @@ function charts(data, selectedCharts) {
 
             busTypesChart.bindData(window.newData);
             instaTopicsChart.bindData(window.newData);
-            //console.log("new data binded");
-            //console.log(window.newData.length);
+            // Binding newData from tagCharts?
+            console.log("new data binded");
+            console.log(window.newData.length);
 
             if (appendableLig){
                 addQuantiles(chart, window.quants.firstX, window.quants.secondX, chartHeight, chartMargins, 6);
@@ -821,6 +826,9 @@ function charts(data, selectedCharts) {
                     var tags = tagSums();
                     busTypesChart.updateElements(tags.types);
                     instaTopicsChart.updateElements(tags.topics);
+                    //if (window.filtered){
+                    //    resetDims(window.dimensions);
+                    //}
                 })
 
             }
@@ -833,22 +841,30 @@ function charts(data, selectedCharts) {
                     //busTypesChart.updateElements(tags.types);
                     //instaTopicsChart.updateElements(tags.topics);
                     bindText(window.correspond, window.median, "#light_digits","#light_digits_o");
+                    //resetDims(window.dimensions);
                 })          
             } 
 
             //ligAveDimension.filter(null);
-            resetDims(window.dimensions);
+            //resetDims(window.dimensions);
             //chart.filter(null)
 
-                   
             if (!window.filtered){
-                // console.log("filterCells")
                 filterCells(window.newData);
                 
             } else {
-
-                console.log("display Cells");
-                displayCells(window.newData);
+                //if (!window.filtered2){
+                    //if (window.lastTagReleased){
+                    //    resetDims(window.dimensions);
+                    //    dc.redrawAll();
+                    //    window.lastTagReleased = false;
+                    //}
+                    console.log("display Cells");
+                    displayCells(window.newData);
+                //} else {
+                 //   console.log("display Cells 2");
+                //    displayCells2(window.newData);
+                //}
                 //chart.brush().clear();
                 //chart.brush().x(null);
                 

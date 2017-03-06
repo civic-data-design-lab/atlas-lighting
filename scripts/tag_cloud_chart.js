@@ -432,10 +432,13 @@ var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#b
                         if (selectedTypes.length === 0){
                             typeSelected = false;
                             window.filtered = false;
+                            //window.lastTagReleased = true;
+                            //window.filtered2 = false;
                             filterCells(originalData, true);
                         } else {
                             typeSelected = true;
                             window.filtered = false;
+                            //window.filtered2 = false;
                             filterCells(originalData, true);
                         }
                     } else {
@@ -444,6 +447,7 @@ var tagCloudChart = function(chartWidth,chartHeight, selection, isInsta) { //"#b
                         var category = d3.select(this).text();
                         selectedTypes.push(category);
                         window.filtered = false;
+                        //window.filtered2 = false;
                         filterCells(cellsData);
                     }
              });
