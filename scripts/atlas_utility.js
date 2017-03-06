@@ -293,6 +293,15 @@ function displayCells(data){
     });
 }
 
+
+function resetDimensionFilter(dimension){
+    dimension.filter(null);
+}
+
+function resetDims(dimensions){
+    dimensions.forEach(resetDimensionFilter);
+}
+
 /*
 
 function resetData(ndxo, dimensions) {
@@ -342,13 +351,7 @@ function updateAndDraw2(data){
     dc.redrawAll()
 } 
 
-function resetDimensionFilter(dimension){
-    dimension.filter(null);
-}
 
-function reset2(dimensions){
-    dimensions.forEach(resetDimensionFilter);
-}
 
 function updateAndDraw3(data){
     window.filtered = true;

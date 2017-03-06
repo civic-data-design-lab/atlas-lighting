@@ -558,7 +558,7 @@ function charts(data, selectedCharts) {
         .on('renderlet', function(chart){
             window.newData = insDimension.top(Infinity);
 
-            insDimension.filter(null);
+            //insDimension.filter(null);
 
             var median = d3.median(window.newData, function(el){
                 if  (el.insta_cnt>50){
@@ -596,7 +596,7 @@ function charts(data, selectedCharts) {
         .on('renderlet', function(chart){
             var selected = window.newData.map(function(el){return el.insta_like}).filter(function(d){return d >=100})
 
-            insLikesDimension.filter(null);
+            //insLikesDimension.filter(null);
 
             var median = d3.median(selected);
             bindSmallText2(median, "#instaLikes_digits");
@@ -625,7 +625,7 @@ function charts(data, selectedCharts) {
         .gap(1)
         .on('renderlet', function(chart){
 
-            busPriDimension.filter(null);
+            //busPriDimension.filter(null);
             var median = d3.median(window.newData, function(el){if (el.b_price > 0) {return el.b_price};});
             bindPriceText(median, "#busPri_digits");
         })
@@ -731,7 +731,7 @@ function charts(data, selectedCharts) {
                 appendableP = false;
             }
 
-            placesDimension.filter(null);
+            //placesDimension.filter(null);
             
             var median = d3.median(window.newData, function (el) { return el.places>100 ? 100 : el.places});
             var correspond = thisQuantile(median, extent, quants.first, quants.second);
@@ -763,10 +763,9 @@ function charts(data, selectedCharts) {
                 appendableDev = false;
             }
 
-            devIntDimension.filter(null);
+            //devIntDimension.filter(null);
 
             var median = d3.median(window.newData, function (el) {return parseInt(el.dev_intensity)});
-            console.log(median);
             var correspond = thisQuantile(median, [0, 100], quants.first, quants.second);
 
             bindDev(correspond, median, "#devInt_digits", "#devInt_digits_o");
@@ -818,22 +817,28 @@ function charts(data, selectedCharts) {
                 window.median = d3.median(window.newData, function(el){return parseInt(el.averlight)})
                 window.correspond = thisQuantile(window.median, window.extent, window.quants.first, window.quants.second);
                 bindText(window.correspond, window.median, "#light_digits","#light_digits_o");
+                chart.on("filtered", function(chart){
+                    var tags = tagSums();
+                    busTypesChart.updateElements(tags.types);
+                    instaTopicsChart.updateElements(tags.topics);
+                })
 
             }
             else {
                 // console.log("OBI chart ON")
                 //hide the light digits for average lightmap
                 // $('#light_average').find("#light_digits_o").hide(); 
-
                 chart.on("filtered", function(chart){
-                    var tags = tagSums();
-                    busTypesChart.updateElements(tags.types);
-                    instaTopicsChart.updateElements(tags.topics);
+                    //var tags = tagSums();
+                    //busTypesChart.updateElements(tags.types);
+                    //instaTopicsChart.updateElements(tags.topics);
                     bindText(window.correspond, window.median, "#light_digits","#light_digits_o");
                 })          
             } 
 
-            ligAveDimension.filter(null);
+            //ligAveDimension.filter(null);
+            resetDims(window.dimensions);
+            //chart.filter(null)
 
                    
             if (!window.filtered){
@@ -875,7 +880,7 @@ function charts(data, selectedCharts) {
             var sorted = data.map(function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0}).sort(function(a, b){return a - b});
             var quants = quantileCalc(extent, sorted, chartWidth);
 
-            busDivDimension.filter(null);
+            //busDivDimension.filter(null);
 
             var median = d3.median(window.newData, function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0});
             var correspond = thisQuantile(median, extent, quants.first, quants.second);
@@ -939,7 +944,7 @@ function charts(data, selectedCharts) {
                 appendablePop = false;
             }
 
-            popDimension.filter(null);
+            //popDimension.filter(null);
             
             var median = d3.median(window.newData, function(el){return parseInt(el.population)} );
             var correspond = thisQuantile(median, extent, quants.first, quants.second);
@@ -984,7 +989,7 @@ function charts(data, selectedCharts) {
                 appendableInc = false;
             }
 
-            window.incomeDimension.filter(null);
+            //window.incomeDimension.filter(null);
 
             var median = d3.median(window.newData, function(el){return parseInt(parseFloat(el.income) / 1000) * 1000;});
             var correspond = thisQuantile(median, extent, quants.first, quants.second);
@@ -1044,7 +1049,7 @@ function charts(data, selectedCharts) {
         $('#business_opening_average').find('#selected_time').hide();
     }
 
-    window.dimensions.push(ligAveDimension, incomeDimension, busDivDimension, popDimension, placesDimension, OBIaverageDimension, OBIpercentDimension, busPriDimension, insLikesDimension, insDimension);
+    window.dimensions.push(ligAveDimension, incomeDimension, busDivDimension, popDimension, placesDimension, busPriDimension, insLikesDimension, insDimension);
          
 }
 
