@@ -22,6 +22,7 @@ ADD view/. /usr/src/app/view
 ADD index.html/. /usr/src/app/index.html
 ADD about.html/. /usr/src/app/about.html
 ADD landing.html/. /usr/src/app/landing.html
+ADD case.html/. /usr/src/app/case.html
 ADD website_video4_small.mp4/. /usr/src/app/website_video4_small.mp4
 WORKDIR /usr/src/app
 RUN npm --unsafe-perm install
