@@ -624,10 +624,10 @@ function addQuantiles(chart, firstQ, secondQ, chrtHeight, chrtMargins, fontSize)
              .style("stroke-width", "1.6")
              .style("stroke-dasharray", "4");
         
-        if ((secondQ - firstQ) > 30) {
+        if ((secondQ - firstQ) > 20) {
             var tConst = (firstQ/2)-6;
             var tConst2 = (secondQ - firstQ)/2;
-            var tConst3 = (270 - secondQ)/2;
+            var tConst3 = (234 - secondQ)/2;
             var texts = [{text:"LOW", x: tConst}, { text:"MEDIUM", x: firstQ + tConst2 - 12}, {text:"HIGH",x:secondQ + tConst3 - 7}];
             var g = chart.select("svg").append("g").attr("transform", "translate(" + chrtMargins.left + "," + chrtMargins.top + ")");
             var newChart = g.selectAll("text").data(texts);
@@ -668,8 +668,8 @@ var thisQuantile = function(median, extent, firstQ, secondQ){
 var quantileCalc = function(extent, sorted, width){
     var firstQ = d3.quantile(sorted, 0.33);
     var secondQ = d3.quantile(sorted, 0.66);
-    var xOfFirstQ = width*(firstQ/(extent[1]-extent[0]));
-    var xOfSecondQ = width*(secondQ/(extent[1]-extent[0]));
+    var xOfFirstQ = (width-36)*(firstQ/(extent[1]-extent[0]));
+    var xOfSecondQ = (width-36)*(secondQ/(extent[1]-extent[0]));
     return {firstX: xOfFirstQ, secondX: xOfSecondQ, first:firstQ, second:secondQ}
 }
 
@@ -680,7 +680,8 @@ var quantileCalc = function(extent, sorted, width){
  */
 
 var quantileCalcDev = function(width){
-    return {firstX: width*(1/2), secondX: width*(4/5), first:49, second:79}
+    console.log("QuantileDEv:"+width*(1/2));
+    return {firstX: (width-36)*(1/2), secondX: (width-36)*(4/5), first:49, second:79}
 }
 
 
@@ -1060,7 +1061,7 @@ var recastingHelper = function(data, city) {
 
         return {maxBDiv: maxBDiv, minBDiv: minBDiv, maxDInt:maxDInt, maxLight: maxLight, maxPlaces: maxPlaces};
 
-    } else {
+    } else if (city === "Chicago") {
         data.forEach(function (d) {
             d.OBIaverage = 0;
             d.OBIcount = +d.b_opening_count;
@@ -1096,6 +1097,20 @@ var recastingHelper = function(data, city) {
             d.retail = +d.retail ? +d.retail : 0; 
             d.service = +d.service ? +d.service : 0; 
             d.transportation = +d.transportation ? +d.transportation : 0;
+
+            d.insta_advertising = +d.insta_advertising ? +d.insta_advertising : 0;
+            d.insta_beverage = +d.insta_beverage ? +d.insta_beverage : 0;
+            d.insta_coast = +d.insta_coast ? +d.insta_coast : 0;
+            d.insta_entertainment = +d.insta_entertainment ? +d.insta_entertainment : 0;
+            d.insta_food =  +d.insta_food ? +d.insta_food : 0;
+            d.insta_monochrome = +d.insta_monochrome ? +d.insta_monochrome : 0;
+            d.insta_nature = +d.insta_nature ? +d.insta_nature : 0;
+            d.insta_people = +d.insta_people ? +d.insta_people : 0 ;     
+            d.insta_portrait = +d.insta_portrait ? +d.insta_portrait : 0;
+            d.insta_sky = +d.insta_sky ? +d.insta_sky : 0;
+            d.insta_sports = +d.insta_sports ? +d.insta_sports : 0;
+            d.insta_urban = +d.insta_urban ? +d.insta_urban : 0 ;
+           
             
             // -------------------------------------------------------------------------- OBI values
             for (var i=0;i<24;i++){

@@ -68,11 +68,10 @@ var busTypesChart = tagCloudChart(390, 100, "#business_types", false);
 
 //$("#case_study_2").toggle(currentCity_o === 'Chicago';
 
-if (currentCity_o === 'Chicago'){
-    $("#d_instagram_topics").hide();
-    var instaTopics = [];
-    var instaTopicsChart = tagCloudChart(370, 100, "#instagram_topics", true);
-} else {
+//if (currentCity_o === 'Chicago'){
+//    $("#d_instagram_topics").hide();
+//    var instaTopics = [];
+//    var instaTopicsChart = tagCloudChart(370, 100, "#instagram_topics", true);
     if (!$("#d_instagram_topics").is(":visible")){
         $("#d_instagram_topics").show();
     }
@@ -93,9 +92,11 @@ if (currentCity_o === 'Chicago'){
          var instaTopics = ['insta_advertising','insta_animal','insta_coast', 'insta_entertainment',
         'insta_fashion','insta_food','insta_monochrome','insta_people', 'insta_portrait','insta_sky','insta_sports', 'insta_vehicle'];
 
+    } else if (currentCity_o === 'Chicago') {
+         var instaTopics = ['insta_advertising','insta_beverage','insta_coast','insta_entertainment','insta_food',
+         'insta_monochrome','insta_nature','insta_people','insta_portrait','insta_sky','insta_sports','insta_urban'];
     }
     var instaTopicsChart = tagCloudChart(385, 130, "#instagram_topics", true); //125
-}
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -483,7 +484,7 @@ function charts(data, selectedCharts) {
     var maxLight = varsForCharts.maxLight;
     var maxPlaces = varsForCharts.maxPlaces;
 
-    var chartWidth = 320; //304 //320
+    //var chartWidth = 320; //304 //320
     var chartHeight = 140; //52
 
     var chartWidth = 264;
@@ -491,7 +492,7 @@ function charts(data, selectedCharts) {
     var chartWidthBusDiv = 320;
     var chartHeightBusDiv = 52;
 
-    var chartMargins = {top: 8, left: 40, right: 10, bottom: 30};//20 //{top: 0, left: 50, right: 10, bottom: 20};
+    var chartMargins = {top: 8, left: 40, right: 0 , bottom: 30};//20 //{top: 0, left: 50, right: 10, bottom: 20};
 
     window.ndx = crossfilter(data);
     var all = window.ndx.groupAll();
@@ -760,6 +761,7 @@ function charts(data, selectedCharts) {
         .margins(chartMargins)
         .on('renderlet', function(chart){
             window.newData = devIntDimension.top(Infinity);
+            console.log(chartWidth);
             var quants = quantileCalcDev(chartWidth);
             if (appendableDev){
                 addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6); //5 25 for devInt
@@ -980,6 +982,10 @@ function charts(data, selectedCharts) {
             var extent = d3.extent(data, function(el){return parseInt(parseFloat(el.income) / 1000) * 1000});
             var sorted = data.map(function(el){return parseInt(parseFloat(el.income) / 1000) * 1000}).sort(function(a, b){return a - b});
             var quants = quantileCalc(extent, sorted, chartWidth);
+
+            console.log(extent[0]);
+            console.log(quants.first);
+            console.log(quants.second);
 
             if (appendableInc){
                 addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6); // 5, 5
