@@ -161,9 +161,20 @@ function initControl() {
         $(this).addClass("selectedTab");
         $(".click_case_right").removeClass("selectedTab");
         //show instagram likes from left panel
-        $("#d_ins_likes").show();
+        //$("#d_ins_likes").show();
         //show topics from left panel
-        $("#d_instagram_topics").show(); 
+        //$("#d_instagram_topics").show();
+
+        if (selectedCharts.indexOf("ins_likes") === -1) {
+            $("#d_ins_likes").show()
+        }
+
+        if (selectedCharts.indexOf("instagram_topics") === -1) {
+            $("#d_instagram_topics").show()
+        }
+
+
+
     });   
 
     // controls the right bar collapsing and showing
