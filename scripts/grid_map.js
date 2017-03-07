@@ -761,7 +761,6 @@ function charts(data, selectedCharts) {
         .margins(chartMargins)
         .on('renderlet', function(chart){
             window.newData = devIntDimension.top(Infinity);
-            console.log(chartWidth);
             var quants = quantileCalcDev(chartWidth);
             if (appendableDev){
                 addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6); //5 25 for devInt
@@ -982,11 +981,6 @@ function charts(data, selectedCharts) {
             var extent = d3.extent(data, function(el){return parseInt(parseFloat(el.income) / 1000) * 1000});
             var sorted = data.map(function(el){return parseInt(parseFloat(el.income) / 1000) * 1000}).sort(function(a, b){return a - b});
             var quants = quantileCalc(extent, sorted, chartWidth);
-
-            console.log(extent[0]);
-            console.log(quants.first);
-            console.log(quants.second);
-
             if (appendableInc){
                 addQuantiles(chart, quants.firstX, quants.secondX, chartHeight, chartMargins, 6); // 5, 5
                 appendableInc = false;

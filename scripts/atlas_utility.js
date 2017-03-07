@@ -680,7 +680,6 @@ var quantileCalc = function(extent, sorted, width){
  */
 
 var quantileCalcDev = function(width){
-    console.log("QuantileDEv:"+width*(1/2));
     return {firstX: (width-36)*(1/2), secondX: (width-36)*(4/5), first:49, second:79}
 }
 
