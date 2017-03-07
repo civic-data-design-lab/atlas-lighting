@@ -66,7 +66,7 @@ var busTypesChart = tagCloudChart(390, 100, "#business_types", false);
 
 // enable chicago case if current city is chicago
 
-//$("#case_study_2").toggle(currentCity_o === 'Chicago')
+//$("#case_study_2").toggle(currentCity_o === 'Chicago';
 
 if (currentCity_o === 'Chicago'){
     $("#d_instagram_topics").hide();
@@ -302,6 +302,7 @@ function initCanvas(data) {
                             function(result, status) {
                                 if (status === 'OK') {
                                     //console.log("ok");
+                                    d3.select("#streetview_window").style("display", "block");
                                     var newPoint = result.location.latLng;
                                     var heading = google.maps.geometry.spherical.computeHeading(newPoint, oldPoint);
                                     window.panorama.setPosition(latLngo);
@@ -312,14 +313,13 @@ function initCanvas(data) {
                                     });
                                     window.panorama.setVisible(true);
                                     d3.select("#street_view_plc").style("display", "none");
-                                    // d3.select("#street_view_plc0").style("display", "none");
-                                    // d3.select("#streetview_window").style("display", "block");
+                                    d3.select("#street_view_plc0").style("display", "none");
+                                    
 
                                 }else{
-                                    //console.log("not ok");
-                                    // d3.select("#streetview_window").style("display", "none");
+                                    d3.select("#streetview_window").style("display", "none");
                                     d3.select("#street_view_plc").style("display", "block");
-                                    // d3.select("#street_view_plc0").style("display", "none");
+                                    d3.select("#street_view_plc0").style("display", "none");
 
                                 }
                         });
@@ -841,7 +841,6 @@ function charts(data, selectedCharts) {
                     //chart.filter(null);
                     //dc.redrawAll();
                     if (!(busTypesChart.isTypeSelected() || instaTopicsChart.isTypeSelected())){
-                        console.log("I will be very happy!");
                         var allCharts = dc.chartRegistry.list();
                         resetCharts(allCharts);
                         updateAndDraw(busTypesChart.getOriginalData());
@@ -1133,6 +1132,7 @@ function cellSelect(d) {
     var topInstaTopics = instaTopicsChart.topTags(d);
 
 
+
     //switch to the cell view
     $("#map-info").hide();
     $("#report-info").show();
@@ -1161,6 +1161,15 @@ function cellSelect(d) {
 
     printTags(topInstaTopics, '#report-text-insta-topics');
 
+
+    if (selectedCharts.indexOf("business_types") !== -1) {
+        $("#business_types").hide()
+    }
+
+    if (selectedCharts.indexOf("instagram_topics") !== -1) {
+        $("#instagram_topics").hide()
+    }
+
     //hide instagram and google street placeholders
     $("#instagram_plc").hide();
     //hide instagram likes from left panel
@@ -1183,11 +1192,18 @@ function cellDisselect() {
     updateZoomedChart(selectedCharts);
 
     busTypesChart.assignSelect(false);
-    //busTypesChart.updateElements(window.typesData);
+    busTypesChart.updateElements(window.typesData);
     
     instaTopicsChart.assignSelect(false);
-    //instaTopicsChart.updateElements(window.topicsData);
-    
+    instaTopicsChart.updateElements(window.topicsData);
+
+    if (selectedCharts.indexOf("#business_types") !== -1) {
+        $("#business_types").show()
+    }
+
+    if (selectedCharts.indexOf("#instagram_topics") !== -1) {
+        $("#instagram_topics").show()
+    }
 
     // Cell view cell back to normal
     $('.click_case_right').css('color', '#ddd');
@@ -1198,9 +1214,9 @@ function cellDisselect() {
     $('#report-message').show();
 
     //show instagram likes from left panel
-    $("#d_ins_likes").show();
+    //$("#d_ins_likes").show();
     //show topics from left panel
-    $("#d_instagram_topics").show();    
+    //$("#d_instagram_topics").show();    
 
 }
 
