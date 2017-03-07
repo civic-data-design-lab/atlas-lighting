@@ -146,7 +146,7 @@ function initControl() {
 
 
 
-    //show report
+    //show cell view
     $(".click_case_right").click(function () {
         $("#map-info").hide();
         $("#report-info").show();
@@ -154,7 +154,7 @@ function initControl() {
         $(".fold_bar").removeClass("selectedTab");
     });
     
-    //show graphs
+    //show regional view
     $(".fold_bar").click(function () {
         $("#map-info").show();
         $("#report-info").hide();       
