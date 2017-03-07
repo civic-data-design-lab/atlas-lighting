@@ -30,7 +30,9 @@ window.filtered = false;
 window.filtered2 = false;
 window.dimensions = [];
 window.tags = {};
-window.lastTagReleased = false;
+window.recover = {};
+window.recoverKey = 0;
+window.released = false;
 
 var __map = null
 var __canvas = null
@@ -795,9 +797,6 @@ function charts(data, selectedCharts) {
         .margins(chartMargins)
         // Draw range lines
         .on('renderlet', function(chart){
-            //if (!busTypesChart.isTypeSelected() && !instaTopicsChart.isTypeSelected()){
-            //    updateNDX(busTypesChart.bringOriginalData);
-            //}
             window.newData = ligAveDimension.top(Infinity);
             window.extent = d3.extent(data, function(el){return parseInt(el.averlight)});
             window.sorted = data.map(function(el){return parseInt(el.averlight)}).sort(function(a, b){return a - b});
@@ -805,11 +804,10 @@ function charts(data, selectedCharts) {
 
             d3.selectAll(".cellgrids").style("display", "none");
 
-            busTypesChart.bindData(window.newData);
-            instaTopicsChart.bindData(window.newData);
-            // Binding newData from tagCharts?
-            console.log("new data binded");
-            console.log(window.newData.length);
+            var justData = window.newData.slice();
+
+            busTypesChart.bindData(justData);
+            instaTopicsChart.bindData(justData);
 
             if (appendableLig){
                 addQuantiles(chart, window.quants.firstX, window.quants.secondX, chartHeight, chartMargins, 6);
@@ -817,8 +815,6 @@ function charts(data, selectedCharts) {
             }
             
             if (selectedCharts.indexOf("business_opening_percent") === -1) {
-                // $('#light_average').find("#light_digits_o").show();
-                // console.log("OBI chart OFF")
                 window.median = d3.median(window.newData, function(el){return parseInt(el.averlight)})
                 window.correspond = thisQuantile(window.median, window.extent, window.quants.first, window.quants.second);
                 bindText(window.correspond, window.median, "#light_digits","#light_digits_o");
@@ -826,47 +822,33 @@ function charts(data, selectedCharts) {
                     var tags = tagSums();
                     busTypesChart.updateElements(tags.types);
                     instaTopicsChart.updateElements(tags.topics);
-                    //if (window.filtered){
-                    //    resetDims(window.dimensions);
-                    //}
                 })
 
             }
             else {
-                // console.log("OBI chart ON")
-                //hide the light digits for average lightmap
-                // $('#light_average').find("#light_digits_o").hide(); 
                 chart.on("filtered", function(chart){
-                    //var tags = tagSums();
-                    //busTypesChart.updateElements(tags.types);
-                    //instaTopicsChart.updateElements(tags.topics);
                     bindText(window.correspond, window.median, "#light_digits","#light_digits_o");
-                    //resetDims(window.dimensions);
                 })          
-            } 
-
-            //ligAveDimension.filter(null);
-            //resetDims(window.dimensions);
-            //chart.filter(null)
+            }
 
             if (!window.filtered){
                 filterCells(window.newData);
-                
             } else {
-                //if (!window.filtered2){
-                    //if (window.lastTagReleased){
-                    //    resetDims(window.dimensions);
-                    //    dc.redrawAll();
-                    //    window.lastTagReleased = false;
-                    //}
-                    console.log("display Cells");
-                    displayCells(window.newData);
-                //} else {
-                 //   console.log("display Cells 2");
-                //    displayCells2(window.newData);
-                //}
-                //chart.brush().clear();
-                //chart.brush().x(null);
+                displayCells(window.newData);
+                if (window.released){
+                    //var allCharts = dc.chartRegistry.list();
+                    //resetDims(window.dimensions);     
+                    //chart.filter(null);
+                    //dc.redrawAll();
+                    if (!(busTypesChart.isTypeSelected() || instaTopicsChart.isTypeSelected())){
+                        console.log("I will be very happy!");
+                        var allCharts = dc.chartRegistry.list();
+                        resetCharts(allCharts);
+                        updateAndDraw(busTypesChart.getOriginalData());
+                        window.released = false;
+                    }
+                      
+                }
                 
             }
         })

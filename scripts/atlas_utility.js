@@ -13,116 +13,8 @@
  * @param {Boolean} tagRelease
  */
 
-/*
 
 var filterCells = function(data, tagRelease){
-
-    var selectedTypes = busTypesChart.selectedElements();
-    var selectedTopics = instaTopicsChart.selectedElements();
-    var typesLen = selectedTypes.length;
-    var topicsLen = selectedTopics.length;
-
-    if ((busTypesChart.isTypeSelected() || instaTopicsChart.isTypeSelected())) {
-        if (selectedCharts.includes("business_opening_percent")){
-            if ((busTypesChart.isTypeSelected() && instaTopicsChart.isTypeSelected())) {
-                var filteredData = data.filter(function(el){
-                    var types = betterReduce(el, selectedTypes);
-                    var topics = betterReduceInsta(el, selectedTopics);
-                    if ((types == typesLen) && (topics == topicsLen) && el.OBIaverage!=0 ){
-                        d3.select("#c" + el.cell_id).style("display", "block");
-                        return el;
-                    } else {
-                        d3.select("#c" + el.cell_id).style("display", "none");
-                    }
-                })
-                updateAndDraw(filteredData);
-            } else if (busTypesChart.isTypeSelected()) {
-                var filteredData = data.filter(function(el){
-                    var types = betterReduce(el, selectedTypes);
-                    if ((types == typesLen) && el.OBIaverage!=0 ){
-                        d3.select("#c" + el.cell_id).style("display", "block");
-                        return el;
-                    } else {
-                        d3.select("#c" + el.cell_id).style("display", "none");
-                    }
-                })
-                updateAndDraw(filteredData);
-            } else {
-                var filteredData = data.filter(function(el){
-                    var topics = betterReduceInsta(el, selectedTopics);
-                    if ((topics == topicsLen) && el.OBIaverage!=0 ){
-                        d3.select("#c" + el.cell_id).style("display", "block");
-                        return el;
-                    } else {
-                        d3.select("#c" + el.cell_id).style("display", "none");
-                    }
-                })
-                updateAndDraw(filteredData);
-            } 
-    } else {
-        if ((busTypesChart.isTypeSelected() && instaTopicsChart.isTypeSelected())) {
-                var filteredData = data.filter(function(el){
-                    var types = betterReduce(el, selectedTypes);
-                    var topics = betterReduceInsta(el, selectedTopics);
-                    if ((types == typesLen) && (topics == topicsLen)){
-                        d3.select("#c" + el.cell_id).style("display", "block");
-                        return el;
-                    } else {
-                        d3.select("#c" + el.cell_id).style("display", "none");
-                    }
-                })
-                updateAndDraw(filteredData);
-            } else if (busTypesChart.isTypeSelected()) {
-                console.log("please fire!");
-                var filteredData = data.filter(function(el){
-                    var types = betterReduce(el, selectedTypes);
-                    if (types == typesLen){
-                        d3.select("#c" + el.cell_id).style("display", "block");
-                        return el;
-                    } else {
-                        d3.select("#c" + el.cell_id).style("display", "none");
-                    }
-                })
-                updateAndDraw(filteredData);
-                //updateNDX(filtered);
-            } else {
-                var filteredData = data.filter(function(el){
-                    var topics = betterReduceInsta(el, selectedTopics);
-                    if (topics == topicsLen){
-                        d3.select("#c" + el.cell_id).style("display", "block");
-                        return el;
-                    } else {
-                        d3.select("#c" + el.cell_id).style("display", "none");
-                    }
-                })
-                updateAndDraw(filteredData);
-            }
-        }
-    } else if (selectedCharts.includes("business_opening_percent")) {
-        var filteredData = data.filter(function(el){
-            if (el.OBIaverage!=0){
-                d3.select("#c" + el.cell_id).style("display", "block");
-                // return el;
-            } else {
-                d3.select("#c" + el.cell_id).style("display", "none");
-            }
-        })
-        // updateAndDraw(filteredData);
-
-    }  else {
-        data.map(function(el){
-            d3.select("#c" + el.cell_id).style("display", "block");
-        })
-        updateAndDraw(data);
-      }
-
-} */
-
-
-
-var filterCells = function(data, tagRelease){
-
-    console.log("filterCells")
 
     var selectedTypes = busTypesChart.selectedElements();
     var selectedTopics = instaTopicsChart.selectedElements();
@@ -281,7 +173,7 @@ var filterCells = function(data, tagRelease){
         updateAndDraw(data);
       } 
 
-}
+} 
 
 
 
@@ -289,19 +181,8 @@ function displayCells(data){
     data.map(function(el){
         d3.select("#c"+el.cell_id).style("display", "block");
     });
-    //resetDims(window.dimensions);
-    //updateAndDraw2(data);
 
 }
-
-function displayCells2(data){
-    data.map(function(el){
-        d3.select("#c"+el.cell_id).style("display", "block");
-    });
-    //resetDims(window.dimensions);
-
-}
-
 
 function resetDimensionFilter(dimension){
     dimension.filter(null);
@@ -311,9 +192,31 @@ function resetDims(dimensions){
     dimensions.forEach(resetDimensionFilter);
 }
 
-/*
+function resetChartFilter(chart){
+    chart.filter(null);
+}
 
-function resetData(ndxo, dimensions) {
+function resetCharts(charts){
+    charts.forEach(resetChartFilter);
+}
+
+/*
+function addRecover(key, state, data){
+    var obj = {};
+    obj[key] = data;
+    var newState = Object.assign(state, obj);
+    return newState;
+}
+
+function removeRecover(key, state){
+    delete state[key];
+    return state;
+}*/
+
+
+
+/*
+function resetData(data) {
 
     var popFilters = populationChart.filters();
     var incomeFilters = incomeChart.filters();
@@ -325,6 +228,8 @@ function resetData(ndxo, dimensions) {
     var insLikesFilters = insLikesChart.filters()
     var busPriFilters = busPriChart.filters();
 
+    //resetDims(window.dimensions);
+
     populationChart.filter(null);
     incomeChart.filter(null);
     busDivChart2.filter(null);
@@ -335,7 +240,7 @@ function resetData(ndxo, dimensions) {
     insLikesChart.filter(null);
     busPriChart.filter(null);
 
-    ndxo.remove();
+    window.ndx.remove();
 
     populationChart.filter([popFilters]);
     incomeChart.filter([incomeFilters]);
@@ -348,10 +253,32 @@ function resetData(ndxo, dimensions) {
     busPriChart.filter([busPriFilters]);
 
     console.log(ligAveChart.filters());
+    window.filtered = true;
+    window.ndx.add(data);
+    dc.redrawAll();
     
 } 
 
+function resetOneData(dimension, chart, data){
 
+    var ligAveFilters = chart.filters(); 
+
+    dimension.filter(null);
+
+    chart.filter(null);
+
+    window.ndx.remove();
+
+    chart.filter([ligAveFilters]);
+    console.log(ligAveChart.filters());
+    window.filtered = true;
+    window.ndx.add(data);
+    dc.redrawAll();
+
+}
+*/
+
+/*
 function updateAndDraw2(data){
     console.log("updateAndDraw2");
     window.filtered = true;
@@ -393,8 +320,6 @@ function updateAndDraw3(data){
  */
 
 function updateAndDraw(data){
-    //console.log("updateAndDraw");
-    //console.log(data.length);
     window.filtered = true;
     window.ndx.remove();
     window.ndx.add(data);
@@ -402,8 +327,6 @@ function updateAndDraw(data){
 }
 
 function updateAndDraw2(data){
-    //console.log("updateAndDraw");
-    //console.log(data.length);
     window.filtered2 = true;
     window.ndx.remove();
     window.ndx.add(data);
