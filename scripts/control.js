@@ -247,6 +247,8 @@ function initControl() {
             $(`${queryId} > .digits`).toggle();
             $(`${queryId} > svg`).toggle();
         }
+
+        $(this).find('#collapseIndicator').toggleClass("selectedCollapseIndicator");
     })
 
     //////////////////////////////////// .rm dataset from the right panel

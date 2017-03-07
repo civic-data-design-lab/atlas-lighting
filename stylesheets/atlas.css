@@ -81,10 +81,17 @@ a:hover{
     width:380px;
 }
 
-.chart-title-collapsible:hover{
-    margin-left: 11px;
+.toggle-title > img:hover{
+    transform: rotate(-90deg);
 }
 
+#collapseIndicator {
+    margin-right: 3px;
+}
+
+.selectedCollapseIndicator {
+    transform: rotate(-90deg);
+}
 
 .mapboxgl-popup {
         max-width: 400px;
