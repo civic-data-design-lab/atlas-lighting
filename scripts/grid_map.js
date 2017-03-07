@@ -1209,14 +1209,22 @@ function cellDisselect() {
     $('.click_case_right').css('color', '#ddd');
     $('.click_case_right').css('background-color', 'rgba(150,150,150,0.4)');
 
-    //hide report
+    //hide report details
     $('#report-text').hide();
+    //show "select a cell"
     $('#report-message').show();
 
-    //show instagram likes from left panel
-    //$("#d_ins_likes").show();
-    //show topics from left panel
-    //$("#d_instagram_topics").show();    
+    //show instagram likes in left panel
+    $("#d_ins_likes").show();
+    //show topics in left panel
+    $("#d_instagram_topics").show();    
+
+
+    //switch to the regional view
+    $("#map-info").show();
+    $("#report-info").hide();       
+    $(".fold_bar").addClass("selectedTab");
+    $(".click_case_right").removeClass("selectedTab");
 
 }
 
