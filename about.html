@@ -34,11 +34,15 @@
     <div id = "logos"><a href="https://www.philips.com/" target="_blank"><img src="logos/philips_white.png" style="width:80px"></a> <a href="http://www.civicdatadesignlab.org/" target="_blank"><img src="logos/cddl_white.png" style="width:80px "></a><a href="http://cau.mit.edu/" target="_blank"><img src="logos/cau.jpg" style="height:30px "></a></div>
   </div>
   <div id = "about-1">
-<!--   <p class = "section-title">About<p> -->
+  <p class = "section-title-no-indent">About<p>
 <!--     <p class = "subsection-title">MSA Selection</p> -->
-<p>Today’s digital revolution has revolutionized the way we process the volume of information that cities produce every day. Especially with the emergence of digital data and ubiquitous use of mobile social network services, new opportunities arise for researchers to develop tools grounded in new data sources. What makes these sources particularly useful for geospatial analysis is that they are available across municipal, provincial, and national borders. Wherever the web service has users, data is available which means that researchers are no longer dependent on conventional data sources.</p>
+<p>Today’s digital revolution has radically changed the way we process the volume of information that cities produce every day. Especially with the emergence of digital data and ubiquitous use of mobile social network services, new opportunities arise for researchers to develop tools grounded in new data sources. What makes these sources particularly useful for geospatial analysis is that they are available across municipal, provincial, and national borders. Wherever the web service has users, data is available which means that researchers are no longer dependent on conventional data sources.</p>
+
 <p>Atlas of Lighting is a joint project between Philips, MIT Center for Advanced Urbanism and MIT Civic Data Design Lab that responds to the need for for an integrated and scientific understanding of the dynamics of metropolitan areas around the world. It is an interactive mapping tool in which the user can combine, isolate or cross-reference both quantitative and qualitative datasets to get a clear view of how cities operate.</p>
-<p>The tool has a potential to create the first comprehensive city dashboard anywhere that digital data exist. With the inclusion of additional urban areas, the atlas aims to make comparative analysis of metro areas which can will be crucial for policy makers to make integrated and science based decisions.</p>
+
+<p>The Atlas uses interactive visualization techniques to enable users to manipulate the data, changing the mode of display, and adjusting variables of interest. With each query to a dataset, other data sets update themselves automatically, revealing dynamic relationships between variables. Users can also explore the data for one grid cell, including fine-grained data such as all the Instagram posts located in a cell. The customizable interface allows users to choose their data and investigate relationships across multiple scales.</p>
+
+<p>Atlas of Lighting aims to make comparative analysis of metro areas more accessible in order to guide policymakers to make integrated and science-based decisions.</p>
 
   </div>
 <!--   <div id = "about-2">
@@ -66,6 +70,74 @@
     <p>Alexandru Darie, Rohit Kumar, Ravi Choudhary | <a href="http://www.usa.philips.com/" target="_blank">PHILIPS</a></p>
     <br></br>
   <p class = "section-title-no-indent">Data<p>
+    <p class = "subsection-title-no-indent">Business Density</p>
+      <p>Source: Google Places API</p>
+      <p>Year: 2016</p>
+      <p>Indicates total number of Google Places in a grid cell, which includes businesses, institutions, parks, and other points of interest.</p>
+
+    <p class = "subsection-title-no-indent">Business Type</p>
+      <p>Source: Google Places API</p>
+      <p>Year: 2016</p>
+      <p>Indicates the types of the local businesses in a grid cell, using Google Places classifications.</p>
+
+    <p class = "subsection-title-no-indent">Business Type Diversity</p>
+      <p>Source: Google Places API</p>
+      <p>Year: 2016</p>
+      <p>Provides an index value representing the diversity of business types in a grid cell, which increases with business density and variety of business types, using the Google Places classifications.</p>
+
+    <p class = "subsection-title-no-indent">Opening Hour Index</p>
+      <p>Source: Google Places API</p>
+      <p>Year: 2016</p>
+      <p>Indicates the percentage and the average number of businesses that are open per hour in a given period of time in a grid cell.</p>
+
+    <p class = "subsection-title-no-indent">Business Price Category</p>
+      <p>Source: Google Places API</p>
+      <p>Year: 2016</p>
+      <p>Indicates the average price level of a grid cell, using Google Places classifications. 0 — Free; 1 — Inexpensive; 2 — Moderate; 3 — Expensive; 4 — Very Expensive.</p>
+
+    <p class = "subsection-title-no-indent">Instagram Post Density</p>
+      <p>Source: Instagram API</p>
+      <p>Year: 2016</p>
+      <p>Indicates total number of Instagram posts geo-tagged in a grid cell.</p>
+
+    <p class = "subsection-title-no-indent">Instagram Likes Density</p>
+      <p>Source: Instagram API</p>
+      <p>Year: 2016</p>
+      <p>Indicates total number of all the likes that are attached to Instagram posts geo-tagged in a grid cell.</p>
+
+    <p class = "subsection-title-no-indent">Instagram Post Thumbnails</p>
+      <p>Source: Instagram API</p>
+      <p>Year: 2016</p>
+      <p>Provides a collection of Instagram media thumbnails in a selected grid cell.</p>
+
+    <p class = "subsection-title-no-indent">Instagram Content Topics</p>
+      <p>Source: Google Vision API</p>
+      <p>Year: 2016</p>
+      <p>Provides a collection of topics that describe the content of Instagram media, using machine learning tools from the Google Vision API.</p>
+
+    <p class = "subsection-title-no-indent">Population Density</p>
+      <p>Source: ACS 5 Year Estimate</p>
+      <p>Year: 2010-2014</p>
+      <p>Indicates the number people in a given unit area, commonly represented as population per square mile.</p>
+
+    <p class = "subsection-title-no-indent">Household Median Income</p>
+      <p>Source: ACS 5 Year Estimate</p>
+      <p>Year: 2010-2014</p>
+      <p>Indicates the median value of the combined incomes of people sharing a household or place of residence. Census block group values are redistributed to each grid cell using ArcGIS.</p>
+
+    <p class = "subsection-title-no-indent">Development Intensity</p>
+      <p>Source: National Land Cover Database</p>
+      <p>Year: 2011</p>
+      <p>Indicates characteristics and classification of the land surface such as urban, agricultural, and forest, as well as percent impervious surface.</p>
+
+    <p class = "subsection-title-no-indent">Google Street View</p>
+      <p>Source: Google Street View API</p>
+      <p>Year: 2016</p>
+      <p>Provides 360-degree, panoramic, and street-level imagery from the centroid point in a selected grid cell.</p>
+
+
+<!-- 
+
     <p class = "subsection-title-no-indent">Population Density & Household Median Income </p>
      <a href="http://www.census.gov/programs-surveys/acs/" target="_blank">http://www.census.gov/programs-surveys/acs/</a>
     <p>The American Community Survey (ACS) is conducted by the US Census and sent to a portion of the population every year. As of the 2014 (most recent) ACS release there are 1 year and 5 year estimates. For the tool, 2014 ACS - 5 Year Estimate surveys are used because of the large geographic boundaries (MSA) of the focus areas. Unlike 1 year estimates, 5 year estimates use largest sample size which makes it most reliable for analyzing very small populations.</p>
@@ -81,6 +153,10 @@
    <p class = "subsection-title-no-indent">Place Density</p>
    <a href="https://developers.google.com/places/" target="_blank">https://developers.google.com/places/</a>
    <p>The Places dataset belongs to Google Places API which is a collection of georeferenced businesses, institutions, parks, and other points of interest. This dataset is most commonly used as part of the Google maps services. For the research, captured places were binned the points into the cells of a grid that covers the entire MSA. GIS software were used to calculate the the number Google Places in each grid cell.</p>
+
+ -->
+
+
  <!-- <p class = "section-title">Selection Factors and Methodological Process<p>
    <p>In order to select geographically diverse and economically vibrant set of U.S. cities to best represent the variation of urbanized areas in the country, the team conducted a selection process. Typically, research at this scale focuses on the top 100 MSAs (Metropolitan Statistical Area) by population. This convenient metric accounts for a large portion of the nation’s populous and economy. The research uses one primary cutoff (population) and several factors (pop. growth, pop.-weighted density, and Gross Metropolitan Product) to sort the list of potential MSAs for further study. The rationale and steps in the process are detailed below:</p>
 
