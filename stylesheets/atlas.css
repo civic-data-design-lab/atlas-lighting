@@ -149,9 +149,9 @@ a:hover{
 }
 #about-1{
     font-family: Dosis;
-    line-height: 30px;
+    line-height: 26px;
     letter-spacing: 2px;
-    font-size:21px;
+    font-size: 19px;
     position:absolute;
     width:50%;
     left:5%;
@@ -168,7 +168,7 @@ a:hover{
     padding-top:60px;
 }*/
 #about-3{
-    line-height: 15px;
+    line-height: 12px;
     letter-spacing:1px;
     font-size:12px;
     position:absolute;
@@ -177,6 +177,12 @@ a:hover{
     padding:30px;
     padding-top:60px;
 }
+
+#about-data{
+    height:250px;
+    overflow-y: scroll; 
+}
+
 #loader{
     background: #000000; /* For browsers that do not support gradients */
 	position:absolute;
@@ -232,6 +238,7 @@ a:hover{
 .source {
     float: right;
 }
+
 .source .sourcetext {
     visibility: hidden;
     width: 200px;
@@ -248,6 +255,14 @@ a:hover{
 }
 .source:hover .sourcetext {
     visibility: visible;
+}
+
+
+.data_intro > .source {
+    display: inline-block;
+    position: relative;
+    float: none;
+    color: rgb(32, 192, 226);
 }
 
 .overviewMenu{
