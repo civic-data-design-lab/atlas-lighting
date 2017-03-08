@@ -491,6 +491,25 @@ var bindDev = function(quanText, median, selection_1, selection_2){
     $(selection_2).attr("sv_val", newText);       
 }
 
+var bindDiv = function(quanText, median, selection_1, selection_2){
+    if (quanText === "MEDIUM" || quanText === "VERY LOW"){
+        $(selection_1).css("font-size", "14px");
+    } else {
+        $(selection_1).css("font-size", "24px");
+    }
+    $(selection_1).html(quanText);
+    $(selection_1).attr("sv_val", quanText);
+    if (median > 1000){
+        var median = median/1000;
+        var newText =`${median.toFixed(1)}K`;
+
+    } else {
+        var newText =`${median}`;
+    }
+    $(selection_2).html(newText);
+    $(selection_2).attr("sv_val", newText);       
+}
+
 
 /* Utility function to bind text to a DOM element.
  */
@@ -657,6 +676,23 @@ var thisQuantile = function(median, extent, firstQ, secondQ){
    } else {
        return "HIGH"
    }
+}
+
+var thisQuantileDiv = function(median, extent){
+    var range = extent[1] - extent[0]
+    var first = extent[0] + range/4;
+    var second = extent[0] + range/2;
+    var third = extent[0] + 3*(range/4);
+
+    if (median >= extent[0] && median <= first){
+        return "VERY LOW"
+    } else if (median > first && median <= second){
+        return "LOW"
+    } else if (median > second && median <= third){
+        return "MEDIUM"
+    } else if (median > third &&  median <= extent[1]) {
+        return "HIGH"
+    }
 }
 
 /* Calculates quantiles

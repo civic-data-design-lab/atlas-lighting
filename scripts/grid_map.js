@@ -30,8 +30,6 @@ window.filtered = false;
 window.filtered2 = false;
 window.dimensions = [];
 window.tags = {};
-window.recover = {};
-window.recoverKey = 0;
 window.released = false;
 
 var __map = null
@@ -72,31 +70,27 @@ var busTypesChart = tagCloudChart(390, 100, "#business_types", false);
 //    $("#d_instagram_topics").hide();
 //    var instaTopics = [];
 //    var instaTopicsChart = tagCloudChart(370, 100, "#instagram_topics", true);
-    if (!$("#d_instagram_topics").is(":visible")){
-        $("#d_instagram_topics").show();
-    }
-    if (currentCity_o === 'Denver') {
-        var instaTopics = ['insta_advertising','insta_beverage','insta_car','insta_entertainment',
-        'insta_people','insta_fashion','insta_food','insta_interiors','insta_landscape','insta_monochrome','insta_nature',
-        'insta_portrait','insta_sky','insta_sports'];
-
-    } else if (currentCity_o === 'Sanjose') {
-        var instaTopics = ['insta_advertising','insta_animal','insta_car','insta_entertainment',
-        'insta_food', 'insta_nature','insta_people','insta_sports'];
-
-    } else if (currentCity_o === 'Pittsburgh'){
-        var instaTopics = ['insta_advertising','insta_animal','insta_architecture', 'insta_car', 'insta_entertainment',
-        'insta_family','insta_fashion','insta_food','insta_interiors','insta_monochrome','insta_nature','insta_sky','insta_sports'];
-
-    } else if (currentCity_o === 'LA'){
-         var instaTopics = ['insta_advertising','insta_animal','insta_coast', 'insta_entertainment',
-        'insta_fashion','insta_food','insta_monochrome','insta_people', 'insta_portrait','insta_sky','insta_sports', 'insta_vehicle'];
-
-    } else if (currentCity_o === 'Chicago') {
-         var instaTopics = ['insta_advertising','insta_beverage','insta_coast','insta_entertainment','insta_food',
-         'insta_monochrome','insta_nature','insta_people','insta_portrait','insta_sky','insta_sports','insta_urban'];
-    }
-    var instaTopicsChart = tagCloudChart(385, 130, "#instagram_topics", true); //125
+if (!$("#d_instagram_topics").is(":visible")){
+    $("#d_instagram_topics").show();
+}
+if (currentCity_o === 'Denver') {
+    var instaTopics = ['insta_advertising','insta_beverage','insta_car','insta_entertainment',
+    'insta_people','insta_fashion','insta_food','insta_interiors','insta_landscape','insta_monochrome','insta_nature',
+    'insta_portrait','insta_sky','insta_sports'];
+} else if (currentCity_o === 'Sanjose') {
+    var instaTopics = ['insta_advertising','insta_animal','insta_car','insta_entertainment',
+    'insta_food', 'insta_nature','insta_people','insta_sports'];
+} else if (currentCity_o === 'Pittsburgh'){
+    var instaTopics = ['insta_advertising','insta_animal','insta_architecture', 'insta_car', 'insta_entertainment',
+    'insta_family','insta_fashion','insta_food','insta_interiors','insta_monochrome','insta_nature','insta_sky','insta_sports'];
+} else if (currentCity_o === 'LA'){
+     var instaTopics = ['insta_advertising','insta_animal','insta_coast', 'insta_entertainment',
+    'insta_fashion','insta_food','insta_monochrome','insta_people', 'insta_portrait','insta_sky','insta_sports', 'insta_vehicle'];
+} else if (currentCity_o === 'Chicago') {
+     var instaTopics = ['insta_advertising','insta_beverage','insta_coast','insta_entertainment','insta_food',
+     'insta_monochrome','insta_nature','insta_people','insta_portrait','insta_sky','insta_sports','insta_urban'];
+}
+var instaTopicsChart = tagCloudChart(385, 130, "#instagram_topics", true); //125
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -879,10 +873,11 @@ function charts(data, selectedCharts) {
             var quants = quantileCalc(extent, sorted, chartWidth);
 
             //busDivDimension.filter(null);
+            var len = busDivDimension.top(Infinity).length;
 
             var median = d3.median(window.newData, function(el){return (Math.round((el.b_diversity - minBDiv) / (maxBDiv - minBDiv) * 3) + 1) || 0});
-            var correspond = thisQuantile(median, extent, quants.first, quants.second);
-            bindText(correspond, median, "#busDiv_digits","#busDiv_digits_o");
+            var correspond = thisQuantileDiv(median, extent, quants.first, quants.second);
+            bindDiv(correspond, len, "#busDiv_digits","#busDiv_digits_o");
 
             //busDivDimension.filter(null);
         })
