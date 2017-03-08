@@ -66,6 +66,7 @@ a:hover{
     padding:5px;
 }
 #chartTitle{
+    text-transform: uppercase;
     position: fixed;
     top: 80px;
     left: 20px;
@@ -426,6 +427,7 @@ canvas {
 #centered{
     position:fixed;
     text-align: center;
+    margin: auto;
 }
 #frontpage svg{
     display:block;

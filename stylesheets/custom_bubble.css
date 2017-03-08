@@ -24,6 +24,12 @@ select {
    font-family: 'Dosis', sans-serif;
    letter-spacing:2px;
 }
+
+#frontpage-map{
+  margin: 0 auto;
+  width: 100%;
+}
+
 #xAxisArrow{
     width:20px;
     height:20px;
@@ -60,16 +66,16 @@ select {
     letter-spacing:2px;
 }
 #xAxisArrow{
-position:absolute;
-top:602px;
-left:113px;
-    z-index:9999;
+  position:absolute;
+  top:602px;
+  left:113px;
+  z-index:9999;
 }
 #yAxisArrow{
-position:absolute;
-top:540px;
-left:31px;
-z-index:9999;
+  position:absolute;
+  top:540px;
+  left:31px;
+  z-index:9999;
 }
 
 #mapB {
@@ -77,4 +83,23 @@ z-index:9999;
 }
 #msaB {
   cursor: pointer;
+}
+
+#city-title {
+  width: 100%;
+  position:absolute;
+  bottom:300px;
+  margin: 0 auto;
+}
+
+#mapchart_switch {
+  width: 30%;
+  position:absolute;
+  margin: 0 auto;
+}
+
+#bubble-key{
+  position:absolute;
+  bottom:30px;
+  width:30%;
 }
