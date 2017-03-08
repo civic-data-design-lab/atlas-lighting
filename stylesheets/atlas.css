@@ -168,7 +168,7 @@ a:hover{
     padding-top:60px;
 }*/
 #about-3{
-    line-height: 15px;
+    line-height: 12px;
     letter-spacing:1px;
     font-size:12px;
     position:absolute;
@@ -177,6 +177,12 @@ a:hover{
     padding:30px;
     padding-top:60px;
 }
+
+#about-data{
+    height:250px;
+    overflow-y: scroll; 
+}
+
 #loader{
     background: #000000; /* For browsers that do not support gradients */
 	position:absolute;
