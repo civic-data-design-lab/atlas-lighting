@@ -179,7 +179,7 @@ function drawPolygons(geoData){
         .style("stroke-width",2)
 	    .style("opacity",.5)
       .attr("transform", "translate(80,0)")
-          d3.select("#chartTitle").html("MSA Locations")
+          d3.select("#chartTitle").html("CROSS-METRO COMPARISONS")
 //svg.insert("path", ".graticule")
 //      .datum(topojson.mesh(geoData, geoData.objects.states, function(a, b) { return a !== b; }))
 //    
@@ -237,8 +237,8 @@ function draw(varname,data,map,msaOverview) {
   r.domain([1000000,20000000])
   if(varname == "mapB"){
       d3.selectAll(".country").remove()
-      d3.select("#yAxisData").remove()
-      d3.select("#xAxisData").remove()
+      // d3.select("#yAxisData").remove()
+      // d3.select("#xAxisData").remove()
       d3.select("#yAxisArrow").remove()
       d3.select("#xAxisArrow").remove()
       force.stop();
@@ -303,8 +303,8 @@ function draw(varname,data,map,msaOverview) {
       d3.selectAll(".country").remove()
       d3.selectAll(".axis").remove()         
            force.resume();
-      d3.select("#yAxisData").remove()
-      d3.select("#xAxisData").remove()
+      // d3.select("#yAxisData").remove()
+      // d3.select("#xAxisData").remove()
       d3.select("#yAxisArrow").remove()
       d3.select("#xAxisArrow").remove()
       drawCustomBubbleChart(__msaOverview)
@@ -336,59 +336,59 @@ function drawCustomBubbleChart(data){
 }
 
 function generateAxis(list,data,xSelection,ySelection,rLabel){
-    d3.select("#centered").append("select").attr("id","xAxisData")
-    d3.select("#centered").append("select").attr("id","yAxisData")
+    // d3.select("#centered").append("select").attr("id","xAxisData")
+    // d3.select("#centered").append("select").attr("id","yAxisData")
     d3.select("#chartTitle").html(ySelection.split("_").join(" ")+"/"+xSelection.split("_").join(" "))
 
-    d3.select("#centered").append("svg").attr("id","xAxisArrow")
-    .attr("width",8)
-    .attr("height",8)
-    .append("svg:image")
-    .attr("x",0)
-    .attr("y",7)
-    .attr("width",8)
-    .attr("height",8)
-    .attr("xlink:href","../icons/arrow_down.png")
+    // d3.select("#centered").append("svg").attr("id","xAxisArrow")
+    // .attr("width",8)
+    // .attr("height",8)
+    // .append("svg:image")
+    // .attr("x",0)
+    // .attr("y",7)
+    // .attr("width",8)
+    // .attr("height",8)
+    // .attr("xlink:href","../icons/arrow_down.png")
 
-    d3.select("#centered").append("svg").attr("id","yAxisArrow")
-    .attr("width",8)
-    .attr("height",8)
-    .append("svg:image")
-    .attr("x",0)
-    .attr("y",0)
-    .attr("width",8)
-    .attr("height",8)
-    .attr("xlink:href","../icons/arrow_down.png")
+    // d3.select("#centered").append("svg").attr("id","yAxisArrow")
+    // .attr("width",8)
+    // .attr("height",8)
+    // .append("svg:image")
+    // .attr("x",0)
+    // .attr("y",0)
+    // .attr("width",8)
+    // .attr("height",8)
+    // .attr("xlink:href","../icons/arrow_down.png")
 
-    for(var i in list) {
-        var label = list[i].split("_").join(" ")
-      d3.select("#yAxisData").append("option").attr("value",list[i])
-        .text(label)
-        .attr("id",list[i])
-            d3.select("#"+ySelection).attr("selected","selected")
-    }
+    // for(var i in list) {
+    //     var label = list[i].split("_").join(" ")
+    //   d3.select("#yAxisData").append("option").attr("value",list[i])
+    //     .text(label)
+    //     .attr("id",list[i])
+    //         d3.select("#"+ySelection).attr("selected","selected")
+    // }
 
-    for(var i in list){
-        var label = list[i].split("_").join(" ")
+    // for(var i in list){
+    //     var label = list[i].split("_").join(" ")
         
-      d3.select("#xAxisData").append("option").attr("value",list[i]).text(label).attr("id",list[i])
-        if(list[i]==xSelection){
-            d3.select("#"+xSelection).attr("selected","selected")
-        }
-    }
+    //   // d3.select("#xAxisData").append("option").attr("value",list[i]).text(label).attr("id",list[i])
+    //   //   if(list[i]==xSelection){
+    //   //       d3.select("#"+xSelection).attr("selected","selected")
+    //   //   }
+    // }
     
-    d3.select("#xAxisData").on("change",function(){
-  // console.log(data.length)
+  //   d3.select("#xAxisData").on("change",function(){
+  // // console.log(data.length)
 
-      xSelection = d3.select("#xAxisData").property('value')
-      update(data,xSelection,ySelection,rLabel)
-      d3.select("#chartTitle").html(ySelection.split("_").join(" ")+"/"+xSelection.split("_").join(" "))
-    })
-    d3.select("#yAxisData").on("change",function(){
-      ySelection = d3.select("#yAxisData").property('value')
-      update(data,xSelection,ySelection,rLabel)
-      d3.select("#chartTitle").html(ySelection.split("_").join(" ")+"/"+xSelection.split("_").join(" "))
-    })
+  //     xSelection = d3.select("#xAxisData").property('value')
+  //     update(data,xSelection,ySelection,rLabel)
+  //     d3.select("#chartTitle").html(ySelection.split("_").join(" ")+"/"+xSelection.split("_").join(" "))
+  //   })
+  //   d3.select("#yAxisData").on("change",function(){
+  //     ySelection = d3.select("#yAxisData").property('value')
+  //     update(data,xSelection,ySelection,rLabel)
+  //     d3.select("#chartTitle").html(ySelection.split("_").join(" ")+"/"+xSelection.split("_").join(" "))
+  //   })
 
 }
 

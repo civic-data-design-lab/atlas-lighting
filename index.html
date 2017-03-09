@@ -9,32 +9,33 @@
   <script src='mapbox-gl.js'></script> -->
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.20.0/mapbox-gl.css' rel='stylesheet' />
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.20.0/mapbox-gl.js'></script>
-  <script src="d3.min.js"></script>
+  <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v1.3.0/mapbox-gl-geocoder.js'></script>
+  <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v1.3.0/mapbox-gl-geocoder.css'
+    type='text/css' />
+  <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+  <script src="../scripts/lib/d3.min.js"></script>
   <script src="d3-queue.js"></script>
   <script src="topojson.min.js"></script>
   <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
-  <script src="crossfilter.min.js"></script>
-  <script src="dc.js"></script>
+  <script src="../scripts/lib/crossfilter.min.js"></script>
+  <script src="../scripts/lib/dc.js"></script>
   <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v1.3.0/mapbox-gl-geocoder.js'></script>
   <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v1.3.0/mapbox-gl-geocoder.js'></script>
   <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v1.3.0/mapbox-gl-geocoder.css' type='text/css' />
-	<script src="underscore.js"></script>
-  <script src='mapbox.js'></script>
-  <link href='mapbox.css' rel='stylesheet' />
+	<script src="../scripts/underscore.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Dosis:500,300|Ropa+Sans' rel='stylesheet' type='text/css'>
 
-	<link rel="stylesheet" type="text/css" href="atlas.css"> </style>     
-	<link rel="stylesheet" type="text/css" href="custom_bubble.css"> </style>    
+	<link rel="stylesheet" type="text/css" href="../stylesheets/atlas.css"> </style>     
+	<link rel="stylesheet" type="text/css" href="../stylesheets/custom_bubble.css"> </style>    
 	</head>
 
 <body>
   <div id = "basemap">  </div>
 
-    <script>
-    L.mapbox.accessToken = 'pk.eyJ1IjoiampqaWlhMTIzIiwiYSI6ImNpbDQ0Z2s1OTN1N3R1eWtzNTVrd29lMDIifQ.gSWjNbBSpIFzDXU2X5YCiQ';
-    var map = L.mapbox.map('basemap', 'mapbox.streets')
-        .setView([40, -74.50], 9);
-    </script>
+    // <script>
+    // L.mapbox.accessToken = 'pk.eyJ1IjoiampqaWlhMTIzIiwiYSI6ImNpbDQ0Z2s1OTN1N3R1eWtzNTVrd29lMDIifQ.gSWjNbBSpIFzDXU2X5YCiQ';
+    // var map = L.mapbox.map(mapHost[0], 'mapbox.streets').setView([40, -74.50], 9);
+    // </script>
 <div class = "container-">
   <div id = "header">
     <div id = "title"><a href="index.html"><span style="color:#fff">ATLAS of LIGHTING</span> </a><sup><small><i>beta</i></small></sup></div>
@@ -47,14 +48,16 @@
   <div id = "centered">
     <div id = "frontpage-map"></div>
     </div>
-    <div id = "info">
+<!--     <div id = "info"> -->
 
-      <div id = "text" class="content"> 
+<!--       <div id = "text" class="content">  -->
 <br/><br/>
+      <div id = "bubble-key"></div>
       <div id = "city-title" class="title2">
+
  
-               <div class="btn-group" data-toggle="buttons">
-                 <div class = "overviewby">COMPARE MSAS</div><br/>
+              <div class="btn-group" id="mapchart_switch" data-toggle="buttons">
+<!--                  <div class = "overviewby">COMPARE MSAS</div><br/> -->
                 <form>
                  <label class="radio" id="mapB">
                    <input type="radio" name="options"  checked="checked"><img src="icons/usa.png" style="height:15px "> Map &nbsp;&nbsp;</label>
@@ -64,9 +67,9 @@
                    <input type="radio" name="options"> LIGHTING AND INCOME &nbsp;&nbsp;</label>-->
                  </form>
              </div>
-            <br/><br/><br/> <div class= "dropdownPrompt">EXPLORE MSAS</div>
+<!--             <br/><br/><br/> <div class= "dropdownPrompt">EXPLORE MSAS</div> -->
              
-             <div id = "dropdown" class="dropdown">
+<!--              <div id = "dropdown" class="dropdown">
                  <button onclick="myFunction()" class="dropbtn"><img src="icons/arrow_down.png" style="width:10px"> Select to go to a MSA</button>
                  <div id="myDropdown" class="dropdown-content">
                    <a href="view/grid.html#Chicago">CHICAGO-JOLIET-NAPERVILLE</a>
@@ -75,30 +78,29 @@
                    <a href="view/grid.html#Sanjose">SAN JOSE-SUNNYVALE-SANTA CLARA, CA</a>
                    <a href="view/grid.html#Denver">DENVER-AURORA-BROOMFIELD, CO</a>   
                  </div>
-               </div>
+               </div> -->
       </div>
-               <div class= "dropdownPrompt">METHODOLOGY</div>
+<!--                <div class= "dropdownPrompt">METHODOLOGY</div>
                 <div id = "index-text">
                   <p>In order to select geographically diverse and economically vibrant set of U.S. cities to best represent the variation of urbanized areas in the country, the team conducted a selection process. Typically, research at this scale focuses on the top 100 MSAs (Metropolitan Statistical Area) by population. This convenient metric accounts for a large portion of the nation’s populous and economy. The research uses one primary cutoff (population) and several factors (pop. growth, pop.-weighted density, and Gross Metropolitan Product) to sort the list of potential MSAs for further study.</p>
-                    <p>The plot helps reveal a system of MSAs that separate into at least five identifiable groups. The following 5 selection sets will serve as the primary source of the final selection to be determined by data compatibility/availability (see plot figure for full groups). The sets were determined by selecting the highest, lowest, and the median 2010 population-weighted density MSA from each group (listed in that order below). The MSA with a density next closest to the median was chosen as the alternate... <a href ="about.html">read more</a></p>
+                    <p>The plot helps reveal a system of MSAs that separate into at least five identifiable groups. The following 5 selection sets will serve as the primary source of the final selection to be determined by data compatibility/availability (see plot figure for full groups). The sets were determined by selecting the highest, lowest, and the median 2010 population-weighted density MSA from each group (listed in that order below). The MSA with a density next closest to the median was chosen as the alternate... <a href ="about.html">read more</a></p> -->
                 
                 
                 
                 </div>
-          <div id = "bubble-key">
-           <div class= "dropdownPrompt"> MSA CATEGORIES</div></div>
+<!--            <div class= "dropdownPrompt"> MSA CATEGORIES</div></div> -->
 
             
-      </div>
-    </div>
-</div>
+<!--       </div> -->
+<!--     </div> -->
+<!-- </div> -->
 
 
-<script src="city_comparisons_data.js"></script>
-<script src="front_page_text.js"></script>
-<script src="city_dropdown.js"></script>
+<script src="../scripts/city_comparisons_data.js"></script>
+<script src="../scripts/front_page_text.js"></script>
+<script src="../scripts/city_dropdown.js"></script>
 
-<script src="front_page_map_2.js"></script>
+<script src="../scripts/front_page_map_2.js"></script>
 
 	
 </body>
