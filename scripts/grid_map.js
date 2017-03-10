@@ -799,10 +799,10 @@ function charts(data, selectedCharts) {
 
             d3.selectAll(".cellgrids").style("display", "none");
 
-            var justData = window.newData.slice();
+            //var justData = window.newData.slice();
 
-            busTypesChart.bindData(justData);
-            instaTopicsChart.bindData(justData);
+            busTypesChart.bindData(window.newData);
+            instaTopicsChart.bindData(window.newData);
 
             if (appendableLig){
                 addQuantiles(chart, window.quants.firstX, window.quants.secondX, chartHeight, chartMargins, 6);
