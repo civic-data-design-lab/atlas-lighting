@@ -64,19 +64,22 @@
   app.use(serveStatic('./scripts'));
 
   app.use(function(req, res, next) {
-    var auth;
-    auth = void 0;
-    if (req.headers.authorization) {
+    //nvar auth;
+    //auth = void 0;
+    //var auth = ['philips-guest', 'm!tCdDL'];
+    /*
+    if (req.headers.authorizatinon) {
       auth = new Buffer(req.headers.authorization.substring(6), 'base64').toString().split(':');
     }
     //if (!auth || auth[0] !== 'atlas' || auth[1] !== 'Atlas0fL1ght1ng') {
-    if (!auth || auth[0] !== 'philips-guest' || auth[1] !== 'm!t_CdDL') {
-      res.statusCode = 401;
-      res.setHeader('WWW-Authenticate', 'Basic realm="Access to atlas is restricted in beta version"');
-      res.end('Unauthorized');
-    } else {
+      */
+    //if (!auth || auth[0] !== 'philips-guest' || auth[1] !== 'm!t_CdDL') {
+      //res.statusCode = 401;
+      //res.setHeader('WWW-Authenticate', 'Basic realm="Access to atlas is restricted in beta version"');
+      //res.end('Unauthorized');
+    //} else {
       next();
-    }
+    //}
   });
 
   app.use(serveStatic('./', {
